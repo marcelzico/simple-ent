@@ -8,7 +8,7 @@ from subscriptions.models import Subscription, SubscriptionUsageAudit
 from subscriptions.decorators import student_required, active_subscription_required
 from quizzes.models import MCQResult, QAResult, TrueFalseResult, MCQAttempt, QAAttempt
 from lessoncopy.models import StudySession, Resume, ResumeIA
-from quizlet_copy.models import FlashcardSet, Flashcard, UserProgress  # assuming this app exists
+# from quizlet_copy.models import FlashcardSet, Flashcard, UserProgress  # assuming this app exists
 import json
 from quizzes.models import MCQ, QuestionAnswer, TrueFalseQuiz
 from django.db.models import Prefetch
@@ -116,20 +116,20 @@ def subject_detail(request, pk):
     ).aggregate(Avg('score'))['score__avg'] or 0
 
     # 🃏 Flashcards - filtered to active chapters + annotate card count
-    flashcard_sets_public = FlashcardSet.objects.filter(
-        title__in=active_chapters,  # ⚠️ Your FK field is named 'title'
-        is_public=True
-    ).annotate(card_count=Count('cards')).order_by('-created_at')
+    # flashcard_sets_public = FlashcardSet.objects.filter(
+    #     title__in=active_chapters,  # ⚠️ Your FK field is named 'title'
+    #     is_public=True
+    # ).annotate(card_count=Count('cards')).order_by('-created_at')
     
     if not active_sub.feature.can_view_public_flashcard:
         flashcard_sets_public = flashcard_sets_public.none()
         messages.info(request, "Les cartes mentales publiques nécessitent un abonnement.")
     
-    flashcard_sets_private = FlashcardSet.objects.filter(
-        title__in=active_chapters,
-        is_public=False, 
-        created_by=request.user
-    ).annotate(card_count=Count('cards')).order_by('-created_at')
+    # flashcard_sets_private = FlashcardSet.objects.filter(
+    #     title__in=active_chapters,
+    #     is_public=False, 
+    #     created_by=request.user
+    # ).annotate(card_count=Count('cards')).order_by('-created_at')
     
     if not active_sub.feature.can_add_own_flashcard:
         flashcard_sets_private = flashcard_sets_private.none()
@@ -156,15 +156,15 @@ def subject_detail(request, pk):
         chapter.study_minutes = ((chapter.study_seconds or 0) % 3600) // 60
 
     # Calculate total flashcards
-    total_flashcards = FlashcardSet.objects.filter(
-        Q(title__in=active_chapters, is_public=True) | 
-        Q(title__in=active_chapters, is_public=False, created_by=request.user)
-    ).aggregate(total=Count('cards'))['total'] or 0
+    # total_flashcards = FlashcardSet.objects.filter(
+    #     Q(title__in=active_chapters, is_public=True) | 
+    #     Q(title__in=active_chapters, is_public=False, created_by=request.user)
+    # ).aggregate(total=Count('cards'))['total'] or 0
 
     # Add to context
     context = {
         # 'chapters_flashcard': chapters_flashcard,  # Now with annotations
-        'total_flashcards': total_flashcards,
+        # 'total_flashcards': total_flashcards,
         'unite': unite,
         'chapters': active_chapters,
         'sections': sections,
@@ -202,32 +202,32 @@ def chapter_detail(request, subject_pk, chapter_pk):
     tfs = chapter.truefalsequiz_set.all()
     
     # Get Flashcard Sets for this chapter
-    flashcard_sets = FlashcardSet.objects.filter(title=chapter, created_by=request.user)
-    flashcard_sets_private = FlashcardSet.objects.filter(title=chapter, created_by=request.user, is_public=False)
-    flashcard_sets_public = FlashcardSet.objects.filter(title=chapter, is_public=True)
+    # flashcard_sets = FlashcardSet.objects.filter(title=chapter, created_by=request.user)
+    # flashcard_sets_private = FlashcardSet.objects.filter(title=chapter, created_by=request.user, is_public=False)
+    # flashcard_sets_public = FlashcardSet.objects.filter(title=chapter, is_public=True)
     
     # Get user's flashcard progress
     user_flashcard_progress = None
     total_flashcards = 0
     mastered_flashcards = 0
     
-    if request.user.is_authenticated:
+    # if request.user.is_authenticated:
         # Calculate flashcard progress
-        flashcards = Flashcard.objects.filter(flashcard_set__title=chapter)
-        total_flashcards = flashcards.count()
+        # flashcards = Flashcard.objects.filter(flashcard_set__title=chapter)
+        # total_flashcards = flashcards.count()
         
-        if total_flashcards > 0:
-            user_progress = UserProgress.objects.filter(
-                user=request.user,
-                flashcard__in=flashcards
-            )
-            mastered_flashcards = user_progress.filter(mastered=True).count()
-            user_flashcard_progress = {
-                'total': total_flashcards,
-                'mastered': mastered_flashcards,
-                'percentage': (mastered_flashcards / total_flashcards * 100) if total_flashcards > 0 else 0,
-                'in_progress': user_progress.filter(mastered=False).count()
-            }
+        # if total_flashcards > 0:
+        #     user_progress = UserProgress.objects.filter(
+        #         user=request.user,
+        #         flashcard__in=flashcards
+        #     )
+        #     mastered_flashcards = user_progress.filter(mastered=True).count()
+        #     user_flashcard_progress = {
+        #         'total': total_flashcards,
+        #         'mastered': mastered_flashcards,
+        #         'percentage': (mastered_flashcards / total_flashcards * 100) if total_flashcards > 0 else 0,
+        #         'in_progress': user_progress.filter(mastered=False).count()
+        #     }
     
     # Get AI Resume
     ai_resume = ResumeIA.objects.filter(chapitre=chapter).first()
@@ -255,10 +255,10 @@ def chapter_detail(request, subject_pk, chapter_pk):
         'tfs': tfs,
         'ai_resume': ai_resume,
         'user_resume': user_resume,
-        'flashcard_sets': flashcard_sets,
-        'flashcard_sets': flashcard_sets,
-        'flashcard_sets_private': flashcard_sets_private,
-        'flashcard_sets_public': flashcard_sets_public,
+        # 'flashcard_sets': flashcard_sets,
+        # 'flashcard_sets': flashcard_sets,
+        # 'flashcard_sets_private': flashcard_sets_private,
+        # 'flashcard_sets_public': flashcard_sets_public,
         'user_flashcard_progress': user_flashcard_progress,
         'study_time_hours': study_time_seconds // 3600,
         'study_time_minutes': (study_time_seconds % 3600) // 60,
