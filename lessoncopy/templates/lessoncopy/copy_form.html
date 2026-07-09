@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3>
+                {% if is_superuser %}
+                <i class="fas fa-shield-alt"></i> ADMIN: 
+                {% endif %}
+                {{ chapter.title }} - {% if form.instance.pk %}Edit{% else %}Add{% endif %} Content
+            </h3>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                {% if is_superuser %}
+                <div class="alert alert-warning mb-4">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    You're editing as an administrator
+                </div>
+                {% endif %}
+                
+                <div class="row mb-3">
+                    {{ form.is_qe.label_tag }}
+                    {{ form.is_qe }}
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.content.label_tag }}
+                    {{ form.content }}
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.exptanation.label_tag }}
+                    {{ form.exptanation }}
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        {{ form.image.label_tag }}
+                        {{ form.image }}
+                        {% if form.instance.image %}
+                        <div class="mt-2">
+                            <img src="{{ form.instance.image.url }}" class="img-thumbnail" style="max-height: 150px;">
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.caption.label_tag }}
+                        {{ form.caption }}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.table.label_tag }}
+                    {{ form.table }}
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex mt-4">
+                    <button type="submit" class="btn btn-primary me-md-2">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                    <a href="{% url 'lecon:chapter_detail' chapter.ue.id chapter.id %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

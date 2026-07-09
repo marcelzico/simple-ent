@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}MCQ Results - {{ chapter.title }}{% endblock %}
+
+{% block appnav %}
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:subject_list" %}">Liste UE</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:subject_detail" chapter.ue.id %}">{{ chapter.ue.title }}</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:chapter_detail_student" chapter.ue.id chapter.id %}">{{ chapter.title }}</a>
+    </li>
+    <li class="breadcrumb-item active">Resultat QCM - {{ chapter.title }}</li>
+{% endblock appnav %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <!-- Results Header -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-check-circle me-2"></i>
+                        MCQ Quiz Result
+                    </h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="display-4 text-{% if score >= 60 %}success{% else %}warning{% endif %} mb-3">
+                        {{ score|floatformat:1 }}%
+                    </div>
+                    <p class="lead">
+                        Vous avez {{ correct }} sur {{ total}} questions correctes
+                    </p>
+                    
+                    <div class="progress mb-4" style="height: 20px;">
+                        <div class="progress-bar bg-success" style="width: {{ score }}%">
+                            {{ score|floatformat:1 }}%
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-center">
+                        <a href="{% url 'lessoncopy:lesson' chapter.ue.id chapter.id %}" class="btn btn-outline-primary">
+                            <i class="fas fa-book me-2"></i>Revoir le chapitre
+                        </a>
+                        <a href="{% url 'quizzes:start_mcq' chapter.id %}" class="btn btn-primary">
+                            <i class="fas fa-redo me-2"></i>Essayer à nouveau
+                        </a>
+                        {% comment %} <a href="{% url 'quizzes:mcq_results' chapter.id %}" class="btn btn-primary">
+                            Voir les résultats
+                        </a> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questions Review - ONLY THE QUIZ QUESTIONS -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2"></i>
+                        Question Review ({{ questions|length }} questions)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for question in questions %}
+                    <div class="card mb-3 {% if question.correct_option %}border-success{% else %}border-danger{% endif %}">
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                <span class="badge bg-secondary me-2">Q{{ forloop.counter }}</span>
+                                {{ question.question }}
+                            </h6>
+                            
+                            <div class="row mt-3">
+                                {% for option_num in "1234" %}
+                                {% with option_num=forloop.counter %}
+                                    {% comment %} {% if option_num == 1 or option_num == 2 or question.option3 and option_num == 3 or question.option4 and option_num == 4 %} {% endcomment %}
+                                    <div class="col-md-6 mb-2">
+                                        <div class="p-2 rounded 
+                                                {% if option_num == question.correct_option %}bg-success text-white
+                                                {% elif option_num == question.user_answers and not question.correct_option %}bg-danger text-white
+                                                {% comment %} {% elif option_num == question.user_answers %}bg-primary text-white {% endcomment %}
+                                                {% comment %} {% else %}bg-light {% endcomment %}
+                                            {% endif %}">
+                                            <strong>Option {{ option_num }}:</strong> 
+                                            {% if option_num == 1 %}{{ question.option1 }}
+                                            {% elif option_num == 2 %}{{ question.option2 }}
+                                            {% elif option_num == 3 %}{{ question.option3 }}
+                                            {% elif option_num == 4 %}{{ question.option4 }}
+                                            {% endif %}
+                                            
+                                            {% if option_num == question.correct_option %}
+                                            <i class="fas fa-check ms-2"></i>
+                                            {% elif option_num == question.user_answers and not question.correct_option %}
+                                            <i class="fas fa-times ms-2"></i>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% comment %} {% endif %} {% endcomment %}
+                                {% endwith %}
+                                {% endfor %}
+                            </div>
+
+                            <!-- Feedback -->
+                            <div class="mt-3">
+                                {% if question.user_answer == question.correct_option %}
+                                <div class="alert alert-success py-2 mb-0">
+                                    <i class="fas fa-check me-2"></i>
+                                    <strong>Correcte!</strong>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-danger py-2 mb-0">
+                                    <i class="fas fa-times me-2"></i>
+                                    <strong>Incorrecte.</strong> 
+                                    {% if question.user_answer %}
+                                    Vous avez sélectionné l'option {{ question.user_answer }}, 
+                                    {% else %}
+                                    Vous n'avez pas sélectionné d'option,
+                                    {% endif %}
+                                    mais la bonne option est {{ question.correct_option }}.
+                                </div>
+                                {% endif %}
+                                
+                                {% if question.explanation %}
+                                <div class="mt-2 p-2 bg-light rounded">
+                                    <small class="text-muted">
+                                        <strong>Explanation:</strong> {{ question.explanation }}
+                                    </small>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

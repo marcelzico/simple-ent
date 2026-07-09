@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+
+{% block title %}Cas clinique #{{ cas.id }}{% endblock %}
+
+{% block page_title %}
+<h5 class="mb-0">
+    <i class="fas fa-stethoscope me-2 text-primary"></i>
+    Cas clinique #{{ cas.id }}
+</h5>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- Informations principales -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-info-circle me-2"></i>Présentation du cas</span>
+            <div>
+                <a href="{% url 'teacher:cas_modifier' cas.id %}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-edit me-1"></i>Modifier
+                </a>
+                <a href="{% url 'teacher:cas_supprimer' cas.id %}" class="btn btn-sm btn-danger">
+                    <i class="fas fa-trash me-1"></i>Supprimer
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <h6>Présentation du cas</h6>
+                    <div class="p-3 bg-light rounded">
+                        {{ cas.anonce_du_sujet|linebreaks }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong><i class="fas fa-tag me-1"></i>Spécialité:</strong><br>
+                    {{ cas.specialté|default:"-" }}
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-graduation-cap me-1"></i>Niveau cible:</strong><br>
+                    {{ cas.get_niveau_cible_display|default:"-" }}
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-globe me-1"></i>Statut:</strong><br>
+                    {% if cas.publié %}
+                    <span class="badge bg-success">Publié</span>
+                    {% else %}
+                    <span class="badge bg-secondary">Brouillon</span>
+                    {% endif %}
+                </div>
+                <div class="col-md-3">
+                    <strong><i class="fas fa-user me-1"></i>Auteur:</strong><br>
+                    {{ cas.auteur.get_full_name|default:cas.auteur.username }}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistiques -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="fas fa-question-circle"></i>
+                <div class="stat-value">{{ qcms|length }}</div>
+                <div class="stat-label">QCM</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="fas fa-comment-dots"></i>
+                <div class="stat-value">{{ qrs|length }}</div>
+                <div class="stat-label">Questions/Réponses</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="fas fa-check-circle"></i>
+                <div class="stat-value">{{ vfs|length }}</div>
+                <div class="stat-label">Vrai/Faux</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="fas fa-chart-line"></i>
+                <div class="stat-value">{{ avg_score }}%</div>
+                <div class="stat-label">Score moyen</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Section QCM -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-question-circle me-2 text-primary"></i>Questions à choix multiples ({{ qcms|length }})</span>
+            <a href="{% url 'teacher:cas_qcm_creer' cas.id %}" class="btn btn-sm btn-success">
+                <i class="fas fa-plus-circle me-1"></i>Ajouter un QCM
+            </a>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Question</th>
+                            <th>Options</th>
+                            <th>Réponse(s)</th>
+                            <th>Actions</th>
+                        </thead>
+                    <tbody>
+                        {% for qcm in qcms %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td style="max-width: 300px;">{{ qcm.question|truncatechars:80 }}</td>
+                            <td>
+                                <small>1: {{ qcm.option1|truncatechars:20 }}</small><br>
+                                <small>2: {{ qcm.option2|truncatechars:20 }}</small>
+                                {% if qcm.option3 %}<br><small>3: {{ qcm.option3|truncatechars:20 }}</small>{% endif %}
+                                {% if qcm.option4 %}<br><small>4: {{ qcm.option4|truncatechars:20 }}</small>{% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-success">{{ qcm.réponse1 }}</span>
+                                {% if qcm.réponse2 %} <span class="badge bg-info">{{ qcm.réponse2 }}</span>{% endif %}
+                                {% if qcm.réponse3 %} <span class="badge bg-info">{{ qcm.réponse3 }}</span>{% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'teacher:cas_qcm_modifier' qcm.id %}" class="btn btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'teacher:cas_qcm_supprimer' qcm.id %}" class="btn btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4">
+                                <i class="fas fa-question-circle fa-2x text-muted mb-2 d-block"></i>
+                                <p class="text-muted mb-0">Aucun QCM pour ce cas clinique.</p>
+                                <a href="{% url 'teacher:cas_qcm_creer' cas.id %}" class="btn btn-sm btn-primary mt-2">
+                                    <i class="fas fa-plus-circle me-1"></i>Ajouter un QCM
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Section Questions/Réponses -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-comment-dots me-2 text-success"></i>Questions/Réponses ({{ qrs|length }})</span>
+            <a href="{% url 'teacher:cas_qr_creer' cas.id %}" class="btn btn-sm btn-success">
+                <i class="fas fa-plus-circle me-1"></i>Ajouter une question
+            </a>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Question</th>
+                            <th>Difficulté</th>
+                            <th>Réponse attendue</th>
+                            <th>Actions</th>
+                        </thead>
+                    <tbody>
+                        {% for qr in qrs %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td style="max-width: 300px;">{{ qr.question|truncatechars:80 }}</td>
+                            <td>
+                                <span class="badge {% if qr.dificulté == 'Facile' %}bg-success{% elif qr.dificulté == 'Moyenne' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ qr.dificulté }}
+                                </span>
+                            </td>
+                            <td style="max-width: 250px;">{{ qr.réponse|truncatechars:60 }}</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'teacher:cas_qr_modifier' qr.id %}" class="btn btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'teacher:cas_qr_supprimer' qr.id %}" class="btn btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4">
+                                <i class="fas fa-comment-dots fa-2x text-muted mb-2 d-block"></i>
+                                <p class="text-muted mb-0">Aucune question/réponse pour ce cas clinique.</p>
+                                <a href="{% url 'teacher:cas_qr_creer' cas.id %}" class="btn btn-sm btn-primary mt-2">
+                                    <i class="fas fa-plus-circle me-1"></i>Ajouter une question
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Section Vrai/Faux -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-check-circle me-2 text-warning"></i>Vrai/Faux ({{ vfs|length }})</span>
+            <a href="{% url 'teacher:cas_vf_creer' cas.id %}" class="btn btn-sm btn-success">
+                <i class="fas fa-plus-circle me-1"></i>Ajouter une question
+            </a>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Question</th>
+                            <th>Réponse</th>
+                            <th>Actions</th>
+                        </thead>
+                    <tbody>
+                        {% for vf in vfs %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td style="max-width: 400px;">{{ vf.question|truncatechars:100 }}</td>
+                            <td>
+                                {% if vf.réponse %}
+                                <span class="badge bg-success">Vrai</span>
+                                {% else %}
+                                <span class="badge bg-danger">Faux</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'teacher:cas_vf_modifier' vf.id %}" class="btn btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'teacher:cas_vf_supprimer' vf.id %}" class="btn btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4">
+                                <i class="fas fa-check-circle fa-2x text-muted mb-2 d-block"></i>
+                                <p class="text-muted mb-0">Aucune question Vrai/Faux pour ce cas clinique.</p>
+                                <a href="{% url 'teacher:cas_vf_creer' cas.id %}" class="btn btn-sm btn-primary mt-2">
+                                    <i class="fas fa-plus-circle me-1"></i>Ajouter une question
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bouton retour -->
+    <div class="mt-4">
+        <a href="{% url 'teacher:cas_liste' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mes Abonnements{% endblock %}
+{% load subscription_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h2><i class="fas fa-calendar-alt"></i> Mes Abonnements</h2>
+            <p class="text-muted">Consultez l'historique de vos abonnements</p>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'subscriptions:create_subscription' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Nouvel Abonnement
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            {% if subscriptions %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Fonctionnalité</th>
+                            <th>Montant</th>
+                            <th>Statut</th>
+                            <th>Date de Début</th>
+                            <th>Expiration</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for subscription in subscriptions %}
+                        <tr>
+                            <td>{{ subscription.id }}</td>
+                            <td>{{ subscription.feature.name }}</td>
+                            <td>{{ subscription.amount }} Ar</td>
+                            <td>
+                                {% with status=subscription.get_subscription_status %}
+                                {% if status == 'active' %}
+                                <span class="badge bg-success">Actif</span>
+                                {% elif status == 'pending' %}
+                                <span class="badge bg-warning">En attente</span>
+                                {% elif status == 'approved' %}
+                                <span class="badge bg-info">Approuvé</span>
+                                {% elif status == 'rejected' %}
+                                <span class="badge bg-danger">Refusé</span>
+                                {% elif status == 'expired' %}
+                                <span class="badge bg-secondary">Expiré</span>
+                                {% endif %}
+                                {% endwith %}
+                            </td>
+                            <td>
+                                {% if subscription.start_date %}
+                                {{ subscription.start_date|date:"d M Y" }}
+                                {% else %}
+                                <span class="text-muted">Non démarré</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if subscription.expires_at %}
+                                {{ subscription.expires_at|date:"d M Y" }}
+                                {% else %}
+                                <span class="text-muted">N/A</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'subscriptions:subscription_detail' subscription.id %}" 
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i> Voir
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav aria-label="Navigation des pages">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Précédent</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-calendar-alt fa-4x text-muted mb-3"></i>
+                <h5>Aucun abonnement trouvé</h5>
+                <p class="text-muted">Vous n'avez pas encore créé d'abonnements.</p>
+                <a href="{% url 'subscriptions:create_subscription' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Créer Votre Premier Abonnement
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6 class="card-title text-muted">Total</h6>
+                    <h3 class="card-title">{{ subscriptions.count }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Actifs</h6>
+                    <h3 class="card-title">
+                        {% with active=subscriptions|filter_subscriptions_by_status:"active" %}
+                        {{ active|length }}
+                        {% endwith %}
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body text-center">
+                    <h6 class="card-title">En Attente</h6>
+                    <h3 class="card-title">
+                        {% with pending=subscriptions|filter_subscriptions_by_status:"pending" %}
+                        {{ pending|length }}
+                        {% endwith %}
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Approuvés</h6>
+                    <h3 class="card-title">
+                        {% with approved=subscriptions|filter_subscriptions_by_status:"approved" %}
+                        {{ approved|length }}
+                        {% endwith %}
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+</style>
+{% endblock %}

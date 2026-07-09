@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h3><i class="fas fa-trash me-2"></i>Supprimer tous les QCMs</h3>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-danger">
+                <h5><i class="fas fa-exclamation-triangle me-2"></i>Action irréversible</h5>
+                <p class="mb-0">Vous êtes sur le point de supprimer <strong>tous les QCMs</strong> du chapitre "{{ chapter.title }}". Cette action ne peut pas être annulée.</p>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">QCMs qui seront supprimés</h6>
+                </div>
+                <div class="card-body">
+                    {% with mcqs=chapter.mcq_set.all %}
+                        {% if mcqs %}
+                            <p><strong>{{ mcqs.count }} QCM(s)</strong> seront supprimés :</p>
+                            <ul class="mb-0">
+                                {% for mcq in mcqs|slice:":5" %}
+                                <li>{{ mcq.question|truncatewords:10 }}</li>
+                                {% endfor %}
+                                {% if mcqs.count > 5 %}
+                                <li>... et {{ mcqs.count|add:"-5" }} autres</li>
+                                {% endif %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted mb-0">Aucun QCM trouvé.</p>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="confirmation" class="form-label">Tapez "SUPPRIMER" pour confirmer</label>
+                    <input type="text" class="form-control" id="confirmation" name="confirmation" required 
+                           pattern="SUPPRIMER" placeholder="SUPPRIMER">
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-1"></i>Oui, supprimer tous les QCMs
+                    </button>
+                    <a href="{% url 'lecon:chapter_detail' chapter.ue.id chapter.id %}" class="btn btn-secondary">
+                        <i class="fas fa-times me-1"></i>Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+    const confirmation = document.getElementById('confirmation').value;
+    if (confirmation !== 'SUPPRIMER') {
+        e.preventDefault();
+        alert('Veuillez taper "SUPPRIMER" pour confirmer la suppression.');
+    }
+});
+</script>
+{% endblock %}

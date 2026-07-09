@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiz Results{% endblock %}
+
+{% block content %}
+<div class="text-end">
+    <a href="{% url 'quizzes:quiz_results' %}" class="btn btn-secondary btn-sm">Veiw a weekly results</a>
+</div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>MCQ and Q&A results for daily learning</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5>MCQ results</h5>
+            </div>
+            <div class="card-body">
+                {% if mcq_results %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for quiz in mcq_results %}
+                            <tr>
+                                <td>{{ quiz.user }}</td>
+                                <td>{{ quiz.chapter }}</td>
+                                <td>
+                                    <span class="badge bg-{% if quiz.score >= 70 %}success{% elif quiz.score >= 40 %}warning{% else %}danger{% endif %}">
+                                        {{ quiz.score|floatformat:1 }}%
+                                    </span>
+                                </td>
+                                <td>{{ quiz.created_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    No results available yet!
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5>Questions and answers results</h5>
+            </div>
+            <div class="card-body">
+                {% if qa_results %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Quiz</th>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for quiz in qa_results %}
+                            <tr>
+                                <td>{{ quiz.student }}</td>
+                                <td>{{ quiz.chapter }}</td>
+                                <td>
+                                    <span class="badge bg-{% if quiz.score >= 70 %}success{% elif quiz.score >= 40 %}warning{% else %}danger{% endif %}">
+                                        {{ quiz.score|floatformat:1 }}%
+                                    </span>
+                                </td>
+                                <td>{{ quiz.created_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    No results available yet!
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

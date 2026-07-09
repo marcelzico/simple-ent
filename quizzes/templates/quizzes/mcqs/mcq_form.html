@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="card">
+                <div class="card-header {% if is_update %}bg-warning{% else %}bg-primary{% endif %} text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            {% if is_update %}
+                            <i class="fas fa-edit"></i> Update MCQ
+                            {% else %}
+                            <i class="fas fa-plus"></i> Create New MCQ
+                            {% endif %}
+                        </h4>
+                        <a href="{% url 'quizzes:view_mcqs' chapter.id %}" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Chapter:</strong> {{ chapter.title }}
+                            <br>
+                            <small>This MCQ will be added to the "{{ chapter.title }}" chapter.</small>
+                        </div>
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Question -->
+                        <div class="mb-4">
+                            <label for="{{ form.question.id_for_label }}" class="form-label fw-bold">
+                                <i class="fas fa-question-circle text-primary"></i> Question:
+                            </label>
+                            {{ form.question }}
+                            {% if form.question.errors %}
+                            <div class="text-danger small">{{ form.question.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Options -->
+                        <div class="row mb-4">
+                            <div class="col-12 mb-3">
+                                <h5 class="fw-bold">
+                                    <i class="fas fa-list-ol text-success"></i> Options:
+                                </h5>
+                            </div>
+                            
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="{{ form.option1.id_for_label }}" class="form-label">
+                                    <span class="badge bg-primary me-2">A</span> Option 1:
+                                </label>
+                                {{ form.option1 }}
+                                {% if form.option1.errors %}
+                                <div class="text-danger small">{{ form.option1.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="{{ form.option2.id_for_label }}" class="form-label">
+                                    <span class="badge bg-primary me-2">B</span> Option 2:
+                                </label>
+                                {{ form.option2 }}
+                                {% if form.option2.errors %}
+                                <div class="text-danger small">{{ form.option2.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="{{ form.option3.id_for_label }}" class="form-label">
+                                    <span class="badge bg-secondary me-2">C</span> Option 3 (Optional):
+                                </label>
+                                {{ form.option3 }}
+                                {% if form.option3.errors %}
+                                <div class="text-danger small">{{ form.option3.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="{{ form.option4.id_for_label }}" class="form-label">
+                                    <span class="badge bg-secondary me-2">D</span> Option 4 (Optional):
+                                </label>
+                                {{ form.option4 }}
+                                {% if form.option4.errors %}
+                                <div class="text-danger small">{{ form.option4.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <!-- Correct Option -->
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="{{ form.correct_option.id_for_label }}" class="form-label fw-bold">
+                                    <i class="fas fa-check-circle text-success"></i> Correct Option:
+                                </label>
+                                {{ form.correct_option }}
+                                {% if form.correct_option.errors %}
+                                <div class="text-danger small">{{ form.correct_option.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Time Limit -->
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="{{ form.time_limit.id_for_label }}" class="form-label fw-bold">
+                                    <i class="fas fa-clock text-info"></i> Time Limit (seconds):
+                                </label>
+                                {{ form.time_limit }}
+                                {% if form.time_limit.errors %}
+                                <div class="text-danger small">{{ form.time_limit.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Explanation -->
+                        <div class="mb-4">
+                            <label for="{{ form.explanation.id_for_label }}" class="form-label fw-bold">
+                                <i class="fas fa-lightbulb text-warning"></i> Explanation (Optional):
+                            </label>
+                            {{ form.explanation }}
+                            {% if form.explanation.errors %}
+                            <div class="text-danger small">{{ form.explanation.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Submit Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'quizzes:view_mcqs' chapter.id %}" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn {% if is_update %}btn-warning{% else %}btn-primary{% endif %}">
+                                {% if is_update %}
+                                <i class="fas fa-save"></i> Update MCQ
+                                {% else %}
+                                <i class="fas fa-check"></i> Create MCQ
+                                {% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 1rem !important;
+        }
+        
+        .row .col-md-6 {
+            margin-bottom: 15px;
+        }
+    }
+</style>
+
+<script>
+    // Auto-resize textareas
+    document.addEventListener('DOMContentLoaded', function() {
+        const textareas = document.querySelectorAll('textarea');
+        textareas.forEach(textarea => {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+            
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        });
+    });
+</script>
+{% endblock %}

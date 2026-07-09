@@ -1,0 +1,1264 @@
+<!-- lecon/heading_search.html -->
+{% extends 'base.html' %}
+
+{% block title %}Recherche comparative de titres - Matière Médicale{% endblock %}
+
+{% block extra_css %}
+<style>
+    .search-card {
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    
+    .results-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+    
+    .search-summary {
+        background-color: rgba(255,255,255,0.2);
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+    
+    .download-btn {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background-color 0.3s;
+    }
+    
+    .download-btn:hover {
+        background-color: #218838;
+    }
+    
+    /* Single unified table */
+    .unified-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .unified-table th {
+        background-color: #4a5568;
+        color: white;
+        padding: 12px 15px;
+        text-align: left;
+        font-weight: 600;
+        border: 1px solid #4a5568;
+    }
+    
+    .unified-table td {
+        padding: 15px;
+        vertical-align: top;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .chapter-cell {
+        width: 25%;
+        background-color: #f7fafc;
+        font-weight: 600;
+    }
+    
+    .content-cell {
+        width: 75%;
+    }
+    
+    .chapter-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #2d3748;
+        word-wrap: break-word;
+    }
+    
+    /* Hierarchical heading styles - keep these as they work well */
+    .heading-item {
+        margin-bottom: 20px;
+    }
+    
+    .heading-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .heading-level-1 {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #2c3e50;
+        margin: 0 0 8px 0;
+        padding: 5px 0 5px 10px;
+        border-left: 4px solid #667eea;
+        background-color: #f8f9fa;
+    }
+    
+    .heading-level-2 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #34495e;
+        margin: 10px 0 6px 0;
+        padding-left: 20px;
+        border-left: 3px solid #3498db;
+    }
+    
+    .heading-level-3 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #555;
+        margin: 8px 0 5px 0;
+        padding-left: 40px;
+        border-left: 2px solid #95a5a6;
+    }
+    
+    .heading-level-4 {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #666;
+        margin: 6px 0 4px 0;
+        padding-left: 60px;
+    }
+    
+    .heading-level-5, .heading-level-6 {
+        font-size: 0.85rem;
+        font-weight: normal;
+        color: #777;
+        margin: 5px 0 3px 0;
+        padding-left: 80px;
+    }
+    
+    .content-block {
+        background-color: #fef9e7;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin: 8px 0;
+    }
+    
+    .explanation-block {
+        background-color: #e8f4fd;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin: 8px 0;
+        font-style: italic;
+    }
+    
+    .image-block {
+        margin: 10px 0;
+        text-align: center;
+    }
+    
+    .image-block img {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 8px;
+    }
+    
+    .qe-badge {
+        background-color: #e74c3c;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        display: inline-block;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+    
+    .bullet-list {
+        list-style-type: none;
+        padding-left: 0;
+        margin: 5px 0;
+    }
+    
+    .bullet-list li {
+        padding: 4px 0;
+        padding-left: 20px;
+        position: relative;
+    }
+    
+    .bullet-list li:before {
+        content: "•";
+        color: #667eea;
+        font-weight: bold;
+        position: absolute;
+        left: 5px;
+    }
+    
+    .loading-spinner {
+        text-align: center;
+        padding: 50px;
+    }
+    
+    /* Highlight the searched term */
+    .highlight {
+        background-color: #fef9c3;
+        padding: 0 2px;
+        border-radius: 3px;
+        font-weight: bold;
+    }
+    
+    @media (max-width: 768px) {
+        .unified-table, .unified-table tbody, .unified-table tr, .unified-table td {
+            display: block;
+            width: 100%;
+        }
+        
+        .unified-table tr {
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .chapter-cell, .content-cell {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Search Form -->
+    <div class="card search-card">
+        <div class="card-body">
+            <h4 class="card-title mb-3">🔍 Recherche comparative par titres</h4>
+            <form id="search-form" method="get">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label for="level" class="form-label">Niveau d'étude</label>
+                        <select name="level" id="level" class="form-select" required>
+                            <option value="">Choisir niveau</option>
+                            <option value="paces">PACES</option>
+                            <option value="2ème année">2ème année</option>
+                            <option value="3ème année">3ème année</option>
+                            <option value="4ème année">4ème année</option>
+                            <option value="5ème année">5ème année</option>
+                            <option value="6ème année">6ème année</option>
+                            <option value="Prépa IQ">Prépa IQ</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label for="unite" class="form-label">Unité d'enseignement</label>
+                        <select name="unite" id="unite" class="form-select" disabled required>
+                            <option value="">Sélectionnez d'abord un niveau</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label for="heading_query" class="form-label">Titre à rechercher</label>
+                        <input type="text" name="heading_query" id="heading_query" 
+                               class="form-control" placeholder="ex: diagnostic, traitement, classification..." required>
+                        <div class="form-text">Recherche dans tous les titres des chapitres</div>
+                    </div>
+                    
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Loading Spinner -->
+    <div id="loading" style="display: none;" class="loading-spinner">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="mt-2">Recherche en cours...</p>
+    </div>
+    
+    <!-- Results Container -->
+    <div id="results"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Get URLs from Django template
+    const ajaxUnitesUrl = "{% url 'lecon:ajax_unites' %}";
+    const apiSearchUrl = "{% url 'lecon:api_heading_search' %}";
+    const pdfDownloadUrl = "{% url 'lecon:download_pdf' %}";
+
+    let currentResults = [];
+    let currentQuery = '';
+    let currentUniteName = '';
+    let currentLevelName = '';
+
+    // Helper function to parse JSON content (values only, no keys)
+    function parseJsonContent(content) {
+        if (!content) return '';
+        
+        if (typeof content === 'string') {
+            // Remove JSON-specific formatting if present
+            let cleanText = content.replace(/[{}"]/g, '').replace(/[,:]/g, ' ');
+            return `<div class="content-text">${escapeHtml(cleanText.trim())}</div>`;
+        }
+        
+        if (Array.isArray(content)) {
+            if (content.length === 0) return '';
+            let html = '<ul class="bullet-list">';
+            content.forEach(item => {
+                if (typeof item === 'object') {
+                    html += `<li>${parseJsonContent(item)}</li>`;
+                } else {
+                    let cleanText = String(item).replace(/[{}"]/g, '').replace(/[,:]/g, ' ');
+                    html += `<li>${escapeHtml(cleanText.trim())}</li>`;
+                }
+            });
+            html += '</ul>';
+            return html;
+        }
+        
+        if (typeof content === 'object') {
+            const values = Object.values(content);
+            if (values.length === 0) return '';
+            
+            // Check for common text fields
+            if (content.text) return parseJsonContent(content.text);
+            if (content.content) return parseJsonContent(content.content);
+            
+            // Display all values without keys
+            let html = '<div>';
+            values.forEach(value => {
+                if (typeof value === 'object') {
+                    html += parseJsonContent(value);
+                } else if (value && String(value).trim()) {
+                    let cleanText = String(value).replace(/[{}"]/g, '').replace(/[,:]/g, ' ');
+                    html += `<div class="content-text">${escapeHtml(cleanText.trim())}</div>`;
+                }
+            });
+            html += '</div>';
+            return html;
+        }
+        
+        let cleanText = String(content).replace(/[{}"]/g, '').replace(/[,:]/g, ' ');
+        return `<div class="content-text">${escapeHtml(cleanText.trim())}</div>`;
+    }
+
+    // Highlight the searched term in text
+    function highlightText(text, searchTerm) {
+        if (!text || !searchTerm) return escapeHtml(text);
+        const regex = new RegExp(`(${escapeRegex(searchTerm)})`, 'gi');
+        return escapeHtml(text).replace(regex, '<span class="highlight">$1</span>');
+    }
+
+    function escapeRegex(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // Format heading with appropriate style
+    function formatHeading(heading, level, searchTerm) {
+        const levelClass = `heading-level-${Math.min(level, 6)}`;
+        const highlightedHeading = highlightText(heading, searchTerm);
+        return `<div class="${levelClass}">${highlightedHeading}</div>`;
+    }
+
+    // Format a single copy item
+    function formatCopy(copy, searchTerm) {
+        let html = '<div class="heading-item">';
+        
+        if (copy.heading) {
+            html += formatHeading(copy.heading, copy.heading_level, searchTerm);
+        }
+        
+        if (copy.content) {
+            let contentHtml = parseJsonContent(copy.content);
+            // Only try to highlight if it's plain text
+            if (typeof copy.content === 'string') {
+                contentHtml = highlightText(contentHtml, searchTerm);
+            }
+            html += `<div class="content-block">${contentHtml}</div>`;
+        }
+        
+        if (copy.explanation) {
+            const highlightedExplanation = highlightText(copy.explanation, searchTerm);
+            html += `<div class="explanation-block">
+                        <i class="fas fa-info-circle"></i> ${highlightedExplanation}
+                    </div>`;
+        }
+        
+        if (copy.image_url) {
+            html += `<div class="image-block">
+                        <img src="${copy.image_url}" alt="Image">
+                    </div>`;
+        }
+        
+        if (copy.is_qe) {
+            html += `<div><span class="qe-badge">⚠️ Question d'examen</span></div>`;
+        }
+        
+        html += '</div>';
+        return html;
+    }
+
+    // Display results in a single unified table
+    function displayResults(results, query, uniteName, levelName) {
+        if (!results || results.length === 0) {
+            document.getElementById('results').innerHTML = 
+                '<div class="alert alert-info">Aucun résultat trouvé pour cette recherche.</div>';
+            return;
+        }
+        
+        // Store current results for PDF download
+        currentResults = results;
+        currentQuery = query;
+        currentUniteName = uniteName;
+        currentLevelName = levelName;
+        
+        let html = `
+            <div class="results-header">
+                <h3><i class="fas fa-chart-line"></i> Résultats de la recherche</h3>
+                <div class="search-summary">
+                    <strong>🎓 Niveau :</strong> ${escapeHtml(levelName)}<br>
+                    <strong>📚 Unité :</strong> ${escapeHtml(uniteName)}<br>
+                    <strong>🔍 Titre recherché :</strong> "${escapeHtml(query)}"<br>
+                    <strong>📊 Chapitres trouvés :</strong> ${results.length}
+                </div>
+                <button id="downloadPdfBtn" class="download-btn">
+                    <i class="fas fa-download"></i> Télécharger en PDF
+                </button>
+            </div>
+            
+            <!-- Single Unified Table -->
+            <table class="unified-table">
+                <thead>
+                    <tr>
+                        <th>Chapitre</th>
+                        <th>Contenu du cours</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+        
+        // Generate rows for each chapter
+        for (const result of results) {
+            html += `
+                <tr>
+                    <td class="chapter-cell">
+                        <div class="chapter-title">${escapeHtml(result.chapter_title)}</div>
+                    </td>
+                    <td class="content-cell">
+            `;
+            
+            // Add all hierarchical content for this chapter
+            for (const copy of result.rows) {
+                html += formatCopy(copy, query);
+            }
+            
+            html += `
+                    </td>
+                </tr>
+            `;
+        }
+        
+        html += `
+                </tbody>
+            </table>
+        `;
+        
+        document.getElementById('results').innerHTML = html;
+        
+        // Attach PDF download handler
+        const downloadBtn = document.getElementById('downloadPdfBtn');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', function() {
+                downloadPDF();
+            });
+        }
+        
+        // Scroll to results
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Download PDF function (using browser print)
+    function downloadPDF() {
+        if (!currentResults || currentResults.length === 0) {
+            alert('Aucun résultat à télécharger');
+            return;
+        }
+        
+        const downloadBtn = document.getElementById('downloadPdfBtn');
+        const originalText = downloadBtn.innerHTML;
+        downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Préparation...';
+        downloadBtn.disabled = true;
+        
+        fetch(pdfDownloadUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                results: currentResults,
+                query: currentQuery,
+                unite_name: currentUniteName,
+                level_name: currentLevelName
+            })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Generation failed');
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `recherche_${currentQuery}_${new Date().getTime()}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Erreur lors de la génération du document');
+        })
+        .finally(() => {
+            downloadBtn.innerHTML = originalText;
+            downloadBtn.disabled = false;
+        });
+    }
+
+    // Get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    // DOM elements
+    const levelSelect = document.getElementById('level');
+    const uniteSelect = document.getElementById('unite');
+    const searchForm = document.getElementById('search-form');
+    let uniteNameMap = {};
+
+    // Load unites when level changes
+    levelSelect.addEventListener('change', function() {
+        const level = this.value;
+        
+        if (!level) {
+            uniteSelect.disabled = true;
+            uniteSelect.innerHTML = '<option value="">Sélectionnez d\'abord un niveau</option>';
+            return;
+        }
+        
+        uniteSelect.disabled = true;
+        uniteSelect.innerHTML = '<option value="">Chargement des unités...</option>';
+        
+        fetch(`${ajaxUnitesUrl}?level=${encodeURIComponent(level)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.unites && data.unites.length > 0) {
+                    uniteSelect.disabled = false;
+                    uniteSelect.innerHTML = '<option value="">Choisir une unité</option>';
+                    data.unites.forEach(unite => {
+                        const option = document.createElement('option');
+                        option.value = unite.id;
+                        option.textContent = unite.title;
+                        uniteSelect.appendChild(option);
+                        uniteNameMap[unite.id] = unite.title;
+                    });
+                } else {
+                    uniteSelect.disabled = true;
+                    uniteSelect.innerHTML = '<option value="">Aucune unité pour ce niveau</option>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                uniteSelect.disabled = true;
+                uniteSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+            });
+    });
+
+    // Handle search
+    searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const level = levelSelect.value;
+        const unite = uniteSelect.value;
+        const query = document.getElementById('heading_query').value.trim();
+        const levelText = levelSelect.options[levelSelect.selectedIndex]?.text || level;
+        const uniteText = uniteNameMap[unite] || '';
+        
+        if (!level || !unite || !query) {
+            document.getElementById('results').innerHTML = 
+                '<div class="alert alert-warning">Veuillez remplir tous les champs</div>';
+            return;
+        }
+        
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('results').innerHTML = '';
+        
+        const params = new URLSearchParams({level, unite, heading_query: query});
+        
+        fetch(`${apiSearchUrl}?${params.toString()}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loading').style.display = 'none';
+                displayResults(data.results, query, uniteText, levelText);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('results').innerHTML = 
+                    '<div class="alert alert-danger">Erreur lors de la recherche</div>';
+            });
+    });
+</script>
+{% endblock %}
+
+
+
+{% comment %} <!-- lecon/heading_search.html -->
+{% extends 'base.html' %}
+
+{% block title %}Recherche comparative de titres - Matière Médicale{% endblock %}
+
+{% block extra_css %}
+<style>
+    .search-card {
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    
+    .results-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+    
+    .results-header h3 {
+        margin: 0 0 10px 0;
+    }
+    
+    .search-summary {
+        background-color: rgba(255,255,255,0.2);
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        margin-top: 10px;
+    }
+    
+    .download-btn {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background-color 0.3s;
+    }
+    
+    .download-btn:hover {
+        background-color: #218838;
+    }
+    
+    .chapter-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .chapter-header {
+        background-color: #667eea;
+        color: white;
+        padding: 12px 15px;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+    
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .comparison-table th {
+        background-color: #f8f9fa;
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .comparison-table td {
+        padding: 15px;
+        vertical-align: top;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .structure-cell {
+        width: 30%;
+        background-color: #fafbfc;
+    }
+    
+    .content-cell {
+        width: 70%;
+    }
+    
+    .seed-info {
+        background-color: #f0f4ff;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 0.85rem;
+        margin-bottom: 10px;
+    }
+    
+    /* Hierarchical heading styles */
+    .heading-item {
+        margin-bottom: 20px;
+    }
+    
+    .heading-level-1 {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #2c3e50;
+        margin: 0 0 8px 0;
+        padding: 5px 0 5px 10px;
+        border-left: 4px solid #667eea;
+        background-color: #f8f9fa;
+    }
+    
+    .heading-level-2 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #34495e;
+        margin: 10px 0 6px 0;
+        padding-left: 20px;
+        border-left: 3px solid #3498db;
+    }
+    
+    .heading-level-3 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #555;
+        margin: 8px 0 5px 0;
+        padding-left: 40px;
+        border-left: 2px solid #95a5a6;
+    }
+    
+    .heading-level-4 {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #666;
+        margin: 6px 0 4px 0;
+        padding-left: 60px;
+    }
+    
+    .heading-level-5, .heading-level-6 {
+        font-size: 0.85rem;
+        font-weight: normal;
+        color: #777;
+        margin: 5px 0 3px 0;
+        padding-left: 80px;
+    }
+    
+    .content-block {
+        background-color: #fef9e7;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin: 8px 0;
+    }
+    
+    .explanation-block {
+        background-color: #e8f4fd;
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin: 8px 0;
+        font-style: italic;
+    }
+    
+    .image-block {
+        margin: 10px 0;
+        text-align: center;
+    }
+    
+    .image-block img {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 8px;
+    }
+    
+    .qe-badge {
+        background-color: #e74c3c;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        display: inline-block;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+    
+    .bullet-list {
+        list-style-type: none;
+        padding-left: 0;
+        margin: 5px 0;
+    }
+    
+    .bullet-list li {
+        padding: 4px 0;
+        padding-left: 20px;
+        position: relative;
+    }
+    
+    .bullet-list li:before {
+        content: "•";
+        color: #667eea;
+        font-weight: bold;
+        position: absolute;
+        left: 5px;
+    }
+    
+    .loading-spinner {
+        text-align: center;
+        padding: 50px;
+    }
+    
+    @media (max-width: 768px) {
+        .comparison-table th, .comparison-table td {
+            display: block;
+            width: 100%;
+        }
+        
+        .structure-cell, .content-cell {
+            width: 100%;
+        }
+        
+        .heading-level-1 { font-size: 1rem; }
+        .heading-level-2 { padding-left: 10px; }
+        .heading-level-3 { padding-left: 20px; }
+        .heading-level-4 { padding-left: 30px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Search Form -->
+    <div class="card search-card">
+        <div class="card-body">
+            <h4 class="card-title mb-3">🔍 Recherche comparative par titres</h4>
+            <form id="search-form" method="get">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label for="level" class="form-label">Niveau d'étude</label>
+                        <select name="level" id="level" class="form-select" required>
+                            <option value="">Choisir niveau</option>
+                            <option value="paces">PACES</option>
+                            <option value="2ème année">2ème année</option>
+                            <option value="3ème année">3ème année</option>
+                            <option value="4ème année">4ème année</option>
+                            <option value="5ème année">5ème année</option>
+                            <option value="6ème année">6ème année</option>
+                            <option value="Prépa IQ">Prépa IQ</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label for="unite" class="form-label">Unité d'enseignement</label>
+                        <select name="unite" id="unite" class="form-select" disabled required>
+                            <option value="">Sélectionnez d'abord un niveau</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label for="heading_query" class="form-label">Titre à rechercher</label>
+                        <input type="text" name="heading_query" id="heading_query" 
+                               class="form-control" placeholder="ex: diagnostic, traitement, classification..." required>
+                        <div class="form-text">Recherche dans tous les titres des chapitres</div>
+                    </div>
+                    
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Loading Spinner -->
+    <div id="loading" style="display: none;" class="loading-spinner">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="mt-2">Recherche en cours...</p>
+    </div>
+    
+    <!-- Results Container -->
+    <div id="results"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Get URLs from Django template
+    const ajaxUnitesUrl = "{% url 'lecon:ajax_unites' %}";
+    const apiSearchUrl = "{% url 'lecon:api_heading_search' %}";
+    const pdfDownloadUrl = "{% url 'lecon:download_pdf' %}";
+
+    let currentResults = [];
+    let currentQuery = '';
+    let currentUniteName = '';
+    let currentLevelName = '';
+
+    // Helper function to parse JSON content (values only)
+    function parseJsonContent(content) {
+        if (!content) return '';
+        
+        if (typeof content === 'string') {
+            return `<div class="content-text">${escapeHtml(content)}</div>`;
+        }
+        
+        if (Array.isArray(content)) {
+            if (content.length === 0) return '';
+            let html = '<ul class="bullet-list">';
+            content.forEach(item => {
+                if (typeof item === 'object') {
+                    html += `<li>${parseJsonContent(item)}</li>`;
+                } else {
+                    html += `<li>${escapeHtml(String(item))}</li>`;
+                }
+            });
+            html += '</ul>';
+            return html;
+        }
+        
+        if (typeof content === 'object') {
+            const values = Object.values(content);
+            if (values.length === 0) return '';
+            
+            // Check for common text fields
+            if (content.text) return parseJsonContent(content.text);
+            if (content.content) return parseJsonContent(content.content);
+            
+            // Display all values
+            let html = '<div>';
+            values.forEach(value => {
+                if (typeof value === 'object') {
+                    html += parseJsonContent(value);
+                } else if (value && String(value).trim()) {
+                    html += `<div class="content-text">${escapeHtml(String(value))}</div>`;
+                }
+            });
+            html += '</div>';
+            return html;
+        }
+        
+        return `<div class="content-text">${escapeHtml(String(content))}</div>`;
+    }
+
+    // Format heading with appropriate style
+    function formatHeading(heading, level) {
+        const levelClass = `heading-level-${Math.min(level, 6)}`;
+        return `<div class="${levelClass}">${escapeHtml(heading)}</div>`;
+    }
+
+    // Format a single copy item
+    function formatCopy(copy) {
+        let html = '<div class="heading-item">';
+        
+        if (copy.heading) {
+            html += formatHeading(copy.heading, copy.heading_level);
+        }
+        
+        if (copy.content) {
+            html += `<div class="content-block">${parseJsonContent(copy.content)}</div>`;
+        }
+        
+        if (copy.explanation) {
+            html += `<div class="explanation-block">
+                        <i class="fas fa-info-circle"></i> ${escapeHtml(copy.explanation)}
+                    </div>`;
+        }
+        
+        if (copy.image_url) {
+            html += `<div class="image-block">
+                        <img src="${copy.image_url}" alt="Image">
+                    </div>`;
+        }
+        
+        if (copy.is_qe) {
+            html += `<div><span class="qe-badge">⚠️ Question d'examen</span></div>`;
+        }
+        
+        html += '</div>';
+        return html;
+    }
+
+    // Display results in the requested table format
+    function displayResults(results, query, uniteName, levelName) {
+        if (!results || results.length === 0) {
+            document.getElementById('results').innerHTML = 
+                '<div class="alert alert-info">Aucun résultat trouvé pour cette recherche.</div>';
+            return;
+        }
+        
+        // Store current results for PDF download
+        currentResults = results;
+        currentQuery = query;
+        currentUniteName = uniteName;
+        currentLevelName = levelName;
+        
+        let html = `
+            <div class="results-header">
+                <h3><i class="fas fa-chart-line"></i> Résultats de la recherche</h3>
+                <div class="search-summary">
+                    <strong>🎓 Niveau :</strong> ${escapeHtml(levelName)}<br>
+                    <strong>📚 Unité :</strong> ${escapeHtml(uniteName)}<br>
+                    <strong>🔍 Titre recherché :</strong> "${escapeHtml(query)}"<br>
+                    <strong>📊 Chapitres trouvés :</strong> ${results.length}
+                </div>
+                <button id="downloadPdfBtn" class="download-btn">
+                    <i class="fas fa-download"></i> Télécharger en PDF
+                </button>
+            </div>
+        `;
+        
+        // Generate table for each chapter
+        for (const result of results) {
+            html += `
+                <div class="chapter-card">
+                    <div class="chapter-header">
+                        📖 ${escapeHtml(result.chapter_title)}
+                    </div>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th class="structure-cell">Structure du cours</th>
+                                <th class="content-cell">Contenu détaillé</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="structure-cell">
+                                    <div class="seed-info">
+                                        <strong>Titre trouvé :</strong> "${escapeHtml(result.seed_heading)}"<br>
+                                        <small>Niveau ${result.seed_level}</small>
+                                    </div>
+                                </td>
+                                <td class="content-cell">
+            `;
+            
+            // Add all hierarchical content
+            for (const copy of result.rows) {
+                html += formatCopy(copy);
+            }
+            
+            html += `
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        
+        document.getElementById('results').innerHTML = html;
+        
+        // Attach PDF download handler
+        document.getElementById('downloadPdfBtn').addEventListener('click', function() {
+            downloadPDF();
+        });
+        
+        // Scroll to results
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Download PDF function
+    function downloadPDF() {
+        if (!currentResults || currentResults.length === 0) {
+            alert('Aucun résultat à télécharger');
+            return;
+        }
+        
+        const downloadBtn = document.getElementById('downloadPdfBtn');
+        const originalText = downloadBtn.innerHTML;
+        downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Préparation...';
+        downloadBtn.disabled = true;
+        
+        fetch(pdfDownloadUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                results: currentResults,
+                query: currentQuery,
+                unite_name: currentUniteName,
+                level_name: currentLevelName
+            })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Generation failed');
+            return response.blob();
+        })
+        .then(blob => {
+            // Create a temporary link to download the HTML file
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `recherche_${currentQuery}_${new Date().getTime()}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            // Optional: Open in new window for printing
+            // const newWindow = window.open(url);
+            // if (newWindow) {
+            //     newWindow.onload = function() {
+            //         newWindow.print();
+            //     };
+            // }
+        })
+        .catch(error => {
+            console.error('PDF Error:', error);
+            alert('Erreur lors de la génération du document');
+        })
+        .finally(() => {
+            downloadBtn.innerHTML = originalText;
+            downloadBtn.disabled = false;
+        });
+    }
+
+    // Get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    // DOM elements
+    const levelSelect = document.getElementById('level');
+    const uniteSelect = document.getElementById('unite');
+    const searchForm = document.getElementById('search-form');
+    let uniteNameMap = {};
+
+    // Load unites when level changes
+    levelSelect.addEventListener('change', function() {
+        const level = this.value;
+        
+        if (!level) {
+            uniteSelect.disabled = true;
+            uniteSelect.innerHTML = '<option value="">Sélectionnez d\'abord un niveau</option>';
+            return;
+        }
+        
+        uniteSelect.disabled = true;
+        uniteSelect.innerHTML = '<option value="">Chargement des unités...</option>';
+        
+        fetch(`${ajaxUnitesUrl}?level=${encodeURIComponent(level)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.unites && data.unites.length > 0) {
+                    uniteSelect.disabled = false;
+                    uniteSelect.innerHTML = '<option value="">Choisir une unité</option>';
+                    data.unites.forEach(unite => {
+                        const option = document.createElement('option');
+                        option.value = unite.id;
+                        option.textContent = unite.title;
+                        uniteSelect.appendChild(option);
+                        uniteNameMap[unite.id] = unite.title;
+                    });
+                } else {
+                    uniteSelect.disabled = true;
+                    uniteSelect.innerHTML = '<option value="">Aucune unité pour ce niveau</option>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                uniteSelect.disabled = true;
+                uniteSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+            });
+    });
+
+    // Handle search
+    searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const level = levelSelect.value;
+        const unite = uniteSelect.value;
+        const query = document.getElementById('heading_query').value.trim();
+        const levelText = levelSelect.options[levelSelect.selectedIndex]?.text || level;
+        const uniteText = uniteNameMap[unite] || '';
+        
+        if (!level || !unite || !query) {
+            document.getElementById('results').innerHTML = 
+                '<div class="alert alert-warning">Veuillez remplir tous les champs</div>';
+            return;
+        }
+        
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('results').innerHTML = '';
+        
+        const params = new URLSearchParams({level, unite, heading_query: query});
+        
+        fetch(`${apiSearchUrl}?${params.toString()}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loading').style.display = 'none';
+                displayResults(data.results, query, uniteText, levelText);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('results').innerHTML = 
+                    '<div class="alert alert-danger">Erreur lors de la recherche</div>';
+            });
+    });
+</script>
+{% endblock %} {% endcomment %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Importer les données d'un chapitre depuis un dossier</h2>
+    <p>Structure attendue : <code>/chemin/vers/niveau/ue/chapitre/</code></p>
+    <p>Fichiers reconnus :</p>
+    <ul>
+        <li><strong>mcq.csv / qcm.csv</strong> – QCM</li>
+        <li><strong>qa.csv</strong> – Questions/Réponses</li>
+        <li><strong>tf.csv / truefalse.csv</strong> – Vrai/Faux</li>
+        <li><strong>flash.csv / flashcard.csv</strong> – Flashcards</li>
+        <li><strong>term.csv / terminology.csv</strong> – Terminologie</li>
+        <li><strong>summary.txt</strong> – Résumé</li>
+        <li><strong>clinical.txt / cas.txt</strong> – Cas clinique</li>
+    </ul>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Importer</button>
+        <a href="{% url 'lecon:subject_list' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+
+    {% if results %}
+    <hr>
+    <h3>Résultats</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Importés</th>
+                <th>Erreurs</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, data in results.items %}
+            <tr>
+                <td>{{ key|upper }}</td>
+                <td>{{ data.success }}</td>
+                <td>{{ data.errors|length }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}

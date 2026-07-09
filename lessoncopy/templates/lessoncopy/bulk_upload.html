@@ -1,0 +1,21 @@
+<!-- templates/quizzes/bulk_upload.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Bulk Upload for Chapter: {{ chapter.title }}</h2>
+    <p>Select multiple CSV files. The system will detect their type based on filename:</p>
+    <ul>
+        <li><strong>MCQ:</strong> filename contains "mcq" or "qcm"</li>
+        <li><strong>Question-Answer:</strong> filename contains "qa" or "question_answer"</li>
+        <li><strong>True/False:</strong> filename contains "tf" or "truefalse"</li>
+        <li><strong>Flashcards:</strong> filename contains "flash" or "flashcard"</li>
+        <li><strong>Terminology:</strong> filename contains "term" or "terminology"</li>
+    </ul>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Upload Files</button>
+        <a href="{% url 'lecon:chapter_detail' subject_pk=chapter.ue.id chapter_pk=chapter.id %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

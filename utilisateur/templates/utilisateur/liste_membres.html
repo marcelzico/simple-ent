@@ -1,0 +1,565 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Les membres{% endblock title %}
+
+{% block extra_css %}
+<style>
+    /* Variables pour faciliter les modifications */
+    :root {
+        --card-radius: 16px;
+        --transition-speed: 0.2s;
+    }
+    
+    /* Carte principale */
+    .member-card {
+        transition: all var(--transition-speed) ease;
+        border: none;
+        border-radius: var(--card-radius);
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        background: white;
+        height: 100%;
+        position: relative;
+    }
+    
+    .member-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,123,255,0.08);
+    }
+    
+    /* Header minimaliste */
+    .member-header {
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(0,0,0,0.03);
+        background: white;
+    }
+    
+    /* Image de profil - complètement visible */
+    .member-avatar-wrapper {
+        text-align: center;
+        padding: 20px 20px 10px;
+    }
+    
+    .member-img {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        background: white;
+    }
+    
+    /* Badges compacts */
+    .role-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 30px;
+        font-size: 0.7rem;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        gap: 4px;
+    }
+    
+    .role-badge i {
+        font-size: 0.65rem;
+    }
+    
+    /* Badge étudiant */
+    .badge-student {
+        background: rgba(40, 167, 69, 0.08);
+        color: #28a745;
+        border: 1px solid rgba(40, 167, 69, 0.15);
+    }
+    
+    /* Badge staff */
+    .badge-staff {
+        background: rgba(23, 162, 184, 0.08);
+        color: #17a2b8;
+        border: 1px solid rgba(23, 162, 184, 0.15);
+    }
+    
+    /* Badge admin */
+    .badge-admin {
+        background: rgba(255, 193, 7, 0.08);
+        color: #856404;
+        border: 1px solid rgba(255, 193, 7, 0.15);
+    }
+    
+    /* Badge anonyme */
+    .badge-anonyme {
+        background: rgba(108, 117, 125, 0.08);
+        color: #6c757d;
+        border: 1px solid rgba(108, 117, 125, 0.15);
+    }
+    
+    /* Badge niveau - plus discret */
+    .level-badge {
+        background: rgba(102, 126, 234, 0.05);
+        color: #4a5fa5;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        border: 1px solid rgba(102, 126, 234, 0.1);
+    }
+    
+    /* Badge genre */
+    .gender-badge {
+        background: rgba(111, 66, 193, 0.05);
+        color: #6f42c1;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+    
+    /* Informations utilisateur */
+    .user-info {
+        padding: 0 16px 16px;
+    }
+    
+    .user-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 2px;
+    }
+    
+    .user-fullname {
+        font-size: 0.75rem;
+        color: #6c757d;
+        margin-bottom: 12px;
+    }
+    
+    /* Tags container */
+    .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 16px;
+    }
+    
+    /* Statut d'activité - simple */
+    .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.7rem;
+        padding-top: 12px;
+        border-top: 1px solid rgba(0,0,0,0.03);
+    }
+    
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    
+    .status-dot.active {
+        background: #28a745;
+        box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.1);
+    }
+    
+    .status-dot.inactive {
+        background: #dc3545;
+        box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1);
+    }
+    
+    /* Date d'inscription */
+    .join-date {
+        font-size: 0.7rem;
+        color: #adb5bd;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    
+    /* Filtres */
+    .filter-card {
+        border: none;
+        border-radius: var(--card-radius);
+        background: white;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.02);
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .search-input {
+        border-radius: 30px;
+        padding: 8px 16px;
+        border: 1px solid #e9ecef;
+        font-size: 0.9rem;
+        background: #f8f9fa;
+    }
+    
+    .search-input:focus {
+        border-color: #667eea;
+        background: white;
+        box-shadow: none;
+    }
+    
+    /* Stats cards */
+    .stats-card {
+        background: white;
+        border-radius: 12px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border: 1px solid rgba(0,0,0,0.02);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+    }
+    
+    .stats-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+    
+    .empty-state {
+        padding: 60px 20px;
+        text-align: center;
+        background: white;
+        border-radius: var(--card-radius);
+        border: 1px dashed #dee2e6;
+    }
+    
+    /* Animation douce */
+    .member-item {
+        transition: opacity 0.2s ease;
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- En-tête simple -->
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h2 class="fw-bold mb-0">
+                <i class="bi bi-people me-2" style="color: #667eea;"></i>
+                Les membres
+            </h2>
+            <span class="bg-light px-4 py-2 rounded-pill small fw-semibold">
+                <i class="bi bi-person-check text-primary me-1"></i>
+                <span id="memberCount">{{ profiles.count }}</span> membre{{ profiles.count|pluralize }}
+            </span>
+        </div>
+    </div>
+
+    <!-- Filtres compacts -->
+    <div class="filter-card">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="small text-muted mb-1 fw-semibold">
+                    <i class="bi bi-search"></i> Rechercher
+                </label>
+                <input type="text" 
+                       id="searchName" 
+                       class="form-control search-input" 
+                       placeholder="Nom d'utilisateur..."
+                       onkeyup="filterMembers()">
+            </div>
+            
+            <div class="col-md-2">
+                <label class="small text-muted mb-1 fw-semibold">
+                    <i class="bi bi-bar-chart"></i> Niveau
+                </label>
+                <select id="levelFilter" class="form-select search-input" onchange="filterMembers()">
+                    <option value="all">Tous</option>
+                    <option value="paces">PACES</option>
+                    <option value="2ème année">2ème</option>
+                    <option value="3ème année">3ème</option>
+                    <option value="4ème année">4ème</option>
+                    <option value="5ème année">5ème</option>
+                    <option value="6ème année">6ème</option>
+                    <option value="interne">Interne</option>
+                    <option value="no_level">Sans niveau</option>
+                </select>
+            </div>
+            
+            <div class="col-md-2">
+                <label class="small text-muted mb-1 fw-semibold">
+                    <i class="bi bi-person-badge"></i> Rôle
+                </label>
+                <select id="roleFilter" class="form-select search-input" onchange="filterMembers()">
+                    <option value="all">Tous</option>
+                    <option value="student">Étudiants</option>
+                    <option value="staff">Staff</option>
+                    <option value="admin">Admin</option>
+                    <option value="anonyme">Anonyme</option>
+                </select>
+            </div>
+            
+            <div class="col-md-1">
+                <label class="small text-muted mb-1 fw-semibold">
+                    <i class="bi bi-gender-ambiguous"></i>
+                </label>
+                <select id="genderFilter" class="form-select search-input" onchange="filterMembers()">
+                    <option value="all">Tous</option>
+                    <option value="M">♂</option>
+                    <option value="F">♀</option>
+                </select>
+            </div>
+            
+            <div class="col-md-2">
+                <button onclick="clearAllFilters()" class="btn btn-light w-100 search-input text-muted">
+                    <i class="bi bi-x-circle"></i> Effacer
+                </button>
+            </div>
+        </div>
+        
+        <!-- Filtres actifs -->
+        <div id="activeFilters" class="mt-3 d-flex gap-2 flex-wrap small">
+            <!-- JS va remplir ici -->
+        </div>
+    </div>
+
+    <!-- Stats rapides -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3 col-6">
+            <div class="stats-card">
+                <div class="stats-icon" style="background: rgba(102, 126, 234, 0.08); color: #667eea;">
+                    <i class="bi bi-mortarboard"></i>
+                </div>
+                <div>
+                    <div class="small text-muted">Étudiants</div>
+                    <div class="fw-bold fs-5" id="studentCount">{{ profiles|dictsortreversed:"is_student"|slice:":100"|length }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stats-card">
+                <div class="stats-icon" style="background: rgba(23, 162, 184, 0.08); color: #17a2b8;">
+                    <i class="bi bi-gear"></i>
+                </div>
+                <div>
+                    <div class="small text-muted">Staff</div>
+                    <div class="fw-bold fs-5" id="staffCount">{{ profiles|dictsortreversed:"is_staff"|slice:":100"|length }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stats-card">
+                <div class="stats-icon" style="background: rgba(255, 193, 7, 0.08); color: #ffc107;">
+                    <i class="bi bi-shield-lock"></i>
+                </div>
+                <div>
+                    <div class="small text-muted">Admin</div>
+                    <div class="fw-bold fs-5" id="adminCount">{{ profiles|dictsortreversed:"is_superuser"|slice:":100"|length }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stats-card">
+                <div class="stats-icon" style="background: rgba(111, 66, 193, 0.08); color: #6f42c1;">
+                    <i class="bi bi-bar-chart"></i>
+                </div>
+                <div>
+                    <div class="small text-muted">Niveaux</div>
+                    <div class="fw-bold fs-5" id="levelCount">{{ level_count|default:"0" }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grille des membres -->
+    <div class="row g-3" id="memberGrid">
+        {% for profile in profiles %}
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12 member-item" 
+             data-username="{{ profile.username|lower }}"
+             data-level="{% if profile.student_profile.level %}{{ profile.student_profile.level }}{% else %}no_level{% endif %}"
+             data-role="{% if profile.is_superuser %}admin{% elif profile.is_staff %}staff{% elif profile.is_student %}student{% else %}anonyme{% endif %}"
+             data-gender="{{ profile.gender|default:'all' }}">
+            
+            <a href="{% url 'utilisateur:voir_profil' profile.id %}" class="text-decoration-none">
+                <div class="member-card">
+                    <!-- Header minimal -->
+                    <div class="member-header">
+                        <span class="small text-muted">
+                            <i class="bi bi-at"></i> @{{ profile.username|truncatechars:12 }}
+                        </span>
+                        
+                        <!-- Badge rôle compact -->
+                        {% if profile.is_superuser %}
+                        <span class="role-badge badge-admin">
+                            <i class="bi bi-shield-lock"></i> Admin
+                        </span>
+                        {% elif profile.is_staff %}
+                        <span class="role-badge badge-staff">
+                            <i class="bi bi-gear"></i> Staff
+                        </span>
+                        {% elif profile.is_student %}
+                        <span class="role-badge badge-student">
+                            <i class="bi bi-mortarboard"></i> Étudiant
+                        </span>
+                        {% else %}
+                        <span class="role-badge badge-anonyme">
+                            <i class="bi bi-incognito"></i>
+                        </span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Avatar - complètement visible -->
+                    <div class="member-avatar-wrapper">
+                        <img src="{{ profile.profile_pic.url }}" 
+                             class="member-img" 
+                             alt="{{ profile.username }}"
+                             onerror="this.src='{% static 'profile_pics/default.png' %}'">
+                    </div>
+                    
+                    <!-- Infos utilisateur -->
+                    <div class="user-info text-center">
+                        <div class="user-name">{{ profile.username|truncatechars:15 }}</div>
+                        
+                        {% if profile.first_name or profile.last_name %}
+                        <div class="user-fullname">
+                            {{ profile.first_name }} {{ profile.last_name }}
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Tags compacts -->
+                        <div class="tags-container justify-content-center">
+                            {% if profile.student_profile.level %}
+                            <span class="level-badge">
+                                <i class="bi bi-book"></i> {{ profile.student_profile.level|truncatechars:12 }}
+                            </span>
+                            {% endif %}
+                            
+                            {% if profile.gender %}
+                            <span class="gender-badge">
+                                {% if profile.gender == 'M' %}
+                                    <i class="bi bi-gender-male"></i> H
+                                {% elif profile.gender == 'F' %}
+                                    <i class="bi bi-gender-female"></i> F
+                                {% endif %}
+                            </span>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Statut et date -->
+                        <div class="status-indicator justify-content-between">
+                            <span class="d-flex align-items-center">
+                                <span class="status-dot {% if profile.is_active %}active{% else %}inactive{% endif %} me-1"></span>
+                                <span class="small {% if profile.is_active %}text-success{% else %}text-danger{% endif %}">
+                                    {% if profile.is_active %}Actif{% else %}Inactif{% endif %}
+                                </span>
+                            </span>
+                            <span class="join-date">
+                                <i class="bi bi-calendar3"></i>
+                                {{ profile.date_joined|date:"M Y" }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-state">
+                <i class="bi bi-people fs-1 text-muted mb-3 d-block"></i>
+                <h5 class="text-muted mb-2">Aucun membre</h5>
+                <p class="small text-secondary">La liste est vide pour le moment.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Message aucun résultat -->
+    <div id="noResults" class="row d-none">
+        <div class="col-12">
+            <div class="empty-state">
+                <i class="bi bi-funnel fs-1 text-muted mb-3 d-block"></i>
+                <h5 class="text-muted mb-2">Aucun résultat</h5>
+                <p class="small text-secondary mb-3">Aucun membre ne correspond aux filtres sélectionnés.</p>
+                <button onclick="clearAllFilters()" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-x-circle"></i> Effacer les filtres
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function filterMembers() {
+    const searchTerm = document.getElementById('searchName').value.toLowerCase();
+    const levelFilter = document.getElementById('levelFilter').value;
+    const roleFilter = document.getElementById('roleFilter').value;
+    const genderFilter = document.getElementById('genderFilter').value;
+    
+    const members = document.querySelectorAll('.member-item');
+    let visibleCount = 0;
+    let studentCount = 0, staffCount = 0, adminCount = 0;
+    const activeLevels = new Set();
+    
+    members.forEach(member => {
+        const username = member.dataset.username;
+        const level = member.dataset.level;
+        const role = member.dataset.role;
+        const gender = member.dataset.gender;
+        
+        const matchesSearch = searchTerm === '' || username.includes(searchTerm);
+        const matchesLevel = levelFilter === 'all' || level === levelFilter;
+        const matchesRole = roleFilter === 'all' || role === roleFilter;
+        const matchesGender = genderFilter === 'all' || gender === genderFilter;
+        
+        const isVisible = matchesSearch && matchesLevel && matchesRole && matchesGender;
+        
+        if (isVisible) {
+            member.style.display = '';
+            visibleCount++;
+            
+            if (role === 'student') studentCount++;
+            if (role === 'staff') staffCount++;
+            if (role === 'admin') adminCount++;
+            if (level !== 'no_level') activeLevels.add(level);
+        } else {
+            member.style.display = 'none';
+        }
+    });
+    
+    document.getElementById('memberCount').textContent = visibleCount;
+    document.getElementById('studentCount').textContent = studentCount;
+    document.getElementById('staffCount').textContent = staffCount;
+    document.getElementById('adminCount').textContent = adminCount;
+    document.getElementById('levelCount').textContent = activeLevels.size || '0';
+    
+    const noResultsDiv = document.getElementById('noResults');
+    if (visibleCount === 0 && members.length > 0) {
+        noResultsDiv.classList.remove('d-none');
+    } else {
+        noResultsDiv.classList.add('d-none');
+    }
+}
+
+function clearAllFilters() {
+    document.getElementById('searchName').value = '';
+    document.getElementById('levelFilter').value = 'all';
+    document.getElementById('roleFilter').value = 'all';
+    document.getElementById('genderFilter').value = 'all';
+    filterMembers();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    filterMembers();
+});
+</script>
+{% endblock content %}

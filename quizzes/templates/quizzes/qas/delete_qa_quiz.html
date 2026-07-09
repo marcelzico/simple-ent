@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete MCQ Quiz{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-danger shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Confirm Quiz Deletion
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-trash-alt me-2"></i>
+                            Warning: This action cannot be undone!
+                        </h5>
+                        <p class="mb-0">
+                            You are about to permanently delete this MCQ quiz and all associated data.
+                        </p>
+                    </div>
+                    
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ quiz.title }}</h5>
+                            <div class="mb-3">
+                                <span class="badge bg-primary">
+                                    <i class="fas fa-book me-1"></i>{{ quiz.subject.title }}
+                                </span>
+                                <span class="badge bg-secondary ms-2">
+                                    {{ quiz.questions.count }} questions
+                                </span>
+                                <span class="badge bg-info ms-2">
+                                    {{ quiz.time_limit }} minutes
+                                </span>
+                            </div>
+                            
+                            {% if quiz.description %}
+                            <p class="card-text">{{ quiz.description }}</p>
+                            {% endif %}
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <small class="text-muted d-block">Start Date</small>
+                                    <strong>{{ quiz.start_date|date:"M d, Y H:i" }}</strong>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-muted d-block">End Date</small>
+                                    <strong>{{ quiz.end_date|date:"M d, Y H:i" }}</strong>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <small class="text-muted d-block">Chapters Covered</small>
+                                <div class="d-flex flex-wrap gap-1 mt-1">
+                                    {% for chapter in quiz.chapters.all|slice:":5" %}
+                                    <span class="badge bg-light text-dark border">
+                                        {{ chapter.title|truncatewords:2 }}
+                                    </span>
+                                    {% endfor %}
+                                    {% if quiz.chapters.count > 5 %}
+                                    <span class="badge bg-secondary">
+                                        +{{ quiz.chapters.count|add:"-5" }} more
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Statistics -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Quiz Statistics
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <small class="text-muted d-block">Total Attempts</small>
+                                        <h4 class="text-primary">{{ quiz.attempts.count }}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <small class="text-muted d-block">Avg. Score</small>
+                                        <h4 class="text-success">
+                                            {% if quiz.attempts.count > 0 %}
+                                                {{ average_score|floatformat:1 }}%
+                                            {% else %}
+                                                0%
+                                            {% endif %}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {% if quiz.attempts.count > 0 %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                This quiz has {{ quiz.attempts.count }} student attempt{{ quiz.attempts.count|pluralize }}.
+                                All attempt data will be permanently deleted.
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Confirmation Form -->
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="confirmation" class="form-label">
+                                <strong>Type "DELETE" to confirm:</strong>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="confirmation" 
+                                   name="confirmation" 
+                                   placeholder="Type DELETE here" 
+                                   required
+                                   pattern="DELETE">
+                            <div class="form-text text-danger">
+                                <i class="fas fa-exclamation-circle me-1"></i>
+                                This is a safety measure to prevent accidental deletion.
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'quizzes:list_subject_qa_quizzes' quiz.subject.id %}" 
+                               class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Cancel & Return
+                            </a>
+                            
+                            <button type="submit" 
+                                    class="btn btn-danger" 
+                                    id="delete-btn"
+                                    disabled>
+                                <i class="fas fa-trash-alt me-2"></i>
+                                Permanently Delete Quiz
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const confirmationInput = document.getElementById('confirmation');
+    const deleteBtn = document.getElementById('delete-btn');
+    
+    confirmationInput.addEventListener('input', function() {
+        if (this.value.toUpperCase() === 'DELETE') {
+            deleteBtn.disabled = false;
+            deleteBtn.classList.remove('btn-secondary');
+            deleteBtn.classList.add('btn-danger');
+        } else {
+            deleteBtn.disabled = true;
+            deleteBtn.classList.remove('btn-danger');
+            deleteBtn.classList.add('btn-secondary');
+        }
+    });
+    
+    // Double confirmation on button click
+    deleteBtn.addEventListener('click', function(e) {
+        if (!confirm('Are you absolutely sure? This action cannot be undone!')) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
+
+<style>
+.card {
+    border-radius: 10px;
+}
+.badge {
+    font-size: 0.85rem;
+}
+</style>
+{% endblock %}

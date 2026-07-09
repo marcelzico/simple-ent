@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Configuration du profil - MedZone{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0" style="background: var(--bs-body-bg);">
+                <div class="card-header bg-transparent border-bottom">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-cog me-2"></i>Configuration du profil
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Certains profils doivent être créés pour activer toutes les fonctionnalités.
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <!-- Student Profile Setup -->
+                        {% if 'student' in missing_profiles %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 border-primary bg-transparent">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-user-graduate fa-4x text-primary mb-3"></i>
+                                    <h5>Profil étudiant manquant</h5>
+                                    <p class="text-muted small">
+                                        Votre compte est marqué comme étudiant, mais le profil étudiant n'est pas encore créé.
+                                    </p>
+                                    <form method="post" class="mt-3">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="create_profile" value="student">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-plus-circle me-2"></i>Créer le profil étudiant
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Teacher Profile Setup -->
+                        {% if 'teacher' in missing_profiles %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 border-success bg-transparent">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chalkboard-teacher fa-4x text-success mb-3"></i>
+                                    <h5>Profil enseignant manquant</h5>
+                                    <p class="text-muted small">
+                                        Votre compte est marqué comme enseignant, mais le profil enseignant n'est pas encore créé.
+                                    </p>
+                                    <form method="post" class="mt-3">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="create_profile" value="teacher">
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-plus-circle me-2"></i>Créer le profil enseignant
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Skip Option -->
+                    <div class="text-center mt-4">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="skip" value="true">
+                            <button type="submit" class="btn btn-outline-secondary">
+                                <i class="fas fa-forward me-2"></i>Configurer plus tard
+                            </button>
+                        </form>
+                        <p class="text-muted small mt-2">
+                            Vous pourrez créer ces profils plus tard depuis votre page de profil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

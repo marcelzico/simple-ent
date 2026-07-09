@@ -1,0 +1,88 @@
+.reading-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    padding: 20px;
+}
+
+.word {
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+.word:hover {
+    background-color: #e3f2fd;
+}
+
+.word.clicked {
+    background-color: #fff3cd;
+    border-bottom: 2px solid #ffc107;
+}
+
+.word.known {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.word.unknown {
+    color: #dc3545;
+    text-decoration: underline dotted;
+}
+
+.sentence {
+    margin-bottom: 10px;
+}
+
+/* Word Modal */
+.word-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+    z-index: 1000;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.modal-content {
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-save, .btn-mastered {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-save {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-mastered {
+    background-color: #28a745;
+    color: white;
+}

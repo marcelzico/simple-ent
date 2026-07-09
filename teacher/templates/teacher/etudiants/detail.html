@@ -1,0 +1,81 @@
+<!-- teacher/templates/teacher/etudiants/detail.html -->
+{% extends 'base.html' %}
+{% block title %}{{ etudiant.get_full_name }}{% endblock %}
+{% block content %}
+<div class="fade-in">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-user-circle fa-5x text-primary mb-3"></i>
+                    <h4>{{ etudiant.get_full_name|default:etudiant.username }}</h4>
+                    <p class="text-muted">{{ etudiant.email }}</p>
+                    <p><span class="badge bg-secondary">{{ etudiant.student_profile.student_id_number|default:"Numéro IM non renseigné" }}</span></p>
+                    <hr>
+                    <p>
+                        <strong>Chapitres étudiés:</strong> {{ studied_chapters }}/{{ total_chapters }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 mb-4">
+            <div class="card">
+                <div class="card-header">Progression par chapitre</div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Chapitre</th>
+                                    <th>QCM</th>
+                                    <th>QA</th>
+                                    <th>V/F</th>
+                                    <th>Moyenne</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cr in chapter_results %}
+                                <tr>
+                                    <td>{{ cr.chapter.title }}</td>
+                                    <td>
+                                        {% if cr.mcq_score %}
+                                            <span class="badge bg-{% if cr.mcq_score >= 70 %}success{% elif cr.mcq_score >= 50 %}warning{% else %}danger{% endif %}">
+                                                {{ cr.mcq_score }}%
+                                            </span>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if cr.qa_score %}
+                                        <span class="badge bg-{% if cr.qa_score >= 70 %}success{% elif cr.qa_score >= 50 %}warning{% else %}danger{% endif %}">
+                                            {{ cr.qa_score }}%
+                                        </span>
+                                        {% else %}
+                                        <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if cr.tf_score %}
+                                        <span class="badge bg-{% if cr.tf_score >= 70 %}success{% elif cr.tf_score >= 50 %}warning{% else %}danger{% endif %}">
+                                            {{ cr.tf_score }}%
+                                        </span>
+                                        {% else %}
+                                        <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <strong>{{ cr.global_avg }}%</strong>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

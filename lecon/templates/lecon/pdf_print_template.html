@@ -1,0 +1,305 @@
+<!-- lecon/pdf_print_template.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Résultats de recherche - {{ query }}</title>
+    <style>
+        /* Print styles */
+        @media print {
+            body {
+                margin: 0;
+                padding: 15px;
+                font-size: 10pt;
+            }
+            .no-print {
+                display: none;
+            }
+            .chapter-card {
+                page-break-inside: avoid;
+                border: 1px solid #ddd;
+                margin-bottom: 20px;
+            }
+            h1, h2, h3 {
+                page-break-after: avoid;
+            }
+        }
+        
+        /* Screen styles */
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .print-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #4a5568;
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .print-instructions {
+            background: #e8f0fe;
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 5px;
+            text-align: center;
+            border-left: 4px solid #4a5568;
+        }
+        
+        .print-button {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        .print-button:hover {
+            background: #38a169;
+        }
+        
+        .search-info {
+            background: #f7fafc;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #4299e1;
+            font-size: 12pt;
+        }
+        
+        .chapter-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .chapter-title {
+            background: #4a5568;
+            color: white;
+            padding: 12px 15px;
+            font-size: 14pt;
+            font-weight: bold;
+        }
+        
+        .content-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .content-table td {
+            padding: 15px;
+            vertical-align: top;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .structure-col {
+            width: 30%;
+            background: #f7fafc;
+            border-right: 1px solid #e2e8f0;
+        }
+        
+        .seed-highlight {
+            background: #edf2f7;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 11pt;
+        }
+        
+        /* Hierarchical heading styles */
+        .heading-item {
+            margin-bottom: 15px;
+        }
+        
+        .level-1 {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 8px;
+            padding-left: 0;
+            border-left: 3px solid #4a5568;
+            padding-left: 8px;
+        }
+        
+        .level-2 {
+            font-size: 13pt;
+            font-weight: 600;
+            color: #4a5568;
+            margin: 10px 0 6px 0;
+            padding-left: 15px;
+            border-left: 2px solid #718096;
+        }
+        
+        .level-3 {
+            font-size: 12pt;
+            font-weight: 600;
+            color: #718096;
+            margin: 8px 0 5px 0;
+            padding-left: 30px;
+            border-left: 2px solid #a0aec0;
+        }
+        
+        .level-4, .level-5, .level-6 {
+            font-size: 11pt;
+            margin: 6px 0 4px 0;
+            padding-left: 45px;
+        }
+        
+        .content-box {
+            background: #fef5e7;
+            padding: 8px 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+        }
+        
+        .explanation-box {
+            background: #e6f7ff;
+            padding: 8px 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            font-style: italic;
+        }
+        
+        .qe-badge {
+            background: #e53e3e;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 9pt;
+            display: inline-block;
+            margin-left: 8px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 9pt;
+            color: #718096;
+        }
+        
+        ul, .bullet-list {
+            margin: 5px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin: 3px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="print-container">
+        <!-- Print controls (hidden when printing) -->
+        <div class="no-print" style="text-align: center; margin-bottom: 20px;">
+            <button class="print-button" onclick="window.print();">
+                🖨️ Imprimer / Enregistrer en PDF
+            </button>
+            <button class="print-button" onclick="window.close();" style="background: #718096;">
+                ✖️ Fermer
+            </button>
+            <div class="print-instructions">
+                <strong>💡 Astuce :</strong> Cliquez sur "Imprimer" puis choisissez "Enregistrer au format PDF" dans les options d'impression.
+            </div>
+        </div>
+        
+        <!-- Content to print -->
+        <div class="header">
+            <h1>📚 Recherche Comparative par Titres</h1>
+            <p>Document généré automatiquement</p>
+        </div>
+        
+        <div class="search-info">
+            <strong>🎓 Niveau :</strong> {{ level_name }}<br>
+            <strong>📚 Unité :</strong> {{ unite_name }}<br>
+            <strong>🔍 Titre recherché :</strong> "{{ query }}"<br>
+            <strong>📅 Date :</strong> {{ generated_date }}<br>
+            <strong>📊 Chapitres trouvés :</strong> {{ results|length }}
+        </div>
+        
+        {% for result in results %}
+        <div class="chapter-card">
+            <div class="chapter-title">
+                📖 {{ result.chapter_title }}
+            </div>
+            <table class="content-table">
+                <tr>
+                    <td class="structure-col">
+                        <div class="seed-highlight">
+                            <strong>Titre trouvé :</strong><br>
+                            "{{ result.seed_heading }}"<br>
+                            <small>Niveau {{ result.seed_level }}</small>
+                        </div>
+                    </td>
+                    <td>
+                        {% for copy in result.rows %}
+                            <div class="heading-item">
+                                {% if copy.heading %}
+                                    <div class="level-{{ copy.heading_level|default:1 }}">
+                                        {{ copy.heading }}
+                                        {% if copy.is_qe %}
+                                            <span class="qe-badge">⚠️ Question d'examen</span>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                
+                                {% if copy.content %}
+                                    <div class="content-box">
+                                        {% if copy.content.text %}
+                                            {{ copy.content.text|linebreaks }}
+                                        elif copy.content.content %}
+                                            {{ copy.content.content|linebreaks }}
+                                        else %}
+                                            {{ copy.content|linebreaks }}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                
+                                {% if copy.explanation %}
+                                    <div class="explanation-box">
+                                        📝 {{ copy.explanation }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        {% empty %}
+        <div style="text-align: center; padding: 40px; color: #718096;">
+            Aucun résultat trouvé.
+        </div>
+        {% endfor %}
+        
+        <div class="footer">
+            Matière Médicale - Recherche comparative par titres
+        </div>
+    </div>
+    
+    <script>
+        // Auto-open print dialog when page loads (optional)
+        // window.print();
+    </script>
+</body>
+</html>

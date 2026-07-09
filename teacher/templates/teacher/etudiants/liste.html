@@ -1,0 +1,41 @@
+<!-- teacher/templates/teacher/etudiants/liste.html -->
+{% extends 'base.html' %}
+{% block title %}Étudiants{% endblock %}
+{% block content %}
+<div class="fade-in">
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-2">
+                <div class="col-md-4"><input type="text" name="q" class="form-control" placeholder="Nom, email, numéro IM..." value="{{ search_query }}"></div>
+                <div class="col-md-4"><select name="unite" class="form-select"><option value="">Toutes les unités</option>{% for u in teaching_unites %}<option value="{{ u.id }}" {% if selected_unite.id == u.id %}selected{% endif %}>{{ u.title }}</option>{% endfor %}</select></div>
+                <div class="col-md-4"><button type="submit" class="btn btn-primary w-100"><i class="fas fa-search"></i> Filtrer</button></div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header"><i class="fas fa-users me-2"></i>Étudiants ({{ total_etudiants }})</div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead><tr><th>Étudiant</th><th>Email</th><th>Numéro IM</th><th>QCM</th><th>QA</th><th>V/F</th><th>Moyenne</th><th>Actions</th></tr></thead>
+                <tbody>
+                    {% for etudiant in page_obj %}
+                    <tr>
+                        <td><i class="fas fa-user-graduate me-2"></i>{{ etudiant.get_full_name|default:etudiant.username }}</td>
+                        <td>{{ etudiant.email }}</td>
+                        <td>{{ etudiant.student_profile.student_id_number|default:"-" }}</td>
+                        <td><span class="badge {% if etudiant.mcq_avg >= 70 %}bg-success{% elif etudiant.mcq_avg >= 50 %}bg-warning{% else %}bg-danger{% endif %}">{{ etudiant.mcq_avg }}%</span></td>
+                        <td><span class="badge {% if etudiant.qa_avg >= 70 %}bg-success{% elif etudiant.qa_avg >= 50 %}bg-warning{% else %}bg-danger{% endif %}">{{ etudiant.qa_avg }}%</span></td>
+                        <td><span class="badge {% if etudiant.tf_avg >= 70 %}bg-success{% elif etudiant.tf_avg >= 50 %}bg-warning{% else %}bg-danger{% endif %}">{{ etudiant.tf_avg }}%</span></td>
+                        <td><strong>{{ etudiant.global_avg }}%</strong></td>
+                        <td><a href="{% url 'teacher:etudiant_detail' etudiant.id %}" class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></a></td>
+                    </tr>
+                    {% empty %}<tr><td colspan="8" class="text-center py-5"><p>Aucun étudiant trouvé</p></td></tr>{% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% if page_obj.has_other_pages %}<nav class="mt-3"><ul class="pagination justify-content-center">...</ul></nav>{% endif %}
+</div>
+{% endblock %}
+

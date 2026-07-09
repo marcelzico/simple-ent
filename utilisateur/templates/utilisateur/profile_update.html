@@ -1,0 +1,640 @@
+<!-- users/profile_update.html - Reorganized with transparent backgrounds -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Modifier le Profil - EduTrack{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #1abc9c;
+        --danger-color: #e74c3c;
+        --border-color: #dfe6e9;
+        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+        --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    [data-bs-theme="dark"] {
+        --primary-color: #1a1a2e;
+        --secondary-color: #0f3460;
+        --accent-color: #1abc9c;
+        --border-color: #2c2c2c;
+        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-update-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    .update-header {
+        background: var(--bs-body-bg);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+    }
+
+    .form-section {
+        background: var(--bs-body-bg);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        transition: var(--transition-smooth);
+        position: relative;
+    }
+
+    .form-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(to bottom, var(--secondary-color), var(--accent-color));
+        border-radius: 16px 0 0 16px;
+    }
+
+    .form-section-title {
+        color: var(--text-color);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.3rem;
+    }
+
+    .form-section-title i {
+        color: var(--secondary-color);
+        font-size: 1.4rem;
+    }
+
+    /* Profile Picture Preview */
+    .profile-pic-preview-container {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .profile-pic-preview {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--secondary-color);
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .profile-pic-preview:hover {
+        transform: scale(1.02);
+    }
+
+    /* Form Controls */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+        display: block;
+    }
+
+    .required-field .form-label:after {
+        content: " *";
+        color: var(--danger-color);
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs-update {
+        background: var(--bs-body-bg);
+        border-radius: 15px 15px 0 0;
+        padding: 0.5rem;
+        margin-bottom: 0;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        border-bottom: none;
+    }
+
+    .nav-tabs-update .nav-link {
+        padding: 1rem 1.5rem;
+        color: var(--text-light);
+        border: none;
+        border-bottom: 3px solid transparent;
+        transition: var(--transition-smooth);
+        font-weight: 500;
+        border-radius: 8px;
+        margin: 0 0.25rem;
+        background: transparent;
+    }
+
+    .nav-tabs-update .nav-link.active {
+        color: var(--secondary-color);
+        border-bottom-color: var(--secondary-color);
+        background: rgba(52, 152, 219, 0.15);
+        font-weight: 600;
+    }
+
+    .tab-pane {
+        background: var(--bs-body-bg);
+        border-radius: 0 0 15px 15px;
+        padding: 2rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        border-top: none;
+    }
+
+    /* Buttons */
+    .btn-save {
+        background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+        color: white;
+        border: none;
+        padding: 0.875rem 2rem;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: var(--transition-smooth);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 1rem;
+    }
+
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .update-header {
+            padding: 1.5rem;
+        }
+
+        .form-section {
+            padding: 1.5rem;
+        }
+
+        .nav-tabs-update .nav-link {
+            padding: 0.875rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .tab-pane {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-update-container">
+    <!-- Update Header -->
+    <div class="update-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="h2 fw-bold mb-2">Modifier le profil</h1>
+                <p class="text-muted mb-0">Mettez à jour vos informations personnelles et professionnelles</p>
+            </div>
+            <a href="{% url 'utilisateur:profile' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Retour
+            </a>
+        </div>
+    </div>
+    
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs-update" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if active_tab == 'general' %}active{% endif %}" 
+                    id="general-tab" data-bs-toggle="tab" data-bs-target="#general-tab-pane" type="button">
+                <i class="bi bi-person-fill me-1"></i>Informations générales
+            </button>
+        </li>
+        {% if user.is_student %}
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="student-tab" data-bs-toggle="tab" data-bs-target="#student-tab-pane" type="button">
+                <i class="bi bi-mortarboard-fill me-1"></i>Informations étudiant
+            </button>
+        </li>
+        {% endif %}
+    </ul>
+    
+    <!-- Tab Content -->
+    <div class="tab-content" id="profileTabContent">
+        <!-- General Information Tab -->
+        <div class="tab-pane fade {% if active_tab == 'general' %}show active{% endif %}" 
+             id="general-tab-pane" role="tabpanel">
+            <form method="POST" enctype="multipart/form-data" id="generalForm">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next_url }}">
+                
+                <div class="row">
+                    <div class="col-lg-8">
+                        <!-- Profile Picture Section -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">
+                                <i class="bi bi-camera-fill"></i>Photo de profil
+                            </h3>
+                            
+                            <div class="profile-pic-preview-container">
+                                <img src="{{ user.profile_pic.url|default:'/static/images/default-avatar.png' }}" 
+                                     alt="Photo de profil" 
+                                     class="profile-pic-preview"
+                                     id="profilePicPreview"
+                                     onclick="document.getElementById('id_profile_pic').click()">
+                                
+                                <div class="d-flex justify-content-center gap-2 mt-3">
+                                    <button type="button" class="btn btn-primary btn-sm" 
+                                            onclick="document.getElementById('id_profile_pic').click()">
+                                        <i class="bi bi-camera-fill me-1"></i>Changer
+                                    </button>
+                                    
+                                    {% if user.profile_pic and user.profile_pic.name != 'profile_pics/default.png' %}
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteProfilePic()">
+                                        <i class="bi bi-trash-fill me-1"></i>Supprimer
+                                    </button>
+                                    {% endif %}
+                                </div>
+                                
+                                {{ form.profile_pic }}
+                                <small class="text-muted d-block text-center mt-2 small">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Max 5MB | JPG, PNG, GIF, WebP
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <!-- Personal Information -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">
+                                <i class="bi bi-person-lines-fill"></i>Informations personnelles
+                            </h3>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group required-field">
+                                        <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                                            {{ form.first_name.label }}
+                                        </label>
+                                        {{ form.first_name }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group required-field">
+                                        <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                                            {{ form.last_name.label }}
+                                        </label>
+                                        {{ form.last_name }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group required-field">
+                                        <label for="{{ form.email.id_for_label }}" class="form-label">
+                                            {{ form.email.label }}
+                                        </label>
+                                        {{ form.email }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.phone_number.id_for_label }}" class="form-label">
+                                            {{ form.phone_number.label }}
+                                        </label>
+                                        {{ form.phone_number }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.gender.id_for_label }}" class="form-label">
+                                            {{ form.gender.label }}
+                                        </label>
+                                        {{ form.gender }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ form.date_of_birth.id_for_label }}" class="form-label">
+                                            {{ form.date_of_birth.label }}
+                                        </label>
+                                        {{ form.date_of_birth }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="{{ form.bio.id_for_label }}" class="form-label">
+                                    {{ form.bio.label }}
+                                </label>
+                                {{ form.bio }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="form-section">
+                            <h3 class="form-section-title">
+                                <i class="bi bi-check-circle-fill"></i>Enregistrement
+                            </h3>
+                            
+                            <div class="alert alert-info small">
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                Assurez-vous que toutes les informations sont correctes.
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn-save" name="save_general">
+                                    <i class="bi bi-check-lg me-2"></i>Enregistrer
+                                </button>
+                                
+                                <a href="{% url 'utilisateur:profile' %}" class="btn btn-secondary">
+                                    <i class="bi bi-x-lg me-2"></i>Annuler
+                                </a>
+                                
+                                <a href="{% url 'utilisateur:password_change' %}" class="btn btn-outline-primary">
+                                    <i class="bi bi-key-fill me-2"></i>Changer mot de passe
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Student Information Tab -->
+        {% if user.is_student %}
+        <div class="tab-pane fade" id="student-tab-pane" role="tabpanel">
+            <form method="POST" action="{% url 'utilisateur:role_profile_update' 'student' %}" id="studentForm">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="form-section">
+                            <h3 class="form-section-title">
+                                <i class="bi bi-mortarboard-fill"></i>Informations étudiantes
+                            </h3>
+                            
+                            {% if student_form %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ student_form.level.id_for_label }}" class="form-label">
+                                            {{ student_form.level.label }}
+                                        </label>
+                                        {{ student_form.level }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ student_form.institution.id_for_label }}" class="form-label">
+                                            {{ student_form.institution.label }}
+                                        </label>
+                                        {{ student_form.institution }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ student_form.student_id_number.id_for_label }}" class="form-label">
+                                            {{ student_form.student_id_number.label }}
+                                        </label>
+                                        {{ student_form.student_id_number }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ student_form.preferred_learning_style.id_for_label }}" class="form-label">
+                                            {{ student_form.preferred_learning_style.label }}
+                                        </label>
+                                        {{ student_form.preferred_learning_style }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ student_form.facebook.id_for_label }}" class="form-label">
+                                            {{ student_form.facebook.label }}
+                                        </label>
+                                        {{ student_form.facebook }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="{{ student_form.instagram.id_for_label }}" class="form-label">
+                                            {{ student_form.instagram.label }}
+                                        </label>
+                                        {{ student_form.instagram }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check mb-3">
+                                        {{ student_form.is_premium }}
+                                        <label class="form-check-label" for="{{ student_form.is_premium.id_for_label }}">
+                                            {{ student_form.is_premium.label }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check mb-3">
+                                        {{ student_form.is_pro }}
+                                        <label class="form-check-label" for="{{ student_form.is_pro.id_for_label }}">
+                                            {{ student_form.is_pro.label }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between mt-4 gap-2">
+                                <a href="{% url 'utilisateur:profile' %}" class="btn btn-secondary">
+                                    <i class="bi bi-x-lg me-2"></i>Annuler
+                                </a>
+                                <button type="submit" class="btn-save">
+                                    <i class="bi bi-check-lg me-2"></i>Enregistrer
+                                </button>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-warning">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                Vous devez d'abord créer votre profil étudiant.
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deletePicModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                    Supprimer la photo
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer votre photo de profil ?</p>
+                <p class="text-muted small">La photo par défaut sera utilisée.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDeletePic()">
+                    <i class="bi bi-trash-fill me-1"></i>Supprimer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Profile picture preview
+document.getElementById('id_profile_pic').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('profilePicPreview').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+function deleteProfilePic() {
+    const modal = new bootstrap.Modal(document.getElementById('deletePicModal'));
+    modal.show();
+}
+
+function confirmDeletePic() {
+    fetch('{% url "utilisateur:delete_profile_pic" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('profilePicPreview').src = data.url;
+            document.getElementById('id_profile_pic').value = '';
+            
+            const deleteBtn = document.querySelector('.profile-pic-preview-container .btn-danger');
+            if (deleteBtn) deleteBtn.style.display = 'none';
+            
+            bootstrap.Modal.getInstance(document.getElementById('deletePicModal')).hide();
+            showToast('success', data.message);
+        } else {
+            showToast('error', 'Erreur lors de la suppression');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('error', 'Erreur réseau');
+    });
+}
+
+// Tab switching
+document.addEventListener('DOMContentLoaded', function() {
+    const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
+    tabEls.forEach(tab => {
+        tab.addEventListener('shown.bs.tab', function (event) {
+            const targetId = event.target.getAttribute('data-bs-target').replace('#', '');
+            const role = targetId.replace('-tab-pane', '');
+            
+            const url = new URL(window.location);
+            url.searchParams.set('tab', role);
+            history.replaceState(null, '', url.toString());
+        });
+    });
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get('tab');
+    if (tabParam) {
+        const tabButton = document.querySelector(`[data-bs-target="#${tabParam}-tab-pane"]`);
+        if (tabButton) {
+            const tab = new bootstrap.Tab(tabButton);
+            tab.show();
+        }
+    }
+});
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function showToast(type, message) {
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+        document.body.appendChild(container);
+    }
+    
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-bg-${type === 'success' ? 'success' : 'danger'} border-0`;
+    toast.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="bi ${type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'} me-2"></i>
+                ${message}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    `;
+    
+    container.appendChild(toast);
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+    
+    toast.addEventListener('hidden.bs.toast', function () {
+        toast.remove();
+    });
+}
+</script>
+{% endblock %}

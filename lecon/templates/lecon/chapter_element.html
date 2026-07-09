@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">UE : <span class="text-primary">{{ ue.title }}</span></h2>
+        <a href="{% url 'lecon:ue_list' %}" class="btn btn-outline-secondary btn-sm">← Retour aux unités</a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col" class="ps-3">#</th>
+                            <th scope="col">Titre du Chapitre</th>
+                            <th scope="col">QCM</th>
+                            <th scope="col">QA</th>
+                            <th scope="col">V/F</th>
+                            <th scope="col">Docs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for chapter in chapters %}
+                        <tr>
+                            <td class="ps-3">{{ forloop.counter }}</td>
+                            <td class="fw-medium">{{ chapter.title }}</td>
+                            <td>
+                                {{ chapter.mcq_set.count|default:0 }}
+                            </td>
+                            <td>
+                                {{ chapter.questionanswer_set.count|default:0 }}
+                            </td>
+                            <td>
+                                {{ chapter.truefalsequiz_set.count|default:0 }}
+                            </td>
+                            <td>
+                                {{ chapter.importer_set.count|default:0 }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-4">
+                                Aucun chapitre n'a encore été ajouté pour cette unité.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

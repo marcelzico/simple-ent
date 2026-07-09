@@ -1,0 +1,10 @@
+<!-- teacher/templates/teacher/etudiants/resultats.html -->
+{% extends 'base.html' %}
+{% block title %}Résultats - {{ etudiant.get_full_name }}{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between"><span>{{ title }}</span><div><a href="{% url 'teacher:etudiant_detail' etudiant.id %}" class="btn btn-secondary btn-sm">Retour</a></div></div>
+    <div class="card-body p-0"><table class="table">{% for result in page_obj %}<tr><td>{{ result.created_at|date:"d/m/Y H:i" }}</td><td>{{ result.chapter.ue.title }} - {{ result.chapter.title }}</td><td>{% if result.score %}{{ result.score }}%{% else %}{{ result.score|default:"-" }}{% endif %}</td>{% if result.type %}<td>{{ result.type }}</td>{% endif %}</tr>{% empty %}<tr><td class="text-center py-5">Aucun résultat</td></tr>{% endfor %}</table></div>
+</div>
+{% endblock %}
+

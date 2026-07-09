@@ -1,0 +1,437 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit QA Quiz{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Subject Info Banner -->
+    <div class="alert alert-info">
+        <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+                <h4 class="mb-1">
+                    <i class="fas fa-edit me-2"></i>Editing QA Quiz: {{ quiz.title }}
+                </h4>
+                <p class="mb-0">
+                    <i class="fas fa-book me-2"></i>Subject: {{ subject.title }}
+                </p>
+            </div>
+            <div class="text-end">
+                <span class="badge bg-white text-info border">
+                    Quiz ID: {{ quiz.pk }}
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quiz Info Card -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <small class="text-muted d-block">Current Status</small>
+                    {% if quiz.is_active %}
+                    <span class="badge bg-success">Active</span>
+                    {% else %}
+                    <span class="badge bg-secondary">Inactive</span>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 text-end">
+                    <small class="text-muted d-block">Created</small>
+                    <strong>{{ quiz.created_at|date:"M d, Y" }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <form method="post" id="edit-qa-quiz-form">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ form.title.label }}</label>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        <div class="text-danger small">{{ form.title.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">{{ form.description.label }}</label>
+                    {{ form.description }}
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ form.time_limit.label }}</label>
+                    {{ form.time_limit }}
+                    <div class="form-text">Time limit in minutes</div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.max_attempts.label }}</label>
+                            {{ form.max_attempts }}
+                            <div class="form-text">Maximum attempts allowed</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.score_to_pass.label }}</label>
+                            {{ form.score_to_pass }}
+                            <div class="form-text">Minimum score to pass (%)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ form.start_date.label }}</label>
+                    {{ form.start_date }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ form.end_date.label }}</label>
+                    {{ form.end_date }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chapters Selection -->
+        <div class="mb-3">
+            <label class="form-label">{{ form.chapters.label }}</label>
+            <div class="chapters-checkbox-container border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+                {% for checkbox in form.chapters %}
+                <div class="form-check mb-2">
+                    {{ checkbox.tag }}
+                    <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                        <strong>{{ checkbox.choice_label }}</strong>
+                    </label>
+                </div>
+                {% empty %}
+                <div class="alert alert-warning">
+                    No chapters available in this subject.
+                </div>
+                {% endfor %}
+            </div>
+            <div class="form-text">Select chapters from <strong>{{ subject.title }}</strong></div>
+        </div>
+        
+        <!-- Questions Selection -->
+        <div class="mb-3">
+            <label class="form-label">{{ form.questions.label }}</label>
+            {{ form.questions }}
+            <div class="form-text">
+                <span id="questions-count-qa">0</span> QA questions available from selected chapters
+                <span id="loading-questions-qa" style="display: none;">Loading...</span>
+            </div>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" class="btn btn-info">
+                <i class="fas fa-save me-2"></i>Update MCQ Quiz
+            </button>
+            <a href="{% url 'quizzes:qa_quiz_detail' quiz.id %}" class="btn btn-secondary">
+                <i class="fas fa-times me-2"></i>Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<!-- Use the SAME JavaScript from qa_quiz_form.html -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Elements
+        const chaptersContainer = document.querySelector('.chapters-checkbox-container');
+        const questionsHiddenSelect = document.getElementById('id_questions');
+        const questionsCount = document.getElementById('questions-count-qa');
+        const loadingIndicator = document.getElementById('loading-questions-qa');
+        
+        // Create questions container
+        const questionsContainer = document.createElement('div');
+        questionsContainer.className = 'questions-container mt-3 border rounded p-3';
+        questionsHiddenSelect.parentNode.insertBefore(questionsContainer, questionsHiddenSelect.nextSibling);
+        
+        // State
+        const selectedChapterIds = new Set();
+        const selectedQuestionIds = new Set();
+        
+        // Initialize from existing selections
+        {% for chapter in quiz.chapters.all %}
+        selectedChapterIds.add('{{ chapter.id }}');
+        {% endfor %}
+        
+        {% for question in quiz.questions.all %}
+        selectedQuestionIds.add('{{ question.id }}');
+        {% endfor %}
+        
+        // ====== CHAPTERS HANDLING ======
+        // Add chapter management buttons
+        const chapterButtons = document.createElement('div');
+        chapterButtons.className = 'btn-group btn-group-sm mb-2';
+        chapterButtons.innerHTML = `
+            <button type="button" class="btn btn-outline-info" id="select-all-chapters">
+                <i class="fas fa-check-square"></i> Select All Chapters
+            </button>
+            <button type="button" class="btn btn-outline-secondary" id="deselect-all-chapters">
+                <i class="fas fa-square"></i> Deselect All
+            </button>
+        `;
+        chaptersContainer.parentNode.insertBefore(chapterButtons, chaptersContainer);
+        
+        // Initialize chapter checkboxes
+        const chapterCheckboxes = chaptersContainer.querySelectorAll('input[type="checkbox"]');
+        chapterCheckboxes.forEach(checkbox => {
+            if (selectedChapterIds.has(checkbox.value)) {
+                checkbox.checked = true;
+            }
+            
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    selectedChapterIds.add(this.value);
+                } else {
+                    selectedChapterIds.delete(this.value);
+                }
+                updateChapterCount();
+                updateQuestions();
+            });
+        });
+        
+        // Chapter select all/deselect all
+        document.getElementById('select-all-chapters').addEventListener('click', function() {
+            chapterCheckboxes.forEach(cb => {
+                cb.checked = true;
+                selectedChapterIds.add(cb.value);
+            });
+            updateChapterCount();
+            updateQuestions();
+        });
+        
+        document.getElementById('deselect-all-chapters').addEventListener('click', function() {
+            chapterCheckboxes.forEach(cb => {
+                cb.checked = false;
+                selectedChapterIds.delete(cb.value);
+            });
+            updateChapterCount();
+            updateQuestions();
+        });
+        
+        function updateChapterCount() {
+            const count = selectedChapterIds.size;
+            let countBadge = document.getElementById('chapter-count-qa');
+            if (!countBadge) {
+                countBadge = document.createElement('span');
+                countBadge.id = 'chapter-count-qa';
+                countBadge.className = 'badge bg-info ms-2';
+                document.querySelector('label[for="' + chapterCheckboxes[0].id + '"]').closest('.mb-3').querySelector('.form-label').appendChild(countBadge);
+            }
+            countBadge.textContent = `${count} selected`;
+        }
+        
+        // ====== QUESTIONS HANDLING ======
+        function updateQuestions() {
+            if (selectedChapterIds.size === 0) {
+                questionsContainer.innerHTML = '<div class="alert alert-warning">Select chapters first to see QA questions</div>';
+                questionsCount.textContent = '0';
+                updateHiddenQuestions();
+                return;
+            }
+
+            loadingIndicator.style.display = 'inline';
+            questionsContainer.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm" role="status"></div> Loading QA questions...</div>';
+            
+            const url = '{% url "quizzes:load_questions_ajax" %}?chapter_ids=' + Array.from(selectedChapterIds).join(',');
+            
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    questionsContainer.innerHTML = '';
+                    
+                    if (data.success && data.questions && data.questions.length > 0) {
+                        // Create question table
+                        const table = document.createElement('table');
+                        table.className = 'table table-hover table-sm mb-0';
+                        table.innerHTML = `
+                            <thead>
+                                <tr>
+                                    <th width="50px">Select</th>
+                                    <th>Question</th>
+                                    <th width="100px">Chapter</th>
+                                </tr>
+                            </thead>
+                            <tbody id="questions-tbody"></tbody>
+                        `;
+                        
+                        const tbody = table.querySelector('#questions-tbody');
+                        
+                        data.questions.forEach(question => {
+                            const isSelected = selectedQuestionIds.has(question.id.toString());
+                            const row = document.createElement('tr');
+                            row.className = isSelected ? 'table-primary' : '';
+                            row.innerHTML = `
+                                <td>
+                                    <input type="checkbox" class="form-check-input question-checkbox" 
+                                        value="${question.id}" 
+                                        id="question_${question.id}"
+                                        ${isSelected ? 'checked' : ''}>
+                                </td>
+                                <td>
+                                    <label class="form-check-label" for="question_${question.id}" style="cursor: pointer;">
+                                        ${question.question.length > 100 ? question.question.substring(0, 100) + '...' : question.question}
+                                    </label>
+                                </td>
+                                <td><small class="text-muted">${question.chapter}</small></td>
+                            `;
+                            
+                            // Checkbox event
+                            const checkbox = row.querySelector('.question-checkbox');
+                            checkbox.addEventListener('change', function() {
+                                if (this.checked) {
+                                    selectedQuestionIds.add(this.value);
+                                    row.classList.add('table-primary');
+                                } else {
+                                    selectedQuestionIds.delete(this.value);
+                                    row.classList.remove('table-primary');
+                                }
+                                updateHiddenQuestions();
+                            });
+                            
+                            // Row click event
+                            row.addEventListener('click', (e) => {
+                                if (!e.target.matches('input') && !e.target.matches('label')) {
+                                    checkbox.checked = !checkbox.checked;
+                                    checkbox.dispatchEvent(new Event('change'));
+                                }
+                            });
+                            
+                            tbody.appendChild(row);
+                        });
+                        
+                        questionsContainer.appendChild(table);
+                        questionsCount.textContent = data.questions.length;
+                        
+                        // Add question management buttons
+                        const questionButtons = document.createElement('div');
+                        questionButtons.className = 'btn-group btn-group-sm mb-3';
+                        questionButtons.innerHTML = `
+                            <button type="button" class="btn btn-outline-success" id="select-all-questions">
+                                <i class="fas fa-check-square"></i> Select All
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" id="deselect-all-questions">
+                                <i class="fas fa-square"></i> Deselect All
+                            </button>
+                        `;
+                        questionsContainer.insertBefore(questionButtons, table);
+                        
+                        // Question select all/deselect all
+                        document.getElementById('select-all-questions').addEventListener('click', function() {
+                            document.querySelectorAll('.question-checkbox').forEach(cb => {
+                                if (!cb.checked) {
+                                    cb.checked = true;
+                                    selectedQuestionIds.add(cb.value);
+                                    cb.closest('tr').classList.add('table-primary');
+                                }
+                            });
+                            updateHiddenQuestions();
+                        });
+                        
+                        document.getElementById('deselect-all-questions').addEventListener('click', function() {
+                            document.querySelectorAll('.question-checkbox').forEach(cb => {
+                                if (cb.checked) {
+                                    cb.checked = false;
+                                    selectedQuestionIds.delete(cb.value);
+                                    cb.closest('tr').classList.remove('table-primary');
+                                }
+                            });
+                            updateHiddenQuestions();
+                        });
+                        
+                    } else {
+                        questionsContainer.innerHTML = '<div class="alert alert-info">No QA questions available for the selected chapters</div>';
+                        questionsCount.textContent = '0';
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    questionsContainer.innerHTML = '<div class="alert alert-danger">Error loading QA questions. Please try again.</div>';
+                    questionsCount.textContent = '0';
+                })
+                .finally(() => {
+                    loadingIndicator.style.display = 'none';
+                    updateHiddenQuestions();
+                });
+        }
+        
+        function updateHiddenQuestions() {
+            // Update hidden select element
+            while (questionsHiddenSelect.options.length > 0) {
+                questionsHiddenSelect.remove(0);
+            }
+            
+            // Add selected questions
+            selectedQuestionIds.forEach(id => {
+                const option = document.createElement('option');
+                option.value = id;
+                option.selected = true;
+                questionsHiddenSelect.appendChild(option);
+            });
+            
+            // Update selected count
+            const selectedCount = selectedQuestionIds.size;
+            let countBadge = document.getElementById('selected-count-qa');
+            if (!countBadge) {
+                countBadge = document.createElement('span');
+                countBadge.id = 'selected-count-qa';
+                countBadge.className = 'badge bg-success ms-2';
+                questionsCount.parentNode.appendChild(countBadge);
+            }
+            countBadge.textContent = `${selectedCount} selected`;
+        }
+        
+        // Initialize
+        updateChapterCount();
+        updateQuestions();
+    });
+</script>
+
+<style>
+    .chapters-checkbox-container .form-check {
+        padding: 8px;
+        border-radius: 5px;
+        transition: background-color 0.2s;
+    }
+    .chapters-checkbox-container .form-check:hover {
+        background-color: #f8f9fa;
+    }
+    .chapters-checkbox-container .form-check-input:checked + .form-check-label {
+        color: #0dcaf0;
+        font-weight: bold;
+    }
+    .questions-container tr {
+        cursor: pointer;
+    }
+    .questions-container tr:hover {
+        background-color: #f8f9fa;
+    }
+    .questions-container .table-primary {
+        background-color: #e3f2fd !important;
+    }
+</style>
+{% endblock %}

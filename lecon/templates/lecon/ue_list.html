@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Liste des Unités d'Enseignement</h2>
+    
+    {% if ues %}
+    <div class="list-group shadow-sm rounded row d-flex mb-2">
+        {% for ue in ues %}
+            <div class="col-6">
+                <h5 class="mb-1">{{ ue.title }}</h5>
+                <p class="mb-0 text-muted small">
+                    Niveau : {{ ue.get_level_display }} | Semestre : {{ ue.get_semester_display }}
+                </p>
+            </div>
+            <div class="col-6 mb-2">
+                <a href="{% url 'lecon:chapter_list' ue.id %}" class="btn btn-sm btn-outline-primary w-25">Voir chapitre</a>
+                <a href="{% url 'lecon:chapter_element' ue.id %}" class="btn btn-sm btn-outline-secondary w-25">Stats</a>
+            </div>
+            <hr>
+            
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center mt-3">
+        Aucune unité d'enseignement n'est disponible pour le moment.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

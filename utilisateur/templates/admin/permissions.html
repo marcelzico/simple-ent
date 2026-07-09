@@ -1,0 +1,378 @@
+<!-- templates/admin/system/permissions.html -->
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}Gestion des permissions - Admin MedZone{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- En-tête -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">Gestion des permissions</h1>
+            <p class="text-muted mb-0">Superuser seulement</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createGroupModal">
+                <i class="fas fa-plus me-2"></i>Nouveau groupe
+            </button>
+            <button class="btn btn-outline-secondary" onclick="refreshPermissions()">
+                <i class="fas fa-sync-alt me-2"></i>Actualiser
+            </button>
+        </div>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_staff }}</div>
+                <div class="stat-label">Utilisateurs Staff</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_groups }}</div>
+                <div class="stat-label">Groupes</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_permissions }}</div>
+                <div class="stat-label">Permissions</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_modules }}</div>
+                <div class="stat-label">Modules</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Colonne gauche : Groupes -->
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Groupes d'utilisateurs</h6>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% for group in groups %}
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ group.name }}</strong>
+                                <div class="small text-muted">
+                                    {{ group.user_set.count }} membre(s)
+                                </div>
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary" 
+                                        onclick="editGroup({{ group.id }})"
+                                        title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" 
+                                        onclick="deleteGroup({{ group.id }})"
+                                        title="Supprimer">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-3">
+                            <i class="fas fa-users fa-2x text-muted mb-2"></i>
+                            <p class="text-muted">Aucun groupe</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colonne droite : Permissions et modules -->
+        <div class="col-lg-8">
+            <!-- Onglets -->
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#permissions-tab">
+                                Permissions
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#modules-tab">
+                                Modules
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#staff-tab">
+                                Utilisateurs Staff
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card-body">
+                    <div class="tab-content">
+                        <!-- Onglet Permissions -->
+                        <div class="tab-pane fade show active" id="permissions-tab">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="permissionSearch" 
+                                       placeholder="Rechercher une permission...">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Permission</th>
+                                            <th>Description</th>
+                                            <th>Groupes</th>
+                                            <th>Utilisateurs</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for permission in admin_permissions %}
+                                        <tr>
+                                            <td>
+                                                <strong>{{ permission.get_name_display }}</strong>
+                                                <div class="small text-muted">{{ permission.codename }}</div>
+                                            </td>
+                                            <td>{{ permission.description|default:"—" }}</td>
+                                            <td>{{ permission.groups.count }}</td>
+                                            <td>{{ permission.users.count }}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary" 
+                                                        onclick="assignPermission({{ permission.id }})">
+                                                    <i class="fas fa-share"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Onglet Modules -->
+                        <div class="tab-pane fade" id="modules-tab">
+                            <div class="row g-3">
+                                {% for module in modules %}
+                                <div class="col-md-6">
+                                    <div class="card module-card">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <div>
+                                                    <h6 class="mb-1">
+                                                        <i class="{{ module.icon }} me-2" style="color: {{ module.color }};"></i>
+                                                        {{ module.get_name_display }}
+                                                    </h6>
+                                                    <small class="text-muted">{{ module.description }}</small>
+                                                </div>
+                                                <span class="badge" style="background: {{ module.color }};">{{ module.order }}</span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <small class="text-muted">URL: {{ module.url_name }}</small>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <small>
+                                                    Groupes: {{ module.groups.count }}<br>
+                                                    Utilisateurs: {{ module.users.count }}
+                                                </small>
+                                                <button class="btn btn-sm btn-outline-primary" 
+                                                        onclick="manageModuleAccess({{ module.id }})">
+                                                    <i class="fas fa-cog"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Onglet Staff -->
+                        <div class="tab-pane fade" id="staff-tab">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Utilisateur</th>
+                                            <th>Groupes</th>
+                                            <th>Permissions directes</th>
+                                            <th>Modules</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for staff in staff_users %}
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <strong>{{ staff.display_name }}</strong>
+                                                    <div class="small text-muted">{{ staff.email }}</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {% for group in staff.groups.all %}
+                                                <span class="badge bg-primary mb-1">{{ group.name }}</span>
+                                                {% endfor %}
+                                            </td>
+                                            <td>{{ staff.admin_permissions.count }}</td>
+                                            <td>{{ staff.dashboard_modules.count }}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary" 
+                                                        onclick="manageStaffPermissions({{ staff.id }})">
+                                                    <i class="fas fa-user-cog"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal création groupe -->
+<div class="modal fade" id="createGroupModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Créer un nouveau groupe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="createGroupForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nom du groupe</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Permissions</label>
+                        <select class="form-select" name="permissions" multiple size="5">
+                            {% for permission in admin_permissions %}
+                            <option value="{{ permission.id }}">{{ permission.get_name_display }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Créer le groupe</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Recherche de permissions
+    document.getElementById('permissionSearch').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('#permissions-tab tbody tr');
+        
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+    
+    // Création de groupe
+    document.getElementById('createGroupForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        fetch('{% url "admin-user:create_group" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.reload();
+            } else {
+                alert(data.message || 'Erreur');
+            }
+        });
+    });
+    
+    function editGroup(groupId) {
+        // Charger les données du groupe et ouvrir un modal d'édition
+        fetch(`/admin/groups/${groupId}/`)
+        .then(response => response.json())
+        .then(data => {
+            // Implémenter l'édition de groupe
+        });
+    }
+    
+    function deleteGroup(groupId) {
+        if (confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?')) {
+            fetch(`/admin/groups/${groupId}/delete/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert(data.message || 'Erreur');
+                }
+            });
+        }
+    }
+    
+    function assignPermission(permissionId) {
+        // Implémenter l'assignation de permission
+        alert('Fonctionnalité d\'assignation de permission à venir');
+    }
+    
+    function manageModuleAccess(moduleId) {
+        // Implémenter la gestion d'accès au module
+        alert('Fonctionnalité de gestion d\'accès au module à venir');
+    }
+    
+    function manageStaffPermissions(staffId) {
+        // Implémenter la gestion des permissions staff
+        alert('Fonctionnalité de gestion des permissions staff à venir');
+    }
+    
+    function refreshPermissions() {
+        fetch('{% url "admin-user:refresh_permissions" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('success', 'Permissions rafraîchies avec succès');
+            } else {
+                showToast('error', data.message || 'Erreur');
+            }
+        });
+    }
+</script>
+{% endblock %}

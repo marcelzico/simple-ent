@@ -1,0 +1,85 @@
+<!-- users/includes/activity_tab.html -->
+<div class="profile-card">
+    <h3 class="card-title">
+        <i class="bi bi-clock-history"></i>Activité récente
+    </h3>
+    
+    {% if recent_activities %}
+    <div class="timeline">
+        {% for activity in recent_activities %}
+        <div class="timeline-item mb-4">
+            <div class="timeline-marker bg-{% if 'Connexion' in activity.description %}success{% elif 'Profil' in activity.description %}info{% else %}primary{% endif %}"></div>
+            <div class="timeline-content">
+                <div class="timeline-title d-flex justify-content-between">
+                    <span class="fw-bold">{{ activity.description }}</span>
+                    <span class="text-muted small">{{ activity.time }}</span>
+                </div>
+                <div class="timeline-description small text-muted mt-1">
+                    {% if 'Connexion' in activity.description %}
+                    <i class="bi bi-lock-fill me-1"></i> Connexion sécurisée à votre compte
+                    {% elif 'Profil' in activity.description %}
+                    <i class="bi bi-person-fill me-1"></i> Mise à jour de vos informations personnelles
+                    {% elif 'Quiz' in activity.description %}
+                    <i class="bi bi-question-circle-fill me-1"></i> Exercice d'apprentissage complété
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <div class="mb-4">
+            <i class="bi bi-clock-history display-1 text-muted"></i>
+        </div>
+        <h5 class="profile-heading mb-2">Aucune activité récente</h5>
+        <p class="text-muted mb-0">
+            Commencez à utiliser l'application pour voir votre historique d'activité.
+        </p>
+    </div>
+    {% endif %}
+    
+    <style>
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+        
+        .timeline-item {
+            position: relative;
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            left: -2rem;
+            top: 0;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+        
+        .timeline-content {
+            background: white;
+            padding: 1.25rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .timeline-title {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+    </style>
+</div>

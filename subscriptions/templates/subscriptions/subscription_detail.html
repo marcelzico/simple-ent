@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+{% load subscription_tags %}
+
+{% block title %}Détails de l'Abonnement{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="fas fa-file-invoice"></i> Détails de l'Abonnement
+                </h4>
+                <span class="badge {% if subscription.payement_status == 'approved' %}bg-success{% elif subscription.payement_status == 'rejected' %}bg-danger{% else %}bg-warning{% endif %}">
+                    {{ subscription.get_payement_status_display }}
+                </span>
+            </div>
+            <div class="card-body">
+                <!-- Informations de Base -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-cube"></i> Fonctionnalité</h6>
+                        <p class="fs-5">{{ subscription.feature.name }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-coins"></i> Montant</h6>
+                        <p class="fs-5">{{ subscription.amount }} Ar</p>
+                    </div>
+                </div>
+                
+                <!-- Dates -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-calendar-plus"></i> Créé le</h6>
+                        <p>{{ subscription.created_at|date:"d F Y H:i" }}</p>
+                    </div>
+                    {% if subscription.planning_date_to_start %}
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-calendar-check"></i> Début Prévu</h6>
+                        <p>{{ subscription.planning_date_to_start|date:"d F Y" }}</p>
+                    </div>
+                    {% endif %}
+                    {% if subscription.start_date %}
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-play-circle"></i> Début Réel</h6>
+                        <p>{{ subscription.start_date|date:"d F Y" }}</p>
+                    </div>
+                    {% endif %}
+                    {% if subscription.expires_at %}
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-calendar-times"></i> Expiration</h6>
+                        <p>{{ subscription.expires_at|date:"d F Y" }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Statut Actuel -->
+                <div class="alert 
+                    {% if audit_info.current_status == 'active' %}alert-success
+                    {% elif audit_info.current_status == 'expired' %}alert-secondary
+                    {% elif audit_info.current_status == 'pending' %}alert-warning
+                    {% elif audit_info.current_status == 'rejected' %}alert-danger
+                    {% else %}alert-info{% endif %}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="alert-heading mb-1">
+                                <i class="fas fa-info-circle"></i> 
+                                {{ audit_info.current_status_display }}
+                            </h5>
+                            {% if audit_info.current_status == 'active' %}
+                                <p class="mb-0">
+                                    <i class="fas fa-clock"></i> 
+                                    {{ audit_info.days_available }} jours restants
+                                </p>
+                            {% elif audit_info.current_status == 'expired' %}
+                                <p class="mb-0">Cet abonnement a expiré</p>
+                            {% elif audit_info.current_status == 'pending' %}
+                                <p class="mb-0">En attente d'approbation par l'administrateur</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section pour afficher l'utilisation des quiz -->
+                {% if quiz_limits %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Limites d'Utilisation des Quiz</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h6 class="mb-0">Quiz MCQ</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-1">Total : {{ quiz_limits.mcq.total }}</p>
+                                        <p class="mb-1">Utilisés : {{ quiz_limits.mcq.used }}</p>
+                                        <p class="mb-0">Restants : <strong>{{ quiz_limits.mcq.remaining }}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-header bg-success text-white">
+                                        <h6 class="mb-0">Examens MCQ</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-1">Total : {{ quiz_limits.mcq_exam.total }}</p>
+                                        <p class="mb-1">Utilisés : {{ quiz_limits.mcq_exam.used }}</p>
+                                        <p class="mb-0">Restants : <strong>{{ quiz_limits.mcq_exam.remaining }}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-header bg-info text-white">
+                                        <h6 class="mb-0">Quiz Q&amp;A</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-1">Total : {{ quiz_limits.qa.total }}</p>
+                                        <p class="mb-1">Utilisés : {{ quiz_limits.qa.used }}</p>
+                                        <p class="mb-0">Restants : <strong>{{ quiz_limits.qa.remaining }}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h6 class="mb-0">Examens Q&amp;A</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-1">Total : {{ quiz_limits.qa_exam.total }}</p>
+                                        <p class="mb-1">Utilisés : {{ quiz_limits.qa_exam.used }}</p>
+                                        <p class="mb-0">Restants : <strong>{{ quiz_limits.qa_exam.remaining }}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-header bg-secondary text-white">
+                                        <h6 class="mb-0">Quiz Vrai/Faux</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-1">Total : {{ quiz_limits.tf.total }}</p>
+                                        <p class="mb-1">Utilisés : {{ quiz_limits.tf.used }}</p>
+                                        <p class="mb-0">Restants : <strong>{{ quiz_limits.tf.remaining }}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Notes de l'Administrateur (visible uniquement si approuvé/rejeté) -->
+                {% if can_see_notes and subscription.notes %}
+                <div class="card border-{% if subscription.payement_status == 'approved' %}success{% else %}danger{% endif %} mb-4">
+                    <div class="card-header bg-{% if subscription.payement_status == 'approved' %}success{% else %}danger{% endif %} text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-sticky-note"></i> Notes de l'Administrateur
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">{{ subscription.notes|linebreaks }}</p>
+                        {% if audit_info.reviewed_by != 'Pas encore examiné' %}
+                        <small class="text-muted">
+                            Examiné par {{ audit_info.reviewed_by }} le {{ audit_info.reviewed_at }}
+                        </small>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Description de l'Étudiant -->
+                {% if subscription.description %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="fas fa-comment"></i> Vos Notes</h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">{{ subscription.description|linebreaks }}</p>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Informations de Paiement -->
+                {% if subscription.payment %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="fas fa-money-check"></i> Informations de Paiement</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Montant :</strong> {{ subscription.payment.amount }} Ar</p>
+                                <p><strong>Méthode :</strong> {{ subscription.payment.get_paid_with_display }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Référence :</strong> {{ subscription.payment.reference_of_payment }}</p>
+                                <p><strong>Statut :</strong> 
+                                    <span class="badge {% if subscription.payment.payement_status == 'approved' %}bg-success{% elif subscription.payment.payement_status == 'rejected' %}bg-danger{% else %}bg-warning{% endif %}">
+                                        {{ subscription.payment.get_payement_status_display }}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'subscriptions:student_subscription_list' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Retour à la Liste
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <!-- Détails de la Fonctionnalité -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-star"></i> Détails de la Fonctionnalité</h5>
+            </div>
+            <div class="card-body">
+                <h6>{{ subscription.feature.name }}</h6>
+                <p class="text-muted">{{ subscription.feature.code }}</p>
+                
+                <hr>
+                
+                <h6>Fonctionnalités Incluses :</h6>
+                <ul class="list-unstyled">
+                    {% for feature in subscription.feature.get_feature_list %}
+                    <li><i class="fas fa-check text-success"></i> {{ feature }}</li>
+                    {% endfor %}
+                </ul>
+                
+                <hr>
+                
+                <p>
+                    <strong>Validité :</strong> {{ subscription.feature.validity_day_number }} jours<br>
+                    <strong>Quiz :</strong> {{ subscription.feature.quiz_features }} tentatives<br>
+                    <strong>Examens :</strong> {{ subscription.feature.exam_feature }} tentatives
+                </p>
+            </div>
+        </div>
+        
+        <!-- Actions Rapides -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-bolt"></i> Actions Rapides</h5>
+            </div>
+            <div class="card-body">
+                {% if audit_info.current_status == 'active' %}
+                <a href="#" class="btn btn-success btn-block mb-2">
+                    <i class="fas fa-play-circle"></i> Démarrer un Quiz
+                </a>
+                <a href="#" class="btn btn-warning btn-block mb-2">
+                    <i class="fas fa-file-alt"></i> Passer un Examen
+                </a>
+                {% endif %}
+                
+                {% if subscription.payement_status == 'pending' %}
+                <div class="alert alert-info">
+                    <small>
+                        <i class="fas fa-info-circle"></i>
+                        Votre abonnement est en attente d'approbation par l'administrateur. Vous serez notifié lorsqu'il sera examiné.
+                    </small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

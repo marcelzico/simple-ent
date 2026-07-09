@@ -1,0 +1,267 @@
+<!-- templates/admin/system/activity_logs.html -->
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}Journal d'activité - Admin MedZone{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- En-tête -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">Journal d'activité</h1>
+            <p class="text-muted mb-0">{{ total_count }} activité(s) trouvée(s)</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary" onclick="exportActivityLogs()">
+                <i class="fas fa-download me-2"></i>Exporter
+            </button>
+            <button class="btn btn-outline-danger" onclick="clearOldLogs()">
+                <i class="fas fa-trash me-2"></i>Nettoyer
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label for="user" class="form-label">Utilisateur</label>
+                    <input type="text" class="form-control" id="user" name="user" 
+                           value="{{ user_filter }}" placeholder="Nom d'admin...">
+                </div>
+                <div class="col-md-3">
+                    <label for="action" class="form-label">Action</label>
+                    <select class="form-select" id="action" name="action">
+                        <option value="">Toutes les actions</option>
+                        {% for value, label in actions %}
+                        <option value="{{ value }}" {% if action_filter == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="date_from" class="form-label">Date début</label>
+                    <input type="date" class="form-control" id="date_from" name="date_from" 
+                           value="{{ date_from }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="date_to" class="form-label">Date fin</label>
+                    <input type="date" class="form-control" id="date_to" name="date_to" 
+                           value="{{ date_to }}">
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-filter me-2"></i>Filtrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tableau des activités -->
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 150px;">Date/Heure</th>
+                            <th>Utilisateur</th>
+                            <th>Action</th>
+                            <th>Modèle/Objet</th>
+                            <th>IP</th>
+                            <th>Détails</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for activity in activities %}
+                        <tr>
+                            <td>
+                                <small>{{ activity.created_at|date:"d/m/Y" }}</small><br>
+                                <small class="text-muted">{{ activity.created_at|date:"H:i:s" }}</small>
+                            </td>
+                            <td>
+                                {% if activity.user %}
+                                <strong>{{ activity.user.display_name }}</strong><br>
+                                <small class="text-muted">@{{ activity.user.username }}</small>
+                                {% else %}
+                                <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge 
+                                    {% if activity.action == 'login' %}bg-success
+                                    {% elif activity.action == 'logout' %}bg-secondary
+                                    {% elif activity.action == 'create' %}bg-info
+                                    {% elif activity.action == 'update' %}bg-warning
+                                    {% elif activity.action == 'delete' %}bg-danger
+                                    {% else %}bg-primary{% endif %}">
+                                    {{ activity.get_action_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <div>{{ activity.model_name }}</div>
+                                {% if activity.object_repr %}
+                                <small class="text-muted">{{ activity.object_repr|truncatechars:30 }}</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if activity.ip_address %}
+                                <code>{{ activity.ip_address }}</code>
+                                {% else %}
+                                <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if activity.message %}
+                                <button class="btn btn-sm btn-outline-secondary" 
+                                        onclick="showActivityDetails({{ activity.id }})">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4">
+                                <i class="fas fa-history fa-2x text-muted mb-2"></i>
+                                <p class="text-muted">Aucune activité trouvée</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        {% if activities.has_other_pages %}
+        <div class="card-footer">
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center mb-0">
+                    {% if activities.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if user_filter %}&user={{ user_filter }}{% endif %}{% if action_filter %}&action={{ action_filter }}{% endif %}{% if date_from %}&date_from={{ date_from }}{% endif %}{% if date_to %}&date_to={{ date_to }}{% endif %}">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ activities.previous_page_number }}{% if user_filter %}&user={{ user_filter }}{% endif %}{% if action_filter %}&action={{ action_filter }}{% endif %}{% if date_from %}&date_from={{ date_from }}{% endif %}{% if date_to %}&date_to={{ date_to }}{% endif %}">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in activities.paginator.page_range %}
+                        {% if activities.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > activities.number|add:'-3' and num < activities.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if user_filter %}&user={{ user_filter }}{% endif %}{% if action_filter %}&action={{ action_filter }}{% endif %}{% if date_from %}&date_from={{ date_from }}{% endif %}{% if date_to %}&date_to={{ date_to }}{% endif %}">
+                                {{ num }}
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if activities.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ activities.next_page_number }}{% if user_filter %}&user={{ user_filter }}{% endif %}{% if action_filter %}&action={{ action_filter }}{% endif %}{% if date_from %}&date_from={{ date_from }}{% endif %}{% if date_to %}&date_to={{ date_to }}{% endif %}">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ activities.paginator.num_pages }}{% if user_filter %}&user={{ user_filter }}{% endif %}{% if action_filter %}&action={{ action_filter }}{% endif %}{% if date_from %}&date_from={{ date_from }}{% endif %}{% if date_to %}&date_to={{ date_to }}{% endif %}">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal détails activité -->
+<div class="modal fade" id="activityDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Détails de l'activité</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="activityDetailsContent">
+                <!-- Contenu chargé via AJAX -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function showActivityDetails(activityId) {
+        fetch(`/admin/activity-logs/${activityId}/details/`)
+        .then(response => response.json())
+        .then(data => {
+            const content = document.getElementById('activityDetailsContent');
+            content.innerHTML = `
+                <div class="mb-3">
+                    <label class="form-label">Message</label>
+                    <div class="form-control bg-light">${data.message || '—'}</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Navigateur</label>
+                    <div class="form-control bg-light small">${data.user_agent || '—'}</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Modifications</label>
+                    <div class="form-control bg-light">
+                        <pre class="mb-0 small">${JSON.stringify(data.changes, null, 2) || 'Aucune modification'}</pre>
+                    </div>
+                </div>
+            `;
+            
+            const modal = new bootstrap.Modal(document.getElementById('activityDetailsModal'));
+            modal.show();
+        });
+    }
+    
+    function exportActivityLogs() {
+        // Construire l'URL avec les filtres actuels
+        let url = '{% url "admin-user:export_activity_logs" %}?';
+        const params = new URLSearchParams();
+        
+        if ('{{ user_filter }}') params.append('user', '{{ user_filter }}');
+        if ('{{ action_filter }}') params.append('action', '{{ action_filter }}');
+        if ('{{ date_from }}') params.append('date_from', '{{ date_from }}');
+        if ('{{ date_to }}') params.append('date_to', '{{ date_to }}');
+        
+        window.location.href = url + params.toString();
+    }
+    
+    function clearOldLogs() {
+        if (confirm('Supprimer les logs de plus de 30 jours ? Cette action est irréversible.')) {
+            fetch('{% url "admin-user:clear_old_logs" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message);
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('error', data.message);
+                }
+            });
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,52 @@
+<!-- teacher/templates/teacher/flashcards/sets.html -->
+{% extends 'base.html' %}
+{% block title %}Sets de flashcards{% endblock %}
+{% block content %}
+<div class="fade-in">
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="{% url 'teacher:flashcard_set_create' teaching_unites.first.id %}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-2"></i>Nouveau set
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <form method="get">
+                        <div class="input-group"><input type="text" name="q" class="form-control" placeholder="Rechercher..." value="{{ search_query }}"><button class="btn btn-secondary"><i class="fas fa-search"></i></button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        {% for set in page_obj %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ set.title.title }}</h5>
+                    <p class="card-text text-muted small">{{ set.description|truncatechars:80|default:"Aucune description" }}</p>
+                    <p><span class="badge bg-secondary">{{ set.cards.count }} cartes</span></p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="btn-group w-100">
+                        <a href="{% url 'teacher:flashcard_cards' set.id %}" class="btn btn-outline-primary"><i class="fas fa-eye"></i> Voir</a>
+                        <a href="{% url 'teacher:flashcard_set_edit' set.id %}" class="btn btn-outline-secondary"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'teacher:flashcard_set_delete' set.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}<div class="col-12 text-center py-5"><p class="text-muted">Aucun set de flashcards</p><a href="{% url 'teacher:flashcard_set_create' teaching_unites.first.id %}" class="btn btn-primary">Créer mon premier set</a></div>{% endfor %}
+    </div>
+    
+    {% if page_obj.has_other_pages %}
+    <nav><ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Précédent</a></li>{% endif %}
+        {% for num in page_obj.paginator.page_range %}{% if page_obj.number == num %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>{% endif %}{% endfor %}
+        {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a></li>{% endif %}
+    </ul></nav>
+    {% endif %}
+</div>
+{% endblock %}

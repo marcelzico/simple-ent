@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+{% block title %}Créer un Abonnement{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-calendar-plus"></i> Créer une Demande d'Abonnement
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Sélection du Paiement -->
+                    <div class="mb-3">
+                        <label for="{{ form.payment.id_for_label }}" class="form-label">
+                            <i class="fas fa-money-check"></i> Sélectionner un Paiement Approuvé
+                        </label>
+                        {% if approved_payments %}
+                            <select name="{{ form.payment.name }}" id="{{ form.payment.id_for_label }}" 
+                                    class="form-select" required>
+                                <option value="">Choisir un paiement...</option>
+                                {% for payment in approved_payments %}
+                                <option value="{{ payment.id }}" 
+                                        {% if form.payment.value == payment.id|stringformat:"i" %}selected{% endif %}>
+                                    Paiement #{{ payment.id }} - {{ payment.amount }} Ar ({{ payment.feature.name }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Aucun paiement approuvé trouvé. Veuillez d'abord effectuer un paiement.
+                            </div>
+                        {% endif %}
+                        {% if form.payment.errors %}
+                        <div class="text-danger">
+                            {% for error in form.payment.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Sélection de la Fonctionnalité -->
+                    <div class="mb-3">
+                        <label for="{{ form.feature.id_for_label }}" class="form-label">
+                            <i class="fas fa-cube"></i> Sélectionner une Fonctionnalité
+                        </label>
+                        <select name="{{ form.feature.name }}" id="{{ form.feature.id_for_label }}" 
+                                class="form-select" required>
+                            <option value="">Choisir une fonctionnalité...</option>
+                            {% for feature in form.fields.feature.queryset %}
+                            <option value="{{ feature.id }}" 
+                                    {% if form.feature.value == feature.id|stringformat:"i" %}selected{% endif %}>
+                                {{ feature.name }} - {{ feature.price }} Ar ({{ feature.validity_day_number }} jours)
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.feature.errors %}
+                        <div class="text-danger">
+                            {% for error in form.feature.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Date de Début Prévue -->
+                    <div class="mb-3">
+                        <label for="{{ form.planning_date_to_start.id_for_label }}" class="form-label">
+                            <i class="fas fa-calendar"></i> Date de Début Prévue (Optionnel)
+                        </label>
+                        <input type="date" name="{{ form.planning_date_to_start.name }}" 
+                            id="{{ form.planning_date_to_start.id_for_label }}"
+                            value="{{ form.planning_date_to_start.value|default:'' }}"
+                            class="form-control"
+                            min="{{ today|date:'Y-m-d' }}">
+                        <small class="form-text text-muted">
+                            Laisser vide pour démarrer immédiatement après approbation. Ne peut pas être dans le passé.
+                        </small>
+                        {% if form.planning_date_to_start.errors %}
+                        <div class="text-danger">
+                            {% for error in form.planning_date_to_start.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">
+                            <i class="fas fa-comment"></i> Informations Supplémentaires (Optionnel)
+                        </label>
+                        <textarea name="{{ form.description.name }}" 
+                                  id="{{ form.description.id_for_label }}"
+                                  class="form-control" 
+                                  rows="3"
+                                  placeholder="Ajoutez toute information supplémentaire concernant votre demande d'abonnement...">{{ form.description.value|default:'' }}</textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        {% if approved_payments %}
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane"></i> Soumettre la Demande d'Abonnement
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-primary btn-lg" disabled>
+                                Aucun Paiement Approuvé Disponible
+                            </button>
+                        {% endif %}
+                        <a href="{% url 'subscriptions:student_dashboard' %}" class="btn btn-outline-secondary">
+                            Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Liste des Paiements Approuvés -->
+        {% if approved_payments %}
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-list"></i> Vos Paiements Approuvés</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Montant</th>
+                                <th>Fonctionnalité</th>
+                                <th>Méthode</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in approved_payments %}
+                            <tr>
+                                <td>#{{ payment.id }}</td>
+                                <td>{{ payment.amount }} Ar</td>
+                                <td>{{ payment.feature.name }}</td>
+                                <td>{{ payment.get_paid_with_display }}</td>
+                                <td>{{ payment.created_at|date:"d M, Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Définir la date minimale à aujourd'hui
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date().toISOString().split('T')[0];
+        const dateField = document.getElementById('{{ form.planning_date_to_start.id_for_label }}');
+        
+        if (!dateField.value) {
+            dateField.value = today;
+        }
+    });
+</script>
+{% endblock %}

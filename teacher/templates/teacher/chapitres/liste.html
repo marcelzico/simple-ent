@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+{% block title %}Chapitres - {{ unite.title }}{% endblock %}
+
+{% block page_title %}
+<h5 class="mb-0">
+    <i class="fas fa-folder-open me-2 text-primary"></i>
+    Chapitres de {{ unite.title }}
+    <span class="badge bg-secondary">{{ total_chapitres }}</span>
+</h5>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- Barre d'actions -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <a href="{% url 'teacher:chapitre_create' unite.id %}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-2"></i>Nouveau chapitre
+                    </a>
+                    <a href="{% url 'teacher:unites_list' %}" class="btn btn-secondary ms-2">
+                        <i class="fas fa-arrow-left me-2"></i>Retour aux unités
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <form method="get" class="row g-2">
+                        <div class="col-md-8">
+                            <select name="is_active" class="form-select">
+                                <option value="">Tous les chapitres</option>
+                                <option value="active" {% if is_active_filter == 'active' %}selected{% endif %}>Actifs uniquement</option>
+                                <option value="inactive" {% if is_active_filter == 'inactive' %}selected{% endif %}>Inactifs uniquement</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-secondary w-100">
+                                <i class="fas fa-filter me-2"></i>Filtrer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Liste des chapitres -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-list me-2"></i>
+            Liste des chapitres
+            {% if is_active_filter %}
+            <span class="badge bg-info ms-2">Filtré</span>
+            {% endif %}
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px">Ordre</th>
+                            <th>Titre</th>
+                            <th>Enseignants</th>
+                            <th>Statut</th>
+                            {% comment %} <th>Quiz</th>
+                            <th>Flashcards</th> {% endcomment %}
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="chapters-list">
+                        {% for chapitre in page_obj %}
+                        <tr data-id="{{ chapitre.id }}">
+                            <td>
+                                {% comment %} <i class="fas fa-grip-vertical text-muted drag-handle me-2" style="cursor: grab;"></i> {% endcomment %}
+                                <span class="order-value">{{ chapitre.order|default:"-" }}</span>
+                            </td>
+                            <td class="fw-bold">{{ chapitre.title|truncatechars:40 }}</td>
+                            <td>{{ chapitre.prof|default:"-" }}</td>
+                            <td>
+                                {% if chapitre.is_active %}
+                                <span class="badge bg-success">Actif</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Inactif</span>
+                                {% endif %}
+                            </td>
+                            {% comment %} <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'teacher:mcq_list_by_unite' unite.id %}?chapitre={{ chapitre.id }}" class="btn btn-outline-primary" title="QCM">
+                                        <i class="fas fa-question-circle"></i>
+                                    </a>
+                                    <a href="{% url 'teacher:qa_list_by_unite' unite.id %}?chapitre={{ chapitre.id }}" class="btn btn-outline-success" title="Questions/Réponses">
+                                        <i class="fas fa-comment-dots"></i>
+                                    </a>
+                                    <a href="{% url 'teacher:tf_list_by_unite' unite.id %}?chapitre={{ chapitre.id }}" class="btn btn-outline-warning" title="Vrai/Faux">
+                                        <i class="fas fa-check-circle"></i>
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="{% url 'teacher:flashcard_sets' %}?chapitre={{ chapitre.id }}" class="btn btn-sm btn-outline-info">
+                                    <i class="fas fa-layer-group"></i>
+                                </a>
+                            </td> {% endcomment %}
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'teacher:chapitre_edit' chapitre.id %}" class="btn btn-outline-primary" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'lecon:chapter_detail' chapitre.ue.id chapitre.id %}" class="btn btn-outline-info" title="Voir les détails du chapitre">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'teacher:chapitre_delete' chapitre.id %}" class="btn btn-outline-danger" title="Supprimer">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <i class="fas fa-folder-open fa-3x text-muted mb-3 d-block"></i>
+                                <p class="text-muted">Aucun chapitre dans cette unité.</p>
+                                <a href="{% url 'teacher:chapitre_create' unite.id %}" class="btn btn-primary">
+                                    <i class="fas fa-plus-circle me-2"></i>Créer le premier chapitre
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="card-footer">
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center mb-0">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if is_active_filter %}&is_active={{ is_active_filter }}{% endif %}">
+                            Précédent
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if is_active_filter %}&is_active={{ is_active_filter }}{% endif %}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if is_active_filter %}&is_active={{ is_active_filter }}{% endif %}">
+                            Suivant
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Drag and drop pour réordonner les chapitres
+    let dragSrcElement = null;
+
+    function handleDragStart(e) {
+        dragSrcElement = this;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+        this.classList.add('dragging');
+    }
+
+    function handleDragOver(e) {
+        if (e.preventDefault) e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+
+    function handleDragEnter(e) {
+        this.classList.add('drag-over');
+    }
+
+    function handleDragLeave(e) {
+        this.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+        if (e.stopPropagation) e.stopPropagation();
+        
+        if (dragSrcElement != this) {
+            // Réordonner dans le DOM
+            const parent = this.parentNode;
+            const allRows = Array.from(document.querySelectorAll('#chapters-list tr'));
+            const srcIndex = allRows.indexOf(dragSrcElement);
+            const destIndex = allRows.indexOf(this);
+            
+            if (srcIndex < destIndex) {
+                this.parentNode.insertBefore(dragSrcElement, this.nextSibling);
+            } else {
+                this.parentNode.insertBefore(dragSrcElement, this);
+            }
+            
+            // Mettre à jour les ordres
+            updateOrders();
+        }
+        
+        this.classList.remove('drag-over');
+        return false;
+    }
+
+    function updateOrders() {
+        const rows = document.querySelectorAll('#chapters-list tr');
+        const orders = {};
+        
+        rows.forEach((row, index) => {
+            const chapterId = row.dataset.id;
+            orders[chapterId] = index + 1;
+            row.querySelector('.order-value').textContent = index + 1;
+        });
+        
+        // Envoyer la mise à jour au serveur
+        fetch("{% url 'teacher:chapitre_reorder' unite.id %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ orders: orders })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Afficher une notification
+                showToast('Ordre mis à jour avec succès');
+            }
+        });
+    }
+
+    function showToast(message) {
+        // Créer un toast simple
+        const toast = document.createElement('div');
+        toast.className = 'alert alert-success alert-dismissible fade show position-fixed bottom-0 end-0 m-3';
+        toast.style.zIndex = '9999';
+        toast.innerHTML = `<i class="fas fa-check-circle me-2"></i>${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Attacher les événements drag and drop
+    document.querySelectorAll('#chapters-list tr').forEach(row => {
+        row.setAttribute('draggable', 'true');
+        row.addEventListener('dragstart', handleDragStart);
+        row.addEventListener('dragover', handleDragOver);
+        row.addEventListener('dragenter', handleDragEnter);
+        row.addEventListener('dragleave', handleDragLeave);
+        row.addEventListener('drop', handleDrop);
+    });
+</script>
+
+<style>
+    .dragging {
+        opacity: 0.5;
+    }
+    .drag-over {
+        border-top: 2px solid #3498db;
+        background-color: rgba(52, 152, 219, 0.1);
+    }
+    .drag-handle {
+        cursor: grab;
+    }
+    .drag-handle:active {
+        cursor: grabbing;
+    }
+</style>
+{% endblock %}

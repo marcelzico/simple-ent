@@ -1,0 +1,145 @@
+[file name]: feature_management.html
+[file content begin]
+{% extends 'base.html' %}
+{% load static %}
+{% load subscription_tags %}
+
+{% block title %}Gestion des Fonctionnalités{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <h2><i class="fas fa-cog"></i> Gestion des Fonctionnalités</h2>
+            <p class="text-muted">Gérez les fonctionnalités d'abonnement et les tarifs</p>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'subscriptions:create_feature' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Ajouter une Nouvelle Fonctionnalité
+            </a>
+        </div>
+    </div>
+
+    <!-- Grille des Fonctionnalités -->
+    <div class="row">
+        {% for feature in features %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">{{ feature.name }}</h5>
+                        <span class="badge bg-primary">{{ feature.code }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h3 class="text-primary">{{ feature.price }} Ar</h3>
+                        <p class="text-muted mb-0">
+                            <i class="fas fa-calendar-day"></i> {{ feature.validity_day_number }} jours
+                        </p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Limites d'Utilisation :</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <small><i class="fas fa-question-circle"></i> Quiz : {{ feature.quiz_features }}</small>
+                            </div>
+                            <div class="col-6">
+                                <small><i class="fas fa-file-alt"></i> Examens : {{ feature.exam_feature }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Fonctionnalités :</h6>
+                        <div class="row">
+                            {% for feature_item in feature.get_feature_list|slice:":3" %}
+                            <div class="col-12">
+                                <small><i class="fas fa-check text-success"></i> {{ feature_item }}</small>
+                            </div>
+                            {% endfor %}
+                            {% if feature.get_feature_list|length > 3 %}
+                            <div class="col-12">
+                                <small class="text-muted">+ {{ feature.get_feature_list|length|add:"-3" }} autres fonctionnalités</small>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'subscriptions:update_feature' feature.id %}" 
+                           class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                        <small class="text-muted">
+                            Créé le : {{ feature.created_at|date:"d M Y" }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-cubes fa-4x text-muted mb-3"></i>
+                    <h5>Aucune fonctionnalité trouvée</h5>
+                    <p class="text-muted">Créez votre première fonctionnalité pour commencer.</p>
+                    <a href="{% url 'subscriptions:create_feature' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Créer la Première Fonctionnalité
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Statistiques des Fonctionnalités -->
+    {% if features %}
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Statistiques des Fonctionnalités</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Fonctionnalité</th>
+                                    <th>Prix</th>
+                                    <th>Validité</th>
+                                    <th>Abonnements Actifs</th>
+                                    <th>Revenu Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for feature in features %}
+                                {% with active_subs=feature.subscription_set.filter|filter_by_current_status:"active" %}
+                                <tr>
+                                    <td>{{ feature.name }}</td>
+                                    <td>{{ feature.price }} Ar</td>
+                                    <td>{{ feature.validity_day_number }} jours</td>
+                                    <td>{{ active_subs|length }}</td>
+                                    <td>
+                                        {% with total_subs=feature.subscription_set.count %}
+                                        {{ total_subs|multiply:feature.price }} Ar
+                                        {% endwith %}
+                                    </td>
+                                </tr>
+                                {% endwith %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+[file content end]

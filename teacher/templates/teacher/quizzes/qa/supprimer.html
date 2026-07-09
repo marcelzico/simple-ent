@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Supprimer une question{% endblock %}
+
+{% block page_title %}
+<h5 class="mb-0">
+    <i class="fas fa-trash me-2 text-danger"></i>
+    {{ title }}
+</h5>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirmation
+                </div>
+                <div class="card-body text-center">
+                    <i class="fas fa-comment-dots fa-4x text-danger mb-3 d-block"></i>
+                    <h5>Supprimer cette question ?</h5>
+                    <div class="alert alert-secondary text-start mt-3">
+                        <strong>Question:</strong><br>
+                        {{ qa.question|truncatechars:200 }}
+                        <hr>
+                        <strong>Réponse attendue:</strong><br>
+                        {{ qa.sample_answer|truncatechars:100 }}
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-warning me-2"></i>Cette action est irréversible.
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="{% url 'teacher:qa_list_by_unite' unite.id %}" class="btn btn-secondary">Annuler</a>
+                            <button type="submit" class="btn btn-danger">Confirmer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

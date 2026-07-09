@@ -1,0 +1,349 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tableau de bord - Espace Enseignant{% endblock %}
+
+{% block page_title %}
+<h5 class="mb-0">
+    <i class="fas fa-chart-line me-2 text-primary"></i>
+    Tableau de bord
+    {% if selected_unite %}
+    <span class="badge bg-info ms-2">{{ selected_unite.title }}</span>
+    {% endif %}
+</h5>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- Filtre par unité -->
+    {% if teaching_unites.count > 1 %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <label class="form-label fw-bold">📚 Filtrer par unité d'enseignement</label>
+            <div class="row">
+                <div class="col-md-4">
+                    <select class="form-select" id="uniteFilter" onchange="window.location.href=this.value">
+                        <option value="{% url 'teacher:dashboard' %}" {% if not selected_unite %}selected{% endif %}>
+                            Toutes mes unités
+                        </option>
+                        {% for unite in teaching_unites %}
+                        <option value="{% url 'teacher:dashboard' %}?unite={{ unite.id }}" {% if selected_unite.id == unite.id %}selected{% endif %}>
+                            {{ unite.title }} ({{ unite.level }} - {{ unite.semester }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Statistiques générales - Cartes KPI -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <i class="fas fa-university"></i>
+                <div class="stat-value">{{ unites_count }}</div>
+                <div class="stat-label">Unités enseignées</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <div class="stat-value">{{ students_count }}</div>
+                <div class="stat-label">Étudiants</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <i class="fas fa-question-circle"></i>
+                <div class="stat-value">{{ mcq_count|add:qa_count|add:tf_count }}</div>
+                <div class="stat-label">Questions créées</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <i class="fas fa-chart-simple"></i>
+                <div class="stat-value">{{ global_avg_score|floatformat:1 }}%</div>
+                <div class="stat-label">Moyenne générale</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Graphiques principaux -->
+    <div class="row">
+        <!-- Évolution des performances -->
+        <div class="col-lg-8 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-chart-line me-2 text-primary"></i>
+                    Évolution des performances (7 derniers jours)
+                </div>
+                <div class="card-body">
+                    <canvas id="performanceChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Taux de complétion -->
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-check-circle me-2 text-success"></i>
+                    Taux de complétion
+                </div>
+                <div class="card-body text-center">
+                    <div class="display-1 fw-bold text-primary" id="completionRate">{{ completion_rate|floatformat:1 }}%</div>
+                    <p class="text-muted">des chapitres étudiés</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar bg-success" style="width: {{ completion_rate }}%" role="progressbar"></div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <small class="text-muted">QCM</small>
+                            <div class="fw-bold">{{ avg_mcq_score|floatformat:1 }}%</div>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">QA</small>
+                            <div class="fw-bold">{{ avg_qa_score|floatformat:1 }}%</div>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <small class="text-muted">Vrai/Faux</small>
+                            <div class="fw-bold">{{ avg_tf_score|floatformat:1 }}%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Distribution des scores -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-2 text-warning"></i>
+                    Distribution des scores
+                </div>
+                <div class="card-body">
+                    <canvas id="distributionChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Performances par chapitre -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-chart-pie me-2 text-info"></i>
+                    Complétion par chapitre
+                </div>
+                <div class="card-body">
+                    <canvas id="completionChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Top étudiants et étudiants en difficulté -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-trophy me-2 text-warning"></i>
+                    🏆 Meilleurs étudiants
+                </div>
+                <div class="card-body">
+                    {% if top_students %}
+                    <div class="list-group list-group-flush">
+                        {% for student, score in top_students %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fas fa-user-graduate me-2 text-primary"></i>
+                                <a href="{% url 'teacher:etudiant_detail' student.id %}" class="text-decoration-none">
+                                    {{ student.get_full_name|default:student.username }}
+                                </a>
+                            </div>
+                            <span class="badge bg-success rounded-pill">{{ score|floatformat:1 }}%</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center">Aucune donnée disponible</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-exclamation-triangle me-2 text-danger"></i>
+                    ⚠️ Étudiants en difficulté
+                </div>
+                <div class="card-body">
+                    {% if struggling_students %}
+                    <div class="list-group list-group-flush">
+                        {% for student, score in struggling_students %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fas fa-user-graduate me-2 text-danger"></i>
+                                <a href="{% url 'teacher:etudiant_detail' student.id %}" class="text-decoration-none">
+                                    {{ student.get_full_name|default:student.username }}
+                                </a>
+                            </div>
+                            <span class="badge bg-danger rounded-pill">{{ score|floatformat:1 }}%</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center">Aucune donnée disponible</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Activité récente -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-clock me-2 text-secondary"></i>
+            Activité récente (7 derniers jours)
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-4">
+                    <div class="display-4 text-primary">{{ recent_activity.mcq }}</div>
+                    <small class="text-muted">QCM complétés</small>
+                </div>
+                <div class="col-4">
+                    <div class="display-4 text-success">{{ recent_activity.qa }}</div>
+                    <small class="text-muted">Questions/Réponses</small>
+                </div>
+                <div class="col-4">
+                    <div class="display-4 text-warning">{{ recent_activity.tf }}</div>
+                    <small class="text-muted">Vrai/Faux</small>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <span class="badge bg-info fs-6 p-2">{{ recent_activity.total }} tentatives au total</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Actions rapides -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-bolt me-2 text-warning"></i>
+            Actions rapides
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3 col-6">
+                    <a href="{% url 'teacher:unite_create' %}" class="btn btn-outline-primary w-100 py-3">
+                        <i class="fas fa-plus-circle mb-2 d-block fs-3"></i>
+                        Nouvelle unité
+                    </a>
+                </div>
+                <div class="col-md-3 col-6">
+                    <a href="{% url 'teacher:etudiants_liste' %}" class="btn btn-outline-success w-100 py-3">
+                        <i class="fas fa-users mb-2 d-block fs-3"></i>
+                        Voir étudiants
+                    </a>
+                </div>
+                <div class="col-md-3 col-6">
+                    <a href="{% url 'teacher:mcq_quiz_list' %}" class="btn btn-outline-info w-100 py-3">
+                        <i class="fas fa-tasks mb-2 d-block fs-3"></i>
+                        Créer un quiz
+                    </a>
+                </div>
+                <div class="col-md-3 col-6">
+                    <a href="{% url 'teacher:cas_creer_sans_unite' %}" class="btn btn-outline-secondary w-100 py-3">
+                        <i class="fas fa-stethoscope mb-2 d-block fs-3"></i>
+                        Nouveau cas
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Graphique d'évolution des performances
+    const perfCtx = document.getElementById('performanceChart').getContext('2d');
+    new Chart(perfCtx, {
+        type: 'line',
+        data: {
+            labels: {{ weekly_performance.days|safe }},
+            datasets: [
+                {
+                    label: 'QCM',
+                    data: {{ weekly_performance.mcq|safe }},
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Questions/Réponses',
+                    data: {{ weekly_performance.qa|safe }},
+                    borderColor: '#27ae60',
+                    backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Vrai/Faux',
+                    data: {{ weekly_performance.tf|safe }},
+                    borderColor: '#f39c12',
+                    backgroundColor: 'rgba(243, 156, 18, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { callbacks: { label: function(context) { return context.dataset.label + ': ' + context.raw + '%'; } } }
+            },
+            scales: { y: { beginAtZero: true, max: 100, title: { display: true, text: 'Score (%)' } } }
+        }
+    });
+    
+    // Graphique de distribution des scores
+    const distCtx = document.getElementById('distributionChart').getContext('2d');
+    const distData = {{ score_distribution|safe }};
+    new Chart(distCtx, {
+        type: 'bar',
+        data: {
+            labels: ['0-20%', '21-40%', '41-60%', '61-80%', '81-100%'],
+            datasets: [{
+                label: 'Nombre d\'étudiants',
+                data: [distData['0-20'], distData['21-40'], distData['41-60'], distData['61-80'], distData['81-100']],
+                backgroundColor: ['#e74c3c', '#f39c12', '#3498db', '#27ae60', '#2ecc71'],
+                borderRadius: 8
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: true, scales: { y: { beginAtZero: true, title: { display: true, text: 'Nombre d\'étudiants' } } } }
+    });
+    
+    // Graphique de complétion par chapitre
+    const compCtx = document.getElementById('completionChart').getContext('2d');
+    const compData = {{ chapter_completion_data|safe }};
+    new Chart(compCtx, {
+        type: 'doughnut',
+        data: {
+            labels: compData.chapters.slice(0, 5),
+            datasets: [{ data: compData.rates.slice(0, 5), backgroundColor: ['#3498db', '#27ae60', '#f39c12', '#e74c3c', '#1abc9c'] }]
+        },
+        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'right' } } }
+    });
+</script>
+{% endblock %}

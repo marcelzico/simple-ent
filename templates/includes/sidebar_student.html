@@ -1,0 +1,170 @@
+{% if user.is_student %}
+<!-- ========== MAIN NAVIGATION ========== -->
+
+<!-- 📚 LEARNING SECTION -->
+<div class="nav-section">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-graduation-cap me-1"></i> Apprentissage
+        </small>
+    </div>
+    
+    <!-- Mes Cours -->
+    <a href="{% url 'lecon:subject_list' %}" class="nav-link">
+        <i class="fas fa-book me-2"></i>
+        <span>Mes cours</span>
+    </a>
+    
+    <!-- Cartes mentales -->
+    <a href="#flashcardsCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="flashcardsCollapse">
+        <i class="fas fa-brain me-2"></i>
+        <span>Cartes mentales</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="flashcardsCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'quizlet_copy:home' %}" class="nav-link">
+                <i class="fas fa-globe me-2"></i>
+                <span>Publiques</span>
+            </a>
+            <a href="{% url 'quizlet_copy:my-sets' %}" class="nav-link">
+                <i class="fas fa-user me-2"></i>
+                <span>Personnelles</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========== JOURNAL & TRACKING SECTION ========== -->
+<div class="nav-section mt-3">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-chart-line me-1"></i> Suivi & Journal
+        </small>
+    </div>
+    
+    <!-- Mes journaux -->
+    <a href="#DiaryCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="DiaryCollapse">
+        <i class="fas fa-book-open me-2"></i>
+        <span>Mon journal</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="DiaryCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'journal:home' %}" class="nav-link">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                <span>Tableau de bord</span>
+            </a>
+            <a href="{% url 'journal:entry_create' %}" class="nav-link">
+                <i class="fas fa-plus-circle me-2"></i>
+                <span>Nouvelle entrée</span>
+            </a>
+            <a href="{% url 'journal:calendar' %}" class="nav-link">
+                <i class="fas fa-calendar-alt me-2"></i>
+                <span>Calendrier</span>
+            </a>
+            <a href="{% url 'journal:study_dashboard' %}" class="nav-link">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span>Tableau d'étude</span>
+            </a>
+            <a href="{% url 'journal:clinical_timeline' %}" class="nav-link">
+                <i class="fas fa-stethoscope me-2"></i>
+                <span>Stage clinique</span>
+            </a>
+            <a href="{% url 'journal:clinical_skill_list' %}" class="nav-link">
+                <i class="fas fa-clinic-medical me-2"></i>
+                <span>Compétences cliniques</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========== RESULTS SECTION ========== -->
+<div class="nav-section mt-3">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-chart-simple me-1"></i> Évaluations & Résultats
+        </small>
+    </div>
+    
+    <!-- Mes Résultats -->
+    <a href="#resultsCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="resultsCollapse">
+        <i class="fas fa-chart-line me-2"></i>
+        <span>Mes résultats</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="resultsCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'quizzes:mcq_quiz_results' %}" class="nav-link">
+                <i class="fas fa-file-alt me-2"></i>
+                <span>Examens QCM</span>
+            </a>
+            <a href="{% url 'quizzes:qa_quiz_results' %}" class="nav-link">
+                <i class="fas fa-file-alt me-2"></i>
+                <span>Examens Q&R</span>
+            </a>
+            <a href="{% url 'quizzes:mcq_results' %}" class="nav-link">
+                <i class="fas fa-question-circle me-2"></i>
+                <span>QCM</span>
+            </a>
+            <a href="{% url 'quizzes:qa_results' %}" class="nav-link">
+                <i class="fas fa-comments me-2"></i>
+                <span>Q&R</span>
+            </a>
+            <a href="{% url 'quizzes:tf_results' %}" class="nav-link">
+                <i class="fas fa-check-double me-2"></i>
+                <span>Vrai ou Faux</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========== SEARCH SECTION ========== -->
+<div class="nav-section mt-3">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-search me-1"></i> Recherche
+        </small>
+    </div>
+    
+    <a href="#RechercheCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="RechercheCollapse">
+        <i class="fas fa-search me-2"></i>
+        <span>Rechercher</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="RechercheCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'lecon:heading_search' %}" class="nav-link">
+                <i class="fas fa-heading me-2"></i>
+                <span>Rechercher un titre</span>
+            </a>
+            <a href="{% url 'lecon:content_search' %}" class="nav-link">
+                <i class="fas fa-file-alt me-2"></i>
+                <span>Rechercher des contenus</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========== COMMUNITY SECTION ========== -->
+<div class="nav-section mt-3">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-users me-1"></i> Communauté
+        </small>
+    </div>
+    
+    <!-- Membres -->
+    <a href="{% url 'utilisateur:member' %}" class="nav-link">
+        <i class="fas fa-user-friends me-2"></i>
+        <span>Membres</span>
+    </a>
+    
+    <!-- Feedback -->
+    <a href="{% url 'feedback:submit_feedback' %}" class="nav-link">
+        <i class="fas fa-star me-2"></i>
+        <span>Feedback</span>
+    </a>
+</div>
+{% endif %}
+

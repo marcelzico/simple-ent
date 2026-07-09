@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load subscription_tags %}
+
+{% block title %}Tous les Paiements - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <h2><i class="fas fa-money-bill-wave"></i> Tous les Paiements</h2>
+            <p class="text-muted">Gérez et examinez tous les paiements</p>
+        </div>
+    </div>
+
+    <!-- Formulaire de Filtre -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label for="status" class="form-label">Statut</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="">Tous les Statuts</option>
+                        <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>En attente</option>
+                        <option value="approved" {% if status_filter == 'approved' %}selected{% endif %}>Approuvé</option>
+                        <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejeté</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="student" class="form-label">ID Étudiant</label>
+                    <input type="text" name="student" id="student" class="form-control" 
+                           value="{{ student_filter }}" placeholder="Entrez l'ID étudiant">
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="fas fa-filter"></i> Filtrer
+                    </button>
+                    <a href="{% url 'subscriptions:payment_list' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-times"></i> Effacer
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tableau des Paiements -->
+    <div class="card">
+        <div class="card-body">
+            {% if payments %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Étudiant</th>
+                            <th>Fonctionnalité</th>
+                            <th>Montant</th>
+                            <th>Méthode</th>
+                            <th>Statut</th>
+                            <th>Référence</th>
+                            <th>Créé le</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment in payments %}
+                        <tr>
+                            <td>{{ payment.id }}</td>
+                            <td>
+                                {% if payment.student %}
+                                {{ payment.student.user.get_full_name|default:payment.student.user.username }}
+                                {% else %}
+                                <span class="text-muted">Aucun étudiant</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if payment.feature %}
+                                {{ payment.feature.name }}
+                                {% else %}
+                                <span class="text-muted">Aucune fonctionnalité</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ payment.amount }} Ar</td>
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {{ payment.get_paid_with_display }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if payment.payement_status == 'pending' %}
+                                <span class="badge bg-warning">En attente</span>
+                                {% elif payment.payement_status == 'approved' %}
+                                <span class="badge bg-success">Vérifié</span>
+                                {% else %}
+                                <span class="badge bg-danger">Refusé</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <small>{{ payment.reference_of_payment|truncatechars:10 }}</small>
+                            </td>
+                            <td>{{ payment.created_at|date:"d M, Y" }}</td>
+                            <td>
+                                {% if payment.payement_status == 'pending' %}
+                                <a href="{% url 'subscriptions:admin_payment_review' payment.id %}" 
+                                   class="btn btn-sm btn-warning">
+                                    <i class="fas fa-clipboard-check"></i> Examiner
+                                </a>
+                                {% else %}
+                                <button class="btn btn-sm btn-outline-secondary" disabled>
+                                    Examniné
+                                </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav aria-label="Navigation des pages" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if student_filter %}&student={{ student_filter }}{% endif %}">
+                            Précédent
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if student_filter %}&student={{ student_filter }}{% endif %}">
+                            {{ num }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if student_filter %}&student={{ student_filter }}{% endif %}">
+                            Suivant
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-money-bill-wave fa-4x text-muted mb-3"></i>
+                <h5>Aucun paiement trouvé</h5>
+                <p class="text-muted">Aucun paiement ne correspond à vos filtres.</p>
+                <a href="{% url 'subscriptions:payment_list' %}" class="btn btn-primary">
+                    <i class="fas fa-eye"></i> Voir Tous les Paiements
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Options d'Exportation -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-download"></i> Exporter les Données</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 mb-2">
+                    <button class="btn btn-outline-primary btn-block" onclick="exportToCSV()">
+                        <i class="fas fa-file-csv"></i> Exporter en CSV
+                    </button>
+                </div>
+                <div class="col-md-3 mb-2">
+                    <button class="btn btn-outline-success btn-block" onclick="window.print()">
+                        <i class="fas fa-print"></i> Imprimer le Rapport
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function exportToCSV() {
+    alert('La fonctionnalité d\'exportation CSV serait implémentée ici.');
+    // Dans une implémentation réelle, cela générerait et téléchargerait un fichier CSV
+}
+</script>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block page_title %}
+<h5 class="mb-0">
+    <i class="fas fa-{% if 'Créer' in title %}plus-circle{% else %}edit{% endif %} me-2 text-primary"></i>
+    {{ title }}
+</h5>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-comment-dots me-2"></i>
+                    Question/Réponse
+                    {% if chapitre %}
+                    <span class="badge bg-secondary ms-2">{{ chapitre.title }} - {{ unite.title }}</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                        {% endif %}
+                        
+                        <!-- Question -->
+                        <div class="mb-3">
+                            <label for="{{ form.question.id_for_label }}" class="form-label fw-bold">
+                                {{ form.question.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.question }}
+                            {% if form.question.errors %}
+                            <div class="text-danger small">{{ form.question.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Réponse attendue -->
+                        <div class="mb-3">
+                            <label for="{{ form.sample_answer.id_for_label }}" class="form-label fw-bold">
+                                {{ form.sample_answer.label }} <span class="text-danger">*</span>
+                            </label>
+                            {{ form.sample_answer }}
+                            {% if form.sample_answer.errors %}
+                            <div class="text-danger small">{{ form.sample_answer.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">Exemple de réponse attendue pour la correction automatique.</div>
+                        </div>
+                        
+                        <!-- Explication -->
+                        <div class="mb-3">
+                            <label for="{{ form.explanation.id_for_label }}" class="form-label">
+                                {{ form.explanation.label }}
+                            </label>
+                            {{ form.explanation }}
+                            {% if form.explanation.errors %}
+                            <div class="text-danger small">{{ form.explanation.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Temps limite -->
+                        <div class="mb-4">
+                            <label for="{{ form.time_limit.id_for_label }}" class="form-label fw-bold">
+                                {{ form.time_limit.label }}
+                            </label>
+                            {{ form.time_limit }}
+                            {% if form.time_limit.errors %}
+                            <div class="text-danger small">{{ form.time_limit.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">Temps alloué pour répondre (en secondes). Recommandé: 60-300 secondes.</div>
+                        </div>
+                        
+                        <!-- Boutons -->
+                        <div class="d-flex justify-content-between">
+                            {% if chapitre %}
+                            <a href="{% url 'teacher:qa_list_by_unite' unite.id %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Annuler
+                            </a>
+                            {% else %}
+                            <a href="{% url 'teacher:qa_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Annuler
+                            </a>
+                            {% endif %}
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>{{ button_text }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Aide -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-lightbulb me-2 text-warning"></i>Conseils
+                </div>
+                <div class="card-body">
+                    <h6>📝 Questions ouvertes</h6>
+                    <p class="small text-muted">Les questions ouvertes permettent d'évaluer la compréhension profonde.</p>
+                    
+                    <h6 class="mt-3">✅ Réponse attendue</h6>
+                    <p class="small text-muted">Donnez un exemple de réponse complète. La correction sera basée sur la similarité avec cet exemple.</p>
+                    
+                    <h6 class="mt-3">⏱️ Temps adapté</h6>
+                    <p class="small text-muted">Pour une question complexe: 5-10 minutes. Pour une question simple: 1-2 minutes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,203 @@
+<!-- users/includes/general_tab.html -->
+<div class="row">
+    <!-- Left Column -->
+    <div class="col-lg-8">
+        <!-- Personal Information -->
+        <div class="profile-card">
+            <h3 class="card-title">
+                <i class="bi bi-person-lines-fill"></i>Informations personnelles
+            </h3>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">Nom complet</div>
+                        <div class="info-value profile-heading">{{ user.display_name }}</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">Email</div>
+                        <div class="info-value profile-subheading">{{ user.email }}</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">Téléphone</div>
+                        <div class="info-value">
+                            {{ user.phone_number|default:"Non spécifié" }}
+                            {% if not user.phone_number %}
+                            <small class="d-block text-warning mt-1">
+                                <i class="bi bi-exclamation-circle"></i> Ajoutez votre numéro pour une meilleure communication
+                            </small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">Genre</div>
+                        <div class="info-value">{{ user.get_gender_display|default:"Non spécifié" }}</div>
+                    </div>
+                </div>
+                {% if user.bio %}
+                <div class="col-12">
+                    <div class="info-item">
+                        <div class="info-label">À propos de moi</div>
+                        <div class="info-value bio-text">{{ user.bio|linebreaks }}</div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="action-buttons mt-4">
+                <a href="{% url 'utilisateur:profile_update' %}?tab=general" class="btn-edit">
+                    <i class="bi bi-pencil-fill me-2"></i>Modifier les informations
+                </a>
+                <a href="{% url 'utilisateur:password_change' %}" class="btn-edit">
+                    <i class="bi bi-key-fill me-2"></i>Changer le mot de passe
+                </a>
+            </div>
+        </div>
+        
+        <!-- Statistics -->
+        {% if user.is_student or user.is_teacher %}
+        <div class="profile-card">
+            <h3 class="card-title">
+                <i class="bi bi-bar-chart-fill"></i>Statistiques
+            </h3>
+            
+            <div class="stats-grid">
+                {% if user.is_student and student_profile %}
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-book-fill"></i>
+                    </div>
+                    <div class="stat-number">{{ subscription_count|default:"0" }}</div>
+                    <div class="stat-label">Abonnements actifs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-graph-up"></i>
+                    </div>
+                    <div class="stat-number">{{ average_grade|default:"0"|floatformat:1 }}</div>
+                    <div class="stat-label">Moyenne générale</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+                    <div class="stat-number">{{ recent_sessions|length|default:"0" }}</div>
+                    <div class="stat-label">Sessions récentes</div>
+                </div>
+                {% endif %}
+                
+                {% if user.is_teacher and teacher_profile %}
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <div class="stat-number">{{ total_students|default:"0" }}</div>
+                    <div class="stat-label">Étudiants</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-book-half"></i>
+                    </div>
+                    <div class="stat-number">{{ active_courses|default:"0" }}</div>
+                    <div class="stat-label">Cours actifs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-award-fill"></i>
+                    </div>
+                    <div class="stat-number">{{ years_experience|default:"0" }}</div>
+                    <div class="stat-label">Années d'expérience</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Right Column -->
+    <div class="col-lg-4">
+        <!-- Account Information -->
+        <div class="profile-card">
+            <h3 class="card-title">
+                <i class="bi bi-shield-check"></i>Informations du compte
+            </h3>
+            
+            <div class="info-item">
+                <div class="info-label">Date d'inscription</div>
+                <div class="info-value">{{ user.date_joined|date:"d F Y" }}</div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">Dernière connexion</div>
+                <div class="info-value">
+                    {% if user.last_login %}
+                    {{ user.last_login|date:"d/m/Y à H:i" }}
+                    {% else %}
+                    <span class="text-muted">Jamais</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">Statut du compte</div>
+                <div class="info-value">
+                    {% if user.is_active %}
+                    <span class="badge bg-success p-2">
+                        <i class="bi bi-check-circle-fill me-1"></i>Actif
+                    </span>
+                    {% else %}
+                    <span class="badge bg-danger p-2">
+                        <i class="bi bi-x-circle-fill me-1"></i>Inactif
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">Identifiant unique</div>
+                <div class="info-value">
+                    <code class="small text-muted">{{ user.id }}</code>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="profile-card">
+            <h3 class="card-title">
+                <i class="bi bi-lightning-charge-fill"></i>Actions rapides
+            </h3>
+            
+            <div class="d-grid gap-2">
+                <a href="{% url 'utilisateur:profile_update' %}" class="btn-edit">
+                    <i class="bi bi-pencil-square me-2"></i>Modifier le profil
+                </a>
+                
+                <a href="{% url 'utilisateur:password_change' %}" class="btn-edit">
+                    <i class="bi bi-key me-2"></i>Changer le mot de passe
+                </a>
+                
+                {% if user.is_student %}
+                <a href="{% url 'subscriptions:create_subscription' %}" class="btn-subscribe">
+                    <i class="bi bi-star-fill me-2"></i>Gérer les abonnements
+                </a>
+                {% endif %}
+                
+                {% if user.is_teacher %}
+                <a href="#" class="btn-edit">
+                    <i class="bi bi-people me-2"></i>Mes étudiants
+                </a>
+                {% endif %}
+                
+                <a href="{% url "utilisateur:settings" %}" class="btn-edit">
+                    <i class="bi bi-gear-fill me-2"></i>Paramètres
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

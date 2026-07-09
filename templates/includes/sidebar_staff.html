@@ -1,0 +1,48 @@
+{% if user.is_superuser or user.is_staff %}
+<!-- ========== STAFF NAVIGATION ========== -->
+
+<div class="nav-section">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-chalkboard-teacher me-1"></i> Administration
+        </small>
+    </div>
+    
+    <!-- Mes Cours -->
+    <a href="{% url 'lecon:subject_list' %}" class="nav-link">
+        <i class="fas fa-book me-2"></i>
+        <span>Leçons</span>
+    </a>
+    
+    <!-- Terminologies -->
+    <a href="#terminologiesCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="terminologiesCollapse">
+        <i class="fas fa-terminology me-2"></i>
+        <span>Terminologies</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="terminologiesCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'terminology:set_list' %}" class="nav-link">
+                <i class="fas fa-link me-2"></i>
+                <span>Liées aux leçons</span>
+            </a>
+            <a href="{% url 'terminology:general_list' %}" class="nav-link">
+                <i class="fas fa-globe me-2"></i>
+                <span>Générales</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Cartes mentales -->
+    <a href="{% url 'quizlet_copy:home' %}" class="nav-link">
+        <i class="fas fa-brain me-2"></i>
+        <span>Cartes mentales</span>
+    </a>
+    
+    <!-- Membres -->
+    <a href="{% url 'utilisateur:member' %}" class="nav-link">
+        <i class="fas fa-users me-2"></i>
+        <span>Membres</span>
+    </a>
+</div>
+{% endif %}

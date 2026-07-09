@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Chapters dropdown{% endblock %}
+
+
+{% block content %}
+    <!-- templates/quizzes/chapters_dropdown_list_options.html -->
+    {% for chapter in chapters %}
+    <option value="{{ chapter.id }}">{{ chapter.title }}</option>
+    {% empty %}
+    <option value="">No chapters available</option>
+    {% endfor %}
+{% endblock content %}

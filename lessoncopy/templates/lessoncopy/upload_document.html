@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-warning text-white">
+            <h3><i class="fas fa-upload me-2"></i>Uploader un document pour {{ chapter.title }}</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="file_type" class="form-label">Type de document</label>
+                    <select class="form-select" id="file_type" name="file_type" required>
+                        <option value="">Sélectionnez un type</option>
+                        <option value="docx">Document Word (.docx)</option>
+                        <option value="pptx">PowerPoint (.pptx)</option>
+                        <option value="pdf">PDF (.pdf)</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="file" class="form-label">Fichier</label>
+                    <input type="file" class="form-control" id="file" name="file" accept=".docx,.pptx,.pdf" required>
+                    <div class="form-text">Formats acceptés: .docx, .pptx, .pdf (Max: 10MB)</div>
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-upload me-1"></i>Uploader le document
+                    </button>
+                    <a href="{% url 'lecon:chapter_detail' chapter.ue.id chapter.id %}" class="btn btn-secondary">
+                        <i class="fas fa-times me-1"></i>Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

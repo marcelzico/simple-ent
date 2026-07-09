@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block page_title %}
+<h5 class="mb-0">
+    <i class="fas fa-users me-2 text-primary"></i>
+    {{ title }}
+</h5>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-chalkboard-user me-2"></i>
+                    Enseignants de l'unité: <strong>{{ unite.title }}</strong>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Enseignant principal -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-star text-warning me-1"></i>
+                                Enseignant principal (titulaire)
+                            </label>
+                            {{ form.main_teacher }}
+                            {% if form.main_teacher.errors %}
+                            <div class="text-danger small">{{ form.main_teacher.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">L'enseignant principal est le responsable de l'unité.</div>
+                        </div>
+                        
+                        <!-- Enseignants assistants -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-users me-1"></i>
+                                Enseignants assistants
+                            </label>
+                            {{ form.teachers }}
+                            {% if form.teachers.errors %}
+                            <div class="text-danger small">{{ form.teachers.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">
+                                Maintenez la touche Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs enseignants.
+                                Les assistants peuvent également modifier le contenu de l'unité.
+                            </div>
+                        </div>
+                        
+                        <!-- Boutons -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'teacher:unites_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Retour
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Enregistrer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Aide -->
+            <div class="card mt-3 bg-light">
+                <div class="card-body">
+                    <h6 class="card-title"><i class="fas fa-info-circle me-2 text-info"></i>À propos des rôles</h6>
+                    <ul class="small text-muted mb-0">
+                        <li><strong>Enseignant principal</strong> : Responsable de l'unité, peut gérer tous les aspects.</li>
+                        <li><strong>Enseignant assistant</strong> : Peut modifier le contenu, créer des quiz et voir les résultats des étudiants.</li>
+                        <li>Les deux rôles ont accès à toutes les fonctionnalités de l'unité.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,859 @@
+<!-- templates/admin/dashboard.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tableau de bord Administratif - MedZone{% endblock %}
+
+{% block extra_css %}
+<style>
+    .admin-dashboard {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+    }
+    
+    .admin-navbar {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+    
+    .admin-sidebar {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-right: 1px solid rgba(0,0,0,0.1);
+        height: calc(100vh - 70px);
+        position: fixed;
+        top: 70px;
+        left: 0;
+        overflow-y: auto;
+        width: 280px;
+        transition: transform 0.3s ease;
+    }
+    
+    .admin-content {
+        margin-left: 280px;
+        padding: 2rem;
+        min-height: calc(100vh - 70px);
+        background: #f8f9fa;
+    }
+    
+    @media (max-width: 992px) {
+        .admin-sidebar {
+            transform: translateX(-100%);
+        }
+        
+        .admin-sidebar.show {
+            transform: translateX(0);
+        }
+        
+        .admin-content {
+            margin-left: 0;
+        }
+        
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        
+        .sidebar-overlay.show {
+            display: block;
+        }
+    }
+    
+    .module-card {
+        background: white;
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        height: 100%;
+    }
+    
+    .module-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .module-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .stat-change {
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    
+    .stat-change.positive {
+        color: #28a745;
+    }
+    
+    .stat-change.negative {
+        color: #dc3545;
+    }
+    
+    .activity-item {
+        border-left: 3px solid transparent;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.5rem;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s;
+    }
+    
+    .activity-item:hover {
+        border-left-color: #3498db;
+        background: #f8f9fa;
+    }
+    
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+    
+    .activity-action.login { border-left-color: #28a745; }
+    .activity-action.logout { border-left-color: #6c757d; }
+    .activity-action.create { border-left-color: #17a2b8; }
+    .activity-action.update { border-left-color: #ffc107; }
+    .activity-action.delete { border-left-color: #dc3545; }
+    .activity-action.view { border-left-color: #6f42c1; }
+    
+    .nav-link-module {
+        padding: 0.75rem 1.5rem;
+        margin: 0.25rem 1rem;
+        border-radius: 8px;
+        color: #495057;
+        font-weight: 500;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .nav-link-module:hover,
+    .nav-link-module.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        transform: translateX(5px);
+    }
+    
+    .nav-link-module i {
+        width: 20px;
+        text-align: center;
+    }
+    
+    .admin-badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    
+    .badge-superuser {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+    }
+    
+    .badge-staff {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+    }
+    
+    .quick-action-btn {
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: center;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+    
+    .quick-action-btn:hover {
+        border-color: #3498db;
+        background: #f8f9fa;
+        transform: translateY(-3px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <!-- Navbar Admin -->
+    <nav class="admin-navbar navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <button class="btn btn-link d-lg-none" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <a class="navbar-brand fw-bold text-primary" href="#">
+                <i class="fas fa-shield-alt me-2"></i>MedZone Admin
+            </a>
+            
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <div class="me-2">
+                            <strong>{{ user.display_name }}</strong>
+                            <div class="small">
+                                {% if user.is_superuser %}
+                                <span class="badge-superuser admin-badge">Superuser</span>
+                                {% else %}
+                                <span class="badge-staff admin-badge">Staff</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <i class="fas fa-user-circle fa-2x"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="{% url 'utilisateur:profile' %}">
+                            <i class="fas fa-user me-2"></i>Mon profil
+                        </a>
+                        <a class="dropdown-item" href="{% url 'admin-user:dashboard' %}">
+                            <i class="fas fa-tachometer-alt me-2"></i>Tableau de bord utilisateur
+                        </a>
+                        {% if user.is_superuser %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'admin-user:system_status' %}">
+                            <i class="fas fa-server me-2"></i>Statut système
+                        </a>
+                        <a class="dropdown-item" href="{% url 'admin-user:permission_manager' %}">
+                            <i class="fas fa-user-lock me-2"></i>Gestion des permissions
+                        </a>
+                        {% endif %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="{% url 'utilisateur:logout' %}">
+                            <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Overlay pour mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <!-- Sidebar -->
+    <div class="admin-sidebar" id="adminSidebar">
+        <div class="p-3">
+            <!-- Recherche -->
+            <div class="mb-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <input type="text" class="form-control border-0 bg-light" placeholder="Rechercher...">
+                </div>
+            </div>
+            
+            <!-- Modules -->
+            <div class="mb-4">
+                <h6 class="text-uppercase text-muted small mb-3 px-3">Tableau de bord</h6>
+                <div class="nav flex-column">
+                    <a href="{% url 'admin-user:dashboard' %}" 
+                       class="nav-link-module active">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Vue d'ensemble</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Modules accessibles -->
+            {% if modules %}
+            <div class="mb-4">
+                <h6 class="text-uppercase text-muted small mb-3 px-3">Modules</h6>
+                <div class="nav flex-column">
+                    {% for module in modules %}
+                    <a href="{% url module.url_name %}" 
+                       class="nav-link-module"
+                       style="border-left: 4px solid {{ module.color }};">
+                        <i class="{{ module.icon }}"></i>
+                        <span>{{ module.name }}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Outils -->
+            <div class="mb-4">
+                <h6 class="text-uppercase text-muted small mb-3 px-3">Outils</h6>
+                <div class="nav flex-column">
+                    <a href="{% url 'admin-user:activity_logs' %}" class="nav-link-module">
+                        <i class="fas fa-history"></i>
+                        <span>Journal d'activité</span>
+                    </a>
+                    {% if user.is_superuser %}
+                    <a href="{% url 'admin-user:system_status' %}" class="nav-link-module">
+                        <i class="fas fa-server"></i>
+                        <span>Statut système</span>
+                    </a>
+                    <a href="{% url 'admin-user:permission_manager' %}" class="nav-link-module">
+                        <i class="fas fa-user-lock"></i>
+                        <span>Permissions</span>
+                    </a>
+                    {% endif %}
+                    {% if perms.users.send_notifications %}
+                    <a href="{% url 'admin-user:send_notification' %}" class="nav-link-module">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Statut -->
+            <div class="mt-5 px-3">
+                <div class="alert alert-light small">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-circle text-success me-2"></i>
+                        <strong>Système en ligne</strong>
+                    </div>
+                    <div class="text-muted">
+                        <small>{% now "j F Y H:i" %}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contenu principal -->
+    <div class="admin-content" id="adminContent">
+        <!-- En-tête -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3 mb-1">Tableau de bord administratif</h1>
+                <p class="text-muted mb-0">Bienvenue, {{ user.display_name }}</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary">
+                    <i class="fas fa-sync-alt me-2"></i>Actualiser
+                </button>
+                {% if user.is_superuser %}
+                <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#systemModal">
+                    <i class="fas fa-cogs me-2"></i>Système
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Cartes de statistiques -->
+        <div class="row g-4 mb-4">
+            {% if stats.total_users is not None %}
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <div class="stat-number">{{ stats.total_users }}</div>
+                            <div class="stat-label">Utilisateurs totaux</div>
+                        </div>
+                        <div class="module-icon" style="background: rgba(52, 152, 219, 0.1); color: #3498db;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="stat-change positive">
+                            <i class="fas fa-arrow-up me-1"></i>{{ stats.new_users_today }} aujourd'hui
+                        </span>
+                        <a href="{% url 'admin-user:users' %}" class="btn btn-sm btn-link">
+                            Voir <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if stats.total_students is not None %}
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <div class="stat-number">{{ stats.total_students }}</div>
+                            <div class="stat-label">Étudiants</div>
+                        </div>
+                        <div class="module-icon" style="background: rgba(41, 128, 185, 0.1); color: #2980b9;">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>
+                            <span class="text-success">{{ stats.premium_students }}</span> premium
+                        </span>
+                        <a href="#" class="btn btn-sm btn-link">
+                            Voir <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if stats.total_teachers is not None %}
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <div class="stat-number">{{ stats.total_teachers }}</div>
+                            <div class="stat-label">Enseignants</div>
+                        </div>
+                        <div class="module-icon" style="background: rgba(39, 174, 96, 0.1); color: #27ae60;">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>
+                            <span class="text-success">{{ stats.verified_teachers }}</span> vérifiés
+                        </span>
+                        <a href="#" class="btn btn-sm btn-link">
+                            Voir <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if stats.total_enrollments is not None %}
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <div class="stat-number">{{ stats.total_enrollments }}</div>
+                            <div class="stat-label">Inscriptions</div>
+                        </div>
+                        <div class="module-icon" style="background: rgba(155, 89, 182, 0.1); color: #9b59b6;">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>
+                            <span class="text-success">{{ stats.active_enrollments }}</span> actives
+                        </span>
+                        <a href="#" class="btn btn-sm btn-link">
+                            Voir <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Graphique et activités -->
+        <div class="row g-4 mb-4">
+            <!-- Graphique -->
+            <div class="col-lg-8">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">Inscriptions (30 derniers jours)</h5>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-secondary active">30j</button>
+                            <button class="btn btn-sm btn-outline-secondary">90j</button>
+                            <button class="btn btn-sm btn-outline-secondary">1an</button>
+                        </div>
+                    </div>
+                    <div id="enrollmentChart" style="height: 300px;"></div>
+                </div>
+            </div>
+            
+            <!-- Activités récentes -->
+            <div class="col-lg-4">
+                <div class="stat-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">Activités récentes</h5>
+                        <a href="{% url 'admin-user:activity_logs' %}" class="btn btn-sm btn-link">
+                            Tout voir
+                        </a>
+                    </div>
+                    
+                    <div class="activity-list">
+                        {% for activity in recent_activities %}
+                        <div class="activity-item activity-action {{ activity.action }}">
+                            <div class="d-flex align-items-start">
+                                <div class="activity-icon me-3" 
+                                     style="background: rgba(52, 152, 219, 0.1); color: #3498db;">
+                                    <i class="fas 
+                                        {% if activity.action == 'login' %}fa-sign-in-alt
+                                        {% elif activity.action == 'logout' %}fa-sign-out-alt
+                                        {% elif activity.action == 'create' %}fa-plus
+                                        {% elif activity.action == 'update' %}fa-edit
+                                        {% elif activity.action == 'delete' %}fa-trash
+                                        {% else %}fa-eye{% endif %}">
+                                    </i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <strong>{{ activity.user.display_name }}</strong>
+                                        <small class="text-muted">{{ activity.created_at|timesince }}</small>
+                                    </div>
+                                    <div class="small text-muted">
+                                        {{ activity.get_action_display }} - {{ activity.model_name }}
+                                    </div>
+                                    {% if activity.object_repr %}
+                                    <div class="small">
+                                        "{{ activity.object_repr|truncatechars:30 }}"
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-history fa-2x text-muted mb-2"></i>
+                            <p class="text-muted">Aucune activité récente</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modules rapides -->
+        <div class="row g-4">
+            <div class="col-12">
+                <h5 class="mb-3">Accès rapide</h5>
+            </div>
+            
+            {% for module in modules|slice:":6" %}
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                <a href="{% url module.url_name %}" class="text-decoration-none">
+                    <div class="module-card p-3 text-center">
+                        <div class="module-icon mx-auto" style="background: {{ module.color }}20; color: {{ module.color }};">
+                            <i class="{{ module.icon }}"></i>
+                        </div>
+                        <h6 class="mb-2">{{ module.name }}</h6>
+                        <p class="small text-muted mb-0">{{ module.description|truncatechars:60 }}</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Actions rapides (superuser seulement) -->
+        {% if user.is_superuser %}
+        <div class="row g-4 mt-4">
+            <div class="col-12">
+                <h5 class="mb-3">Actions système</h5>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="quick-action-btn" onclick="quickAction('backup')">
+                    <i class="fas fa-save fa-2x text-primary mb-2"></i>
+                    <div>Sauvegarde</div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="quick-action-btn" onclick="quickAction('cache_clear')">
+                    <i class="fas fa-broom fa-2x text-warning mb-2"></i>
+                    <div>Vider le cache</div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="quick-action-btn" onclick="quickAction('send_test_email')">
+                    <i class="fas fa-envelope fa-2x text-info mb-2"></i>
+                    <div>Email test</div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="quick-action-btn" data-bs-toggle="modal" data-bs-target="#systemModal">
+                    <i class="fas fa-cogs fa-2x text-danger mb-2"></i>
+                    <div>Paramètres système</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal système (superuser) -->
+{% if user.is_superuser %}
+<div class="modal fade" id="systemModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Paramètres système</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Mode debug</label>
+                            <div class="form-control bg-light">
+                                {% if debug %}ACTIF{% else %}INACTIF{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Fuseau horaire</label>
+                            <div class="form-control bg-light">{{ timezone }}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Actions système</label>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-warning" onclick="systemAction('migrate')">
+                            <i class="fas fa-database me-2"></i>Appliquer les migrations
+                        </button>
+                        <button class="btn btn-outline-info" onclick="systemAction('collectstatic')">
+                            <i class="fas fa-folder me-2"></i>Collecter les statics
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="systemAction('restart')">
+                            <i class="fas fa-redo me-2"></i>Redémarrer l'application
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    // Gestion de la sidebar mobile
+    document.getElementById('sidebarToggle').addEventListener('click', function() {
+        const sidebar = document.getElementById('adminSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        sidebar.classList.toggle('show');
+        overlay.classList.toggle('show');
+    });
+    
+    document.getElementById('sidebarOverlay').addEventListener('click', function() {
+        const sidebar = document.getElementById('adminSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        sidebar.classList.remove('show');
+        overlay.classList.remove('show');
+    });
+    
+    // Initialiser le graphique
+    document.addEventListener('DOMContentLoaded', function() {
+        const enrollmentData = {{ enrollment_chart_data|safe }};
+        
+        if (enrollmentData.length > 0) {
+            const dates = enrollmentData.map(item => item.date);
+            const counts = enrollmentData.map(item => item.count);
+            
+            const options = {
+                series: [{
+                    name: 'Inscriptions',
+                    data: counts
+                }],
+                chart: {
+                    height: 300,
+                    type: 'area',
+                    toolbar: {
+                        show: false
+                    }
+                },
+                colors: ['#667eea'],
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.7,
+                        opacityTo: 0.3,
+                        stops: [0, 90, 100]
+                    }
+                },
+                xaxis: {
+                    categories: dates,
+                    labels: {
+                        rotate: -45,
+                        style: {
+                            fontSize: '12px'
+                        }
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Nombre d\'inscriptions'
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return val + ' inscriptions'
+                        }
+                    }
+                }
+            };
+            
+            const chart = new ApexCharts(document.querySelector("#enrollmentChart"), options);
+            chart.render();
+        }
+    });
+    
+    // Actions rapides
+    function quickAction(action) {
+        let url, message;
+        
+        switch(action) {
+            case 'backup':
+                url = '/admin/system/backup/';
+                message = 'Sauvegarde en cours...';
+                break;
+            case 'cache_clear':
+                url = '/admin/system/cache-clear/';
+                message = 'Cache en cours de vidage...';
+                break;
+            case 'send_test_email':
+                url = '/admin/system/send-test-email/';
+                message = 'Email de test en cours d\'envoi...';
+                break;
+        }
+        
+        if (url) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message || 'Action réussie');
+                } else {
+                    showToast('error', data.message || 'Erreur');
+                }
+            })
+            .catch(error => {
+                showToast('error', 'Erreur de connexion');
+            });
+            
+            showToast('info', message);
+        }
+    }
+    
+    // Actions système
+    function systemAction(action) {
+        fetch(`/admin/system/${action}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('success', data.message);
+            } else {
+                showToast('error', data.message);
+            }
+        });
+    }
+    
+    // Fonction de notification toast
+    function showToast(type, message) {
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-white bg-${type} border-0`;
+        toast.setAttribute('role', 'alert');
+        
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">
+                    ${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+        
+        const container = document.getElementById('toastContainer') || createToastContainer();
+        container.appendChild(toast);
+        
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+        
+        toast.addEventListener('hidden.bs.toast', function() {
+            toast.remove();
+        });
+    }
+    
+    function createToastContainer() {
+        const container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+        document.body.appendChild(container);
+        return container;
+    }
+    
+    // Actualiser les stats toutes les 60 secondes
+    setInterval(function() {
+        fetch('/admin/quick-stats/?type=general')
+            .then(response => response.json())
+            .then(data => {
+                // Mettre à jour les stats dynamiquement
+                if (data.total_users) {
+                    document.querySelector('.stat-number').textContent = data.total_users;
+                }
+            });
+    }, 60000);
+</script>
+{% endblock %}

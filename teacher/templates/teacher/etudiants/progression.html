@@ -1,0 +1,32 @@
+<!-- teacher/templates/teacher/etudiants/progression.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Progression - {{ unite.title }}</div>
+    <div class="card-body">
+        <div class="progress mb-4">
+            <div class="progress-bar bg-success" style="width: {{ chapters_completed|divisibleby:total_chapters|default:0 }}%">
+
+            </div>
+        </div>
+        <p>{{ chapters_completed }}/{{ total_chapters }} chapitres étudiés - Moyenne: {{ unite_global_score }}%</p>
+        <ul class="list-group">
+            {% for p in progression_data %}
+            <li class="list-group-item d-flex justify-content-between">
+                <span>
+                    {% if p.has_studied %}
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    {% else %}
+                    <i class="fas fa-circle text-muted me-2"></i>
+                    {% endif %}
+                    {{ p.chapter.title }}
+                </span>
+                <span>
+                    <strong>{{ p.global_score }}%</strong> - {{ p.study_time }} min
+                </span>
+            </li>
+                {% endfor %}
+            </ul>
+        </div>
+</div>
+{% endblock %}

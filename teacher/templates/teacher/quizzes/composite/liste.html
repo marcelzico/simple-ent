@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Quiz composites{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    {% if unite %}
+                    <a href="{% url 'teacher:mcq_quiz_create' unite.id %}" class="btn btn-primary me-2">
+                        <i class="fas fa-plus-circle me-2"></i>Nouveau quiz QCM
+                    </a>
+                    <a href="{% url 'teacher:qa_quiz_create' unite.id %}" class="btn btn-success">
+                        <i class="fas fa-plus-circle me-2"></i>Nouveau quiz QA
+                    </a>
+                    {% else %}
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary me-2 disabled">
+                            <i class="fas fa-plus-circle me-2"></i>Nouveau quiz QCM
+                        </button>
+                        <button type="button" class="btn btn-success disabled">
+                            <i class="fas fa-plus-circle me-2"></i>Nouveau quiz QA
+                        </button>
+                    </div>
+                    <span class="text-muted ms-2 small">
+                        <i class="fas fa-info-circle"></i> Sélectionnez une unité pour créer un quiz
+                    </span>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <select class="form-select" id="uniteFilter" onchange="window.location.href=this.value">
+                        <option value="{% url 'teacher:mcq_quiz_list' %}">Toutes les unités</option>
+                        {% for u in teaching_unites %}
+                        <option value="{% url 'teacher:mcq_quiz_list_by_unite' u.id %}" {% if unite.id == u.id %}selected{% endif %}>
+                            {{ u.title }} ({{ u.get_level_display }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Section Quiz QCM -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-tasks me-2 text-primary"></i>
+            Quiz QCM
+            <span class="badge bg-secondary ms-2">{{ quizzes|length }}</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Unité</th>
+                            <th>Chapitres</th>
+                            <th>Questions</th>
+                            <th>Période</th>
+                            <th>Score min</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for quiz in quizzes %}
+                        <tr>
+                            <td class="fw-bold">{{ quiz.title }}</td>
+                            <td>
+                                <span class="badge bg-light text-dark">{{ quiz.subject.title }}</span>
+                                <br>
+                                <small class="text-muted">{{ quiz.subject.get_level_display }}</small>
+                            </td>
+                            <td>{{ quiz.chapters.count }}</td>
+                            <td>{{ quiz.questions.count }}</td>
+                            <td>
+                                <small>{{ quiz.start_date|date:"d/m/Y" }}<br>→ {{ quiz.end_date|date:"d/m/Y" }}</small>
+                            </td>
+                            <td>
+                                <span class="badge {% if quiz.score_to_pass >= 70 %}bg-danger{% elif quiz.score_to_pass >= 50 %}bg-warning{% else %}bg-success{% endif %}">
+                                    {{ quiz.score_to_pass }}%
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'teacher:mcq_quiz_edit' quiz.id %}" class="btn btn-outline-primary" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'teacher:mcq_quiz_delete' quiz.id %}" class="btn btn-outline-danger" title="Supprimer">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <i class="fas fa-tasks fa-3x text-muted mb-3 d-block"></i>
+                                <p class="text-muted">
+                                    {% if unite %}
+                                    Aucun quiz QCM pour cette unité.
+                                    <br>
+                                    <a href="{% url 'teacher:mcq_quiz_create' unite.id %}" class="btn btn-primary mt-2">
+                                        <i class="fas fa-plus-circle me-2"></i>Créer le premier quiz
+                                    </a>
+                                    {% else %}
+                                    Sélectionnez une unité pour voir ou créer des quiz.
+                                    {% endif %}
+                                </p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Section Quiz QA -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-comment-dots me-2 text-success"></i>
+            Quiz Questions/Réponses
+            <span class="badge bg-secondary ms-2">{{ qa_quizzes|length }}</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Unité</th>
+                            <th>Chapitres</th>
+                            <th>Questions</th>
+                            <th>Période</th>
+                            <th>Score min</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for quiz in qa_quizzes %}
+                        <tr>
+                            <td class="fw-bold">{{ quiz.title }}</td>
+                            <td>
+                                <span class="badge bg-light text-dark">{{ quiz.subject.title }}</span>
+                                <br>
+                                <small class="text-muted">{{ quiz.subject.get_level_display }}</small>
+                            </td>
+                            <td>{{ quiz.chapters.count }}</td>
+                            <td>{{ quiz.questions.count }}</td>
+                            <td>
+                                <small>{{ quiz.start_date|date:"d/m/Y" }}<br>→ {{ quiz.end_date|date:"d/m/Y" }}</small>
+                            </td>
+                            <td>
+                                <span class="badge {% if quiz.score_to_pass >= 70 %}bg-danger{% elif quiz.score_to_pass >= 50 %}bg-warning{% else %}bg-success{% endif %}">
+                                    {{ quiz.score_to_pass }}%
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'teacher:qa_quiz_edit' quiz.id %}" class="btn btn-outline-primary" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'teacher:qa_quiz_delete' quiz.id %}" class="btn btn-outline-danger" title="Supprimer">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <i class="fas fa-comment-dots fa-3x text-muted mb-3 d-block"></i>
+                                <p class="text-muted">
+                                    {% if unite %}
+                                    Aucun quiz QA pour cette unité.
+                                    <br>
+                                    <a href="{% url 'teacher:qa_quiz_create' unite.id %}" class="btn btn-success mt-2">
+                                        <i class="fas fa-plus-circle me-2"></i>Créer le premier quiz
+                                    </a>
+                                    {% else %}
+                                    Sélectionnez une unité pour voir ou créer des quiz.
+                                    {% endif %}
+                                </p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

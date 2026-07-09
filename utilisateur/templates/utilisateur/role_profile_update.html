@@ -1,0 +1,440 @@
+<!-- users/role_profile_update.html - SIMPLIFIED WITHOUT CRISPY_FORMS -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} - EduTrack{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #1abc9c;
+        --success-color: #27ae60;
+        --warning-color: #f39c12;
+        --danger-color: #e74c3c;
+        --light-color: #ecf0f1;
+        --dark-color: #2c3e50;
+        --text-color: #34495e;
+        --text-light: #7f8c8d;
+        --border-color: #dfe6e9;
+        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+        --card-shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.12);
+        --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .role-update-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    .role-update-header {
+        background: linear-gradient(135deg, 
+            {% if role == 'student' %}#27ae60
+            {% else %}#2c3e50{% endif %}, 
+            {% if role == 'student' %}#2ecc71
+            {% else %}#34495e{% endif %});
+        color: white;
+        border-radius: 20px;
+        padding: 3rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+    }
+
+    .role-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-section {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        transition: var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .form-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(to bottom, 
+            {% if role == 'student' %}#27ae60
+            {% else %}#2c3e50{% endif %}, 
+            {% if role == 'student' %}#2ecc71
+            {% else %}#34495e{% endif %});
+    }
+
+    .form-section-title {
+        color: {% if role == 'student' %}#27ae60
+               {% else %}#2c3e50{% endif %};
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid {% if role == 'student' %}#27ae60
+                                {% else %}#2c3e50{% endif %};
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.3rem;
+    }
+
+    .btn-save-role {
+        background: linear-gradient(135deg, 
+            {% if role == 'student' %}#27ae60
+            {% else %}#2c3e50{% endif %}, 
+            {% if role == 'student' %}#2ecc71
+            {% else %}#34495e{% endif %});
+        color: white;
+        border: none;
+        padding: 0.875rem 2rem;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: var(--transition-smooth);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 1rem;
+    }
+
+    .btn-save-role:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        color: white;
+    }
+
+    /* Form Styles */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+        display: block;
+    }
+
+    .form-control, .form-select {
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: var(--transition-smooth);
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: {% if role == 'student' %}#27ae60
+                     {% else %}#2c3e50{% endif %};
+        box-shadow: 0 0 0 0.25rem rgba(
+            {% if role == 'student' %}39, 174, 96
+            {% else %}44, 62, 80{% endif %}, 0.25);
+        outline: none;
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    /* Checkbox Styling */
+    .form-check {
+        padding-left: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-check-input {
+        width: 20px;
+        height: 20px;
+        margin-left: -2.5rem;
+        margin-top: 0.25rem;
+        border: 2px solid var(--border-color);
+    }
+
+    .form-check-input:checked {
+        background-color: {% if role == 'student' %}#27ae60
+                         {% else %}#2c3e50{% endif %};
+        border-color: {% if role == 'student' %}#27ae60
+                     {% else %}#2c3e50{% endif %};
+    }
+
+    .form-check-label {
+        font-weight: 500;
+        color: var(--text-color);
+        margin-left: 0.5rem;
+    }
+
+    /* Info Display */
+    .info-display {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid var(--border-color);
+    }
+
+    .info-item {
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .info-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+        color: var(--text-color);
+        font-size: 1rem;
+    }
+
+    /* Error Styling */
+    .invalid-feedback {
+        display: block;
+        color: var(--danger-color);
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .form-control.is-invalid,
+    .form-select.is-invalid {
+        border-color: var(--danger-color);
+    }
+
+    /* Help Text */
+    .form-text {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    @media (max-width: 768px) {
+        .role-update-header {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .form-section {
+            padding: 1.5rem;
+        }
+
+        .role-icon {
+            font-size: 2.5rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .role-update-container {
+            padding: 1rem;
+        }
+
+        .role-update-header {
+            padding: 1.5rem;
+        }
+
+        .form-section {
+            padding: 1.25rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="role-update-container">
+    <!-- Role Update Header -->
+    <div class="role-update-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <div class="role-icon">
+                    <i class="bi 
+                        {% if role == 'student' %}bi-mortarboard-fill
+                        {% else %}bi-person-fill{% endif %}"></i>
+                </div>
+                <h1 class="h2 fw-bold mb-2">{{ title }}</h1>
+                <p class="mb-0 opacity-85">
+                    Mettez à jour vos informations spécifiques au rôle de {{ role|title }}
+                </p>
+            </div>
+            <a href="{% url 'utilisateur:profile' %}" class="btn btn-light">
+                <i class="bi bi-arrow-left me-2"></i>Retour au profil
+            </a>
+        </div>
+    </div>
+
+    {% if role == 'student' %}
+        <!-- Form for student roles -->
+        <form method="POST" id="roleForm">
+            {% csrf_token %}
+            
+            <div class="form-section">
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    Veuillez corriger les erreurs ci-dessous.
+                </div>
+                {% endif %}
+                
+                <!-- Render form fields manually -->
+                {% for field in form %}
+                <div class="form-group">
+                    {% if field.field.widget.input_type == 'checkbox' %}
+                    <div class="form-check">
+                        {{ field }}
+                        <label class="form-check-label" for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+                        {% if field.help_text %}
+                        <small class="form-text d-block">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% if field.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ field.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <label for="{{ field.id_for_label }}" class="form-label">
+                        {{ field.label }}
+                        {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                    </label>
+                    {{ field }}
+                    {% if field.help_text %}
+                    <small class="form-text">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                    <div class="invalid-feedback">
+                        {{ field.errors }}
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'utilisateur:profile' %}" class="btn btn-secondary">
+                        <i class="bi bi-x-lg me-2"></i>Annuler
+                    </a>
+                    <button type="submit" class="btn-save-role">
+                        <i class="bi bi-check-lg me-2"></i>Enregistrer
+                    </button>
+                </div>
+            </div>
+        </form>
+    
+    {% else %}
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            Aucune information disponible pour ce rôle.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation
+    const form = document.getElementById('roleForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            // Remove any existing validation messages
+            const invalidFields = form.querySelectorAll('.is-invalid');
+            invalidFields.forEach(field => {
+                field.classList.remove('is-invalid');
+                const feedback = field.nextElementSibling;
+                if (feedback && feedback.classList.contains('invalid-feedback')) {
+                    feedback.remove();
+                }
+            });
+            
+            // Validate required fields
+            const requiredFields = form.querySelectorAll('[required]');
+            let hasErrors = false;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'invalid-feedback d-block';
+                    errorDiv.textContent = 'Ce champ est obligatoire.';
+                    field.parentNode.appendChild(errorDiv);
+                    hasErrors = true;
+                }
+            });
+            
+            if (hasErrors) {
+                e.preventDefault();
+                showToast('error', 'Veuillez remplir tous les champs obligatoires.');
+            }
+        });
+    }
+    
+    // Phone number formatting
+    const phoneField = document.querySelector('input[name$="phone_number"]');
+    if (phoneField) {
+        phoneField.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0) {
+                value = value.match(/(\d{0,3})(\d{0,2})(\d{0,2})(\d{0,2})/);
+                value = !value[2] ? value[1] : value[1] + ' ' + value[2] + (value[3] ? ' ' + value[3] : '') + (value[4] ? ' ' + value[4] : '');
+            }
+            e.target.value = value;
+        });
+    }
+});
+
+// Helper functions
+function showToast(type, message) {
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-bg-${type === 'success' ? 'success' : 'danger'} border-0`;
+    toast.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="bi ${type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'} me-2"></i>
+                ${message}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    `;
+    
+    const container = document.querySelector('.toast-container') || createToastContainer();
+    container.appendChild(toast);
+    
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+    
+    toast.addEventListener('hidden.bs.toast', function () {
+        toast.remove();
+    });
+}
+
+function createToastContainer() {
+    const container = document.createElement('div');
+    container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+    document.body.appendChild(container);
+    return container;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}MCQ Result{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4>MCQ Result: {{ quiz.title }}</h4>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <h2>Your Score: {{ score|floatformat:1 }}%</h2>
+                    {% comment %} <p class="lead">You got {{ correct }} out of {{ total }} questions correct</p> {% endcomment %}
+                    <p class="lead">You got {{ correct }} out of 10 questions correct</p>
+                </div>
+                
+                <div class="progress mb-4" style="height: 30px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ score }}%" 
+                         aria-valuenow="{{ score }}" aria-valuemin="0" aria-valuemax="100">
+                        {{ score|floatformat:1 }}%
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{% url 'lessoncopy:lesson' chapter.ue.id chapter.id %}" class="btn btn-info">
+                        Go back and learn again
+                    </a>
+                    <a href="{% url 'quizzes:start_mcq' chapter.id %}" class="btn btn-primary">
+                        Take the quiz again
+                    </a>
+
+                    <a href="{% url 'quizzes:results' %}" class="btn btn-secondary">
+                        View All Results
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

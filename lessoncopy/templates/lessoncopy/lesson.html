@@ -1,0 +1,2009 @@
+{% extends "base.html" %}
+
+{% load lesson_tags %}
+
+{% block title %}{{ chapter }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bullet-level-0 { margin-left: 0; }
+    .bullet-level-1 { margin-left: 1.5rem; }
+    .bullet-level-2 { margin-left: 3rem; }
+    /* etc. up to level 9 */
+    .bullet-item { list-style-type: disc; margin-bottom: 0.25rem; }
+    .lesson-paragraph { margin-bottom: 0.75rem; }
+
+    /* Enhanced Voice Reader Text Highlighting */
+    .current-reading-word {
+        background: linear-gradient(120deg, #ffeb3b, #ffc107) !important;
+        color: #000 !important;
+        padding: 2px 4px;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(255, 193, 7, 0.6);
+        font-weight: bold;
+        animation: wordPulse 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes wordPulse {
+        from {
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.6);
+            transform: scale(1);
+        }
+        to {
+            box-shadow: 0 4px 16px rgba(255, 193, 7, 0.8);
+            transform: scale(1.02);
+        }
+    }
+
+    .active-reading-element {
+        background: linear-gradient(90deg, rgba(33, 150, 243, 0.1), transparent) !important;
+        border-left: 4px solid #2196f3 !important;
+        padding-left: 10px !important;
+        transition: all 0.3s ease;
+    }
+
+    .active-reading-card {
+        box-shadow: 0 0 0 2px #2196f3, 0 4px 20px rgba(33, 150, 243, 0.3) !important;
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+
+    /* Improved progress display */
+    .reading-progress {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4CAF50, #45a049, #4CAF50);
+        background-size: 200% 100%;
+        width: 0%;
+        transition: width 0.3s ease;
+        animation: progressShine 2s ease-in-out infinite;
+    }
+
+    @keyframes progressShine {
+        0% {
+            background-position: -200% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    .progress-text {
+        text-align: center;
+        font-size: 0.9em;
+        color: #495057;
+        min-height: 20px;
+        font-weight: 500;
+    }
+
+    /* Enhanced voice controls */
+    .voice-controls {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .voice-control-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid #007bff;
+        background: white;
+        color: #007bff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        font-size: 1.1em;
+    }
+
+    .voice-control-btn:hover {
+        background: #007bff;
+        color: white;
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    }
+
+    .voice-control-btn:active {
+        transform: scale(0.95);
+    }
+
+    .voice-control-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        border-color: #6c757d;
+        color: #6c757d;
+    }
+
+    .voice-control-btn:disabled:hover {
+        background: white;
+        color: #6c757d;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Improved voice settings */
+    .voice-settings {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .voice-setting {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .voice-setting label {
+        min-width: 70px;
+        font-size: 0.9em;
+        color: #495057;
+        font-weight: 600;
+    }
+
+    .voice-setting input[type="range"] {
+        flex: 1;
+        height: 6px;
+        border-radius: 3px;
+        background: #e9ecef;
+        outline: none;
+        -webkit-appearance: none;
+        transition: background 0.3s ease;
+    }
+
+    .voice-setting input[type="range"]:hover {
+        background: #dee2e6;
+    }
+
+    .voice-setting input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #007bff;
+        cursor: pointer;
+        border: 2px solid white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+    }
+
+    .voice-setting input[type="range"]::-webkit-slider-thumb:hover {
+        background: #0056b3;
+        transform: scale(1.1);
+    }
+
+    .voice-setting input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #007bff;
+        cursor: pointer;
+        border: 2px solid white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+    }
+
+    .voice-setting span {
+        min-width: 45px;
+        font-size: 0.85em;
+        color: #6c757d;
+        text-align: right;
+        font-weight: 500;
+    }
+
+    .voice-setting select {
+        flex: 1;
+        padding: 10px 12px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        background: white;
+        font-size: 0.9em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .voice-setting select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+
+    /* Mobile responsive improvements */
+    @media (max-width: 768px) {
+        .current-reading-word {
+            padding: 3px 6px;
+            font-size: 1.05em;
+        }
+        
+        .active-reading-element {
+            border-left-width: 6px;
+            padding-left: 15px !important;
+        }
+        
+        .voice-control-btn {
+            width: 48px;
+            height: 48px;
+            font-size: 1.2em;
+        }
+        
+        .voice-settings {
+            gap: 15px;
+        }
+        
+        .voice-setting {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+        }
+        
+        .voice-setting label {
+            min-width: auto;
+            text-align: center;
+        }
+    }
+    .voice-control-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        border-color: #6c757d;
+        color: #6c757d;
+    }
+
+    .voice-control-btn:disabled:hover {
+        background: white;
+        color: #6c757d;
+        transform: none;
+    }
+
+    /* Voice Reader Styles */
+    .voice-reader-controls {
+        position: fixed;
+        bottom: 150px;
+        right: 20px;
+        z-index: 999;
+    }
+
+    .voice-reader-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2em;
+        transition: all 0.3s ease;
+    }
+
+    .voice-reader-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        background: linear-gradient(135deg, #45a049 0%, #4CAF50 100%);
+    }
+
+    .voice-reader-btn.playing {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        animation: pulse 2s infinite;
+    }
+
+    .voice-reader-panel {
+        position: absolute;
+        bottom: 60px;
+        right: 0;
+        width: 320px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        border: 1px solid #e0e0e0;
+        display: none;
+        z-index: 1000;
+    }
+
+    .voice-reader-panel.show {
+        display: block;
+        animation: slideUp 0.3s ease;
+    }
+
+    .voice-reader-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #e0e0e0;
+        background: #f8f9fa;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .voice-reader-header h6 {
+        margin: 0;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .close-voice-panel {
+        background: none;
+        border: none;
+        font-size: 1.1em;
+        color: #6c757d;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .voice-reader-content {
+        padding: 20px;
+    }
+
+    .voice-controls {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .voice-control-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid #007bff;
+        background: white;
+        color: #007bff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .voice-control-btn:hover {
+        background: #007bff;
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .voice-control-btn:active {
+        transform: scale(0.95);
+    }
+
+    .voice-settings {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .voice-setting {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .voice-setting label {
+        min-width: 60px;
+        font-size: 0.9em;
+        color: #555;
+        font-weight: 500;
+    }
+
+    .voice-setting input[type="range"] {
+        flex: 1;
+        height: 6px;
+        border-radius: 3px;
+        background: #e0e0e0;
+        outline: none;
+        -webkit-appearance: none;
+    }
+
+    .voice-setting input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #007bff;
+        cursor: pointer;
+    }
+
+    .voice-setting input[type="range"]::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #007bff;
+        cursor: pointer;
+        border: none;
+    }
+
+    .voice-setting span {
+        min-width: 40px;
+        font-size: 0.8em;
+        color: #666;
+        text-align: right;
+    }
+
+    .voice-setting select {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: white;
+        font-size: 0.9em;
+        cursor: pointer;
+    }
+
+    .reading-progress {
+        margin-top: 15px;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 6px;
+        background: #e0e0e0;
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4CAF50, #45a049);
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+
+    .progress-text {
+        text-align: center;
+        font-size: 0.9em;
+        color: #666;
+        min-height: 20px;
+    }
+
+    /* Highlight current word being read */
+    .current-word {
+        background-color: #ffeb3b !important;
+        padding: 2px 4px;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(255, 193, 7, 0.4);
+    }
+
+    /* Mobile responsive for voice reader */
+    @media (max-width: 768px) {
+        .voice-reader-controls {
+            bottom: 140px;
+            right: 15px;
+        }
+        
+        .voice-reader-btn {
+            width: 45px;
+            height: 45px;
+            font-size: 1.1em;
+        }
+        
+        .voice-reader-panel {
+            width: 280px;
+            right: -10px;
+        }
+        
+        .voice-settings {
+            gap: 12px;
+        }
+        
+        .voice-setting {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 5px;
+        }
+        
+        .voice-setting label {
+            min-width: auto;
+        }
+    }
+
+    /* Animation for voice reader button */
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+        }
+        70% {
+            box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+        }
+    }
+
+
+    /* Mobile Annotation Styles */
+    .mobile-annotation-toolbar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        border-top: 2px solid #007bff;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+        z-index: 1100;
+        padding: 10px;
+    }
+
+    .mobile-toolbar-content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .selected-text-preview {
+        font-size: 0.9em;
+        color: #666;
+        text-align: center;
+        padding: 5px;
+        background: #f8f9fa;
+        border-radius: 5px;
+        max-height: 40px;
+        overflow: hidden;
+    }
+
+    .mobile-toolbar-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .mobile-toolbar-btn {
+        flex: 1;
+        padding: 12px 8px;
+        border: none;
+        border-radius: 8px;
+        background: #007bff;
+        color: white;
+        font-size: 0.8em;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        transition: all 0.2s;
+    }
+
+    .mobile-toolbar-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .mobile-toolbar-btn.add-note-btn {
+        flex: 2;
+        background: #28a745;
+    }
+
+    .mobile-toolbar-btn.highlight-only-btn {
+        background: #ffc107;
+        color: #000;
+    }
+
+    .mobile-toolbar-btn.cancel-btn {
+        flex: 0.5;
+        background: #6c757d;
+    }
+
+    .mobile-color-picker {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        border-top: 2px solid #007bff;
+        z-index: 1200;
+        padding: 15px;
+    }
+
+    .color-picker-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+
+    .color-picker-header button {
+        background: none;
+        border: none;
+        font-size: 1.2em;
+        cursor: pointer;
+    }
+
+    .color-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .color-option.mobile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .color-option.mobile.active {
+        border-color: #007bff;
+        background: #f8f9fa;
+    }
+
+    .color-swatch {
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        border: 2px solid #ddd;
+    }
+
+    .mobile-note-form {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: white;
+        z-index: 1300;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-note-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+        background: #f8f9fa;
+    }
+
+    .mobile-note-header button {
+        background: none;
+        border: none;
+        font-size: 1.2em;
+        cursor: pointer;
+    }
+
+    .mobile-note-body {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+    }
+
+    .selected-text-context {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .selected-text-context p {
+        margin: 5px 0 0 0;
+        font-style: italic;
+        color: #666;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px; /* Prevents zoom on iOS */
+        resize: vertical;
+    }
+
+    .color-selection {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .mobile-color-palette {
+        display: flex;
+        gap: 10px;
+    }
+
+    .color-option.mini {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: all 0.2s;
+    }
+
+    .color-option.mini.active {
+        border-color: #007bff;
+        transform: scale(1.1);
+    }
+
+    .mobile-note-actions {
+        display: flex;
+        gap: 10px;
+        padding: 15px;
+        border-top: 1px solid #ddd;
+        background: #f8f9fa;
+    }
+
+    .mobile-note-actions button {
+        flex: 1;
+        padding: 15px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .mobile-note-actions .btn-primary {
+        background: #007bff;
+        color: white;
+    }
+
+    .mobile-note-actions .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+
+    /* Prevent body scroll when mobile UI is open */
+    body.mobile-ui-open {
+        overflow: hidden;
+    }
+
+    /* Enhanced mobile selection */
+    @media (max-width: 768px) {
+        .highlightable {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Improve touch targets */
+        .user-highlight {
+            padding: 4px 6px;
+            margin: 2px;
+        }
+    }
+
+
+
+
+    /* Your existing styles remain unchanged */
+    .dropdown-toggle::after {
+        display: none;
+    }
+    
+    .action-dropdown {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+    }
+    
+    .card {
+        position: relative;
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Annotation Styles */
+    .highlightable {
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    
+    .user-highlight {
+        padding: 2px 4px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+        margin: 1px;
+    }
+    
+    .user-highlight:hover {
+        transform: scale(1.02);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        z-index: 10;
+    }
+    
+    .user-highlight.active {
+        box-shadow: 0 0 0 2px #007bff;
+        z-index: 11;
+    }
+    
+    .highlight-yellow { background-color: #fff3cd !important; border: 1px solid #ffeaa7; }
+    .highlight-blue { background-color: #d1ecf1 !important; border: 1px solid #b8daff; }
+    .highlight-green { background-color: #d4edda !important; border: 1px solid #c3e6cb; }
+    .highlight-pink { background-color: #f8d7da !important; border: 1px solid #f5c6cb; }
+    
+    .annotation-indicator::after {
+        content: "📝";
+        font-size: 10px;
+        margin-left: 2px;
+        opacity: 0.7;
+    }
+
+    /* Sticky Annotation Tools */
+    .annotation-tools {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        padding: 10px 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        z-index: 1000;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        backdrop-filter: blur(10px);
+    }
+    
+    .annotation-tools.hidden {
+        display: none;
+    }
+    
+    .color-palette {
+        display: flex;
+        gap: 5px;
+    }
+    
+    .color-option {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: transform 0.2s;
+    }
+    
+    .color-option:hover {
+        transform: scale(1.1);
+    }
+    
+    .color-option.active {
+        border-color: #000;
+        transform: scale(1.1);
+    }
+    
+    .tool-btn {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .tool-btn:hover {
+        transform: translateY(-1px);
+    }
+    
+    .highlight-btn {
+        background: #007bff;
+        color: white;
+    }
+    
+    .highlight-btn.active {
+        background: #0056b3;
+        box-shadow: 0 2px 8px rgba(0,123,255,0.3);
+    }
+    
+    .notes-btn {
+        background: #28a745;
+        color: white;
+    }
+    
+    .notes-btn.active {
+        background: #1e7e34;
+        box-shadow: 0 2px 8px rgba(40,167,69,0.3);
+    }
+
+    /* Notes Sidebar */
+    .notes-sidebar {
+        position: fixed;
+        top: 0;
+        right: -400px;
+        width: 380px;
+        height: 100vh;
+        background: white;
+        border-left: 1px solid #ddd;
+        box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+        z-index: 1050;
+        transition: right 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .notes-sidebar.open {
+        right: 0;
+    }
+    
+    .notes-header {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        background: #f8f9fa;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .notes-title {
+        margin: 0;
+        font-size: 1.2em;
+        color: #333;
+    }
+    
+    .close-notes {
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        cursor: pointer;
+        color: #6c757d;
+        padding: 5px;
+    }
+    
+    .notes-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+    }
+    
+    .notes-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .note-item {
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #007bff;
+        background: #f8f9fa;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .note-item:hover {
+        background: #e9ecef;
+        transform: translateX(-2px);
+    }
+    
+    .note-item.active {
+        background: #007bff;
+        color: white;
+    }
+    
+    .note-text {
+        font-weight: 500;
+        margin-bottom: 8px;
+        line-height: 1.4;
+    }
+    
+    .note-context {
+        font-size: 0.9em;
+        color: #6c757d;
+        font-style: italic;
+        margin-bottom: 5px;
+        border-bottom: 1px dashed #dee2e6;
+        padding-bottom: 5px;
+    }
+    
+    .note-item.active .note-context {
+        color: #e9ecef;
+        border-bottom-color: rgba(255,255,255,0.3);
+    }
+    
+    .note-meta {
+        font-size: 0.8em;
+        color: #6c757d;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .note-item.active .note-meta {
+        color: #e9ecef;
+    }
+    
+    .note-color {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 5px;
+    }
+    
+    .empty-notes {
+        text-align: center;
+        padding: 40px 20px;
+        color: #6c757d;
+    }
+
+    /* Study Timer */
+    .study-timer {
+        position: fixed;
+        top: 70px;
+        right: 10px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 999;
+        min-width: 120px;
+        text-align: center;
+        font-size: 0.9em;
+    }
+    
+    .timer-display {
+        font-size: 1.2em;
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+    }
+    
+    .timer-label {
+        font-size: 0.7em;
+        opacity: 0.9;
+    }
+
+    /* Quick Note Popup */
+    .note-popup {
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        z-index: 1001;
+        width: 90%;
+        max-width: 400px;
+        display: none;
+    }
+    
+    .note-popup.show {
+        display: block;
+        animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+
+    /* Overlay */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1049;
+        display: none;
+    }
+    
+    .sidebar-overlay.show {
+        display: block;
+    }
+
+    /* Search Styles */
+    .search-highlight {
+        background-color: #ffeb3b !important;
+        padding: 2px 1px;
+        border-radius: 3px;
+        box-shadow: 0 1px 3px rgba(255, 193, 7, 0.3);
+    }
+
+    .search-highlight.current {
+        background-color: #ff9800 !important;
+        box-shadow: 0 2px 6px rgba(255, 152, 0, 0.5);
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    /* Tooltip Styles */
+    .note-tooltip {
+        background: white;
+        border: 2px solid #007bff;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        max-width: 320px;
+        font-size: 0.9em;
+        z-index: 1060;
+        animation: tooltipFadeIn 0.3s ease;
+    }
+
+    @keyframes tooltipFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Toast Notification */
+    .custom-toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1100;
+        min-width: 300px;
+    }
+
+    /* Delete Note Modal */
+    .delete-note-modal .modal-header {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    /* Go to Top Button */
+    .go-to-top {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        cursor: pointer;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2em;
+        transition: all 0.3s ease;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px);
+    }
+    
+    .go-to-top.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    .go-to-top:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
+    
+    .go-to-top:active {
+        transform: translateY(-1px);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .container-fluid {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+        .study-timer {
+            top: 60px;
+            right: 5px;
+            min-width: 100px;
+            padding: 8px;
+        }
+        
+        .timer-display {
+            font-size: 1em;
+        }
+        
+        .annotation-tools {
+            bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            width: 95%;
+        }
+        
+        .tool-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .notes-sidebar {
+            width: 100%;
+            right: -100%;
+        }
+        
+        .notes-sidebar.open {
+            right: 0;
+        }
+
+        .custom-toast {
+            left: 10px;
+            right: 10px;
+            min-width: auto;
+        }
+        
+        .go-to-top {
+            bottom: 80px;
+            right: 15px;
+            width: 45px;
+            height: 45px;
+            font-size: 1.1em;
+        }
+    }
+
+    /* Hierarchical Heading Styles - KEEP YOUR EXISTING STYLES */
+    .heading-level-1 { color: rgba(69, 152, 225, 1); font-size: 1.5em; font-weight: bold; }
+    .heading-level-2 { color: #44993c; font-size: 1.4em; font-weight: bold; padding-left: 1rem; }
+    .heading-level-3 { color: purple; font-size: 1.3em; font-weight: bold; padding-left: 2rem; }
+    .heading-level-4 { color: rgb(55, 128, 122); font-size: 1.2em; padding-left: 3rem; }
+    .heading-level-5 { color: rgb(198, 162, 91); padding-left: 4rem; font-size: 1.1em; }
+    .heading-level-6 { color: rgba(0, 181, 139, 0.61); padding-left: 5rem; font-size: 1.1em; }
+    .heading-level-7 { color: rgb(112, 1, 146); padding-left: 6rem; font-size: 1.1em; }
+    .heading-level-8 { color: rgb(196, 87, 111); padding-left: 7rem; font-size: 1.1em; }
+    .heading-level-9 { color: rgb(48, 135, 30); padding-left: 8rem; font-size: 1.1em; }
+</style>
+{% endblock %}
+
+{% block appnav %}
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:subject_list" %}">Liste UE</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:subject_detail" chapter.ue.id %}">{{ chapter.ue.title }}</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:chapter_detail" chapter.ue.id chapter.id %}">{{ chapter.title }}</a>
+    </li>
+    <li class="breadcrumb-item active">Contenus - {{ chapter.title }}</li>
+{% endblock appnav %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <!-- Toast Container -->
+    <div id="toastContainer" class="custom-toast"></div>
+
+    <!-- Go to Top Button -->
+    <button class="go-to-top" id="goToTop" title="Retour en haut">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <a href="{% if user.is_student %}{% url 'lecon:chapter_detail_student' chapter.ue.id chapter.id %}{% else %}{% url 'lecon:chapter_detail' chapter.ue.id chapter.id %}{% endif %}" class="btn btn-sm btn-outline-info mb-2">
+            <i class="fas fa-arrow-left me-1"></i>
+            <span class="d-none d-sm-inline">Retour</span>
+        </a>
+        <h1 class="h4 text-center text-danger mb-0 flex-grow-1 mx-3">
+            {{ chapter }}
+        </h1>
+
+        <!-- Version switcher -->
+        {% if importers|length > 1 %}
+        <div class="dropdown me-2">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                Version du {{ selected_importer.uploaded_at|date:"d/m/Y H:i" }}
+            </button>
+            <ul class="dropdown-menu">
+                {% for imp in importers %}
+                <li>
+                    <a class="dropdown-item {% if imp.id == selected_importer.id %}active{% endif %}" 
+                    href="?importer={{ imp.id }}">
+                        {{ imp.uploaded_at|date:"d/m/Y H:i" }} - {{ imp.title }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        
+        <!-- Search Box -->
+        <div class="d-flex gap-2 mb-2">
+            <div class="input-group" style="max-width: 250px;">
+                <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Rechercher...">
+                <button class="btn btn-outline-secondary btn-sm" type="button" id="clearSearch">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lesson Content -->
+    {% if copies %}
+    <div class="lesson-content">
+        {% for obj in copies %}
+        <div class="card shadow-sm mb-4 content-card" id="content-{{ obj.id }}" 
+             data-content="{{ obj.heading }} {{ obj.content }} {{ obj.explanation }} {{ obj.caption }}"
+             data-copy-id="{{ obj.id }}">
+            
+            <!-- Three-dot Action Menu -->
+            {% if request.user.is_staff %}
+            <div class="action-dropdown">
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" 
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item text-info" href="{% url 'lessoncopy:modify' chapter.id obj.id %}">
+                                <i class="fas fa-edit me-2"></i>Modifier
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" 
+                                    data-bs-target="#deleteModal{{ obj.id }}">
+                                <i class="fas fa-trash me-2"></i>Supprimer
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="card-body">
+                <!-- Heading -->
+                <div class="heading mb-3 hierarchical-heading highlightable" 
+                     data-level="{{ obj.heading_level|default:'1' }}"
+                     data-heading-id="{{ obj.id }}">
+                    {{ obj.heading }}
+                    {% if obj.is_qe %}
+                        <span style="background-color: #6c0d36; color: #ffffff; border-radius: 25%;">QE</span>
+                    {% endif %}
+                </div>
+
+                <!-- Content and Explanation -->
+                <div class="row g-3">
+                    <!-- Main Content -->
+                    {% if obj.content %}
+                    <div class="col-12 {% if obj.explanation %}col-lg-9{% endif %}">
+                        <div class="content-text" id="content-{{ obj.id }}-text">
+                            {{ obj.content|render_content }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Explanation Sidebar -->
+                    {% if obj.explanation %}
+                    <div class="col-12 col-lg-3">
+                        <div class="explication-card bg-light rounded p-3 highlightable">
+                            <h6 class="text-success mb-2">
+                                <i class="fas fa-lightbulb me-1"></i>
+                                Explications :
+                            </h6>
+                            <div class="explication-text small">
+                                {{ obj.explanation|linebreaks }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Image and Caption -->
+                {% if obj.image or obj.caption %}
+                <div class="mt-3">
+                    <div class="row align-items-start g-3">
+                        {% if obj.image %}
+                        <div class="col-12 col-md-auto">
+                            <div class="image-container text-center">
+                                <img src="{{ obj.image.url }}" 
+                                     alt="Illustration" 
+                                     class="img-fluid img-thumbnail"
+                                     style="max-height: 300px; width: auto;">
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if obj.caption %}
+                        <div class="col-12 col-md">
+                            <div class="caption-text fst-italic text-muted highlightable">
+                                {{ obj.caption|linebreaks }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Table -->
+                {% if obj.table %}
+                <div class="mt-3">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-sm">
+                            <tbody>
+                                {% for row in obj.table %}
+                                <tr>
+                                    {% for cell in row %}
+                                    <td class="p-2 highlightable">{{ cell }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteModal{{ obj.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ obj.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteModalLabel{{ obj.id }}">Confirmation de suppression</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Êtes-vous sûr de vouloir supprimer "<strong>{{ obj.heading }}</strong>" ? Cette action est irréversible.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <form method="post" action="{% url 'lessoncopy:delete' chapter.id obj.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i>
+                                Oui, supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-5">
+        <i class="fas fa-book-open fa-3x text-muted mb-3"></i>
+        <h3 class="text-muted">Aucun contenu disponible</h3>
+        <p class="lead text-muted mb-4">Aucun contenu n'a été ajouté pour ce chapitre. Restez à l'écoute, le contenu sera bientôt disponible !</p>
+        
+        {% if request.user.is_staff %}
+        <a href="{% url 'lessoncopy:copy_create' chapter.id %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>
+            Ajouter du contenu
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- JavaScript -->
+<script>
+    // Global state
+
+    let highlightMode = false;
+    let selectedColor = 'yellow';
+    let currentSelection = null;
+    let userAnnotations = [];
+    let activeHighlight = null;
+    let noteToDeleteId = null;
+
+    // Initialize everything when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Initializing lesson page...');
+        
+        // Setup functionality
+        setupHighlighting();
+        setupSearch();
+        setupHierarchicalNumbering();
+        setupGoToTopButton();
+    
+        console.log('Lesson page initialized successfully');
+    });
+
+    // Go to Top Button functionality
+    function setupGoToTopButton() {
+        const goToTopBtn = document.getElementById('goToTop');
+        
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                goToTopBtn.classList.add('show');
+            } else {
+                goToTopBtn.classList.remove('show');
+            }
+        });
+        
+        // Smooth scroll to top when clicked
+        goToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // Toast notification system
+    function showToast(message, type = 'success') {
+        const toastContainer = document.getElementById('toastContainer');
+        const toastId = 'toast-' + Date.now();
+        
+        const toastHTML = `
+            <div id="${toastId}" class="toast align-items-center text-bg-${type === 'error' ? 'danger' : 'success'} border-0 mb-2" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fas ${type === 'error' ? 'fa-exclamation-triangle' : 'fa-check-circle'} me-2"></i>
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+        `;
+        
+        toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+        
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement, {
+            autohide: true,
+            delay: 4000
+        });
+        
+        toast.show();
+        
+        // Remove toast from DOM after it's hidden
+        toastElement.addEventListener('hidden.bs.toast', function() {
+            toastElement.remove();
+        });
+    }
+
+    // Enhanced tooltip with delete option
+    function showHighlightTooltip(highlight) {
+        const annotationId = highlight.getAttribute('data-annotation-id');
+        const userNote = highlight.getAttribute('data-user-note');
+        
+        // Remove existing tooltip
+        removeExistingTooltip();
+        
+        const tooltip = document.createElement('div');
+        tooltip.className = 'note-tooltip';
+        tooltip.id = 'noteTooltip';
+        
+        let noteContent = '';
+        if (userNote && userNote.trim() !== '') {
+            noteContent = `
+                <div class="note-content">
+                    <strong>Votre note:</strong>
+                    <div class="note-text">${userNote}</div>
+                </div>
+            `;
+        } else {
+            noteContent = `
+                <div class="note-content text-center">
+                    <i class="fas fa-sticky-note text-muted mb-2" style="font-size: 2em;"></i>
+                    <div class="note-text">Aucune note pour ce surlignage</div>
+                </div>
+            `;
+        }
+        
+        tooltip.innerHTML = `
+            ${noteContent}
+            <div class="note-actions mt-2 d-flex gap-2">
+                <button class="btn btn-sm btn-outline-primary flex-fill" onclick="editAnnotation('${annotationId}')">
+                    <i class="fas fa-edit me-1"></i>Modifier
+                </button>
+                <button class="btn btn-sm btn-outline-danger flex-fill" onclick="showDeleteNoteConfirmation('${annotationId}')">
+                    <i class="fas fa-trash me-1"></i>Supprimer
+                </button>
+                <button class="btn btn-sm btn-outline-secondary flex-fill" onclick="closeTooltip()">
+                    <i class="fas fa-times me-1"></i>Fermer
+                </button>
+            </div>
+        `;
+        
+        // Position tooltip
+        const rect = highlight.getBoundingClientRect();
+        tooltip.style.position = 'absolute';
+        tooltip.style.left = (rect.left + window.scrollX) + 'px';
+        tooltip.style.top = (rect.top + window.scrollY - tooltip.offsetHeight - 10) + 'px';
+        
+        document.body.appendChild(tooltip);
+        
+        // Close on outside click
+        setTimeout(() => {
+            document.addEventListener('click', function closeTooltipHandler(e) {
+                if (!e.target.closest('.note-tooltip') && !e.target.closest('.user-highlight')) {
+                    removeExistingTooltip();
+                    document.removeEventListener('click', closeTooltipHandler);
+                }
+            });
+        }, 100);
+    }
+
+    // Enhanced toggle functions with better user feedback
+    function toggleHighlightMode() {
+        highlightMode = !highlightMode;
+        const highlightBtn = document.getElementById('highlightBtn');
+        
+        if (highlightMode) {
+            document.body.style.cursor = 'text';
+            highlightBtn.classList.add('active');
+            showToast('Mode surlignage activé ✓ Sélectionnez du texte pour le surligner', 'success');
+        } else {
+            document.body.style.cursor = 'default';
+            highlightBtn.classList.remove('active');
+            showToast('Mode surlignage désactivé', 'success');
+        }
+    }
+
+    // Annotation System
+    function setupHighlighting() {
+        // Handle text selection for highlighting
+        document.addEventListener('mouseup', handleTextSelection);
+        
+        // Handle clicks on existing highlights
+        document.addEventListener('click', function(e) {
+            const highlight = e.target.closest('.user-highlight');
+            if (highlight && !highlightMode) {
+                showHighlightTooltip(highlight);
+            }
+        });
+    }
+
+    function handleTextSelection(e) {
+        if (!highlightMode) return;
+        
+        const selection = window.getSelection();
+        const selectedText = selection.toString().trim();
+        
+        if (selectedText.length > 2) {
+            const range = selection.getRangeAt(0).cloneRange();
+            currentSelection = {
+                text: selectedText,
+                range: range,
+                copyId: getNearestCopyId(e.target)
+            };
+            
+            showNotePopup();
+        }
+    }
+
+    // Load and display annotations
+    async function loadUserAnnotations() {
+        try {
+            const response = await fetch(`/note/get-annotations/{{ chapter.id }}/`);
+            userAnnotations = await response.json();
+            
+            // Update notes count
+            document.getElementById('notesCount').textContent = userAnnotations.length;
+            
+            // Apply highlights to content
+            applyAllHighlights();
+            
+        } catch (error) {
+            console.error('Error loading annotations:', error);
+        }
+    }
+
+    function applyAllHighlights() {
+        userAnnotations.forEach(annotation => {
+            if (!annotation.highlighted_text || !annotation.copy_id) return;
+            
+            const contentElement = document.querySelector(`#content-${annotation.copy_id}-text`);
+            if (!contentElement) return;
+            
+            // Check if highlight already exists
+            const existingHighlight = contentElement.querySelector(`[data-annotation-id="${annotation.id}"]`);
+            if (existingHighlight) return;
+            
+            // Apply highlight
+            const elementText = contentElement.textContent || contentElement.innerText;
+            if (elementText.includes(annotation.highlighted_text)) {
+                const regex = new RegExp(escapeRegExp(annotation.highlighted_text), 'g');
+                const newHTML = contentElement.innerHTML.replace(
+                    regex, 
+                    `<span class="user-highlight highlight-${annotation.color} annotation-indicator" 
+                        data-annotation-id="${annotation.id}" 
+                        data-user-note="${annotation.user_note || ''}"
+                        data-copy-id="${annotation.copy_id}"
+                        style="cursor: pointer;">${annotation.highlighted_text}</span>`
+                );
+                contentElement.innerHTML = newHTML;
+            }
+        });
+    }
+
+    function removeExistingTooltip() {
+        const existingTooltip = document.getElementById('noteTooltip');
+        if (existingTooltip) {
+            existingTooltip.remove();
+        }
+    }
+
+    function closeTooltip() {
+        removeExistingTooltip();
+    }
+
+    function editAnnotation(annotationId) {
+        // Implementation for editing annotation
+        console.log('Edit annotation:', annotationId);
+        closeTooltip();
+    }
+
+    // UI Controls
+    function selectColor(element) {
+        document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
+        element.classList.add('active');
+        selectedColor = element.getAttribute('data-color');
+    }
+
+    function showAnnotationTools() {
+        document.getElementById('annotationTools').classList.remove('hidden');
+    }
+
+    // Notes Sidebar
+    function toggleNotesSidebar() {
+        const sidebar = document.getElementById('notesSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        if (sidebar.classList.contains('open')) {
+            closeNotesSidebar();
+        } else {
+            sidebar.classList.add('open');
+            overlay.classList.add('show');
+            loadNotesSidebar();
+        }
+    }
+
+    function closeNotesSidebar() {
+        const sidebar = document.getElementById('notesSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+    }
+
+    function showAnnotationInText(annotationId) {
+        const highlight = document.querySelector(`[data-annotation-id="${annotationId}"]`);
+        if (highlight) {
+            highlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            highlight.classList.add('active');
+            setTimeout(() => highlight.classList.remove('active'), 2000);
+        }
+        closeNotesSidebar();
+    }
+
+    // Search Functionality
+    function setupSearch() {
+        const searchInput = document.getElementById('searchInput');
+        const clearSearch = document.getElementById('clearSearch');
+        
+        clearSearch.addEventListener('click', function() {
+            searchInput.value = '';
+            performSearch();
+        });
+        
+        searchInput.addEventListener('input', performSearch);
+    }
+
+    function performSearch() {
+        const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+        
+        if (searchTerm === '') {
+            removeSearchHighlights();
+            return;
+        }
+        
+        // Simple search implementation - you can enhance this
+        const contentElements = document.querySelectorAll('.content-text, .explication-text, .caption-text, .heading');
+        
+        contentElements.forEach(element => {
+            const text = element.textContent.toLowerCase();
+            if (text.includes(searchTerm)) {
+                element.style.backgroundColor = '#fff3cd';
+            } else {
+                element.style.backgroundColor = '';
+            }
+        });
+    }
+
+    function removeSearchHighlights() {
+        document.querySelectorAll('.content-text, .explication-text, .caption-text, .heading').forEach(element => {
+            element.style.backgroundColor = '';
+        });
+    }
+
+    // Hierarchical Numbering
+    function setupHierarchicalNumbering() {
+        const headings = document.querySelectorAll('.hierarchical-heading');
+        const counters = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        
+        headings.forEach((heading, index) => {
+            const level = parseInt(heading.getAttribute('data-level')) - 1;
+            if (isNaN(level) || level < 0 || level >= counters.length) return;
+            
+            const originalText = heading.textContent.trim();
+            
+            // Skip if already numbered
+            if (originalText.match(/^[IVX]+\./) || originalText.match(/^[A-Z]\./) || originalText.match(/^\d+\./)) {
+                return;
+            }
+            
+            // Reset lower level counters
+            for (let i = level + 1; i < counters.length; i++) {
+                counters[i] = 0;
+            }
+            
+            // Increment current level
+            counters[level]++;
+            
+            // Build hierarchical number
+            let numberParts = [];
+            for (let i = 0; i <= level; i++) {
+                if (counters[i] > 0) {
+                    if (i === 0) {
+                        numberParts.push(toRoman(counters[i]));
+                    } else if (i === 1) {
+                        numberParts.push(toLetter(counters[i]));
+                    } else {
+                        numberParts.push(counters[i]);
+                    }
+                }
+            }
+            
+            const numbering = numberParts.join('.') + '.';
+            heading.innerHTML = `<strong>${numbering}</strong> ${originalText}`;
+            
+            // Apply heading level styles
+            heading.classList.add(`heading-level-${level + 1}`);
+        });
+        
+        function toRoman(num) {
+            const roman = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+            return num >= 1 && num <= 10 ? roman[num] : num.toString();
+        }
+        
+        function toLetter(num) {
+            const letters = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            return num >= 1 && num <= 26 ? letters[num] : num.toString();
+        }
+    }
+
+    // Utility Functions
+    function getNearestCopyId(element) {
+        let currentElement = element;
+        while (currentElement && !currentElement.classList.contains('content-card')) {
+            currentElement = currentElement.parentElement;
+        }
+        return currentElement ? currentElement.getAttribute('data-copy-id') : null;
+    }
+
+    function getColorValue(colorName) {
+        const colors = {
+            'yellow': '#fff3cd',
+            'blue': '#d1ecf1', 
+            'green': '#d4edda',
+            'pink': '#f8d7da'
+        };
+        return colors[colorName] || colors.yellow;
+    }
+
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', async function() {
+        if (studyTimer) {
+            clearInterval(studyTimer);
+        }
+        
+        if (currentSessionId) {
+            try {
+                await fetch('/note/study-session/end/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        session_id: currentSessionId,
+                        duration_seconds: studySeconds
+                    })
+                });
+            } catch (error) {
+                console.error('Error ending study session:', error);
+            }
+        }
+    });
+
+
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+Alt+R to read selected text (when voice reader panel is open)
+        if (e.ctrlKey && e.altKey && e.key === 'r') {
+            e.preventDefault();
+            readSelectedText();
+        }
+        
+        // Space to play/pause when voice reader has focus
+        if (e.key === ' ' && document.getElementById('voiceReaderPanel').classList.contains('show')) {
+            e.preventDefault();
+            togglePlayPause();
+        }
+    });
+
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+{% endblock %}

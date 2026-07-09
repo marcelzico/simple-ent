@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Créer un chapitre{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3>
+                {% if is_superuser %}
+                <i class="fas fa-shield-alt"></i> ADMIN: 
+                {% endif %}
+                Create Chapter in {{ unite.title }}
+            </h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                {% if is_superuser %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    You're editing as an administrator
+                </div>
+                {% endif %}
+                
+                {{ form.as_p }}
+                
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Chapter
+                    </button>
+                    <a href="{% url 'lecon:subject_detail' unite.id %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

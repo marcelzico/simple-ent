@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}True/False Results - Daily Learning{% endblock %}
+
+{% block extra_css %}
+<style>
+    .table-responsive {
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+    .score-badge {
+        font-size: 0.85rem;
+        padding: 0.35rem 0.75rem;
+    }
+    @media (max-width: 768px) {
+        .table th, .table td {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        .score-badge {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <!-- Results Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+        <div>
+            <h1 class="h3 mb-1 text-dark">True/False - Daily Learning Results</h1>
+            <p class="text-muted mb-0">Your performance on true/false questions</p>
+        </div>
+        
+        <div class="d-flex flex-column flex-sm-row gap-2">
+            {% comment %} In all results templates, add this after the User Role Badge: {% endcomment %}
+
+            {% comment %} Calculate current view type for display {% endcomment %}
+            {% with current_view=request.GET.view|default:"my" %}
+            {% if user.is_superuser or user.is_teacher %}
+            <div class="alert alert-info py-2">
+                <small>
+                    <i class="fas fa-info-circle me-1"></i>
+                    {% if current_view == 'my' %}
+                    Showing your personal results only. 
+                    <a href="?view=all" class="alert-link">Switch to all results</a>
+                    {% else %}
+                    Showing all results from all students. 
+                    <a href="?view=my" class="alert-link">Switch to my results only</a>
+                    {% endif %}
+                </small>
+            </div>
+            {% endif %}
+            {% endwith %}
+            
+            <!-- Results Dropdown -->
+            <div class="dropdown">
+                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="resultsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-chart-bar me-1"></i>Other Results
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="resultsDropdown">
+                    <li><h6 class="dropdown-header">Weekly Evaluation</h6></li>
+                    <li><a class="dropdown-item" href="{% url 'quizzes:mcq_quiz_results' %}">
+                        <i class="fas fa-list-ol me-2"></i>MCQ Quiz Results
+                    </a></li>
+                    <li><a class="dropdown-item" href="{% url 'quizzes:qa_quiz_results' %}">
+                        <i class="fas fa-edit me-2"></i>QA Quiz Results
+                    </a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><h6 class="dropdown-header">Daily Learning</h6></li>
+                    <li><a class="dropdown-item" href="{% url 'quizzes:mcq_results' %}">
+                        <i class="fas fa-check-circle me-2"></i>MCQ Results
+                    </a></li>
+                    <li><a class="dropdown-item" href="{% url 'quizzes:qa_results' %}">
+                        <i class="fas fa-question-circle me-2"></i>QA Results
+                    </a></li>
+                    <li><a class="dropdown-item" href="{% url 'quizzes:tf_results' %}">
+                        <i class="fas fa-toggle-on me-2"></i>True/False Results
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% comment %} In all results templates, update the User Role Badge section: {% endcomment %}
+
+    <!-- User Role Badge -->
+    <div class="mb-3">
+        <span class="badge 
+            {% if user.is_superuser %}bg-danger
+            {% elif user.is_teacher %}bg-warning text-dark
+            {% else %}bg-info{% endif %}">
+            {% if user.is_superuser %}Administrator
+            {% elif user.is_teacher %}Teacher
+            {% else %}Student{% endif %}
+        </span>
+        {% if user.is_superuser or user.is_teacher %}
+        <small class="text-muted ms-2">
+            Viewing: 
+            {% if request.GET.view == 'all' %}
+            All Results
+            {% else %}
+            My Results
+            {% endif %}
+            ({{ mcq_results|length }} records)
+        </small>
+        {% endif %}
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            {% if tf_results %}
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-toggle-on text-success me-2"></i>
+                            True/False Results Summary
+                        </h5>
+                        <span class="badge bg-success">{{ tf_results|length }} attempt(s)</span>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                {% if user.is_superuser or user.is_teacher %}
+                                <th scope="col" class="ps-3">Student</th>
+                                {% endif %}
+                                <th scope="col">Chapter</th>
+                                <th scope="col" class="text-center">Score</th>
+                                <th scope="col" class="text-center">Performance</th>
+                                <th scope="col" class="text-end pe-3">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in tf_results %}
+                            <tr class="{% if forloop.counter|divisibleby:2 %}table-light{% endif %}">
+                                {% if user.is_superuser or user.is_teacher %}
+                                <td class="ps-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-user-circle text-muted me-2"></i>
+                                        {{ result.student.get_full_name|default:result.student.username }}
+                                    </div>
+                                </td>
+                                {% endif %}
+                                <td>
+                                    <strong>{{ result.chapter.title }}</strong>
+                                    <br>
+                                    <small class="text-muted">{{ result.chapter.ue.title }}</small>
+                                </td>
+                                <td class="text-center">
+                                    <span class="score-badge badge 
+                                        {% if result.score >= 80 %}bg-success
+                                        {% elif result.score >= 60 %}bg-warning text-dark
+                                        {% elif result.score >= 40 %}bg-info
+                                        {% else %}bg-danger{% endif %}">
+                                        {{ result.score|floatformat:1 }}%
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="progress" style="height: 8px; width: 80px; margin: 0 auto;">
+                                        <div class="progress-bar 
+                                            {% if result.score >= 80 %}bg-success
+                                            {% elif result.score >= 60 %}bg-warning
+                                            {% elif result.score >= 40 %}bg-info
+                                            {% else %}bg-danger{% endif %}" 
+                                            style="width: {{ result.score }}%">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-end pe-3">
+                                    <small class="text-muted">
+                                        {{ result.created_at|date:"M d, Y" }}<br>
+                                        <span class="text-muted">{{ result.created_at|time:"H:i" }}</span>
+                                    </small>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="card-footer bg-white py-3">
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <small class="text-muted d-block">Average Score</small>
+                            <strong class="text-primary">
+                                {% with total=0 %}
+                                {% for result in tf_results %}
+                                {% widthratio result.score 1 1 as score %}
+                                {% endfor %}
+                                {% endwith %}
+                                {{ tf_results|length }} attempts
+                            </strong>
+                        </div>
+                        <div class="col-4">
+                            <small class="text-muted d-block">Total Attempts</small>
+                            <strong class="text-primary">{{ tf_results|length }}</strong>
+                        </div>
+                        <div class="col-4">
+                            <small class="text-muted d-block">Best Score</small>
+                            <strong class="text-success">
+                                {% with best=tf_results|dictsort:"score"|last %}
+                                {{ best.score|floatformat:1 }}%
+                                {% endwith %}
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <div class="mb-4">
+                    <i class="fas fa-toggle-on fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No True/False Results Yet</h4>
+                    <p class="text-muted">You haven't completed any true/false quizzes yet.</p>
+                </div>
+                <a href="{% url 'lecon:subject_list' %}" class="btn btn-success">
+                    <i class="fas fa-play me-2"></i>Start Quizzing
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

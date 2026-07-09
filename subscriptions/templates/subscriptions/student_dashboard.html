@@ -1,0 +1,191 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tableau de Bord Étudiant{% endblock %}
+{% load subscription_tags %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <!-- Carte d'Abonnement Actif -->
+        {% if active_subscription %}
+        <div class="card subscription-card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-crown"></i> Abonnement Actif
+                    <span class="badge bg-light text-dark float-end">
+                        {{ active_subscription.get_subscription_status_display }}
+                    </span>
+                </h5>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ active_subscription.feature.name }}</h5>
+                <p class="card-text">
+                    <i class="fas fa-calendar-alt"></i> 
+                    Valide jusqu'au : {{ active_subscription.expires_at|date:"d F Y" }}
+                    <br>
+                    <i class="fas fa-clock"></i> 
+                    Jours restants : {{ active_subscription.calculate_days_available }} jours
+                </p>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-2">
+                            <div class="card-body text-center">
+                                <h6 class="card-subtitle mb-2 text-muted">Quiz</h6>
+                                <h4 class="card-title">
+                                    {{ active_subscription.get_remaining_quizzes }}/{{ active_subscription.feature.quiz_features }}
+                                </h4>
+                                <small class="text-muted">Tentatives restantes</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-2">
+                            <div class="card-body text-center">
+                                <h6 class="card-subtitle mb-2 text-muted">Examens</h6>
+                                <h4 class="card-title">
+                                    {{ active_subscription.get_remaining_exams }}/{{ active_subscription.feature.exam_feature }}
+                                </h4>
+                                <small class="text-muted">Tentatives restantes</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <a href="{% url 'subscriptions:subscription_detail' active_subscription.id %}" 
+                       class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-info-circle"></i> Voir les Détails
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h5 class="card-title">Aucun Abonnement Actif</h5>
+                <p class="card-text">Vous n'avez pas d'abonnement actif.</p>
+                <a href="{% url 'subscriptions:create_subscription' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Créer un Abonnement
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Actions Rapides -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-money-bill-wave fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Effectuer un Paiement</h5>
+                        <p class="card-text">Payez pour un nouvel abonnement de fonctionnalité</p>
+                        <a href="{% url 'subscriptions:create_payment' %}" class="btn btn-success">
+                            Payer Maintenant
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-calendar-plus fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">S'abonner</h5>
+                        <p class="card-text">Activez un abonnement avec un paiement approuvé</p>
+                        <a href="{% url 'subscriptions:create_subscription' %}" class="btn btn-primary">
+                            S'abonner Maintenant
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <!-- Informations de l'Étudiant -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-user"></i> Informations de l'Étudiant</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Nom :</strong> {{ student.user.get_full_name }}</p>
+                <p><strong>Email :</strong> {{ student.user.email }}</p>
+                <p><strong>ID Étudiant :</strong> {{ student.id }}</p>
+                <hr>
+                <small class="text-muted">
+                    <i class="fas fa-info-circle"></i> 
+                    Membre depuis le {{ student.user.date_joined|date:"d F Y" }}
+                </small>
+            </div>
+        </div>
+
+        <!-- Paiements Récents -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-history"></i> Paiements Récents</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_payments %}
+                    <div class="list-group list-group-flush">
+                        {% for payment in recent_payments %}
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">{{ payment.feature.name }}</h6>
+                                <span class="badge {% if payment.payement_status == 'approved' %}bg-success{% elif payment.payement_status == 'rejected' %}bg-danger{% else %}bg-warning{% endif %}">
+                                    {{ payment.get_payement_status_display }}
+                                </span>
+                            </div>
+                            <p class="mb-1">{{ payment.amount }} Ar</p>
+                            <small class="text-muted">Il y a {{ payment.created_at|timesince }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <a href="{% url 'subscriptions:student_payment_list' %}" class="btn btn-outline-secondary btn-sm mt-3">
+                        Voir Tous les Paiements
+                    </a>
+                {% else %}
+                    <p class="text-muted">Aucun paiement pour l'instant.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Fonctionnalités Disponibles -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-star"></i> Fonctionnalités Disponibles</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for feature in available_features %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card feature-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ feature.name }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ feature.price }} Ar</h6>
+                                <p class="card-text">
+                                    <small>
+                                        <i class="fas fa-calendar-day"></i> {{ feature.validity_day_number }} jours<br>
+                                        <i class="fas fa-question-circle"></i> {{ feature.quiz_features }} quiz<br>
+                                        <i class="fas fa-file-alt"></i> {{ feature.exam_feature }} examens
+                                    </small>
+                                </p>
+                                <a href="{% url 'subscriptions:create_payment' %}?feature={{ feature.id }}" 
+                                   class="btn btn-sm btn-outline-primary">
+                                    Sélectionner la Fonctionnalité
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

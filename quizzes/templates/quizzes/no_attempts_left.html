@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}No Attempts Left{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h4>No Attempts Left</h4>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
+                    <h3 class="mt-3">You've used all your attempts for this quiz</h3>
+                </div>
+                <p class="lead">You've reached the maximum number of attempts allowed for this quiz.</p>
+                <a href="{% url 'lecon:subject_detail' quiz.subject.id %}" class="btn btn-primary">
+                    Return to Subject
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

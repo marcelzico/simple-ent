@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiz Results for weekly evaluation{% endblock %}
+
+{% block content %}
+<div class="text-end">
+    <a href="{% url 'quizzes:results' %}" class="btn btn-secondary btn-sm">Veiw a daily results</a>
+</div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Quiz Results for weekly evaluation</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5>MCQ Quizzes</h5>
+            </div>
+            <div class="card-body">
+                {% if mcq_quizzes %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Quiz</th>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for quiz in mcq_quizzes %}
+                            {% for attempt in quiz.attempts.all %}
+                            <tr>
+                                <td>{{ quiz.title }}</td>
+                                <td>{{ quiz.subject.title }}</td>
+                                <td>
+                                    <span class="badge bg-{% if attempt.score >= 70 %}success{% elif attempt.score >= 40 %}warning{% else %}danger{% endif %}">
+                                        {{ attempt.score|floatformat:1 }}%
+                                    </span>
+                                </td>
+                                <td>{{ attempt.end_time|date:"M d, Y" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center">No attempts yet</td>
+                            </tr>
+                            {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    No MCQ quizzes available.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5>QA Quizzes</h5>
+            </div>
+            <div class="card-body">
+                {% if qa_quizzes %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Quiz</th>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for quiz in qa_quizzes %}
+                            {% for attempt in quiz.attempts.all %}
+                            <tr>
+                                <td>{{ quiz.title }}</td>
+                                <td>{{ quiz.subject.title }}</td>
+                                <td>
+                                    <span class="badge bg-{% if attempt.score >= 70 %}success{% elif attempt.score >= 40 %}warning{% else %}danger{% endif %}">
+                                        {{ attempt.score|floatformat:1 }}%
+                                    </span>
+                                </td>
+                                <td>{{ attempt.end_time|date:"M d, Y" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center">No attempts yet</td>
+                            </tr>
+                            {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    No QA quizzes available.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

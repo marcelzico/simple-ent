@@ -1,0 +1,2977 @@
+{% extends "base.html" %}
+{% load lesson_tags %}
+{% block title %}{{ chapter }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bullet-level-0 { margin-left: 0; }
+    .bullet-level-1 { margin-left: 1.5rem; }
+    .bullet-level-2 { margin-left: 3rem; }
+    /* etc. up to level 9 */
+    .bullet-item { list-style-type: disc; margin-bottom: 0.25rem; }
+    .lesson-paragraph { margin-bottom: 0.75rem; }
+
+    /* Enhanced Voice Reader Text Highlighting */
+    .current-reading-word {
+        background: linear-gradient(120deg, #ffeb3b, #ffc107) !important;
+        color: #000 !important;
+        padding: 2px 4px;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(255, 193, 7, 0.6);
+        font-weight: bold;
+        animation: wordPulse 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes wordPulse {
+        from {
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.6);
+            transform: scale(1);
+        }
+        to {
+            box-shadow: 0 4px 16px rgba(255, 193, 7, 0.8);
+            transform: scale(1.02);
+        }
+    }
+
+    .active-reading-element {
+        background: linear-gradient(90deg, rgba(33, 150, 243, 0.1), transparent) !important;
+        border-left: 4px solid #2196f3 !important;
+        padding-left: 10px !important;
+        transition: all 0.3s ease;
+    }
+
+    .active-reading-card {
+        box-shadow: 0 0 0 2px #2196f3, 0 4px 20px rgba(33, 150, 243, 0.3) !important;
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+
+    /* Improved progress display */
+    .reading-progress {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4CAF50, #45a049, #4CAF50);
+        background-size: 200% 100%;
+        width: 0%;
+        transition: width 0.3s ease;
+        animation: progressShine 2s ease-in-out infinite;
+    }
+
+    @keyframes progressShine {
+        0% {
+            background-position: -200% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    .progress-text {
+        text-align: center;
+        font-size: 0.9em;
+        color: #495057;
+        min-height: 20px;
+        font-weight: 500;
+    }
+
+    /* Enhanced voice controls */
+    .voice-controls {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .voice-control-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid #007bff;
+        background: white;
+        color: #007bff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        font-size: 1.1em;
+    }
+
+    .voice-control-btn:hover {
+        background: #007bff;
+        color: white;
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    }
+
+    .voice-control-btn:active {
+        transform: scale(0.95);
+    }
+
+    .voice-control-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        border-color: #6c757d;
+        color: #6c757d;
+    }
+
+    .voice-control-btn:disabled:hover {
+        background: white;
+        color: #6c757d;
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Improved voice settings */
+    .voice-settings {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .voice-setting {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .voice-setting label {
+        min-width: 70px;
+        font-size: 0.9em;
+        color: #495057;
+        font-weight: 600;
+    }
+
+    .voice-setting input[type="range"] {
+        flex: 1;
+        height: 6px;
+        border-radius: 3px;
+        background: #e9ecef;
+        outline: none;
+        -webkit-appearance: none;
+        transition: background 0.3s ease;
+    }
+
+    .voice-setting input[type="range"]:hover {
+        background: #dee2e6;
+    }
+
+    .voice-setting input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #007bff;
+        cursor: pointer;
+        border: 2px solid white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+    }
+
+    .voice-setting input[type="range"]::-webkit-slider-thumb:hover {
+        background: #0056b3;
+        transform: scale(1.1);
+    }
+
+    .voice-setting input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #007bff;
+        cursor: pointer;
+        border: 2px solid white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+    }
+
+    .voice-setting span {
+        min-width: 45px;
+        font-size: 0.85em;
+        color: #6c757d;
+        text-align: right;
+        font-weight: 500;
+    }
+
+    .voice-setting select {
+        flex: 1;
+        padding: 10px 12px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        background: white;
+        font-size: 0.9em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .voice-setting select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+
+    /* Mobile responsive improvements */
+    @media (max-width: 768px) {
+        .current-reading-word {
+            padding: 3px 6px;
+            font-size: 1.05em;
+        }
+        
+        .active-reading-element {
+            border-left-width: 6px;
+            padding-left: 15px !important;
+        }
+        
+        .voice-control-btn {
+            width: 48px;
+            height: 48px;
+            font-size: 1.2em;
+        }
+        
+        .voice-settings {
+            gap: 15px;
+        }
+        
+        .voice-setting {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+        }
+        
+        .voice-setting label {
+            min-width: auto;
+            text-align: center;
+        }
+    }
+
+    /* Voice Reader Styles */
+    .voice-reader-controls {
+        position: fixed;
+        bottom: 150px;
+        right: 20px;
+        z-index: 999;
+    }
+
+    .voice-reader-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2em;
+        transition: all 0.3s ease;
+    }
+
+    .voice-reader-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        background: linear-gradient(135deg, #45a049 0%, #4CAF50 100%);
+    }
+
+    .voice-reader-btn.playing {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        animation: pulse 2s infinite;
+    }
+
+    .voice-reader-panel {
+        position: absolute;
+        bottom: 60px;
+        right: 0;
+        width: 320px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        border: 1px solid #e0e0e0;
+        display: none;
+        z-index: 1000;
+    }
+
+    .voice-reader-panel.show {
+        display: block;
+        animation: slideUp 0.3s ease;
+    }
+
+    .voice-reader-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #e0e0e0;
+        background: #f8f9fa;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .voice-reader-header h6 {
+        margin: 0;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .close-voice-panel {
+        background: none;
+        border: none;
+        font-size: 1.1em;
+        color: #6c757d;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .voice-reader-content {
+        padding: 20px;
+    }
+
+    .reading-progress {
+        margin-top: 15px;
+    }
+
+    /* Animation for voice reader button */
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+        }
+        70% {
+            box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+        }
+    }
+
+    /* Your existing styles remain unchanged */
+    .dropdown-toggle::after {
+        display: none;
+    }
+    
+    .action-dropdown {
+        position: absolute;
+        top: 10px;
+        right: 60px;
+        z-index: 10;
+    }
+    
+    .card {
+        position: relative;
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Study Timer */
+    .study-timer {
+        position: fixed;
+        top: 70px;
+        right: 10px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 999;
+        min-width: 120px;
+        text-align: center;
+        font-size: 0.9em;
+    }
+    
+    .timer-display {
+        font-size: 1.2em;
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+    }
+    
+    .timer-label {
+        font-size: 0.7em;
+        opacity: 0.9;
+    }
+
+    /* Overlay */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1049;
+        display: none;
+    }
+    
+    .sidebar-overlay.show {
+        display: block;
+    }
+
+    /* Search Styles */
+    .search-highlight {
+        background-color: #ffeb3b !important;
+        padding: 2px 1px;
+        border-radius: 3px;
+        box-shadow: 0 1px 3px rgba(255, 193, 7, 0.3);
+    }
+
+    .search-highlight.current {
+        background-color: #ff9800 !important;
+        box-shadow: 0 2px 6px rgba(255, 152, 0, 0.5);
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    /* Toast Notification */
+    .custom-toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1100;
+        min-width: 300px;
+    }
+
+    /* Go to Top Button */
+    .go-to-top {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        cursor: pointer;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2em;
+        transition: all 0.3s ease;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px);
+    }
+    
+    .go-to-top.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    .go-to-top:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
+    
+    .go-to-top:active {
+        transform: translateY(-1px);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .container-fluid {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+        .study-timer {
+            top: 60px;
+            right: 5px;
+            min-width: 100px;
+            padding: 8px;
+        }
+        
+        .timer-display {
+            font-size: 1em;
+        }
+
+        .custom-toast {
+            left: 10px;
+            right: 10px;
+            min-width: auto;
+        }
+        
+        .go-to-top {
+            bottom: 80px;
+            right: 15px;
+            width: 45px;
+            height: 45px;
+            font-size: 1.1em;
+        }
+    }
+
+    /* Hierarchical Heading Styles */
+    .heading-level-1 { color: rgba(69, 152, 225, 1); font-size: 1.5em; font-weight: bold; }
+    .heading-level-2 { color: #44993c; font-size: 1.4em; font-weight: bold; padding-left: 1rem; }
+    .heading-level-3 { color: purple; font-size: 1.3em; font-weight: bold; padding-left: 2rem; }
+    .heading-level-4 { color: rgb(55, 128, 122); font-size: 1.2em; padding-left: 3rem; }
+    .heading-level-5 { color: rgb(198, 162, 91); padding-left: 4rem; font-size: 1.1em; }
+    .heading-level-6 { color: rgba(0, 181, 139, 0.61); padding-left: 5rem; font-size: 1.1em; }
+    .heading-level-7 { color: rgb(112, 1, 146); padding-left: 6rem; font-size: 1.1em; }
+    .heading-level-8 { color: rgb(196, 87, 111); padding-left: 7rem; font-size: 1.1em; }
+    .heading-level-9 { color: rgb(48, 135, 30); padding-left: 8rem; font-size: 1.1em; }
+
+    /* =========================================== */
+    /* SIMPLE ANNOTATION SYSTEM - MOBILE FIRST     */
+    /* =========================================== */
+
+    /* Three-dot menu for annotations */
+    .annotation-menu-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 5;
+        transition: all 0.2s ease;
+    }
+    
+    .annotation-menu-btn:hover {
+        background: #e9ecef;
+        transform: scale(1.1);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .annotation-menu-btn.has-note {
+        background: #fff3cd;
+        border-color: #ffc107;
+        color: #856404;
+    }
+    
+    .annotation-menu-btn.has-note::after {
+        content: "📝";
+        font-size: 12px;
+        position: absolute;
+        top: -5px;
+        right: -5px;
+    }
+    
+    /* Show/hide notes toggle */
+    .show-notes-toggle {
+        position: absolute;
+        top: 10px;
+        right: 50px;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        padding: 4px 12px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        z-index: 5;
+        display: none;
+    }
+    
+    .card.has-annotation .show-notes-toggle {
+        display: block;
+    }
+    
+    .card.showing-notes .annotation-note-display {
+        display: block;
+    }
+    
+    .annotation-note-display {
+        display: none;
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 15px;
+        position: relative;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .annotation-note-display::before {
+        content: "📝 Votre note";
+        display: block;
+        font-weight: bold;
+        color: #856404;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .annotation-note-content {
+        color: #495057;
+        line-height: 1.5;
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Simple annotation modal */
+    .simple-annotation-modal .modal-dialog {
+        max-width: 500px;
+        margin: 1rem auto; /* Center on desktop */
+    }
+    
+    .simple-annotation-modal .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    
+    .simple-annotation-modal .modal-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 15px 15px 0 0;
+        border: none;
+        padding: 15px 20px;
+    }
+    
+    .simple-annotation-modal .modal-header .modal-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .simple-annotation-modal .modal-body {
+        padding: 20px;
+    }
+    
+    .annotation-context {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-left: 4px solid #007bff;
+    }
+    
+    .annotation-context h6 {
+        color: #495057;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .annotation-context p {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin: 0;
+        line-height: 1.4;
+    }
+    
+    .annotation-textarea {
+        width: 100%;
+        min-height: 150px;
+        padding: 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-size: 16px;
+        resize: vertical;
+        transition: border-color 0.3s;
+    }
+    
+    .annotation-textarea:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+    
+    .annotation-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .annotation-actions .btn {
+        flex: 1;
+        padding: 10px;
+        font-weight: 500;
+    }
+    
+    /* Notes Sidebar */
+    .notes-sidebar {
+        position: fixed;
+        top: 0;
+        right: -400px;
+        width: 380px;
+        height: 100vh;
+        background: white;
+        border-left: 1px solid #ddd;
+        box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+        z-index: 1050;
+        transition: right 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .notes-sidebar.open {
+        right: 0;
+    }
+    
+    .notes-header {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        background: #f8f9fa;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .notes-title {
+        margin: 0;
+        font-size: 1.2em;
+        color: #333;
+    }
+    
+    .close-notes {
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        cursor: pointer;
+        color: #6c757d;
+        padding: 5px;
+    }
+    
+    .notes-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+    }
+    
+    .notes-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .note-item {
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #007bff;
+        background: #f8f9fa;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .note-item:hover {
+        background: #e9ecef;
+        transform: translateX(-2px);
+    }
+    
+    .note-text {
+        font-weight: 500;
+        margin-bottom: 8px;
+        line-height: 1.4;
+    }
+    
+    .note-context {
+        font-size: 0.9em;
+        color: #6c757d;
+        font-style: italic;
+        margin-bottom: 5px;
+        border-bottom: 1px dashed #dee2e6;
+        padding-bottom: 5px;
+    }
+    
+    .note-meta {
+        font-size: 0.8em;
+        color: #6c757d;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .empty-notes {
+        text-align: center;
+        padding: 40px 20px;
+        color: #6c757d;
+    }
+    
+    /* Notes counter */
+    #notesCount {
+        min-width: 22px;
+        height: 22px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8em;
+    }
+
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+        .annotation-menu-btn {
+            width: 32px;
+            height: 32px;
+            font-size: 0.9rem;
+        }
+        
+        .simple-annotation-modal .modal-dialog {
+            margin: 10px;
+            max-width: calc(100% - 20px);
+        }
+        
+        .annotation-textarea {
+            min-height: 120px;
+            font-size: 16px;
+        }
+        
+        .annotation-actions {
+            flex-direction: column;
+        }
+        
+        .annotation-actions .btn {
+            width: 100%;
+        }
+        
+        .notes-sidebar {
+            width: 100%;
+            right: -100%;
+        }
+        
+        .notes-sidebar.open {
+            right: 0;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .simple-annotation-modal .modal-header {
+            padding: 12px 15px;
+        }
+        
+        .simple-annotation-modal .modal-body {
+            padding: 15px;
+        }
+        
+        .annotation-context {
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .action-dropdown {
+            right: 50px;
+        }
+    }
+
+    /* Annotation dropdown menu */
+    .annotation-menu-dropdown {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+    }
+
+    .annotation-menu-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .annotation-menu-btn:hover {
+        background: #e9ecef;
+        transform: scale(1.1);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .annotation-menu-btn.has-note {
+        background: #fff3cd;
+        border-color: #ffc107;
+        color: #856404;
+    }
+
+    .annotation-dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        min-width: 180px;
+        z-index: 100;
+        margin-top: 5px;
+    }
+
+    .annotation-dropdown-menu .dropdown-item {
+        padding: 10px 15px;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        color: #495057;
+        transition: all 0.2s;
+    }
+
+    .annotation-dropdown-menu .dropdown-item:hover {
+        background: #f8f9fa;
+        color: #007bff;
+    }
+
+    .annotation-dropdown-menu .dropdown-item:first-child {
+        border-radius: 8px 8px 0 0;
+    }
+
+    .annotation-dropdown-menu .dropdown-item:last-child {
+        border-radius: 0 0 8px 8px;
+        color: #dc3545;
+    }
+
+    .annotation-dropdown-menu .dropdown-item:last-child:hover {
+        background: #dc3545;
+        color: white;
+    }
+
+    /* Mobile responsive for dropdown */
+    @media (max-width: 768px) {
+        .annotation-menu-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+        }
+        
+        .annotation-dropdown-menu {
+            min-width: 160px;
+            right: -10px;
+        }
+    }
+
+</style>
+{% endblock %}
+
+{% block appnav %}
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:subject_list" %}">Liste UE</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:subject_detail" chapter.ue.id %}">{{ chapter.ue.title }}</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:chapter_detail_student" chapter.ue.id chapter.id %}">{{ chapter.title }}</a>
+    </li>
+    <li class="breadcrumb-item active">Contenus - {{ chapter.title }}</li>
+{% endblock appnav %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <!-- Toast Container -->
+    <div id="toastContainer" class="custom-toast"></div>
+
+    <!-- Go to Top Button -->
+    <button class="go-to-top" id="goToTop" title="Retour en haut">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Voice Reader Controls -->
+    <div class="voice-reader-controls" id="voiceReaderControls">
+        {% comment %} <button class="voice-reader-btn" id="voiceReaderBtn" title="Lecture vocale">
+            <i class="fas fa-volume-up"></i>
+        </button> {% endcomment %}
+        <div class="voice-reader-panel" id="voiceReaderPanel">
+            {% comment %} <div class="voice-reader-header">
+                <h6>Lecture Vocale</h6>
+                <button class="close-voice-panel" onclick="hideVoiceReaderPanel()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div> {% endcomment %}
+            <div class="voice-reader-content">
+                <div class="voice-controls">
+                    <button class="voice-control-btn" id="playPauseBtn" onclick="togglePlayPause()">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="voice-control-btn" id="stopBtn" onclick="stopReading()">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                    <button class="voice-control-btn" onclick="skipBackward()">
+                        <i class="fas fa-backward"></i>
+                    </button>
+                    <button class="voice-control-btn" onclick="skipForward()">
+                        <i class="fas fa-forward"></i>
+                    </button>
+                </div>
+                <div class="voice-settings">
+                    <div class="voice-setting">
+                        <label>Vitesse:</label>
+                        <input type="range" id="rateControl" min="0.5" max="2" step="0.1" value="1" 
+                            oninput="updateRate(this.value)">
+                        <span id="rateValue">1.0x</span>
+                    </div>
+                    <div class="voice-setting">
+                        <label>Volume:</label>
+                        <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="1" 
+                            oninput="updateVolume(this.value)">
+                        <span id="volumeValue">100%</span>
+                    </div>
+                    <div class="voice-setting">
+                        <label>Voix:</label>
+                        <select id="voiceSelect" onchange="updateVoice()">
+                            <option value="">Chargement...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="reading-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="currentWord">Prêt à lire</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simple Annotation Modal -->
+    <div class="modal fade simple-annotation-modal" id="simpleAnnotationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-sticky-note me-2"></i>
+                        <span id="annotationModalTitle">Ajouter une note</span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="annotation-context" id="annotationContext">
+                        <h6>Contenu :</h6>
+                        <p id="copyHeadingPreview"></p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="simpleAnnotationText" class="form-label">
+                            <strong>Votre note personnelle</strong>
+                            <small class="text-muted ms-2">(Optionnel)</small>
+                        </label>
+                        <textarea 
+                            class="annotation-textarea" 
+                            id="simpleAnnotationText" 
+                            placeholder="Écrivez vos réflexions, questions ou points importants ici..."
+                            rows="4"></textarea>
+                        <div class="form-text">
+                            Cette note est personnelle et visible uniquement par vous.
+                        </div>
+                    </div>
+                    
+                    <div class="annotation-actions">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i>Annuler
+                        </button>
+                        <button type="button" class="btn btn-danger" id="deleteAnnotationBtn" style="display: none;">
+                            <i class="fas fa-trash me-1"></i>Supprimer
+                        </button>
+                        <button type="button" class="btn btn-primary" id="saveAnnotationBtn">
+                            <i class="fas fa-save me-1"></i>Enregistrer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Study Timer -->
+    <div class="study-timer" id="studyTimer">
+        <div class="timer-label">Temps d'étude</div>
+        <div class="timer-display" id="timerDisplay">00:00:00</div>
+    </div>
+
+    <!-- Notes Sidebar -->
+    <div class="notes-sidebar" id="notesSidebar">
+        <div class="notes-header">
+            <h3 class="notes-title">📝 Mes Notes</h3>
+            <button class="close-notes" onclick="closeNotesSidebar()">×</button>
+        </div>
+        <div class="notes-content">
+            <div class="notes-list" id="notesList">
+                <!-- Notes will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeNotesSidebar()"></div>
+
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <a href="{% if user.is_student %}{% url 'lecon:chapter_detail_student' chapter.ue.id chapter.id %}{% else %}{% url 'lecon:chapter_detail' chapter.ue.id chapter.id %}{% endif %}" class="btn btn-sm btn-outline-info mb-2">
+            <i class="fas fa-arrow-left me-1"></i>
+            <span class="d-none d-sm-inline">Retour</span>
+        </a>
+        <h1 class="h4 text-center text-danger mb-0 flex-grow-1 mx-3">
+            {{ chapter }}
+        </h1>
+
+        <!-- Version switcher -->
+        {% if importers|length > 1 %}
+        <div class="dropdown me-2">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                Version du {{ selected_importer.uploaded_at|date:"d/m/Y H:i" }}
+            </button>
+            <ul class="dropdown-menu">
+                {% for imp in importers %}
+                <li>
+                    <a class="dropdown-item {% if imp.id == selected_importer.id %}active{% endif %}" 
+                    href="?importer={{ imp.id }}">
+                        {{ imp.uploaded_at|date:"d/m/Y H:i" }} - {{ imp.title }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        
+        <!-- Search Box -->
+        <div class="d-flex gap-2 mb-2">
+            <div class="input-group" style="max-width: 250px;">
+                <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Rechercher...">
+                <button class="btn btn-outline-secondary btn-sm" type="button" id="clearSearch">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- Notes Sidebar Button -->
+            <button class="btn btn-outline-primary btn-sm" onclick="toggleNotesSidebar()" title="Voir toutes mes notes">
+                <i class="fas fa-sticky-note"></i>
+                <span class="badge bg-light text-dark ms-1" id="notesCount">0</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Lesson Content -->
+    {% if copies %}
+    <div class="lesson-content">
+        {% for obj in copies %}
+        <div class="card shadow-sm mb-4 content-card" 
+             id="content-{{ obj.id }}" 
+             data-copy-id="{{ obj.id }}">
+            
+            <!-- Three-dot Annotation Menu -->
+            {% comment %} <button class="annotation-menu-btn" 
+                    onclick="openAnnotationModal({{ obj.id }}, '{{ obj.heading|escapejs }}')"
+                    title="Gérer les notes">
+                <i class="fas fa-ellipsis-v"></i>
+            </button> {% endcomment %}
+
+            <!-- Replace the existing annotation-menu-btn section with this: -->
+            <div class="annotation-menu-dropdown">
+                <button class="annotation-menu-btn" 
+                        onclick="toggleAnnotationMenu({{ obj.id }})"
+                        title="Gérer les notes">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div class="annotation-dropdown-menu" id="annotation-menu-{{ obj.id }}" style="display: none;">
+                    <button class="dropdown-item" onclick="openAnnotationModal({{ obj.id }}, '{{ obj.heading|escapejs }}')">
+                        <i class="fas fa-plus me-2"></i>Ajouter une note
+                    </button>
+                    <button class="dropdown-item" onclick="editAnnotation({{ obj.id }}, '{{ obj.heading|escapejs }}')" style="display: none;">
+                        <i class="fas fa-edit me-2"></i>Modifier la note
+                    </button>
+                    <button class="dropdown-item" onclick="deleteAnnotationFromMenu({{ obj.id }})" style="display: none;">
+                        <i class="fas fa-trash me-2"></i>Supprimer la note
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Show/Hide Notes Toggle -->
+            <button class="show-notes-toggle" 
+                    onclick="toggleNotesDisplay({{ obj.id }})"
+                    title="Afficher/Masquer la note">
+                <i class="fas fa-eye"></i>
+            </button>
+            
+            <!-- Teacher Action Menu (if applicable) -->
+            {% if request.user.is_staff %}
+            <div class="action-dropdown">
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" 
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item text-info" href="{% url 'lessoncopy:modify' chapter.id obj.id %}">
+                                <i class="fas fa-edit me-2"></i>Modifier
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" 
+                                    data-bs-target="#deleteModal{{ obj.id }}">
+                                <i class="fas fa-trash me-2"></i>Supprimer
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Note Display Area -->
+            <div class="annotation-note-display" id="notes-display-{{ obj.id }}">
+                <div class="annotation-note-content" id="note-content-{{ obj.id }}">
+                    Chargement...
+                </div>
+            </div>
+            
+            <div class="card-body">
+                <!-- Heading -->
+                <div class="heading mb-3 hierarchical-heading" 
+                     data-level="{{ obj.heading_level|default:'1' }}"
+                     data-heading-id="{{ obj.id }}">
+                    {{ obj.heading }}
+                    {% if obj.is_qe %}
+                        <span style="background-color: #6c0d36; color: #ffffff; border-radius: 25%;">QE</span>
+                    {% endif %}
+                </div>
+
+                <!-- Content and Explanation -->
+                <div class="row g-3">
+                    <!-- Main Content -->
+                    {% if obj.content %}
+                    <div class="col-12 {% if obj.explanation %}col-lg-9{% endif %}">
+                        <div class="content-text" id="content-{{ obj.id }}-text">
+                            {{ obj.content|render_content }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Explanation Sidebar -->
+                    {% if obj.explanation %}
+                    <div class="col-12 col-lg-3">
+                        <div class="explication-card bg-light rounded p-3">
+                            <h6 class="text-success mb-2">
+                                <i class="fas fa-lightbulb me-1"></i>
+                                Explications :
+                            </h6>
+                            <div class="explication-text small">
+                                {{ obj.explanation|linebreaks }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Image and Caption -->
+                {% if obj.image or obj.caption %}
+                <div class="mt-3">
+                    <div class="row align-items-start g-3">
+                        {% if obj.image %}
+                        <div class="col-12 col-md-auto">
+                            <div class="image-container text-center">
+                                <img src="{{ obj.image.url }}" 
+                                     alt="Illustration" 
+                                     class="img-fluid img-thumbnail"
+                                     style="max-height: 300px; width: auto;">
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if obj.caption %}
+                        <div class="col-12 col-md">
+                            <div class="caption-text fst-italic text-muted">
+                                {{ obj.caption|linebreaks }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Table -->
+                {% if obj.table %}
+                <div class="mt-3">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-sm">
+                            <tbody>
+                                {% for row in obj.table %}
+                                <tr>
+                                    {% for cell in row %}
+                                    <td class="p-2">{{ cell }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteModal{{ obj.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ obj.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteModalLabel{{ obj.id }}">Confirmation de suppression</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Êtes-vous sûr de vouloir supprimer "<strong>{{ obj.heading }}</strong>" ? Cette action est irréversible.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <form method="post" action="{% url 'lessoncopy:delete' chapter.id obj.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i>
+                                Oui, supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-5">
+        <i class="fas fa-book-open fa-3x text-muted mb-3"></i>
+        <h3 class="text-muted">Aucun contenu disponible</h3>
+        <p class="lead text-muted mb-4">Aucun contenu n'a été ajouté pour ce chapitre. Restez à l'écoute, le contenu sera bientôt disponible !</p>
+        
+        {% if request.user.is_staff %}
+        <a href="{% url 'lessoncopy:copy_create' chapter.id %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>
+            Ajouter du contenu
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Quiz Actions -->
+    <div class="text-center mt-5 pt-4 border-top">
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="{% url 'quizzes:start_mcq' chapter.id %}" class="btn btn-info flex-fill flex-md-grow-0">
+                <i class="fas fa-play me-2"></i>
+                Commencer QCM
+            </a>
+            <a href="{% url 'quizzes:start_qa' chapter.id %}" class="btn btn-info flex-fill flex-md-grow-0">
+                <i class="fas fa-play me-2"></i>
+                Commencer Q&R
+            </a>
+            <a href="{% url 'quizzes:start_tf' chapter.id %}" class="btn btn-info flex-fill flex-md-grow-0">
+                <i class="fas fa-play me-2"></i>
+                Commencer V/F
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    // Global state
+    let studyTimer = null;
+    let studySeconds = 0;
+    let currentSessionId = null;
+    let currentCopyId = null;
+    let currentAnnotationId = null;
+
+    // Initialize everything when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Initialisation page leçon...');
+        
+        // Initialize study session
+        startStudySession();
+        
+        // Setup functionality
+        setupSearch();
+        setupHierarchicalNumbering();
+        setupGoToTopButton();
+        initializeVoiceReader(); 
+        initializeSimpleAnnotations();
+        
+        // Setup annotation modal events
+        setupAnnotationModalEvents();
+        
+        // Setup notes sidebar button
+        document.getElementById('notesCount').parentElement.addEventListener('click', function() {
+            toggleNotesSidebar();
+            loadNotesSidebar();
+        });
+        // Initialize voice reader with a delay to ensure DOM is ready
+        // setTimeout(() => {
+        //    initializeVoiceReader();
+        // }, 500);
+        
+        console.log('Page leçon initialisée avec succès');
+    });
+
+    // ===========================================
+    // STUDY SESSION FUNCTIONS
+    // ===========================================
+
+    async function startStudySession() {
+        console.log('Démarrage de la session d\'étude...');
+        
+        if (studyTimer) {
+            clearInterval(studyTimer);
+        }
+        
+        try {
+            const response = await fetch('{% url "lessoncopy:start_study_session" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    chapter_id: {{ chapter.id }}
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success && data.session_id) {
+                currentSessionId = data.session_id;
+                console.log('Session d\'étude démarrée:', currentSessionId);
+                
+                // Start timer
+                studySeconds = 0;
+                studyTimer = setInterval(() => {
+                    studySeconds++;
+                    updateTimerDisplay();
+                }, 1000);
+                
+                showToast('Session d\'étude démarrée! 📚');
+            } else {
+                console.error('Erreur démarrage session:', data.error);
+            }
+        } catch (error) {
+            console.error('Erreur démarrage session:', error);
+        }
+    }
+
+    function updateTimerDisplay() {
+        const hours = Math.floor(studySeconds / 3600);
+        const minutes = Math.floor((studySeconds % 3600) / 60);
+        const seconds = studySeconds % 60;
+        
+        document.getElementById('timerDisplay').textContent = 
+            `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', async function() {
+        console.log('Fermeture de la page - arrêt de la session d\'étude');
+        
+        if (studyTimer) {
+            clearInterval(studyTimer);
+            studyTimer = null;
+        }
+        
+        if (currentSessionId && studySeconds > 0) {
+            try {
+                const response = await fetch('{% url "lessoncopy:end_study_session" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        session_id: currentSessionId,
+                        duration_seconds: studySeconds
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    console.log('Session terminée:', data.duration_human);
+                }
+            } catch (error) {
+                console.error('Erreur arrêt session:', error);
+            }
+        }
+    });
+
+    // ===========================================
+    // SIMPLE ANNOTATION SYSTEM
+    // ===========================================
+
+    function initializeSimpleAnnotations() {
+        console.log('Initialisation système annotations simplifié...');
+        loadAllCopyAnnotations();
+        updateTotalNotesCount();
+    }
+
+    async function loadAllCopyAnnotations() {
+        const copyCards = document.querySelectorAll('.content-card');
+        
+        for (const card of copyCards) {
+            const copyId = card.getAttribute('data-copy-id');
+            await loadCopyAnnotation(copyId);
+        }
+    }
+
+    async function loadCopyAnnotation(copyId) {
+        try {
+            const response = await fetch(`{% url "lessoncopy:get_copy_annotation" 0 %}`.replace('0', copyId), {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                const card = document.getElementById(`content-${copyId}`);
+                const menuBtn = card.querySelector('.annotation-menu-btn');
+                const noteContent = document.getElementById(`note-content-${copyId}`);
+                
+                if (data.has_annotation) {
+                    card.classList.add('has-annotation');
+                    menuBtn.classList.add('has-note');
+                    menuBtn.title = 'Modifier la note';
+                    
+                    if (noteContent) {
+                        if (data.user_note) {
+                            noteContent.textContent = data.user_note;
+                        } else {
+                            noteContent.innerHTML = '<em class="text-muted">Note sans texte</em>';
+                        }
+                    }
+                    
+                    card.setAttribute('data-annotation-id', data.annotation_id);
+                } else {
+                    card.classList.remove('has-annotation');
+                    menuBtn.classList.remove('has-note');
+                    menuBtn.title = 'Ajouter une note';
+                    
+                    if (noteContent) {
+                        noteContent.innerHTML = '<em class="text-muted">Aucune note pour ce contenu</em>';
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Erreur chargement annotation:', error);
+        }
+    }
+
+    function openAnnotationModal(copyId, heading) {
+        currentCopyId = copyId;
+        const card = document.getElementById(`content-${copyId}`);
+        currentAnnotationId = card.getAttribute('data-annotation-id');
+        
+        document.getElementById('copyHeadingPreview').textContent = heading;
+        document.getElementById('simpleAnnotationText').value = '';
+        
+        if (currentAnnotationId) {
+            document.getElementById('annotationModalTitle').textContent = 'Modifier la note';
+            document.getElementById('deleteAnnotationBtn').style.display = 'block';
+            
+            const noteContent = document.getElementById(`note-content-${copyId}`);
+            if (noteContent && !noteContent.textContent.includes('Aucune note')) {
+                document.getElementById('simpleAnnotationText').value = noteContent.textContent;
+            }
+        } else {
+            document.getElementById('annotationModalTitle').textContent = 'Ajouter une note';
+            document.getElementById('deleteAnnotationBtn').style.display = 'none';
+        }
+        
+        const modal = new bootstrap.Modal(document.getElementById('simpleAnnotationModal'));
+        modal.show();
+        
+        setTimeout(() => {
+            document.getElementById('simpleAnnotationText').focus();
+        }, 300);
+    }
+
+    function setupAnnotationModalEvents() {
+        document.getElementById('saveAnnotationBtn').addEventListener('click', saveSimpleAnnotation);
+        document.getElementById('deleteAnnotationBtn').addEventListener('click', deleteSimpleAnnotation);
+        
+        document.getElementById('simpleAnnotationText').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                saveSimpleAnnotation();
+            }
+        });
+        
+        document.getElementById('simpleAnnotationModal').addEventListener('hidden.bs.modal', function() {
+            currentCopyId = null;
+            currentAnnotationId = null;
+            document.getElementById('simpleAnnotationText').value = '';
+        });
+    }
+
+    // Add this debug function to check fetch responses
+    async function debugFetch(url, options) {
+        try {
+            console.log('Fetching:', url);
+            console.log('Options:', options);
+            
+            const response = await fetch(url, options);
+            console.log('Response status:', response.status);
+            console.log('Response headers:', [...response.headers.entries()]);
+            
+            const text = await response.text();
+            console.log('Response text:', text);
+            
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error('JSON parse error:', e);
+                console.error('Response was:', text);
+                throw new Error('Invalid JSON response: ' + text.substring(0, 100));
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            throw error;
+        }
+    }
+
+    // Update your saveSimpleAnnotation to use debugFetch temporarily:
+    async function saveSimpleAnnotation() {
+        if (!currentCopyId) return;
+        
+        const userNote = document.getElementById('simpleAnnotationText').value.trim();
+        const saveBtn = document.getElementById('saveAnnotationBtn');
+        const originalText = saveBtn.innerHTML;
+        
+        try {
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Enregistrement...';
+            saveBtn.disabled = true;
+            
+            // Use debugFetch to see what's happening
+            const data = await debugFetch('{% url "lessoncopy:save_simple_annotation" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    copy_id: currentCopyId,
+                    user_note: userNote
+                })
+            });
+            
+            if (data.success) {
+                // ... rest of success handling
+            } else {
+                throw new Error(data.error || 'Erreur lors de la sauvegarde');
+            }
+        } catch (error) {
+            // ... error handling
+        } finally {
+            saveBtn.innerHTML = '<i class="fas fa-save me-1"></i>Enregistrer';
+            saveBtn.disabled = false;
+        }
+    }
+
+    async function deleteSimpleAnnotation() {
+        if (!currentCopyId || !currentAnnotationId) return;
+        
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible.')) {
+            return;
+        }
+        
+        const deleteBtn = document.getElementById('deleteAnnotationBtn');
+        const originalText = deleteBtn.innerHTML;
+        
+        try {
+            deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Suppression...';
+            deleteBtn.disabled = true;
+            
+            const response = await fetch('{% url "lessoncopy:delete_simple_annotation" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    annotation_id: currentAnnotationId
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                await loadCopyAnnotation(currentCopyId);
+                updateTotalNotesCount();
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('simpleAnnotationModal'));
+                modal.hide();
+                
+                showToast(data.message || 'Note supprimée avec succès! 🗑️');
+            } else {
+                throw new Error(data.error || 'Erreur lors de la suppression');
+            }
+        } catch (error) {
+            console.error('Erreur suppression annotation:', error);
+            showToast(error.message || 'Erreur lors de la suppression', 'error');
+        } finally {
+            deleteBtn.innerHTML = '<i class="fas fa-trash me-1"></i>Supprimer';
+            deleteBtn.disabled = false;
+        }
+    }
+
+    function toggleNotesDisplay(copyId) {
+        const card = document.getElementById(`content-${copyId}`);
+        card.classList.toggle('showing-notes');
+        
+        const toggleBtn = card.querySelector('.show-notes-toggle');
+        if (card.classList.contains('showing-notes')) {
+            toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+            toggleBtn.title = 'Masquer la note';
+        } else {
+            toggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
+            toggleBtn.title = 'Afficher la note';
+        }
+    }
+
+    async function updateTotalNotesCount() {
+        try {
+            const response = await fetch('{% url "lessoncopy:get_annotations" chapter.id %}');
+            if (response.ok) {
+                const annotations = await response.json();
+                document.getElementById('notesCount').textContent = annotations.length;
+            }
+        } catch (error) {
+            console.error('Erreur mise à jour compteur notes:', error);
+        }
+    }
+
+    async function loadNotesSidebar() {
+        try {
+            const response = await fetch('{% url "lessoncopy:get_annotations" chapter.id %}');
+            if (!response.ok) throw new Error('Erreur chargement notes');
+            
+            const annotations = await response.json();
+            const notesList = document.getElementById('notesList');
+            
+            if (annotations.length === 0) {
+                notesList.innerHTML = `
+                    <div class="empty-notes">
+                        <i class="fas fa-sticky-note fa-2x text-muted mb-3"></i>
+                        <h5>Aucune note</h5>
+                        <p class="mb-0">Cliquez sur <i class="fas fa-ellipsis-v"></i> sur un contenu pour ajouter vos premières notes !</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let notesHTML = '';
+            annotations.forEach(note => {
+                const date = new Date(note.created_at).toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+                
+                notesHTML += `
+                    <div class="note-item" onclick="scrollToCopy(${note.copy_id})" style="cursor: pointer;">
+                        <div class="note-context">
+                            <strong>${note.copy_heading || 'Sans titre'}</strong>
+                        </div>
+                        <div class="note-text">
+                            ${note.user_note || '<em class="text-muted">Note sans texte</em>'}
+                        </div>
+                        <div class="note-meta">
+                            <span>${date}</span>
+                            <button class="btn btn-sm btn-outline-danger" 
+                                    onclick="event.stopPropagation(); deleteAnnotationFromSidebar(${note.id})"
+                                    title="Supprimer cette note">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            notesList.innerHTML = notesHTML;
+        } catch (error) {
+            console.error('Erreur chargement sidebar:', error);
+            document.getElementById('notesList').innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Erreur lors du chargement des notes
+                </div>
+            `;
+        }
+    }
+
+    function scrollToCopy(copyId) {
+        const card = document.getElementById(`content-${copyId}`);
+        if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.classList.add('showing-notes');
+            
+            card.style.boxShadow = '0 0 0 3px #007bff';
+            setTimeout(() => {
+                card.style.boxShadow = '';
+            }, 2000);
+            
+            closeNotesSidebar();
+        }
+    }
+
+    async function deleteAnnotationFromSidebar(annotationId) {
+        if (!confirm('Supprimer cette note ?')) return;
+        
+        try {
+            const response = await fetch('{% url "lessoncopy:delete_simple_annotation" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    annotation_id: annotationId
+                })
+            });
+            
+            if (response.ok) {
+                loadNotesSidebar();
+                updateTotalNotesCount();
+                
+                const data = await response.json();
+                if (data.success) {
+                    showToast('Note supprimée avec succès! 🗑️');
+                    
+                    // Reload the affected card
+                    const card = document.querySelector(`[data-annotation-id="${annotationId}"]`);
+                    if (card) {
+                        const copyId = card.closest('.content-card').getAttribute('data-copy-id');
+                        loadCopyAnnotation(copyId);
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Erreur suppression sidebar:', error);
+            showToast('Erreur lors de la suppression', 'error');
+        }
+    }
+
+    // ===========================================
+    // NOTES SIDEBAR
+    // ===========================================
+
+    function toggleNotesSidebar() {
+        const sidebar = document.getElementById('notesSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        if (sidebar.classList.contains('open')) {
+            closeNotesSidebar();
+        } else {
+            sidebar.classList.add('open');
+            overlay.classList.add('show');
+        }
+    }
+
+    function closeNotesSidebar() {
+        const sidebar = document.getElementById('notesSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+    }
+
+
+    // ===========================================
+    // VOICE READER FUNCTIONS - FIXED VERSION
+    // ===========================================
+
+    let speechSynthesis = window.speechSynthesis;
+    let currentUtterance = null;
+    let isPlaying = false;
+    let isPaused = false;
+    let voices = [];
+    let currentVoice = null;
+    let currentText = '';
+    let words = [];
+    let currentWordIndex = 0;
+    let speechRate = 1;
+    let speechVolume = 1;
+    let textElements = [];
+    let currentElementIndex = 0;
+
+    // Initialize Voice Reader
+    function initializeVoiceReader() {
+        loadVoices();
+        
+        // Some browsers load voices asynchronously
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+        
+        // Set up event listeners
+        setupVoiceReaderEvents();
+        
+        // Prepare text elements for highlighting
+        prepareTextElements();
+    }
+
+    function prepareTextElements() {
+        // Get all text elements in reading order
+        textElements = Array.from(document.querySelectorAll('.heading, .content-text, .explication-text, .caption-text'));
+        
+        // Remove empty elements and very short ones
+        textElements = textElements.filter(element => {
+            const text = element.textContent.trim();
+            return text.length > 10; // Only include elements with meaningful text
+        });
+    }
+
+    function loadVoices() {
+        voices = speechSynthesis.getVoices();
+        const voiceSelect = document.getElementById('voiceSelect');
+        
+        // Clear existing options
+        voiceSelect.innerHTML = '';
+        
+        // Filter for French voices
+        const frenchVoices = voices.filter(voice => 
+            voice.lang.startsWith('fr') || 
+            voice.name.toLowerCase().includes('french')
+        );
+        
+        // Add French voices first
+        frenchVoices.forEach(voice => {
+            const option = document.createElement('option');
+            option.value = voice.name;
+            option.textContent = `${voice.name} (${voice.lang})`;
+            voiceSelect.appendChild(option);
+        });
+        
+        // Add other available voices
+        voices.forEach(voice => {
+            if (!frenchVoices.includes(voice)) {
+                const option = document.createElement('option');
+                option.value = voice.name;
+                option.textContent = `${voice.name} (${voice.lang})`;
+                voiceSelect.appendChild(option);
+            }
+        });
+        
+        // Set default voice
+        if (frenchVoices.length > 0) {
+            currentVoice = frenchVoices[0];
+            voiceSelect.value = currentVoice.name;
+        } else if (voices.length > 0) {
+            currentVoice = voices[0];
+            voiceSelect.value = currentVoice.name;
+        }
+    }
+
+    function setupVoiceReaderEvents() {
+        // Speech synthesis events
+        speechSynthesis.addEventListener('voiceschanged', loadVoices);
+    }
+
+    // Voice Reader Controls
+    function toggleVoiceReaderPanel() {
+        const panel = document.getElementById('voiceReaderPanel');
+        panel.classList.toggle('show');
+    }
+
+    function hideVoiceReaderPanel() {
+        const panel = document.getElementById('voiceReaderPanel');
+        panel.classList.remove('show');
+    }
+
+    function togglePlayPause() {
+        if (isPlaying && !isPaused) {
+            pauseReading();
+        } else if (isPlaying && isPaused) {
+            resumeReading();
+        } else {
+            startReading();
+        }
+    }
+
+    function startReading() {
+        if (!currentText) {
+            // If no text is selected, read the entire lesson content
+            currentText = getLessonText();
+        }
+        
+        if (!currentText.trim()) {
+            showToast('Aucun texte à lire', 'error');
+            return;
+        }
+        
+        // Stop any current speech
+        if (speechSynthesis.speaking) {
+            speechSynthesis.cancel();
+        }
+        
+        // Clean and prepare text
+        const cleanText = cleanTextForSpeech(currentText);
+        
+        // Split into words for highlighting
+        words = cleanText.split(/\s+/).filter(word => word.length > 0);
+        currentWordIndex = 0;
+        currentElementIndex = 0;
+        
+        // Create utterance
+        currentUtterance = new SpeechSynthesisUtterance(cleanText);
+        currentUtterance.voice = currentVoice;
+        currentUtterance.rate = speechRate;
+        currentUtterance.volume = speechVolume;
+        currentUtterance.pitch = 1;
+        
+        // Set up event handlers
+        currentUtterance.onstart = function() {
+            isPlaying = true;
+            isPaused = false;
+            updatePlayPauseButton();
+            clearAllHighlights();
+            document.getElementById('currentWord').textContent = 'Lecture en cours...';
+        };
+        
+        currentUtterance.onend = function() {
+            isPlaying = false;
+            isPaused = false;
+            currentWordIndex = 0;
+            currentElementIndex = 0;
+            updatePlayPauseButton();
+            clearAllHighlights();
+            document.getElementById('currentWord').textContent = 'Lecture terminée';
+            document.getElementById('progressFill').style.width = '100%';
+        };
+        
+        currentUtterance.onerror = function(event) {
+            console.error('Speech synthesis error:', event);
+            
+            // Don't show error for 'interrupted' errors (happens during normal pause/stop)
+            if (event.error !== 'interrupted') {
+                showToast('Erreur de lecture vocale', 'error');
+            }
+            
+            isPlaying = false;
+            isPaused = false;
+            updatePlayPauseButton();
+            clearAllHighlights();
+        };
+        
+        currentUtterance.onpause = function() {
+            isPaused = true;
+            updatePlayPauseButton();
+        };
+        
+        currentUtterance.onresume = function() {
+            isPaused = false;
+            updatePlayPauseButton();
+        };
+        
+        currentUtterance.onboundary = function(event) {
+            if (event.name === 'word') {
+                currentWordIndex = getCurrentWordIndex(event.charIndex, cleanText);
+                highlightCurrentWord();
+            }
+        };
+        
+        // Start speaking
+        try {
+            speechSynthesis.speak(currentUtterance);
+            updatePlayPauseButton();
+        } catch (error) {
+            console.error('Error starting speech synthesis:', error);
+            showToast('Impossible de démarrer la lecture', 'error');
+        }
+    }
+
+    function pauseReading() {
+        if (speechSynthesis.speaking && !isPaused) {
+            try {
+                speechSynthesis.pause();
+                isPaused = true;
+                updatePlayPauseButton();
+            } catch (error) {
+                console.error('Error pausing speech:', error);
+            }
+        }
+    }
+
+    function resumeReading() {
+        if (speechSynthesis.speaking && isPaused) {
+            try {
+                speechSynthesis.resume();
+                isPaused = false;
+                updatePlayPauseButton();
+            } catch (error) {
+                console.error('Error resuming speech:', error);
+            }
+        }
+    }
+
+    function stopReading() {
+        if (speechSynthesis.speaking) {
+            try {
+                speechSynthesis.cancel();
+                isPlaying = false;
+                isPaused = false;
+                currentWordIndex = 0;
+                currentElementIndex = 0;
+                updatePlayPauseButton();
+                clearAllHighlights();
+                document.getElementById('currentWord').textContent = 'Lecture arrêtée';
+                document.getElementById('progressFill').style.width = '0%';
+            } catch (error) {
+                console.error('Error stopping speech:', error);
+            }
+        }
+    }
+
+    function skipBackward() {
+        if (!isPlaying || words.length === 0) return;
+        
+        // Go back 10 seconds worth of words (approximately)
+        const wordsToSkip = Math.max(5, Math.floor(words.length * 0.05)); // 5% of total words or 5 words minimum
+        currentWordIndex = Math.max(0, currentWordIndex - wordsToSkip);
+        
+        // Restart reading from the new position
+        const newText = words.slice(currentWordIndex).join(' ');
+        currentText = newText;
+        
+        stopReading();
+        setTimeout(() => {
+            startReading();
+        }, 100);
+    }
+
+    function skipForward() {
+        if (!isPlaying || words.length === 0) return;
+        
+        // Skip forward 10 seconds worth of words (approximately)
+        const wordsToSkip = Math.max(5, Math.floor(words.length * 0.05)); // 5% of total words or 5 words minimum
+        currentWordIndex = Math.min(words.length - 1, currentWordIndex + wordsToSkip);
+        
+        // Restart reading from the new position
+        const newText = words.slice(currentWordIndex).join(' ');
+        currentText = newText;
+        
+        stopReading();
+        setTimeout(() => {
+            startReading();
+        }, 100);
+    }
+
+    // Text Processing Functions
+    function getLessonText() {
+        let fullText = '';
+        textElements.forEach(element => {
+            fullText += element.textContent + '\n\n';
+        });
+        return fullText.trim();
+    }
+
+    function cleanTextForSpeech(text) {
+        return text
+            .replace(/\n/g, ' ')
+            .replace(/\s+/g, ' ')
+            .replace(/[\[\]\(\)]/g, '')
+            .replace(/\.{2,}/g, '.') // Replace multiple dots with single dot
+            .trim();
+    }
+
+    function getCurrentWordIndex(charIndex, fullText) {
+        if (charIndex === 0) return 0;
+        
+        // Count words up to the character index
+        const textUpToIndex = fullText.substring(0, charIndex);
+        const wordsUpToIndex = textUpToIndex.split(/\s+/).filter(word => word.length > 0);
+        
+        return Math.min(wordsUpToIndex.length - 1, words.length - 1);
+    }
+
+    function highlightCurrentWord() {
+        clearCurrentWordHighlight();
+        
+        if (currentWordIndex < words.length) {
+            const currentWord = words[currentWordIndex];
+            document.getElementById('currentWord').textContent = currentWord;
+            
+            // Update progress
+            const progress = ((currentWordIndex + 1) / words.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            // Highlight the word in the actual text
+            highlightWordInText(currentWord, currentWordIndex);
+            
+            // Scroll to the current element if needed
+            scrollToCurrentElement();
+        }
+    }
+
+    function highlightWordInText(word, wordIndex) {
+        // Find which element contains this word
+        let cumulativeWordCount = 0;
+        let targetElement = null;
+        let elementWordIndex = 0;
+        
+        for (let i = 0; i < textElements.length; i++) {
+            const element = textElements[i];
+            const elementWords = element.textContent.trim().split(/\s+/).filter(w => w.length > 0);
+            
+            if (wordIndex >= cumulativeWordCount && wordIndex < cumulativeWordCount + elementWords.length) {
+                targetElement = element;
+                elementWordIndex = wordIndex - cumulativeWordCount;
+                currentElementIndex = i;
+                break;
+            }
+            cumulativeWordCount += elementWords.length;
+        }
+        
+        if (targetElement && elementWordIndex >= 0) {
+            highlightElementWord(targetElement, elementWordIndex);
+        }
+    }
+
+    function highlightElementWord(element, wordIndex) {
+        const text = element.textContent;
+        const words = text.split(/\s+/).filter(w => w.length > 0);
+        
+        if (wordIndex >= words.length) return;
+        
+        // Create highlighted HTML
+        let newHTML = '';
+        let currentIndex = 0;
+        
+        words.forEach((word, index) => {
+            const wordStart = text.indexOf(word, currentIndex);
+            if (wordStart === -1) return;
+            
+            const beforeWord = text.substring(currentIndex, wordStart);
+            const wordText = text.substring(wordStart, wordStart + word.length);
+            
+            if (index === wordIndex) {
+                newHTML += beforeWord + `<span class="current-reading-word">${wordText}</span>`;
+            } else {
+                newHTML += beforeWord + wordText;
+            }
+            
+            currentIndex = wordStart + word.length;
+        });
+        
+        // Add any remaining text
+        newHTML += text.substring(currentIndex);
+        
+        // Update element HTML
+        element.innerHTML = newHTML;
+        
+        // Add active class to current element
+        setActiveReadingElement(element);
+    }
+
+    function setActiveReadingElement(element) {
+        // Remove active class from all elements
+        textElements.forEach(el => {
+            el.classList.remove('active-reading-element');
+            el.closest('.card')?.classList.remove('active-reading-card');
+        });
+        
+        // Add active class to current element
+        element.classList.add('active-reading-element');
+        
+        // Also highlight the parent card
+        const parentCard = element.closest('.card');
+        if (parentCard) {
+            parentCard.classList.add('active-reading-card');
+        }
+    }
+
+    function scrollToCurrentElement() {
+        if (textElements[currentElementIndex]) {
+            const element = textElements[currentElementIndex];
+            const elementRect = element.getBoundingClientRect();
+            const isVisible = (
+                elementRect.top >= 0 &&
+                elementRect.left >= 0 &&
+                elementRect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                elementRect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+            
+            if (!isVisible) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'nearest'
+                });
+            }
+        }
+    }
+
+    function clearCurrentWordHighlight() {
+        document.querySelectorAll('.current-reading-word').forEach(element => {
+            const parent = element.parentNode;
+            parent.replaceChild(document.createTextNode(element.textContent), element);
+            parent.normalize();
+        });
+    }
+
+    function clearAllHighlights() {
+        clearCurrentWordHighlight();
+        
+        // Remove active classes
+        textElements.forEach(el => {
+            el.classList.remove('active-reading-element');
+            el.closest('.card')?.classList.remove('active-reading-card');
+        });
+    }
+
+    // Control Updates
+    function updatePlayPauseButton() {
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const voiceReaderBtn = document.getElementById('voiceReaderBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        
+        if (isPlaying) {
+            if (isPaused) {
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                playPauseBtn.title = 'Reprendre';
+                voiceReaderBtn.classList.remove('playing');
+            } else {
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                playPauseBtn.title = 'Pause';
+                voiceReaderBtn.classList.add('playing');
+            }
+            stopBtn.disabled = false;
+        } else {
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            playPauseBtn.title = 'Lire';
+            voiceReaderBtn.classList.remove('playing');
+            stopBtn.disabled = true;
+        }
+    }
+
+    function updateRate(rate) {
+        speechRate = parseFloat(rate);
+        document.getElementById('rateValue').textContent = rate + 'x';
+        
+        if (currentUtterance && isPlaying && !isPaused) {
+            // For current utterance, we need to restart with new rate
+            const wasPlaying = isPlaying;
+            stopReading();
+            
+            if (wasPlaying) {
+                setTimeout(() => {
+                    startReading();
+                }, 100);
+            }
+        }
+    }
+
+    function updateVolume(volume) {
+        speechVolume = parseFloat(volume);
+        document.getElementById('volumeValue').textContent = Math.round(volume * 100) + '%';
+        
+        if (currentUtterance && isPlaying) {
+            currentUtterance.volume = speechVolume;
+        }
+    }
+
+    function updateVoice() {
+        const voiceSelect = document.getElementById('voiceSelect');
+        const selectedVoice = voices.find(voice => voice.name === voiceSelect.value);
+        
+        if (selectedVoice) {
+            currentVoice = selectedVoice;
+            
+            if (currentUtterance && isPlaying && !isPaused) {
+                // For voice change, we need to restart
+                const wasPlaying = isPlaying;
+                stopReading();
+                
+                if (wasPlaying) {
+                    setTimeout(() => {
+                        startReading();
+                    }, 100);
+                }
+            }
+        }
+    }
+
+    // Read Selected Text
+    function readSelectedText() {
+        const selection = window.getSelection();
+        const selectedText = selection.toString().trim();
+        
+        if (selectedText.length > 0) {
+            currentText = selectedText;
+            stopReading();
+            setTimeout(() => {
+                startReading();
+            }, 100);
+        }
+    }
+
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+Alt+R to read selected text (when voice reader panel is open)
+        if (e.ctrlKey && e.altKey && e.key === 'r') {
+            e.preventDefault();
+            readSelectedText();
+        }
+        
+        // Space to play/pause when voice reader has focus
+        if (e.key === ' ' && document.getElementById('voiceReaderPanel').classList.contains('show')) {
+            e.preventDefault();
+            togglePlayPause();
+        }
+    });
+
+
+    // ===========================================
+    // UTILITY FUNCTIONS
+    // ===========================================
+
+    // Go to Top Button functionality
+    function setupGoToTopButton() {
+        const goToTopBtn = document.getElementById('goToTop');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                goToTopBtn.classList.add('show');
+            } else {
+                goToTopBtn.classList.remove('show');
+            }
+        });
+        
+        goToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // Toast notification system
+    function showToast(message, type = 'success') {
+        const toastContainer = document.getElementById('toastContainer');
+        const toastId = 'toast-' + Date.now();
+        
+        const toastHTML = `
+            <div id="${toastId}" class="toast align-items-center text-bg-${type === 'error' ? 'danger' : 'success'} border-0 mb-2" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fas ${type === 'error' ? 'fa-exclamation-triangle' : 'fa-check-circle'} me-2"></i>
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+        `;
+        
+        toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+        
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement, {
+            autohide: true,
+            delay: 4000
+        });
+        
+        toast.show();
+        
+        toastElement.addEventListener('hidden.bs.toast', function() {
+            toastElement.remove();
+        });
+    }
+
+    // Search Functionality
+    function setupSearch() {
+        const searchInput = document.getElementById('searchInput');
+        const clearSearch = document.getElementById('clearSearch');
+        
+        clearSearch.addEventListener('click', function() {
+            searchInput.value = '';
+            performSearch();
+        });
+        
+        searchInput.addEventListener('input', performSearch);
+    }
+
+    function performSearch() {
+        const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+        
+        if (searchTerm === '') {
+            removeSearchHighlights();
+            return;
+        }
+        
+        const contentElements = document.querySelectorAll('.content-text, .explication-text, .caption-text, .heading');
+        
+        contentElements.forEach(element => {
+            const text = element.textContent.toLowerCase();
+            if (text.includes(searchTerm)) {
+                element.style.backgroundColor = '#fff3cd';
+            } else {
+                element.style.backgroundColor = '';
+            }
+        });
+    }
+
+    function removeSearchHighlights() {
+        document.querySelectorAll('.content-text, .explication-text, .caption-text, .heading').forEach(element => {
+            element.style.backgroundColor = '';
+        });
+    }
+
+    // Hierarchical Numbering
+    function setupHierarchicalNumbering() {
+        const headings = document.querySelectorAll('.hierarchical-heading');
+        const counters = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        
+        headings.forEach((heading, index) => {
+            const level = parseInt(heading.getAttribute('data-level')) - 1;
+            if (isNaN(level) || level < 0 || level >= counters.length) return;
+            
+            const originalText = heading.textContent.trim();
+            
+            if (originalText.match(/^[IVX]+\./) || originalText.match(/^[A-Z]\./) || originalText.match(/^\d+\./)) {
+                return;
+            }
+            
+            for (let i = level + 1; i < counters.length; i++) {
+                counters[i] = 0;
+            }
+            
+            counters[level]++;
+            
+            let numberParts = [];
+            for (let i = 0; i <= level; i++) {
+                if (counters[i] > 0) {
+                    if (i === 0) {
+                        numberParts.push(toRoman(counters[i]));
+                    } else if (i === 1) {
+                        numberParts.push(toLetter(counters[i]));
+                    } else {
+                        numberParts.push(counters[i]);
+                    }
+                }
+            }
+            
+            const numbering = numberParts.join('.') + '.';
+            heading.innerHTML = `<strong>${numbering}</strong> ${originalText}`;
+            heading.classList.add(`heading-level-${level + 1}`);
+        });
+        
+        function toRoman(num) {
+            const roman = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+            return num >= 1 && num <= 10 ? roman[num] : num.toString();
+        }
+        
+        function toLetter(num) {
+            const letters = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            return num >= 1 && num <= 26 ? letters[num] : num.toString();
+        }
+    }
+
+    // Utility Functions
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+    // ===========================================
+    // ANNOTATION MENU FUNCTIONS
+    // ===========================================
+
+    let openMenuId = null;
+
+    function toggleAnnotationMenu(copyId) {
+        const menu = document.getElementById(`annotation-menu-${copyId}`);
+        const menuBtn = document.querySelector(`#annotation-menu-${copyId}`).previousElementSibling;
+        
+        // Close any other open menu
+        if (openMenuId && openMenuId !== copyId) {
+            const otherMenu = document.getElementById(`annotation-menu-${openMenuId}`);
+            if (otherMenu) {
+                otherMenu.style.display = 'none';
+            }
+        }
+        
+        // Toggle current menu
+        if (menu.style.display === 'block') {
+            menu.style.display = 'none';
+            openMenuId = null;
+        } else {
+            menu.style.display = 'block';
+            openMenuId = copyId;
+            
+            // Update menu items based on annotation status
+            updateAnnotationMenuItems(copyId);
+        }
+        
+        // Close menu when clicking outside
+        setTimeout(() => {
+            document.addEventListener('click', function closeMenuHandler(e) {
+                if (!e.target.closest('.annotation-menu-dropdown')) {
+                    menu.style.display = 'none';
+                    openMenuId = null;
+                    document.removeEventListener('click', closeMenuHandler);
+                }
+            });
+        }, 10);
+    }
+
+    async function updateAnnotationMenuItems(copyId) {
+        const menu = document.getElementById(`annotation-menu-${copyId}`);
+        const addBtn = menu.querySelector('.dropdown-item:nth-child(1)');
+        const editBtn = menu.querySelector('.dropdown-item:nth-child(2)');
+        const deleteBtn = menu.querySelector('.dropdown-item:nth-child(3)');
+        
+        try {
+            const response = await fetch(`{% url "lessoncopy:get_copy_annotation" 0 %}`.replace('0', copyId));
+            if (response.ok) {
+                const data = await response.json();
+                
+                if (data.has_annotation) {
+                    // Has annotation - show edit/delete, hide add
+                    addBtn.style.display = 'none';
+                    editBtn.style.display = 'flex';
+                    deleteBtn.style.display = 'flex';
+                    
+                    // Store annotation ID for later use
+                    const card = document.getElementById(`content-${copyId}`);
+                    card.setAttribute('data-annotation-id', data.annotation_id);
+                } else {
+                    // No annotation - show add, hide edit/delete
+                    addBtn.style.display = 'flex';
+                    editBtn.style.display = 'none';
+                    deleteBtn.style.display = 'none';
+                }
+            }
+        } catch (error) {
+            console.error('Erreur mise à jour menu:', error);
+        }
+    }
+
+    function editAnnotation(copyId, heading) {
+        openAnnotationModal(copyId, heading);
+        // Close the menu
+        const menu = document.getElementById(`annotation-menu-${copyId}`);
+        menu.style.display = 'none';
+        openMenuId = null;
+    }
+
+    async function deleteAnnotationFromMenu(copyId) {
+        const card = document.getElementById(`content-${copyId}`);
+        const annotationId = card.getAttribute('data-annotation-id');
+        
+        if (!annotationId) {
+            showToast('Aucune note à supprimer', 'error');
+            return;
+        }
+        
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible.')) {
+            return;
+        }
+        
+        try {
+            const response = await fetch('{% url "lessoncopy:delete_simple_annotation" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    annotation_id: annotationId
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Update UI
+                await loadCopyAnnotation(copyId);
+                updateTotalNotesCount();
+                
+                // Update menu items
+                updateAnnotationMenuItems(copyId);
+                
+                // Update button state
+                const menuBtn = card.querySelector('.annotation-menu-btn');
+                menuBtn.classList.remove('has-note');
+                menuBtn.title = 'Ajouter une note';
+                
+                // Hide note display if shown
+                card.classList.remove('showing-notes');
+                
+                showToast('Note supprimée avec succès! 🗑️');
+            } else {
+                throw new Error(data.error || 'Erreur lors de la suppression');
+            }
+        } catch (error) {
+            console.error('Erreur suppression annotation:', error);
+            showToast(error.message || 'Erreur lors de la suppression', 'error');
+        }
+        
+        // Close the menu
+        const menu = document.getElementById(`annotation-menu-${copyId}`);
+        menu.style.display = 'none';
+        openMenuId = null;
+    }
+
+    // Update the openAnnotationModal function to handle both add and edit:
+    function openAnnotationModal(copyId, heading) {
+        currentCopyId = copyId;
+        const card = document.getElementById(`content-${copyId}`);
+        const annotationId = card.getAttribute('data-annotation-id');
+        currentAnnotationId = annotationId || null;
+        
+        document.getElementById('copyHeadingPreview').textContent = heading;
+        document.getElementById('simpleAnnotationText').value = '';
+        
+        if (currentAnnotationId) {
+            // Editing existing annotation
+            document.getElementById('annotationModalTitle').textContent = 'Modifier la note';
+            document.getElementById('deleteAnnotationBtn').style.display = 'block';
+            
+            // Load existing note
+            const noteContent = document.getElementById(`note-content-${copyId}`);
+            if (noteContent && !noteContent.textContent.includes('Aucune note')) {
+                document.getElementById('simpleAnnotationText').value = noteContent.textContent;
+            }
+        } else {
+            // New annotation
+            document.getElementById('annotationModalTitle').textContent = 'Ajouter une note';
+            document.getElementById('deleteAnnotationBtn').style.display = 'none';
+        }
+        
+        // Show modal - center it
+        const modalElement = document.getElementById('simpleAnnotationModal');
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+        
+        // Center modal on desktop
+        if (window.innerWidth > 768) {
+            modalElement.querySelector('.modal-dialog').classList.add('modal-dialog-centered');
+        }
+        
+        setTimeout(() => {
+            document.getElementById('simpleAnnotationText').focus();
+        }, 300);
+    }
+
+    // Update the saveSimpleAnnotation function to handle HTML responses
+    async function saveSimpleAnnotation() {
+        if (!currentCopyId) return;
+        
+        const userNote = document.getElementById('simpleAnnotationText').value.trim();
+        const saveBtn = document.getElementById('saveAnnotationBtn');
+        const originalText = saveBtn.innerHTML;
+        
+        try {
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Enregistrement...';
+            saveBtn.disabled = true;
+            
+            const response = await fetch('{% url "lessoncopy:save_simple_annotation" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    copy_id: currentCopyId,
+                    user_note: userNote
+                })
+            });
+            
+            // Check if response is HTML (error page)
+            const contentType = response.headers.get('content-type');
+            let data;
+            
+            if (contentType && contentType.includes('text/html')) {
+                // Got HTML instead of JSON - likely an error page
+                const html = await response.text();
+                console.error('Received HTML instead of JSON:', html.substring(0, 500));
+                
+                // Try to extract error from HTML
+                const errorMatch = html.match(/<title>([^<]+)<\/title>/);
+                const error = errorMatch ? errorMatch[1] : 'Erreur serveur';
+                
+                throw new Error(`Erreur serveur (${response.status}): ${error}`);
+            } else {
+                // Parse as JSON
+                data = await response.json();
+            }
+            
+            if (!response.ok) {
+                throw new Error(data.error || `Erreur HTTP ${response.status}`);
+            }
+            
+            if (data.success) {
+                await loadCopyAnnotation(currentCopyId);
+                updateTotalNotesCount();
+                
+                // Update menu items
+                await updateAnnotationMenuItems(currentCopyId);
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('simpleAnnotationModal'));
+                modal.hide();
+                
+                showToast(data.message || 'Note sauvegardée avec succès! 📝');
+            } else {
+                throw new Error(data.error || 'Erreur lors de la sauvegarde');
+            }
+        } catch (error) {
+            console.error('Erreur sauvegarde annotation:', error);
+            
+            // Show more specific error messages
+            let errorMessage = error.message;
+            
+            if (errorMessage.includes('JSON') || errorMessage.includes('Unexpected token')) {
+                errorMessage = 'Erreur de communication avec le serveur. Veuillez rafraîchir la page.';
+            } else if (errorMessage.includes('404')) {
+                errorMessage = 'Le contenu n\'existe pas ou a été supprimé.';
+            } else if (errorMessage.includes('403')) {
+                errorMessage = 'Vous n\'avez pas la permission d\'ajouter des notes.';
+            } else if (errorMessage.includes('500')) {
+                errorMessage = 'Erreur interne du serveur. Veuillez réessayer plus tard.';
+            }
+            
+            showToast(errorMessage, 'error');
+        } finally {
+            saveBtn.innerHTML = '<i class="fas fa-save me-1"></i>Enregistrer';
+            saveBtn.disabled = false;
+        }
+    }
+
+    // Update the deleteSimpleAnnotation function to also update menu:
+    async function deleteSimpleAnnotation() {
+        if (!currentCopyId || !currentAnnotationId) return;
+        
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cette note ? Cette action est irréversible.')) {
+            return;
+        }
+        
+        const deleteBtn = document.getElementById('deleteAnnotationBtn');
+        const originalText = deleteBtn.innerHTML;
+        
+        try {
+            deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Suppression...';
+            deleteBtn.disabled = true;
+            
+            const response = await fetch('{% url "lessoncopy:delete_simple_annotation" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    annotation_id: currentAnnotationId
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                await loadCopyAnnotation(currentCopyId);
+                updateTotalNotesCount();
+                
+                // Update menu items
+                await updateAnnotationMenuItems(currentCopyId);
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('simpleAnnotationModal'));
+                modal.hide();
+                
+                showToast(data.message || 'Note supprimée avec succès! 🗑️');
+            } else {
+                throw new Error(data.error || 'Erreur lors de la suppression');
+            }
+        } catch (error) {
+            console.error('Erreur suppression annotation:', error);
+            showToast(error.message || 'Erreur lors de la suppression', 'error');
+        } finally {
+            deleteBtn.innerHTML = '<i class="fas fa-trash me-1"></i>Supprimer';
+            deleteBtn.disabled = false;
+        }
+    }
+
+    // Update the loadCopyAnnotation function to also update menu button:
+    async function loadCopyAnnotation(copyId) {
+        try {
+            const response = await fetch(`{% url "lessoncopy:get_copy_annotation" 0 %}`.replace('0', copyId), {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                const card = document.getElementById(`content-${copyId}`);
+                const menuBtn = card.querySelector('.annotation-menu-btn');
+                const noteContent = document.getElementById(`note-content-${copyId}`);
+                
+                if (data.has_annotation) {
+                    card.classList.add('has-annotation');
+                    menuBtn.classList.add('has-note');
+                    menuBtn.title = 'Gérer la note';
+                    card.setAttribute('data-annotation-id', data.annotation_id);
+                    
+                    if (noteContent) {
+                        if (data.user_note) {
+                            noteContent.textContent = data.user_note;
+                        } else {
+                            noteContent.innerHTML = '<em class="text-muted">Note sans texte</em>';
+                        }
+                    }
+                } else {
+                    card.classList.remove('has-annotation');
+                    menuBtn.classList.remove('has-note');
+                    menuBtn.title = 'Ajouter une note';
+                    card.removeAttribute('data-annotation-id');
+                    
+                    if (noteContent) {
+                        noteContent.innerHTML = '<em class="text-muted">Aucune note pour ce contenu</em>';
+                    }
+                }
+                
+                // Update menu items if menu is open
+                if (openMenuId === copyId) {
+                    await updateAnnotationMenuItems(copyId);
+                }
+            }
+        } catch (error) {
+            console.error('Erreur chargement annotation:', error);
+        }
+    }
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+{% endblock %}

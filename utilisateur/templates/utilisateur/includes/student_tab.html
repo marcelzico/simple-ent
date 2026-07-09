@@ -1,0 +1,246 @@
+<!-- users/includes/student_tab.html -->
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Student Information -->
+        <div class="profile-card">
+            <h3 class="card-title">
+                <i class="bi bi-mortarboard-fill"></i>Informations étudiantes
+            </h3>
+            
+            {% if student_profile %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">Niveau d'études</div>
+                        <div class="info-value">
+                            {{ student_profile.get_level_display|default:"Non spécifié" }}
+                            {% if not student_profile.level %}
+                            <small class="d-block text-warning mt-1">
+                                <i class="bi bi-exclamation-circle"></i> Complétez votre niveau
+                            </small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">Établissement</div>
+                        <div class="info-value">
+                            {{ student_profile.institution|default:"Non spécifié" }}
+                            {% if not student_profile.institution %}
+                            <small class="d-block text-warning mt-1">
+                                <i class="bi bi-exclamation-circle"></i> Ajoutez votre établissement
+                            </small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">Date de naissance</div>
+                        <div class="info-value">
+                            {{ student_profile.date_of_birth|date:"d F Y"|default:"Non spécifiée" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">Numéro étudiant</div>
+                        <div class="info-value">
+                            {{ student_profile.student_id_number|default:"Non spécifié" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">Style d'apprentissage</div>
+                        <div class="info-value">
+                            {{ student_profile.get_preferred_learning_style_display|default:"Non spécifié" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <div class="info-label">Statut académique</div>
+                        <div class="info-value">
+                            {% if student_profile.is_active_student %}
+                            <span class="badge bg-success p-2">
+                                <i class="bi bi-check-circle-fill me-1"></i>Actif
+                            </span>
+                            {% else %}
+                            <span class="badge bg-secondary p-2">
+                                <i class="bi bi-pause-circle-fill me-1"></i>Inactif
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Subscription Status -->
+            <div class="subscription-highlight">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="fw-bold mb-1">
+                            <i class="bi bi-{% if active_subscription %}star-fill text-warning{% else %}star{% endif %} me-2"></i>
+                            {% if active_subscription %}Abonnement Premium Actif{% else %}Aucun abonnement actif{% endif %}
+                        </h6>
+                        {% if active_subscription %}
+                        <p class="mb-0 small">
+                            <i class="bi bi-calendar-check me-1"></i>
+                            Expire le {{ active_subscription.expires_at|date:"d F Y" }} 
+                            ({{ days_remaining }} jours restants)
+                        </p>
+                        {% endif %}
+                    </div>
+                    {% if active_subscription %}
+                    <span class="badge bg-success p-2">
+                        <i class="bi bi-check-circle-fill me-1"></i>Actif
+                    </span>
+                    {% else %}
+                    <span class="badge bg-warning p-2">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>Nécessaire
+                    </span>
+                    {% endif %}
+                </div>
+                
+                {% if active_subscription %}
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <p class="small mb-2"><strong>Fonctionnalités incluses:</strong></p>
+                        <div class="d-flex flex-wrap gap-1">
+                            {% for feature in subscription_features|slice:":4" %}
+                            <span class="feature-badge">{{ feature }}</span>
+                            {% endfor %}
+                            {% if subscription_features|length > 4 %}
+                            <span class="feature-badge">+{{ subscription_features|length|add:"-4" }} autres</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="small mb-2"><strong>Limites disponibles:</strong></p>
+                        <div class="d-flex flex-wrap gap-2">
+                            {% if remaining_mcq > 0 %}
+                            <span class="badge bg-info">QCM: {{ remaining_mcq }}</span>
+                            {% endif %}
+                            {% if remaining_qa > 0 %}
+                            <span class="badge bg-info">Q/R: {{ remaining_qa }}</span>
+                            {% endif %}
+                            {% if remaining_tf > 0 %}
+                            <span class="badge bg-info">V/F: {{ remaining_tf }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="action-buttons mt-4">
+                <a href="{% url 'utilisateur:role_profile_update' 'student' %}" class="btn-edit">
+                    <i class="bi bi-pencil-fill me-2"></i>Modifier le profil étudiant
+                </a>
+                {% if not active_subscription %}
+                <a href="{% url 'subscriptions:create_subscription' %}" class="btn-subscribe">
+                    <i class="bi bi-star-fill me-2"></i>S'abonner maintenant
+                </a>
+                {% else %}
+                <a href="{% url 'subscriptions:subscription_detail' active_subscription.id %}" class="btn-edit">
+                    <i class="bi bi-eye-fill me-2"></i>Voir détails abonnement
+                </a>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                Vous n'avez pas encore complété votre profil étudiant.
+            </div>
+            <a href="{% url 'utilisateur:role_profile_update' 'student' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle-fill me-2"></i>Créer votre profil étudiant
+            </a>
+            {% endif %}
+        </div>
+        
+        <!-- Recent Study Sessions -->
+        {% if recent_sessions %}
+        <div class="profile-card">
+            <h3 class="card-title">
+                <i class="bi bi-clock-history"></i>Sessions d'étude récentes
+            </h3>
+            
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Durée</th>
+                            <th>Unité</th>
+                            <th>Chapitre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for session in recent_sessions %}
+                        <tr>
+                            <td>{{ session.start_time|date:"d/m/Y H:i" }}</td>
+                            <td>{{ session.duration }} min</td>
+                            <td>{{ session.unite.title|default:"-" }}</td>
+                            <td>{{ session.chapter.title|default:"-" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Social Links -->
+        {% if student_profile and student_profile.facebook or student_profile.instagram %}
+        <div class="profile-card">
+            <h3 class="card-title">
+                <i class="bi bi-link-45deg"></i>Réseaux sociaux
+            </h3>
+            
+            <div class="d-grid gap-2">
+                {% if student_profile.facebook %}
+                <a href="{{ student_profile.facebook }}" target="_blank" class="btn btn-facebook d-flex align-items-center">
+                    <i class="bi bi-facebook me-2"></i> Facebook
+                </a>
+                {% endif %}
+                
+                {% if student_profile.instagram %}
+                <a href="{{ student_profile.instagram }}" target="_blank" class="btn btn-instagram d-flex align-items-center">
+                    <i class="bi bi-instagram me-2"></i> Instagram
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Study Tips -->
+        <div class="profile-card">
+            <h3 class="card-title">
+                <i class="bi bi-lightbulb-fill"></i>Conseils d'étude
+            </h3>
+            
+            <div class="list-group list-group-flush">
+                <div class="list-group-item border-0 px-0 py-2">
+                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                    <small>Planifiez vos sessions d'étude à l'avance</small>
+                </div>
+                <div class="list-group-item border-0 px-0 py-2">
+                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                    <small>Utilisez les cartes mémoires pour la révision</small>
+                </div>
+                <div class="list-group-item border-0 px-0 py-2">
+                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                    <small>Faites des pauses régulières</small>
+                </div>
+                <div class="list-group-item border-0 px-0 py-2">
+                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                    <small>Testez vos connaissances avec les quiz</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

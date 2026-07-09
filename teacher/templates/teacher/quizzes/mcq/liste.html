@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+{% block title %}QCM - Mes questions{% endblock %}
+
+{% block page_title %}
+<h5 class="mb-0">
+    <i class="fas fa-question-circle me-2 text-primary"></i>
+    Questions à choix multiples (QCM)
+    {% if unite %}
+    <span class="badge bg-info ms-2">{{ unite.title }}</span>
+    {% endif %}
+    {% if chapitre %}
+    <span class="badge bg-secondary ms-2">{{ chapitre.title }}</span>
+    {% endif %}
+</h5>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- Barre d'actions -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    {% if chapitre %}
+                    <a href="{% url 'teacher:mcq_create' chapitre.id %}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-2"></i>Nouveau QCM
+                    </a>
+                    <a href="{% url 'teacher:chapitres_list' unite.id %}" class="btn btn-secondary ms-2">
+                        <i class="fas fa-arrow-left me-2"></i>Retour
+                    </a>
+                    {% elif unite %}
+                    <a href="{% url 'teacher:mcq_create' 0 %}" class="btn btn-primary disabled">
+                        <i class="fas fa-plus-circle me-2"></i>Sélectionnez un chapitre
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <form method="get" class="row g-2">
+                        <div class="col-md-7">
+                            <input type="text" name="q" class="form-control" placeholder="Rechercher une question..." value="{{ search_query }}">
+                        </div>
+                        <div class="col-md-5">
+                            <button type="submit" class="btn btn-secondary w-100">
+                                <i class="fas fa-search me-2"></i>Rechercher
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistiques -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <i class="fas fa-database"></i>
+                <div class="stat-value">{{ total_mcqs }}</div>
+                <div class="stat-label">Total QCM</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <i class="fas fa-chart-line"></i>
+                <div class="stat-value">{{ avg_score }}%</div>
+                <div class="stat-label">Score moyen étudiants</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <div class="stat-value">{{ mcqs|length }}</div>
+                <div class="stat-label">Affichés sur cette page</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Liste des QCM -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-list me-2"></i>
+            Liste des QCM
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Chapitre</th>
+                            <th>Options</th>
+                            <th>Temps</th>
+                            <th>Créé le</th>
+                            <th>Actions</th>
+                        </thead>
+                    <tbody>
+                        {% for mcq in page_obj %}
+                        <tr>
+                            <td class="fw-bold" style="max-width: 300px;">
+                                {{ mcq.question|truncatechars:80 }}
+                            </td>
+                            <td>
+                                <small class="text-muted">{{ mcq.chapter.title }}</small>
+                                <br>
+                                <span class="badge bg-light text-dark">{{ mcq.chapter.ue.title }}</span>
+                            </td>
+                            <td>
+                                <div class="small">
+                                    <span class="badge bg-success">1: {{ mcq.option1|truncatechars:20 }}</span>
+                                    <span class="badge bg-secondary">2: {{ mcq.option2|truncatechars:20 }}</span>
+                                    {% if mcq.option3 %}<span class="badge bg-info">3: {{ mcq.option3|truncatechars:20 }}</span>{% endif %}
+                                    {% if mcq.option4 %}<span class="badge bg-warning">4: {{ mcq.option4|truncatechars:20 }}</span>{% endif %}
+                                </div>
+                                <div class="mt-1">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    <strong>Réponse correcte:</strong> Option {{ mcq.correct_option }}
+                                </div>
+                            </td>
+                            <td>{{ mcq.time_limit }}s</td>
+                            <td>{{ mcq.created_at|date:"d/m/Y" }}</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'teacher:mcq_edit' mcq.id %}" class="btn btn-outline-primary" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'teacher:mcq_delete' mcq.id %}" class="btn btn-outline-danger" title="Supprimer">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <i class="fas fa-question-circle fa-3x text-muted mb-3 d-block"></i>
+                                <p class="text-muted">
+                                    {% if search_query %}
+                                    Aucun QCM ne correspond à votre recherche.
+                                    {% else %}
+                                    Aucun QCM n'a été créé.
+                                    {% endif %}
+                                </p>
+                                {% if chapitre %}
+                                <a href="{% url 'teacher:mcq_create' chapitre.id %}" class="btn btn-primary">
+                                    <i class="fas fa-plus-circle me-2"></i>Créer mon premier QCM
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="card-footer">
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center mb-0">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}">
+                            Précédent
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}">
+                            Suivant
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Navigation par unité -->
+    {% if not unite %}
+    <div class="card mt-4">
+        <div class="card-header">
+            <i class="fas fa-filter me-2"></i>
+            Filtrer par unité
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for u in teaching_unites %}
+                <div class="col-md-3 col-sm-6 mb-2">
+                    <a href="{% url 'teacher:mcq_list_by_unite' u.id %}" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-book me-2"></i>{{ u.title }}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

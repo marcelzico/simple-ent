@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+
+{% block title %}Modifier profil étudiant - MedZone{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-user-graduate"></i> Modifier mon profil étudiant
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Education Information -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-graduation-cap"></i> Informations académiques</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_level" class="form-label">Niveau d'études</label>
+                                    <select name="level" id="id_level" 
+                                            class="form-control {% if form.level.errors %}is-invalid{% endif %}">
+                                        <option value="">--- Sélectionner ---</option>
+                                        {% for value, label in form.fields.level.choices %}
+                                        <option value="{{ value }}" 
+                                                {% if form.level.value == value %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    {% if form.level.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.level.errors.0 }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_institution" class="form-label">Institution</label>
+                                    <input type="text" name="institution" id="id_institution" 
+                                           class="form-control {% if form.institution.errors %}is-invalid{% endif %}"
+                                           value="{{ form.institution.value|default:'' }}"
+                                           placeholder="Ex: Université de Médecine">
+                                    {% if form.institution.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.institution.errors.0 }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_student_id_number" class="form-label">Numéro IM / Carte</label>
+                                    <input type="text" name="student_id_number" id="id_student_id_number" 
+                                           class="form-control {% if form.student_id_number.errors %}is-invalid{% endif %}"
+                                           value="{{ form.student_id_number.value|default:'' }}"
+                                           placeholder="Ex: IM2024001">
+                                    {% if form.student_id_number.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.student_id_number.errors.0 }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                {% if form.date_of_birth %}
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_date_of_birth" class="form-label">Date de naissance</label>
+                                    <input type="date" name="date_of_birth" id="id_date_of_birth" 
+                                           class="form-control {% if form.date_of_birth.errors %}is-invalid{% endif %}"
+                                           value="{{ form.date_of_birth.value|default:''|date:'Y-m-d' }}">
+                                    {% if form.date_of_birth.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.date_of_birth.errors.0 }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Status Information -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0"><i class="fas fa-chart-line"></i> Statut et abonnements</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check form-switch">
+                                        <input type="checkbox" name="is_premium" id="id_is_premium" 
+                                               class="form-check-input {% if form.is_premium.errors %}is-invalid{% endif %}"
+                                               {% if form.is_premium.value %}checked{% endif %}>
+                                        <label class="form-check-label" for="id_is_premium">
+                                            <i class="fas fa-crown text-warning"></i> Compte Premium
+                                        </label>
+                                        {% if form.is_premium.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ form.is_premium.errors.0 }}
+                                        </div>
+                                        {% endif %}
+                                        <small class="form-text text-muted d-block">
+                                            Accès aux fonctionnalités premium
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check form-switch">
+                                        <input type="checkbox" name="is_pro" id="id_is_pro" 
+                                               class="form-check-input {% if form.is_pro.errors %}is-invalid{% endif %}"
+                                               {% if form.is_pro.value %}checked{% endif %}>
+                                        <label class="form-check-label" for="id_is_pro">
+                                            <i class="fas fa-star text-success"></i> Compte Pro
+                                        </label>
+                                        {% if form.is_pro.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ form.is_pro.errors.0 }}
+                                        </div>
+                                        {% endif %}
+                                        <small class="form-text text-muted d-block">
+                                            Niveau premium supérieur
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check form-switch">
+                                        <input type="checkbox" name="is_active_student" id="id_is_active_student" 
+                                               class="form-check-input {% if form.is_active_student.errors %}is-invalid{% endif %}"
+                                               {% if form.is_active_student.value %}checked{% endif %}>
+                                        <label class="form-check-label" for="id_is_active_student">
+                                            <i class="fas fa-user-check"></i> Étudiant actif
+                                        </label>
+                                        {% if form.is_active_student.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ form.is_active_student.errors.0 }}
+                                        </div>
+                                        {% endif %}
+                                        <small class="form-text text-muted d-block">
+                                            Actuellement inscrit et actif
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Links -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0"><i class="fas fa-share-alt"></i> Réseaux sociaux</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_facebook" class="form-label">
+                                        <i class="fab fa-facebook text-primary"></i> Facebook
+                                    </label>
+                                    <input type="url" name="facebook" id="id_facebook" 
+                                           class="form-control {% if form.facebook.errors %}is-invalid{% endif %}"
+                                           value="{{ form.facebook.value|default:'' }}"
+                                           placeholder="https://facebook.com/votre-profil">
+                                    {% if form.facebook.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.facebook.errors.0 }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="id_instagram" class="form-label">
+                                        <i class="fab fa-instagram text-danger"></i> Instagram
+                                    </label>
+                                    <input type="url" name="instagram" id="id_instagram" 
+                                           class="form-control {% if form.instagram.errors %}is-invalid{% endif %}"
+                                           value="{{ form.instagram.value|default:'' }}"
+                                           placeholder="https://instagram.com/votre-profil">
+                                    {% if form.instagram.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.instagram.errors.0 }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Learning Style (if exists) -->
+                    {% if form.preferred_learning_style %}
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0"><i class="fas fa-brain"></i> Préférences d'apprentissage</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label for="id_preferred_learning_style" class="form-label">Style d'apprentissage préféré</label>
+                                    <select name="preferred_learning_style" id="id_preferred_learning_style" 
+                                            class="form-control {% if form.preferred_learning_style.errors %}is-invalid{% endif %}">
+                                        <option value="">--- Sélectionner ---</option>
+                                        {% for value, label in form.fields.preferred_learning_style.choices %}
+                                        <option value="{{ value }}" 
+                                                {% if form.preferred_learning_style.value == value %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    {% if form.preferred_learning_style.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.preferred_learning_style.errors.0 }}
+                                    </div>
+                                    {% endif %}
+                                    <small class="form-text text-muted">
+                                        Nous adapterons le contenu selon votre style préféré
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'utilisateur:profile' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i> Annuler
+                        </a>
+                        <div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Enregistrer
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    // Toggle switch styling
+    document.querySelectorAll('.form-check-input').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                this.parentElement.classList.add('checked');
+            } else {
+                this.parentElement.classList.remove('checked');
+            }
+        });
+    });
+</script>
+
+<style>
+    .form-check-input:checked {
+        background-color: #3498db;
+        border-color: #3498db;
+    }
+    .form-switch .form-check-input:checked {
+        background-color: #3498db;
+        border-color: #3498db;
+    }
+</style>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+{% block title %}Profil de {{person.username}}{% endblock title %}
+
+{% block content %}
+<style>
+    .profile-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem 0;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .profile-image-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .profile-image {
+        height: 200px;
+        width: 200px;
+        object-fit: cover;
+        border: 5px solid white;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease;
+    }
+    
+    .profile-image:hover {
+        transform: scale(1.05);
+    }
+    
+    .info-card {
+        background: linear-gradient(to right, #ffffff, #f8f9fa);
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    
+    .info-label {
+        font-weight: 600;
+        color: #495057;
+        min-width: 180px;
+        display: inline-block;
+    }
+    
+    .info-value {
+        font-weight: 700;
+        color: #2c3e50;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        padding: 5px 15px;
+        border-radius: 25px;
+        display: inline-block;
+        margin-left: 10px;
+    }
+    
+    .list-item {
+        padding: 12px 15px;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        transition: background-color 0.2s ease;
+        list-style: none;
+    }
+    
+    .list-item:hover {
+        background-color: rgba(102, 126, 234, 0.05);
+    }
+    
+    .badge-statut {
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    
+    .action-buttons .btn {
+        padding: 12px 30px;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .action-buttons .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+</style>
+
+<div class="container py-4">
+    <!-- Fil d'Ariane amélioré -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb bg-light p-3 rounded-3">
+            <li class="breadcrumb-item">
+                <a href="{% url 'utilisateur:member' %}" class="text-decoration-none">
+                    <i class="bi bi-people-fill"></i> Liste des membres
+                </a>
+            </li>
+            <li class="breadcrumb-item active fw-bold" aria-current="page">
+                <i class="bi bi-person-circle"></i> {{person.username}}
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Carte de profil principale -->
+    <div class="card info-card border-0 overflow-hidden">
+        <!-- En-tête du profil avec dégradé -->
+        <div class="profile-header text-center">
+            <div class="profile-image-wrapper mb-3">
+                <img class="rounded-circle profile-image" 
+                     src="{{person.profile_pic.url}}" 
+                     alt="Photo de profil de {{person.username}}">
+            </div>
+            <h1 class="display-4 fw-bold mb-2">{{person.username}}</h1>
+            
+            <!-- Badge de statut -->
+            <div class="mt-2">
+                {% if person.student_profile %}
+                    <span class="badge-statut bg-white text-success">
+                        <i class="bi bi-mortarboard"></i> Étudiant
+                        {% if person.student_profile.is_active %}
+                            <span class="ms-2">✓ Actif</span>
+                        {% else %}
+                            <span class="ms-2">✗ Inactif</span>
+                        {% endif %}
+                    </span>
+                {% elif person.is_staff %}
+                    <span class="badge-statut bg-white text-info">
+                        <i class="bi bi-gear"></i> Staff
+                        {% if person.is_active %}
+                            <span class="ms-2">✓ Actif</span>
+                        {% else %}
+                            <span class="ms-2">✗ Inactif</span>
+                        {% endif %}
+                    </span>
+                {% elif person.is_superuser %}
+                    <span class="badge-statut bg-white text-warning">
+                        <i class="bi bi-shield-lock"></i> Administrateur
+                    </span>
+                {% else %}
+                    <span class="badge-statut bg-white text-secondary">
+                        <i class="bi bi-incognito"></i> Anonyme
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Corps de la carte avec informations -->
+        <div class="card-body p-5">
+            <!-- Nom complet -->
+            <div class="text-center mb-5">
+                <h2 class="h3 text-dark">
+                    <span class="info-label">👤 Nom complet :</span>
+                    <span class="info-value">{{person.first_name}} {{person.last_name}}</span>
+                </h2>
+            </div>
+            
+            <!-- Grille d'informations -->
+            <div class="row g-4">
+                <!-- Colonne de gauche -->
+                <div class="col-md-6">
+                    <div class="bg-light p-4 rounded-4 h-100">
+                        <h4 class="text-primary mb-4">
+                            <i class="bi bi-info-circle"></i> Informations générales
+                        </h4>
+                        <ul class="list-unstyled">
+                            <li class="list-item d-flex align-items-center">
+                                <i class="bi bi-at fs-5 text-primary me-3"></i>
+                                <span class="info-label">Nom d'utilisateur :</span>
+                                <span class="info-value">{{person.username}}</span>
+                            </li>
+                            
+                            {% if person.gender %}
+                            <li class="list-item d-flex align-items-center">
+                                {% if person.gender == 'M' %}
+                                    <i class="bi bi-gender-male fs-5 text-primary me-3"></i>
+                                    <span class="info-label">Genre :</span>
+                                    <span class="info-value">Masculin</span>
+                                {% elif person.gender == 'F' %}
+                                    <i class="bi bi-gender-female fs-5 text-danger me-3"></i>
+                                    <span class="info-label">Genre :</span>
+                                    <span class="info-value">Féminin</span>
+                                {% else %}
+                                    <i class="bi bi-gender-ambiguous fs-5 text-secondary me-3"></i>
+                                    <span class="info-label">Genre :</span>
+                                    <span class="info-value">{{person.gender}}</span>
+                                {% endif %}
+                            </li>
+                            {% endif %}
+                            
+                            <li class="list-item d-flex align-items-center">
+                                <i class="bi bi-calendar fs-5 text-primary me-3"></i>
+                                <span class="info-label">Date d'inscription :</span>
+                                <span class="info-value">{{person.date_joined|date:"d/m/Y"}}</span>
+                            </li>
+                            
+                            <li class="list-item d-flex align-items-center">
+                                <i class="bi bi-clock-history fs-5 text-primary me-3"></i>
+                                <span class="info-label">Dernière connexion :</span>
+                                <span class="info-value">{{person.last_login|date:"d/m/Y H:i"}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Colonne de droite (Informations étudiantes) -->
+                <div class="col-md-6">
+                    <div class="bg-light p-4 rounded-4 h-100">
+                        <h4 class="text-success mb-4">
+                            <i class="bi bi-mortarboard"></i> Informations académiques
+                        </h4>
+                        <ul class="list-unstyled">
+                            {% if person.student_profile.student_id_number %}
+                            <li class="list-item d-flex align-items-center">
+                                <i class="bi bi-qr-code fs-5 text-success me-3"></i>
+                                <span class="info-label">Numéro matricule :</span>
+                                <span class="info-value">{{person.student_profile.student_id_number}}</span>
+                            </li>
+                            {% else %}
+                            <li class="list-item text-muted">
+                                <i class="bi bi-dash-circle me-3"></i>
+                                Aucun numéro matricule renseigné
+                            </li>
+                            {% endif %}
+
+                            {% if person.student_profile.level %}
+                            <li class="list-item d-flex align-items-center">
+                                <i class="bi bi-bar-chart-steps fs-5 text-success me-3"></i>
+                                <span class="info-label">Niveau d'étude :</span>
+                                <span class="info-value">{{person.student_profile.level}}</span>
+                            </li>
+                            {% endif %}
+                            
+                            {% if person.student_profile.department %}
+                            <li class="list-item d-flex align-items-center">
+                                <i class="bi bi-building fs-5 text-success me-3"></i>
+                                <span class="info-label">Département :</span>
+                                <span class="info-value">{{person.student_profile.department}}</span>
+                            </li>
+                            {% endif %}
+                            
+                            {% if person.student_profile.entry_year %}
+                            <li class="list-item d-flex align-items-center">
+                                <i class="bi bi-calendar-check fs-5 text-success me-3"></i>
+                                <span class="info-label">Année d'entrée :</span>
+                                <span class="info-value">{{person.student_profile.entry_year}}</span>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section des contacts et actions -->
+            <div class="mt-5">
+                <div class="card border-0 bg-gradient bg-primary bg-opacity-10">
+                    <div class="card-body p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h5 class="text-primary mb-2">
+                                    <i class="bi bi-chat-dots"></i> Contacter {{person.username}}
+                                </h5>
+                                <p class="text-muted mb-md-0">
+                                    Envoyez un message privé pour entrer en contact avec ce membre.
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-md-end action-buttons">
+                                {% comment %} <a href="{% url 'interactions:send_private_message_to_user' person.id %}" 
+                                   class="btn btn-primary btn-lg">
+                                    <i class="bi bi-envelope-paper"></i> 
+                                    Envoyer un message
+                                </a> {% endcomment %}
+                                {% if person.email %}
+                                <a href="mailto:{{person.email}}" 
+                                   class="btn btn-outline-primary btn-lg mt-2 mt-md-0 ms-md-2">
+                                    <i class="bi bi-envelope"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pied de carte -->
+        <div class="card-footer bg-light text-muted py-3 text-center border-0">
+            <small>
+                <i class="bi bi-info-circle"></i> 
+                Profil consulté le {% now "d/m/Y" %} à {% now "H:i" %}
+            </small>
+        </div>
+    </div>
+</div>
+{% endblock content %}

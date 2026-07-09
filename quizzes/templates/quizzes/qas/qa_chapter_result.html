@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}QA Result{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h4>QA Quiz Result: {{ chapter.title }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h2>Your Score: {{ attempt.score|floatformat:1 }}%</h2>
+                    <p class="lead">Average similarity with model answers</p>
+                </div>
+                
+                <div class="progress mb-4" style="height: 30px;">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: {{ attempt.score }}%" 
+                         aria-valuenow="{{ attempt.score }}" aria-valuemin="0" aria-valuemax="100">
+                        {{ attempt.score|floatformat:1 }}%
+                    </div>
+                </div>
+                
+                <h5 class="mt-4">Detailed Feedback:</h5>
+                <div class="accordion" id="answersAccordion">
+                    {% for answer in questions %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false" 
+                                    aria-controls="collapse{{ forloop.counter }}">
+                                Question {{ forloop.counter }}: {{ answer.question.question|truncatechars:50 }}
+                                <span class="badge bg-{% if answer.similarity_score >= 70 %}success{% elif answer.similarity_score >= 40 %}warning{% else %}danger{% endif %} ms-2">
+                                    {{ answer.similarity_score|floatformat:1 }}%
+                                </span>
+                            </button>
+                        </h2>
+                        <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" 
+                             aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#answersAccordion">
+                            <div class="accordion-body">
+                                <div class="mb-3">
+                                    <h6>Your Answer:</h6>
+                                    <p class="bg-light p-3 rounded">{{ answer.answer }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <h6>Model Answer:</h6>
+                                    <p class="bg-light p-3 rounded">{{ answer.question.sample_answer }}</p>
+                                </div>
+                                {% if answer.feedback %}
+                                <div class="alert alert-info">
+                                    <h6>Feedback:</h6>
+                                    <p>{{ answer.feedback }}</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{% url 'lessoncopy:lesson' chapter.ue.id chapter.id %}" class="btn btn-info">
+                        Go back and learn again
+                    </a>
+                    <a href="{% url 'quizzes:start_qa' chapter.id %}" class="btn btn-primary">
+                        Take the quiz again
+                    </a>
+
+                    <a href="{% url 'quizzes:qa_results' %}" class="btn btn-outline-secondary">
+                        View All Results
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

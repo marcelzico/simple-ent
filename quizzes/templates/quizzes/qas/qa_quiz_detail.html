@@ -1,0 +1,360 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ quiz.title }} - QA Quiz Details{% endblock %}
+
+{% block extra_css %}
+<style>
+    .detail-card {
+        border-left: 4px solid #0dcaf0;
+    }
+    .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+    }
+    .question-preview {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+</style>
+{% endblock %}
+
+{% block appnav %}
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:subject_list" %}">Liste UE</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:subject_detail" chapter.ue.id %}">{{ chapter.ue.title }}</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:chapter_detail_student" chapter.ue.id chapter.id %}">{{ chapter.title }}</a>
+    </li>
+    <li class="breadcrumb-item active">{{ quiz.title }}</li>
+{% endblock appnav %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'quizzes:list_qa_quizzes' %}">
+                    <i class="fas fa-file-alt"></i> QA Quizzes
+                </a>
+            </li>
+            {% if quiz.subject %}
+            <li class="breadcrumb-item">
+                <a href="{% url 'quizzes:list_qa_quizzes' quiz.subject.pk %}">
+                    {{ quiz.subject.title }}
+                </a>
+            </li>
+            {% endif %}
+            <li class="breadcrumb-item active" aria-current="page">{{ quiz.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Main Quiz Info -->
+        <div class="col-lg-8">
+            <div class="card detail-card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="mb-1">{{ quiz.title }}</h2>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-info">
+                                    <i class="fas fa-book me-1"></i>{{ quiz.subject.title }}
+                                </span>
+                                <span class="badge bg-light text-dark border">
+                                    <i class="fas fa-clock me-1"></i>{{ quiz.time_limit }} min
+                                </span>
+                                <span class="badge bg-light text-dark border">
+                                    <i class="fas fa-trophy me-1"></i>Pass: {{ quiz.score_to_pass }}%
+                                </span>
+                            </div>
+                        </div>
+                        
+                        {% if user.is_teacher or user.is_superuser %}
+                        <div class="btn-group">
+                            <a href="{% url 'quizzes:edit_qa_quiz' quiz.id %}" 
+                               class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'quizzes:delete_qa_quiz' quiz.id %}" 
+                               class="btn btn-outline-danger btn-sm">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                            <a href="{% url 'quizzes:qa_quiz_results' %}?quiz={{ quiz.id }}" 
+                               class="btn btn-outline-info btn-sm">
+                                <i class="fas fa-chart-bar"></i>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Description -->
+                    {% if quiz.description %}
+                    <div class="mb-4">
+                        <h5 class="card-title">
+                            <i class="fas fa-align-left text-info me-2"></i>Description
+                        </h5>
+                        <p class="card-text">{{ quiz.description|linebreaks }}</p>
+                    </div>
+                    {% endif %}
+
+                    <!-- Chapters Covered -->
+                    <div class="mb-4">
+                        <h5 class="card-title">
+                            <i class="fas fa-tags text-info me-2"></i>Chapters Covered
+                        </h5>
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for chapter in quiz.chapters.all %}
+                            <a href="{% url 'lecon:chapter_detail' quiz.subject.pk chapter.pk %}" 
+                               class="badge bg-light text-dark text-decoration-none border p-2">
+                                <i class="fas fa-bookmark me-1"></i>{{ chapter.title }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Questions Preview -->
+                    <div class="mb-4">
+                        <h5 class="card-title">
+                            <i class="fas fa-question-circle text-info me-2"></i>
+                            Questions ({{ quiz.questions.count }})
+                        </h5>
+                        <div class="question-preview border rounded p-3">
+                            {% for question in quiz.questions.all|slice:":5" %}
+                            <div class="mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                                <h6 class="text-dark">Question {{ forloop.counter }}</h6>
+                                <p class="mb-2">{{ question.question|truncatewords:50 }}</p>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>
+                                    Suggested time: {{ question.time_limit }} seconds
+                                </small>
+                            </div>
+                            {% endfor %}
+                            {% if quiz.questions.count > 5 %}
+                            <div class="text-center">
+                                <small class="text-muted">
+                                    ... and {{ quiz.questions.count|add:"-5" }} more questions
+                                </small>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Schedule -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title text-muted">
+                                        <i class="fas fa-play me-2"></i>Start Date
+                                    </h6>
+                                    <h4 class="text-dark">{{ quiz.start_date|date:"F d, Y" }}</h4>
+                                    <p class="mb-0 text-muted">{{ quiz.start_date|time:"H:i" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title text-muted">
+                                        <i class="fas fa-stop me-2"></i>End Date
+                                    </h6>
+                                    <h4 class="text-dark">{{ quiz.end_date|date:"F d, Y" }}</h4>
+                                    <p class="mb-0 text-muted">{{ quiz.end_date|time:"H:i" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar with Actions & Stats -->
+        <div class="col-lg-4">
+            <!-- Quiz Status Card -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle text-info me-2"></i>Quiz Status
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        {% if quiz.is_available %}
+                        <div class="stat-card p-4 mb-3">
+                            <h3 class="display-6 mb-2">ACTIVE</h3>
+                            <p class="mb-0">Quiz is available for attempts</p>
+                        </div>
+                        {% elif now < quiz.start_date %}
+                        <div class="bg-warning text-dark p-4 rounded mb-3">
+                            <h3 class="display-6 mb-2">UPCOMING</h3>
+                            <p class="mb-0">Starts in {{ quiz.start_date|timeuntil }}</p>
+                        </div>
+                        {% else %}
+                        <div class="bg-secondary text-white p-4 rounded mb-3">
+                            <h3 class="display-6 mb-2">ENDED</h3>
+                            <p class="mb-0">Quiz is no longer available</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Attempts Progress -->
+                    <div class="mb-4">
+                        <h6 class="text-muted mb-3">
+                            <i class="fas fa-redo me-2"></i>Your Attempts
+                        </h6>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-dark">Progress:</span>
+                            <span class="fw-bold">{{ attempts.count }}/{{ quiz.max_attempts }}</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar {% if attempts.count >= quiz.max_attempts %}bg-danger{% else %}bg-success{% endif %}" 
+                                 role="progressbar" 
+                                 style="width: {% widthratio attempts.count quiz.max_attempts 100 %}%">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <div class="d-grid gap-2">
+                        {% if quiz.is_available and can_attempt %}
+                        <a href="{% url 'quizzes:start_qa_quiz' quiz.id %}" 
+                           class="btn btn-info btn-lg">
+                            <i class="fas fa-play-circle me-2"></i>Start Quiz Now
+                        </a>
+                        <small class="text-center text-muted">
+                            You have {{ quiz.max_attempts|add:"-attempts.count" }} attempt{{ quiz.max_attempts|add:"-attempts.count"|pluralize }} remaining
+                        </small>
+                        {% elif attempts.count >= quiz.max_attempts %}
+                        <button class="btn btn-danger btn-lg" disabled>
+                            <i class="fas fa-ban me-2"></i>No Attempts Remaining
+                        </button>
+                        {% elif now < quiz.start_date %}
+                        <button class="btn btn-warning btn-lg" disabled>
+                            <i class="fas fa-clock me-2"></i>Quiz Not Started
+                        </button>
+                        <small class="text-center text-muted">
+                            Available {{ quiz.start_date|timeuntil }}
+                        </small>
+                        {% elif now > quiz.end_date %}
+                        <button class="btn btn-secondary btn-lg" disabled>
+                            <i class="fas fa-calendar-times me-2"></i>Quiz Ended
+                        </button>
+                        {% endif %}
+                        
+                        {% if attempts.exists %}
+                        <a href="{% url 'quizzes:qa_quiz_results' %}?user={{ user.id }}&quiz={{ quiz.id }}" 
+                           class="btn btn-outline-info">
+                            <i class="fas fa-chart-bar me-2"></i>View My Results
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your Attempts History -->
+            {% if attempts %}
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history text-info me-2"></i>Your Attempts
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% for attempt in attempts|slice:":3" %}
+                        <div class="list-group-item border-0 px-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">
+                                        Attempt {{ forloop.revcounter }}
+                                        {% if attempt.completed %}
+                                        <span class="badge bg-success ms-2">Completed</span>
+                                        {% else %}
+                                        <span class="badge bg-warning ms-2">Incomplete</span>
+                                        {% endif %}
+                                    </h6>
+                                    <small class="text-muted">
+                                        {{ attempt.end_time|date:"M d, Y H:i"|default:"In progress" }}
+                                    </small>
+                                </div>
+                                <div class="text-end">
+                                    {% if attempt.score is not None %}
+                                    <h4 class="mb-0 {% if attempt.score >= quiz.score_to_pass %}text-success{% else %}text-danger{% endif %}">
+                                        {{ attempt.score|floatformat:1 }}%
+                                    </h4>
+                                    {% else %}
+                                    <span class="badge bg-secondary">Not Scored</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    {% if attempts.count > 3 %}
+                    <div class="text-center mt-3">
+                        <a href="{% url 'quizzes:qa_quiz_results' %}?user={{ user.id }}&quiz={{ quiz.id }}" 
+                           class="btn btn-sm btn-outline-info">
+                            View All {{ attempts.count }} Attempts
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Statistics Card -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">
+                                <i class="fas fa-chart-pie text-info me-2"></i>Quiz Statistics
+                            </h5>
+                            <div class="row text-center">
+                                <div class="col-6 col-md-3 mb-3">
+                                    <div class="p-3 bg-light rounded">
+                                        <h3 class="text-info mb-1">{{ total_quizzes_count }}</h3>
+                                        <small class="text-muted">Total Quizzes</small>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3 mb-3">
+                                    <div class="p-3 bg-light rounded">
+                                        <h3 class="text-success mb-1">
+                                            {{ active_quizzes_count }}
+                                        </h3>
+                                        <small class="text-muted">Active Quizzes</small>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3 mb-3">
+                                    <div class="p-3 bg-light rounded">
+                                        <h3 class="text-warning mb-1">
+                                            {{ participation_rate|floatformat:1 }}%
+                                        </h3>
+                                        <small class="text-muted">Your Participation</small>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3 mb-3">
+                                    <div class="p-3 bg-light rounded">
+                                        <h3 class="text-primary mb-1">
+                                            {{ average_score|floatformat:1 }}%
+                                        </h3>
+                                        <small class="text-muted">Avg. Score</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

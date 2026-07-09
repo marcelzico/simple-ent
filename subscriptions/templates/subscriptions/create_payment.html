@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}Effectuer un Paiement{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-money-bill-wave"></i> Effectuer un Paiement
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post" id="paymentForm">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Sélection de la Fonctionnalité -->
+                    <div class="mb-3">
+                        <label for="{{ form.feature.id_for_label }}" class="form-label">
+                            <i class="fas fa-cube"></i> Sélectionner une Fonctionnalité
+                        </label>
+                        <select name="{{ form.feature.name }}" id="{{ form.feature.id_for_label }}" 
+                                class="form-select" required onchange="updateAmount()">
+                            <option value="">Choisir une fonctionnalité...</option>
+                            {% for feature in features %}
+                            <option value="{{ feature.id }}" 
+                                    data-price="{{ feature.price }}"
+                                    {% if form.feature.value == feature.id|stringformat:"i" %}selected{% endif %}>
+                                {{ feature.name }} - {{ feature.price }} Ar ({{ feature.validity_day_number }} jours)
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.feature.errors %}
+                        <div class="text-danger">
+                            {% for error in form.feature.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Montant (auto-rempli) -->
+                    <div class="mb-3">
+                        <label for="{{ form.amount.id_for_label }}" class="form-label">
+                            <i class="fas fa-coins"></i> Montant (Ar)
+                        </label>
+                        <input type="number" name="{{ form.amount.name }}" 
+                               id="{{ form.amount.id_for_label }}"
+                               value="{{ form.amount.value|default:'' }}"
+                               class="form-control" readonly
+                               placeholder="Sera automatiquement rempli selon la fonctionnalité">
+                        {% if form.amount.errors %}
+                        <div class="text-danger">
+                            {% for error in form.amount.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Méthode de Paiement -->
+                    <div class="mb-3">
+                        <label for="{{ form.paid_with.id_for_label }}" class="form-label">
+                            <i class="fas fa-mobile-alt"></i> Méthode de Paiement
+                        </label>
+                        <select name="{{ form.paid_with.name }}" id="{{ form.paid_with.id_for_label }}" 
+                                class="form-select" required onchange="togglePhoneNumber()">
+                            {% for value, label in form.fields.paid_with.choices %}
+                            <option value="{{ value }}" 
+                                    {% if form.paid_with.value == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.paid_with.errors %}
+                        <div class="text-danger">
+                            {% for error in form.paid_with.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Numéro de Téléphone (conditionnel) -->
+                    <div class="mb-3" id="phoneNumberField">
+                        <label for="{{ form.phone_number_of_payment.id_for_label }}" class="form-label">
+                            <i class="fas fa-phone"></i> Numéro de Téléphone
+                        </label>
+                        <input type="tel" name="{{ form.phone_number_of_payment.name }}" 
+                               id="{{ form.phone_number_of_payment.id_for_label }}"
+                               value="{{ form.phone_number_of_payment.value|default:'' }}"
+                               class="form-control"
+                               placeholder="0341234567">
+                        <small class="form-text text-muted">
+                            Numéro de téléphone malgache requis pour les paiements par mobile money
+                        </small>
+                        {% if form.phone_number_of_payment.errors %}
+                        <div class="text-danger">
+                            {% for error in form.phone_number_of_payment.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Référence de Transaction -->
+                    <div class="mb-3">
+                        <label for="{{ form.reference_of_payment.id_for_label }}" class="form-label">
+                            <i class="fas fa-receipt"></i> Référence de Transaction
+                        </label>
+                        <input type="text" name="{{ form.reference_of_payment.name }}" 
+                               id="{{ form.reference_of_payment.id_for_label }}"
+                               value="{{ form.reference_of_payment.value|default:'' }}"
+                               class="form-control"
+                               placeholder="Entrez votre numéro de référence de transaction">
+                        <small class="form-text text-muted">
+                            C'est le numéro de référence de votre transaction de paiement
+                        </small>
+                        {% if form.reference_of_payment.errors %}
+                        <div class="text-danger">
+                            {% for error in form.reference_of_payment.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">
+                            <i class="fas fa-comment"></i> Informations Supplémentaires (Optionnel)
+                        </label>
+                        <textarea name="{{ form.description.name }}" 
+                                  id="{{ form.description.id_for_label }}"
+                                  class="form-control" 
+                                  rows="3"
+                                  placeholder="Ajoutez toute information supplémentaire concernant votre paiement...">{{ form.description.value|default:'' }}</textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-paper-plane"></i> Soumettre la Demande de Paiement
+                        </button>
+                        <a href="{% url 'subscriptions:student_dashboard' %}" class="btn btn-outline-secondary">
+                            Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateAmount() {
+        const featureSelect = document.getElementById('{{ form.feature.id_for_label }}');
+        const amountInput = document.getElementById('{{ form.amount.id_for_label }}');
+        const selectedOption = featureSelect.options[featureSelect.selectedIndex];
+        
+        if (selectedOption.value) {
+            const price = selectedOption.getAttribute('data-price');
+            amountInput.value = price;
+        } else {
+            amountInput.value = '';
+        }
+    }
+    
+    function togglePhoneNumber() {
+        const paymentMethod = document.getElementById('{{ form.paid_with.id_for_label }}');
+        const phoneField = document.getElementById('phoneNumberField');
+        
+        if (paymentMethod.value === 'cash') {
+            phoneField.style.display = 'none';
+        } else {
+            phoneField.style.display = 'block';
+        }
+    }
+    
+    // Initialiser au chargement de la page
+    document.addEventListener('DOMContentLoaded', function() {
+        updateAmount();
+        togglePhoneNumber();
+    });
+</script>
+{% endblock %}

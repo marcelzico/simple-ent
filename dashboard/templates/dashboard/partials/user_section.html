@@ -1,0 +1,766 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .dashboard-card {
+        transition: transform 0.2s;
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    }
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+    }
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: bold;
+    }
+    .growth-positive { color: #28a745; }
+    .growth-negative { color: #dc3545; }
+    
+    /* Better table responsiveness */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .role-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 20px;
+        display: inline-block;
+    }
+    .role-badge-student { background: #e3f2fd; color: #1976d2; }
+    .role-badge-staff { background: #fff3e0; color: #f57c00; }
+    .role-badge-admin { background: #ffebee; color: #c62828; }
+    .role-badge-user { background: #e8eaf6; color: #3949ab; }
+    
+    .filter-section {
+        /*background: #f8f9fa;*/
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    /* Fixed chart containers - smaller and responsive */
+    .chart-container {
+        position: relative;
+        height: 250px;
+        width: 100%;
+    }
+    
+    .chart-container canvas {
+        max-height: 250px;
+        width: 100% !important;
+    }
+    
+    /* For smaller screens */
+    @media (max-width: 768px) {
+        .chart-container {
+            height: 200px;
+        }
+        .stat-number {
+            font-size: 1.4rem;
+        }
+        .filter-section .btn-sm {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+        }
+    }
+    
+    .filter-badge {
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .filter-badge:hover {
+        transform: scale(1.05);
+    }
+    .filter-badge.active {
+        background: #0d6efd !important;
+        color: white !important;
+    }
+    
+    .search-box {
+        position: relative;
+    }
+    .search-box .search-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+    }
+    
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .loading-overlay.active {
+        display: flex;
+    }
+    
+    .user-row {
+        transition: background-color 0.2s;
+    }
+    .user-row:hover {
+        background-color: #f8f9fa;
+    }
+    
+    /* Compact table */
+    .table td, .table th {
+        padding: 0.6rem;
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-2 px-md-4 mt-3">
+
+    <div class="col">
+        <a href="{% url "dashboard:dashboard" %}" class="btn btn-outline-info m-1">Gestion des utilisateurs</a>
+        <a href="{% url "dashboard:home" %}" class="btn btn-outline-secondary m-1">Gestion des progressions</a>
+    </div>
+
+    <h2 class="mb-3 mb-md-4">{{ section_title }}</h2>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner-border text-light" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Chargement...</span>
+        </div>
+    </div>
+    
+    <!-- ==================== 1. STATISTICS CARDS ==================== -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card dashboard-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted mb-1">Total Utilisateurs</h6>
+                            <h3 class="stat-number mb-0">{{ total_users }}</h3>
+                            <small class="{% if user_growth > 0 %}growth-positive{% else %}growth-negative{% endif %}">
+                                {% if user_growth > 0 %}↑{% else %}↓{% endif %} 
+                                {% if user_growth > 0 %}+{% endif %}{{ user_growth|floatformat:1 }}%
+                            </small>
+                            <small class="text-muted">vs mois dernier</small>
+                        </div>
+                        <div><i class="fas fa-users fa-2x text-primary"></i></div>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            📈 Nouveaux ce mois: <strong>{{ new_users_month }}</strong>
+                            {% if new_users_month > 0 %}
+                            <span class="text-success">({{ new_users_month }} inscrits)</span>
+                            {% endif %}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card dashboard-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted mb-1">Étudiants</h6>
+                            <h3 class="stat-number mb-0">{{ total_students }}</h3>
+                            <small class="text-muted">{{ student_stats.active_students }} actifs</small>
+                        </div>
+                        <div><i class="fas fa-graduation-cap fa-2x text-info"></i></div>
+                    </div>
+                    <div class="mt-2">
+                        <div class="progress" style="height: 4px;">
+                            <div class="progress-bar bg-info" style="width: {% widthratio student_stats.active_students total_students 100 %}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card dashboard-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted mb-1">Personnel</h6>
+                            <h3 class="stat-number mb-0">{{ total_staff }}</h3>
+                            <small class="text-muted">Enseignants & Staff</small>
+                        </div>
+                        <div><i class="fas fa-chalkboard-teacher fa-2x text-warning"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card dashboard-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-muted mb-1">Activité (90j)</h6>
+                            <h3 class="stat-number mb-0">{{ active_users }}</h3>
+                            <small class="text-muted">
+                                {% if inactive_users > 0 %}
+                                {{ inactive_users }} inactifs
+                                {% else %}
+                                Tous actifs
+                                {% endif %}
+                            </small>
+                        </div>
+                        <div><i class="fas fa-user-check fa-2x text-success"></i></div>
+                    </div>
+                    <div class="mt-2">
+                        <div class="progress" style="height: 4px;">
+                            <div class="progress-bar bg-success" style="width: {% widthratio active_users total_users 100 %}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ==================== 2. FILTER SECTION ==================== -->
+    <div class="filter-section">
+        <div class="row">
+            <div class="col-12 mb-3">
+                <label class="fw-bold mb-2">👥 Rôle</label>
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-sm filter-badge {% if current_role_filter == 'all' %}btn-primary active{% else %}btn-outline-secondary{% endif %}" 
+                            data-filter="role" data-value="all">
+                        Tous <span class="badge bg-light text-dark ms-1">{{ filter_counts.all }}</span>
+                    </button>
+                    <button class="btn btn-sm filter-badge {% if current_role_filter == 'student' %}btn-primary active{% else %}btn-outline-secondary{% endif %}" 
+                            data-filter="role" data-value="student">
+                        Étudiants <span class="badge bg-light text-dark ms-1">{{ filter_counts.student }}</span>
+                    </button>
+                    <button class="btn btn-sm filter-badge {% if current_role_filter == 'staff' %}btn-primary active{% else %}btn-outline-secondary{% endif %}" 
+                            data-filter="role" data-value="staff">
+                        Personnel <span class="badge bg-light text-dark ms-1">{{ filter_counts.staff }}</span>
+                    </button>
+                    <button class="btn btn-sm filter-badge {% if current_role_filter == 'admin' %}btn-primary active{% else %}btn-outline-secondary{% endif %}" 
+                            data-filter="role" data-value="admin">
+                        Admins <span class="badge bg-light text-dark ms-1">{{ filter_counts.admin }}</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+                <label class="fw-bold mb-2">📊 Statut</label>
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-sm filter-badge {% if current_status_filter == 'all' %}btn-success active{% else %}btn-outline-secondary{% endif %}" 
+                            data-filter="status" data-value="all">
+                        Tous
+                    </button>
+                    <button class="btn btn-sm filter-badge {% if current_status_filter == 'active' %}btn-success active{% else %}btn-outline-secondary{% endif %}" 
+                            data-filter="status" data-value="active">
+                        Actifs (90j)
+                    </button>
+                    <button class="btn btn-sm filter-badge {% if current_status_filter == 'inactive' %}btn-success active{% else %}btn-outline-secondary{% endif %}" 
+                            data-filter="status" data-value="inactive">
+                        Inactifs (90j)
+                    </button>
+                    <button class="btn btn-sm filter-badge {% if current_status_filter == 'never_logged' %}btn-success active{% else %}btn-outline-secondary{% endif %}" 
+                            data-filter="status" data-value="never_logged">
+                        Jamais connectés
+                    </button>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+                <label class="fw-bold mb-2">📚 Niveau d'étude</label>
+                <select class="form-select form-select-sm" id="levelFilter">
+                    <option value="all" {% if current_level_filter == 'all' %}selected{% endif %}>Tous les niveaux</option>
+                    {% for level in student_level_choices %}
+                    <option value="{{ level.value }}" {% if current_level_filter == level.value %}selected{% endif %}>
+                        {{ level.label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div class="row mt-2">
+            <div class="col-md-8 mb-2 mb-md-0">
+                <div class="search-box">
+                    <input type="text" class="form-control" id="searchInput" 
+                           placeholder="🔍 Rechercher par nom, email, téléphone..." 
+                           value="{{ current_search }}">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-outline-danger w-100" id="resetFiltersBtn">
+                    <i class="fas fa-undo-alt"></i> Réinitialiser
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ==================== 3. CHARTS SECTION - RESPONSIVE SIZING ==================== -->
+    <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header py-2">
+                    <h6 class="mb-0">Distribution par Rôle</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="roleChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Monthly Trends Chart with better configuration -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header py-2">
+                    <h6 class="mb-0">📊 Inscriptions Mensuelles (6 derniers mois)</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                    {% if monthly_data %}
+                    <div class="text-center mt-2">
+                        <small class="text-muted">
+                            Total inscriptions: 
+                            {% with total=0 %}
+                                {% for count in monthly_data %}
+                                    {% with total=total|add:count %}
+                                    {% endwith %}
+                                {% endfor %}
+                            {% endwith %}
+                            {{ monthly_data|join:"+" }}
+                        </small>
+                    </div>
+                    {% endif %}
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ==================== 4. STUDENT STATS SECTION ==================== -->
+    {% if total_students > 0 %}
+    <div class="row mb-4">
+        <div class="col-lg-5 mb-4">
+            <div class="card h-100">
+                <div class="card-header py-2">
+                    <h6 class="mb-0">Étudiants par Niveau</h6>
+                </div>
+                <div class="card-body">
+                    {% if student_level_labels %}
+                    <div class="chart-container">
+                        <canvas id="studentLevelChart"></canvas>
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center py-4">Aucune donnée disponible</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-7 mb-4">
+            <div class="card h-100">
+                <div class="card-header py-2">
+                    <h6 class="mb-0">Aperçu des Étudiants</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <h4 class="text-info">{{ student_stats.profile_completion }}%</h4>
+                            <small class="text-muted">Profils complets</small>
+                            <div class="progress mt-2" style="height: 8px;">
+                                <div class="progress-bar bg-info" role="progressbar" 
+                                     style="width: {{ student_stats.profile_completion }}%"></div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-success">{{ student_stats.active_students }}/{{ total_students }}</h4>
+                            <small class="text-muted">Étudiants actifs</small>
+                        </div>
+                    </div>
+                    
+                    {% if students_by_institution %}
+                    <hr>
+                    <h6 class="mt-3">🏛️ Top Établissements</h6>
+                    <div class="row">
+                        {% for inst in students_by_institution %}
+                        <div class="col-md-6 mb-2">
+                            <small><i class="fas fa-university me-1"></i> {{ inst.institution|default:"Non spécifié" }}: <strong>{{ inst.count }}</strong></small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- ==================== 5. ACTIVITY SUMMARY ==================== -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header py-2">
+                    <h6 class="mb-0">📈 Résumé d'Activité</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 col-6 mb-2">
+                            <h5 class="text-primary mb-0">{{ activity_summary.weekly_active }}</h5>
+                            <small class="text-muted">Actifs (7 jours)</small>
+                        </div>
+                        <div class="col-md-3 col-6 mb-2">
+                            <h5 class="text-warning mb-0">{{ activity_summary.inactive_thirty_days }}</h5>
+                            <small class="text-muted">Inactifs (30+ jours)</small>
+                        </div>
+                        <div class="col-md-3 col-6 mb-2">
+                            <h5 class="text-danger mb-0">{{ activity_summary.never_logged_in }}</h5>
+                            <small class="text-muted">Jamais connectés</small>
+                        </div>
+                        <div class="col-md-3 col-6 mb-2">
+                            <h5 class="text-secondary mb-0">{{ activity_summary.total_inactive }}</h5>
+                            <small class="text-muted">Total inactifs (90j)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ==================== 6. USERS TABLE ==================== -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header py-2 d-flex justify-content-between align-items-center flex-wrap">
+                    <h6 class="mb-0">👥 Liste des Utilisateurs</h6>
+                    <div>
+                        <span class="badge bg-secondary" id="userCount">{{ users_page.paginator.count }}</span>
+                        <span class="text-muted ms-1">utilisateurs</span>
+                    </div>
+                </div>
+                {% comment %} <div id="usersTableContainer">
+                    {% include "dashboard/partials/user_section_table_only.html" %}
+                </div> {% endcomment %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Detail Modal -->
+<div class="modal fade" id="userDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Détails de l'utilisateur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="userDetailContent">
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-primary" id="editFromModalBtn">Modifier</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let roleChart, trendChart, studentLevelChart;
+    let currentFilters = {
+        role: '{{ current_role_filter }}',
+        status: '{{ current_status_filter }}',
+        level: '{{ current_level_filter }}',
+        search: '{{ current_search }}',
+        page: 1
+    };
+    
+    // Initialize charts with proper sizing
+    function initCharts() {
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { boxWidth: 10, font: { size: 11 } }
+                },
+                tooltip: { bodyFont: { size: 12 } }
+            }
+        };
+        
+        // Role Distribution Chart
+        const roleCtx = document.getElementById('roleChart').getContext('2d');
+        if (roleChart) roleChart.destroy();
+        roleChart = new Chart(roleCtx, {
+            type: 'pie',
+            data: {
+                labels: {{ role_distribution_labels|safe }},
+                datasets: [{
+                    data: {{ role_distribution_data|safe }},
+                    backgroundColor: {{ role_distribution_colors|safe }},
+                    borderWidth: 1
+                }]
+            },
+            options: chartOptions
+        });
+        
+        // Monthly Trends Chart
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        if (trendChart) trendChart.destroy();
+        trendChart = new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: {{ monthly_labels|safe }},
+                datasets: [{
+                    label: 'Nouvelles inscriptions',
+                    data: {{ monthly_data|safe }},
+                    borderColor: '#36A2EB',
+                    backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    pointRadius: 3,
+                    pointHoverRadius: 5
+                }]
+            },
+            options: {
+                ...chartOptions,
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+        
+        {% if student_level_labels %}
+        const levelCtx = document.getElementById('studentLevelChart').getContext('2d');
+        if (studentLevelChart) studentLevelChart.destroy();
+        studentLevelChart = new Chart(levelCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ student_level_labels|safe }},
+                datasets: [{
+                    label: "Nombre d'étudiants",
+                    data: {{ student_level_counts|safe }},
+                    backgroundColor: '#36A2EB',
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                ...chartOptions,
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } }
+                }
+            }
+        });
+        {% endif %}
+    }
+    
+    // Show/hide loading
+    function showLoading() {
+        document.getElementById('loadingOverlay').classList.add('active');
+    }
+    
+    function hideLoading() {
+        document.getElementById('loadingOverlay').classList.remove('active');
+    }
+    
+    // Update filters with AJAX
+    function updateFilters() {
+        showLoading();
+        
+        const params = new URLSearchParams({
+            role: currentFilters.role,
+            status: currentFilters.status,
+            level: currentFilters.level,
+            search: currentFilters.search,
+            page: currentFilters.page
+        });
+        
+        fetch(`/dashboard/user-section/?${params.toString()}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('usersTableContainer').innerHTML = data.html;
+                document.getElementById('userCount').innerText = data.total_count;
+                
+                // Update URL without reload
+                const url = new URL(window.location.href);
+                url.search = params.toString();
+                window.history.pushState({}, '', url);
+                
+                // Update active button states
+                updateActiveButtons();
+            }
+            hideLoading();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            hideLoading();
+            // Fallback: reload page
+            window.location.reload();
+        });
+    }
+    
+    function updateActiveButtons() {
+        // Update role filters
+        document.querySelectorAll('[data-filter="role"]').forEach(btn => {
+            if (btn.dataset.value === currentFilters.role) {
+                btn.classList.add('btn-primary', 'active');
+                btn.classList.remove('btn-outline-secondary');
+            } else {
+                btn.classList.remove('btn-primary', 'active');
+                btn.classList.add('btn-outline-secondary');
+            }
+        });
+        
+        // Update status filters
+        document.querySelectorAll('[data-filter="status"]').forEach(btn => {
+            if (btn.dataset.value === currentFilters.status) {
+                btn.classList.add('btn-success', 'active');
+                btn.classList.remove('btn-outline-secondary');
+            } else {
+                btn.classList.remove('btn-success', 'active');
+                btn.classList.add('btn-outline-secondary');
+            }
+        });
+    }
+    
+    // Event listeners
+    document.querySelectorAll('[data-filter="role"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentFilters.role = btn.dataset.value;
+            currentFilters.page = 1;
+            updateFilters();
+        });
+    });
+    
+    document.querySelectorAll('[data-filter="status"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentFilters.status = btn.dataset.value;
+            currentFilters.page = 1;
+            updateFilters();
+        });
+    });
+    
+    document.getElementById('levelFilter').addEventListener('change', (e) => {
+        currentFilters.level = e.target.value;
+        currentFilters.page = 1;
+        updateFilters();
+    });
+    
+    let searchTimeout;
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            currentFilters.search = e.target.value;
+            currentFilters.page = 1;
+            updateFilters();
+        }, 500);
+    });
+    
+    document.getElementById('resetFiltersBtn').addEventListener('click', () => {
+        currentFilters = {
+            role: 'all',
+            status: 'all',
+            level: 'all',
+            search: '',
+            page: 1
+        };
+        document.getElementById('searchInput').value = '';
+        document.getElementById('levelFilter').value = 'all';
+        updateFilters();
+    });
+    
+    // Pagination handling
+    document.addEventListener('click', (e) => {
+        const pageLink = e.target.closest('.page-link');
+        if (pageLink && pageLink.dataset.page) {
+            e.preventDefault();
+            currentFilters.page = parseInt(pageLink.dataset.page);
+            updateFilters();
+        }
+    });
+    
+    // User functions
+    window.viewUser = function(userId) {
+        const modal = new bootstrap.Modal(document.getElementById('userDetailModal'));
+        document.getElementById('userDetailContent').innerHTML = `
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary"></div>
+                <p class="mt-2">Chargement des détails...</p>
+            </div>
+        `;
+        modal.show();
+        
+        // Fetch user details (customize this endpoint)
+        fetch(`/admin/utilisateur/user/${userId}/`)
+            .then(response => response.text())
+            .then(html => {
+                // Extract relevant info or show simplified view
+                document.getElementById('userDetailContent').innerHTML = `
+                    <p><strong>ID Utilisateur:</strong> ${userId}</p>
+                    <p class="text-muted">Page d'administration disponible</p>
+                    <a href="/admin/utilisateur/user/${userId}/change/" class="btn btn-sm btn-primary">
+                        Accéder à l'admin
+                    </a>
+                `;
+            });
+    };
+    
+    window.editUser = function(userId) {
+        window.location.href = `/admin/utilisateur/user/${userId}/change/`;
+    };
+    
+    window.toggleUserStatus = function(userId) {
+        if (confirm('Voulez-vous activer/désactiver cet utilisateur ?')) {
+            // You'll need to implement this endpoint
+            alert('Fonctionnalité à implémenter');
+        }
+    };
+    
+    document.getElementById('editFromModalBtn').addEventListener('click', () => {
+        // Implement edit from modal
+    });
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        initCharts();
+        
+        // Handle window resize to redraw charts
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (roleChart) roleChart.resize();
+                if (trendChart) trendChart.resize();
+                if (studentLevelChart) studentLevelChart.resize();
+            }, 250);
+        });
+    });
+</script>
+{% endblock %}

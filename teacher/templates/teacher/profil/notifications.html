@@ -1,0 +1,41 @@
+<!-- teacher/templates/teacher/profil/notifications.html -->
+{% extends 'base.html' %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <i class="fas fa-bell me-2"></i>Préférences de notification
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Activé</th>
+                            <th>Email</th>
+                            <th>SMS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pref in notification_prefs %}
+                        <tr>
+                            <td>{{ pref.get_notification_type_display }}</td>
+                            <td><input type="checkbox" name="is_enabled_{{ pref.notification_type }}" {% if pref.is_enabled %}checked{% endif %} class="form-check-input"></td>
+                            <td><input type="checkbox" name="send_email_{{ pref.notification_type }}" {% if pref.send_email %}checked{% endif %} class="form-check-input"></td>
+                            <td><input type="checkbox" name="send_sms_{{ pref.notification_type }}" {% if pref.send_sms %}checked{% endif %} class="form-check-input"></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'teacher:profil_index' %}" class="btn btn-secondary">Retour</a>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

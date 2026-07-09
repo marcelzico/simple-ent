@@ -1,0 +1,349 @@
+{% if user.is_superuser %}
+<!-- ========== MAIN DASHBOARD ========== -->
+<div class="nav-section">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-tachometer-alt me-1"></i> Principal
+        </small>
+    </div>
+    
+    <a href="{% url 'lecon:subject_list' %}" class="nav-link">
+        <i class="fas fa-book me-2"></i>
+        <span>Leçons</span>
+    </a>
+    
+    <a href="{% url 'utilisateur:member' %}" class="nav-link">
+        <i class="fas fa-users me-2"></i>
+        <span>Membres</span>
+    </a>
+    
+    <a href="{% url 'lecon:ue_list' %}" class="nav-link">
+        <i class="fas fa-layer-group me-2"></i>
+        <span>Unités d'Enseignement</span>
+    </a>
+</div>
+
+<!-- ========== JOURNAL SECTION ========== -->
+<div class="nav-section mt-3">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-book-open me-1"></i> Journal
+        </small>
+    </div>
+    
+    <a href="#DiaryCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="DiaryCollapse">
+        <i class="fas fa-journal-whills me-2"></i>
+        <span>Mon journal</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="DiaryCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'journal:home' %}" class="nav-link">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                <span>Tableau de bord</span>
+            </a>
+            <a href="{% url 'journal:entry_create' %}" class="nav-link">
+                <i class="fas fa-plus-circle me-2"></i>
+                <span>Nouvelle entrée</span>
+            </a>
+            <a href="{% url 'journal:calendar' %}" class="nav-link">
+                <i class="fas fa-calendar-alt me-2"></i>
+                <span>Calendrier</span>
+            </a>
+            <a href="{% url 'journal:study_dashboard' %}" class="nav-link">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span>Tableau d'étude</span>
+            </a>
+            <a href="{% url 'journal:clinical_timeline' %}" class="nav-link">
+                <i class="fas fa-stethoscope me-2"></i>
+                <span>Stage clinique</span>
+            </a>
+            <a href="{% url 'journal:clinical_skill_list' %}" class="nav-link">
+                <i class="fas fa-clinic-medical me-2"></i>
+                <span>Compétences cliniques</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========== CLINICAL CASES SECTION ========== -->
+<div class="nav-section mt-3">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-stethoscope me-1"></i> Cas Cliniques
+        </small>
+    </div>
+    
+    <a href="#ClinicalCaseCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="ClinicalCaseCollapse">
+        <i class="fas fa-briefcase-medical me-2"></i>
+        <span>Cas cliniques</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="ClinicalCaseCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'clinical_case_simple:enonce_list' %}" class="nav-link">
+                <i class="fas fa-list me-2"></i>
+                <span>Liste des énoncés</span>
+            </a>
+            <a href="{% url 'clinical_case_simple:enonce_create' %}" class="nav-link">
+                <i class="fas fa-plus-circle me-2"></i>
+                <span>Créer un cas</span>
+            </a>
+            <a href="{% url 'clinical_case_simple:exam_list' %}" class="nav-link">
+                <i class="fas fa-file-excel me-2"></i>
+                <span>Liste des examens</span>
+            </a>
+            <a href="{% url 'clinical_case_simple:exam_history' %}" class="nav-link">
+                <i class="fas fa-history me-2"></i>
+                <span>Historiques</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========== FLASHCARDS SECTION ========== -->
+<div class="nav-section mt-3">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-brain me-1"></i> Cartes Mentales
+        </small>
+    </div>
+    
+    <a href="#flashcardsCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="flashcardsCollapse">
+        <i class="fas fa-layer-group me-2"></i>
+        <span>Cartes mentales</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="flashcardsCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'quizlet_copy:home' %}" class="nav-link">
+                <i class="fas fa-globe me-2"></i>
+                <span>Publiques</span>
+            </a>
+            <a href="{% url 'quizlet_copy:my-sets' %}" class="nav-link">
+                <i class="fas fa-user me-2"></i>
+                <span>Personnelles</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========== SEARCH SECTION ========== -->
+<div class="nav-section mt-3">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-search me-1"></i> Recherche
+        </small>
+    </div>
+    
+    <a href="#RechercheCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="RechercheCollapse">
+        <i class="fas fa-search me-2"></i>
+        <span>Rechercher</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="RechercheCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'lecon:heading_search' %}" class="nav-link">
+                <i class="fas fa-heading me-2"></i>
+                <span>Rechercher un titre</span>
+            </a>
+            <a href="{% url 'lecon:content_search' %}" class="nav-link">
+                <i class="fas fa-file-alt me-2"></i>
+                <span>Rechercher des contenus</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========== RESULTS SECTION ========== -->
+<div class="nav-section mt-3">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-chart-simple me-1"></i> Résultats
+        </small>
+    </div>
+    
+    <a href="#resultsCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="resultsCollapse">
+        <i class="fas fa-chart-line me-2"></i>
+        <span>Résultats</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="resultsCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'quizzes:mcq_quiz_results' %}" class="nav-link">
+                <i class="fas fa-file-alt me-2"></i>
+                <span>Examens QCM</span>
+            </a>
+            <a href="{% url 'quizzes:qa_quiz_results' %}" class="nav-link">
+                <i class="fas fa-file-alt me-2"></i>
+                <span>Examens Q&R</span>
+            </a>
+            <a href="{% url 'quizzes:mcq_results' %}" class="nav-link">
+                <i class="fas fa-question-circle me-2"></i>
+                <span>QCM</span>
+            </a>
+            <a href="{% url 'quizzes:qa_results' %}" class="nav-link">
+                <i class="fas fa-comments me-2"></i>
+                <span>Q&R</span>
+            </a>
+            <a href="{% url 'quizzes:tf_results' %}" class="nav-link">
+                <i class="fas fa-check-double me-2"></i>
+                <span>Vrai ou Faux</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========== SUBSCRIPTIONS SECTION ========== -->
+<div class="nav-section mt-3">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-credit-card me-1"></i> Abonnements
+        </small>
+    </div>
+    
+    <a href="#subscriptionCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="subscriptionCollapse">
+        <i class="fas fa-crown me-2"></i>
+        <span>Abonnements</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="subscriptionCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'subscriptions:admin_dashboard' %}" class="nav-link">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="{% url 'subscriptions:subscription_list' %}" class="nav-link">
+                <i class="fas fa-list me-2"></i>
+                <span>Liste abonnements</span>
+            </a>
+            <a href="{% url 'subscriptions:payment_list' %}" class="nav-link">
+                <i class="fas fa-money-bill-alt me-2"></i>
+                <span>Liste paiements</span>
+            </a>
+            <a href="{% url 'subscriptions:feature_management' %}" class="nav-link">
+                <i class="fas fa-cogs me-2"></i>
+                <span>Fonctionnalités</span>
+            </a>
+            <a href="{% url 'subscriptions:usage_audit' %}" class="nav-link">
+                <i class="fas fa-chart-line me-2"></i>
+                <span>Audit</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========== FEEDBACK SECTION ========== -->
+<div class="nav-section mt-3">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-star me-1"></i> Feedback
+        </small>
+    </div>
+    
+    <a href="#feedbackCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="feedbackCollapse">
+        <i class="fas fa-comment-dots me-2"></i>
+        <span>Feedback</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="feedbackCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'feedback:submit_feedback' %}" class="nav-link">
+                <i class="fas fa-pen me-2"></i>
+                <span>Créer Feedback</span>
+            </a>
+            <a href="{% url 'feedback:feedback_list' %}" class="nav-link">
+                <i class="fas fa-list me-2"></i>
+                <span>Liste</span>
+            </a>
+            <a href="{% url 'feedback:feedback_analytics' %}" class="nav-link">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span>Analyses</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========== DOCUMENT MANAGEMENT SECTION ========== -->
+<div class="nav-section mt-3">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-file-alt me-1"></i> Gestion Documents
+        </small>
+    </div>
+    
+    <a href="#documentCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="documentCollapse">
+        <i class="fas fa-folder-open me-2"></i>
+        <span>Manipulation documents</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="documentCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'bulk_import:dashboard' %}" class="nav-link">
+                <i class="fas fa-upload me-2"></i>
+                <span>Importer des documents</span>
+            </a>
+            <a href="{% url 'bulk_import:level_list' %}" class="nav-link">
+                <i class="fas fa-layer-group me-2"></i>
+                <span>Niveaux</span>
+            </a>
+            <a href="{% url 'handler:upload_document' %}" class="nav-link">
+                <i class="fas fa-file-upload me-2"></i>
+                <span>Importer Handler</span>
+            </a>
+            <a href="{% url 'handler:document_list' %}" class="nav-link">
+                <i class="fas fa-list me-2"></i>
+                <span>Liste Handler</span>
+            </a>
+            <a href="{% url 'handler:level_list' %}" class="nav-link">
+                <i class="fas fa-tags me-2"></i>
+                <span>Niveau Handler</span>
+            </a>
+            <a href="{% url 'img_to_pdf:home' %}" class="nav-link">
+                <i class="fas fa-file-image me-2"></i>
+                <span>Image en PDF</span>
+            </a>
+            <a href="{% url 'pdf_pptx_to_word:upload_document' %}" class="nav-link">
+                <i class="fas fa-file-pdf me-2"></i>
+                <span>Convertir en PDF</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ========== HEADING MANIPULATION SECTION ========== -->
+<div class="nav-section mt-3">
+    <div class="nav-section-header px-3 py-2">
+        <small class="text-uppercase fw-semibold text-white-50">
+            <i class="fas fa-heading me-1"></i> Manipulation Titres
+        </small>
+    </div>
+    
+    <a href="#headingCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="headingCollapse">
+        <i class="fas fa-heading me-2"></i>
+        <span>Titres</span>
+        <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
+    </a>
+    <div class="collapse" id="headingCollapse">
+        <div class="collapse-inner">
+            <a href="{% url 'heading_manipulation:home' %}" class="nav-link">
+                <i class="fas fa-home me-2"></i>
+                <span>Accueil</span>
+            </a>
+            <a href="{% url 'heading_manipulation:upload_document' %}" class="nav-link">
+                <i class="fas fa-upload me-2"></i>
+                <span>Upload document</span>
+            </a>
+            <a href="{% url 'heading_manipulation:upload_multiple' %}" class="nav-link">
+                <i class="fas fa-files me-2"></i>
+                <span>Upload multiple</span>
+            </a>
+            <a href="{% url 'heading_manipulation:batch_results' %}" class="nav-link">
+                <i class="fas fa-chart-bar me-2"></i>
+                <span>Résultats batch</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endif %}

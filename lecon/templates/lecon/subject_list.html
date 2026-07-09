@@ -1,0 +1,482 @@
+{% extends 'base.html' %}
+
+{% block title %}Mes unités d'enseignement{% endblock title %}
+
+{% block appnav %}
+<li class="breadcrumb-item" >
+    <a href="{% url "utilisateur:dashboard" %}">Tableau de bord</a>
+</li>
+<li class="breadcrumb-item active">Liste UE</li>
+{% endblock appnav %}
+
+{% block content %}
+
+<div class="container-fluid py-3">
+    {% comment %} <h2 class="h3 mb-4">Liste des unités d'enseignement</h2> {% endcomment %}
+    
+    {% if request.user.is_staff %}
+
+        <!-- Navigation Buttons -->
+        <div class="row g-2 mb-4" id="top">
+
+            <a href="{% url 'lessoncopy:bulk_import_chapter_data_path' %}" class="btn btn-secondary flex-fill flex-md-grow-0">
+                <i class="fas fa-plus me-1"></i>
+                <span class="d-none d-sm-inline">Bulk Données</span>Chapitres
+            </a>
+
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <a href="#niv-1" class="btn btn-secondary w-100 py-2">PACES</a>
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <a href="#niv-2" class="btn btn-secondary w-100 py-2">2ème année</a>
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <a href="#niv-3" class="btn btn-secondary w-100 py-2">3ème année</a>
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <a href="#niv-4" class="btn btn-secondary w-100 py-2">4ème année</a>
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <a href="#niv-5" class="btn btn-secondary w-100 py-2">5ème année</a>
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <a href="#niv-6" class="btn btn-secondary w-100 py-2">6ème année</a>
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <a href="#niv-7" class="btn btn-secondary w-100 py-2">Prépa IQ</a>
+            </div>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <a href="#niv-8" class="btn btn-secondary w-100 py-2">Spécialités</a>
+            </div>
+        </div>
+
+        <!-- PACES Section -->
+        <div class="year-section mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h4 text-danger mb-0" id="niv-1">PACES</h3>
+                <span class="badge bg-danger">{{ paces.count }} UE</span>
+            </div> 
+            <div class="row g-3">
+                {% for subject in paces %}
+                <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title h6">{{ subject.title }}</h5>
+                            <p class="card-text small text-muted">{{ subject.description|truncatechars:100 }}</p>
+                            <div class="subject-meta small text-muted">
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ subject.unite_section.count }} sections</span>
+                                    <span>{{ subject.chapters.count }} chapitres</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'lecon:subject_detail' subject.id %}" class="btn btn-primary btn-sm w-100">Voir</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-book me-2"></i>Aucune unité d'enseignement disponible en PACES.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Deuxième année Section -->
+        <div class="year-section mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h4 text-danger mb-0" id="niv-2">Deuxième année</h3>
+                <span class="badge bg-danger">{{ deuxieme.count }} UE</span>
+            </div>
+            <div class="row g-3">
+                {% for subject in deuxieme %}
+                <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title h6">{{ subject.title }}</h5>
+                            <p class="card-text small text-muted">{{ subject.description|truncatechars:100 }}</p>
+                            <div class="subject-meta small text-muted">
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ subject.unite_section.count }} sections</span>
+                                    <span>{{ subject.chapters.count }} chapitres</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'lecon:subject_detail' subject.id %}" class="btn btn-primary btn-sm w-100">Voir</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-book me-2"></i>Aucune unité d'enseignement disponible en 2ème année.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Troisième année Section -->
+        <div class="year-section mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h4 text-danger mb-0" id="niv-3">Troisième année</h3>
+                <span class="badge bg-danger">{{ troisieme.count }} UE</span>
+            </div>
+            <div class="row g-3">
+                {% for subject in troisieme %}
+                <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title h6">{{ subject.title }}</h5>
+                            <p class="card-text small text-muted">{{ subject.description|truncatechars:100 }}</p>
+                            <div class="subject-meta small text-muted">
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ subject.unite_section.count }} sections</span>
+                                    <span>{{ subject.chapters.count }} chapitres</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'lecon:subject_detail' subject.id %}" class="btn btn-primary btn-sm w-100">Voir</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-book me-2"></i>Aucune unité d'enseignement disponible en 3ème année.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Quatrième année Section -->
+        <div class="year-section mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h4 text-danger mb-0" id="niv-4">Quatrième année</h3>
+                <span class="badge bg-danger">{{ quatrieme.count }} UE</span>
+            </div>
+            <div class="row g-3">
+                {% for subject in quatrieme %}
+                <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title h6">{{ subject.title }}</h5>
+                            <p class="card-text small text-muted">{{ subject.description|truncatechars:100 }}</p>
+                            <div class="subject-meta small text-muted">
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ subject.unite_section.count }} sections</span>
+                                    <span>{{ subject.chapters.count }} chapitres</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'lecon:subject_detail' subject.id %}" class="btn btn-primary btn-sm w-100">Voir</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-book me-2"></i>Aucune unité d'enseignement disponible en 4ème année.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Cinquième année Section -->
+        <div class="year-section mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h4 text-danger mb-0" id="niv-5">Cinquième année</h3>
+                <span class="badge bg-danger">{{ cinquieme.count }} UE</span>
+            </div>
+            <div class="row g-3">
+                {% for subject in cinquieme %}
+                <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title h6">{{ subject.title }}</h5>
+                            <p class="card-text small text-muted">{{ subject.description|truncatechars:100 }}</p>
+                            <div class="subject-meta small text-muted">
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ subject.unite_section.count }} sections</span>
+                                    <span>{{ subject.chapters.count }} chapitres</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'lecon:subject_detail' subject.id %}" class="btn btn-primary btn-sm w-100">Voir</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-book me-2"></i>Aucune unité d'enseignement disponible en 5ème année.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Sixième année Section -->
+        <div class="year-section mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h4 text-danger mb-0" id="niv-6">Sixième année</h3>
+                <span class="badge bg-danger">{{ sixieme.count }} UE</span>
+            </div>
+            <div class="row g-3">
+                {% for subject in sixieme %}
+                <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title h6">{{ subject.title }}</h5>
+                            <p class="card-text small text-muted">{{ subject.description|truncatechars:100 }}</p>
+                            <div class="subject-meta small text-muted">
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ subject.unite_section.count }} sections</span>
+                                    <span>{{ subject.chapters.count }} chapitres</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'lecon:subject_detail' subject.id %}" class="btn btn-primary btn-sm w-100">Voir</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-book me-2"></i>Aucune unité d'enseignement disponible en 6ème année.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Prépa IQ Section -->
+        <div class="year-section mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h4 text-danger mb-0" id="niv-7">Préparation du concours d'Internat Qualifiant</h3>
+                <span class="badge bg-danger">{{ prepaIQ.count }} UE</span>
+            </div>
+            <div class="row g-3">
+                {% for subject in prepaIQ %}
+                <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title h6">{{ subject.title }}</h5>
+                            <p class="card-text small text-muted">{{ subject.description|truncatechars:100 }}</p>
+                            <div class="subject-meta small text-muted">
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ subject.unite_section.count }} sections</span>
+                                    <span>{{ subject.chapters.count }} chapitres</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'lecon:subject_detail' subject.id %}" class="btn btn-primary btn-sm w-100">Voir</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-book me-2"></i>Aucune unité d'enseignement disponible en 6ème année.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Autres Section -->
+        <div class="year-section mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h4 text-danger mb-0" id="niv-8">Organisation par discipline</h3>
+                <span class="badge bg-danger">{{ autre.count }} Items</span>
+            </div>
+            <div class="row g-3">
+                {% for subject in autre %}
+                <div class="col-12 col-sm-6 col-xl-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title h6">{{ subject.title }}</h5>
+                            <p class="card-text small text-muted">{{ subject.description|truncatechars:100 }}</p>
+                            <div class="subject-meta small text-muted">
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ subject.unite_section.count }} sections</span>
+                                    <span>{{ subject.chapters.count }} chapitres</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'lecon:subject_detail' subject.id %}" class="btn btn-primary btn-sm w-100">Voir</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-book me-2"></i>Aucune unité d'enseignement disponible en 6ème année.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% elif request.user.is_staff %}
+        <!-- Teacher and Student View -->
+        <div class="row g-3">
+            {% for subject in subjects %}
+            <div class="col-12 col-sm-6 col-xl-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title h6">{{ subject.title }}</h5>
+                        <p class="card-text small text-muted">{{ subject.description|truncatechars:100 }}</p>
+                        <div class="subject-meta small text-muted">
+                            <div class="d-flex justify-content-between">
+                                <span>{{ subject.unite_section.count }} sections</span>
+                                <span>{{ subject.chapters.count }} chapitres</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="{% url 'lecon:subject_detail' subject.id %}" class="btn btn-primary btn-sm w-100">Voir</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-book me-2"></i>Aucune unité d'enseignement disponible.
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    {% elif request.user.is_student %}
+        <!-- Teacher and Student View -->
+        <div class="row g-3">
+            {% for subject in subjects %}
+            <div class="col-12 col-sm-6 col-xl-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title h6">{{ subject.title }}</h5>
+                        <p class="card-text small text-muted">{{ subject.description|truncatechars:100 }}</p>
+                        <div class="subject-meta small text-muted">
+                            <div class="d-flex justify-content-between">
+                                <span>{{ subject.unite_section.count }} sections</span>
+                                <span>{{ subject.active_chapter_count }} chapitres</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        {% if request.user.is_superuser or request.user.is_staff or request.user.is_teacher %}
+                            <a href="{% url 'lecon:subject_detail' subject.id %}" class="btn btn-primary btn-sm w-100">Voir</a>
+                        {% elif request.user.is_student %}
+                            <a href="{% url 'lecon:subject_detail_student' subject.id %}" class="btn btn-primary btn-sm w-100">Voir</a>
+                        {% else %}
+                            <p>Vous n'avez pas le droit de voir les contenus de cet Unité d'enseignement.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-book me-2"></i>Aucune unité d'enseignement disponible.
+                </div>
+                {% if request.user.is_student %}
+                    {% if enrollment %} 
+                        {% for enroll in enrollment %}
+                        <div class="card p-3 mt-3 text-center">
+                            <i class="fas fa-clock fa-2x text-warning mb-2"></i>
+                            <p class="lead mb-2">Demande d'inscription déjà envoyée, en attente de l'approbation de l'admin.</p>
+                            <p class="mb-1">Statut : <b>{{ enroll.status }}</b></p>
+                            <p class="mb-0">Demandé le : <b>{{ enroll.requested_at }}</b></p>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <!-- Other Users -->
+        <div class="alert alert-warning text-center">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Aucune unité d'enseignement disponible pour votre niveau d'étude ou votre profil actuel.
+        </div>
+    {% endif %}
+
+</div>
+
+{% if request.user.is_superuser %}
+<div class="container-fluid">
+    <div class="text-center mt-3">
+        <a href="#top" class="btn btn-info">
+            <i class="fas fa-arrow-up me-2"></i>Aller en haut
+        </a>
+    </div>
+</div>
+{% endif %}
+
+<style>
+    .year-section {
+        scroll-margin-top: 80px;
+    }
+
+    .subject-meta {
+        border-top: 1px solid #e9ecef;
+        padding-top: 0.75rem;
+        margin-top: 0.75rem;
+    }
+
+    .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+    }
+
+    /* Responsive improvements */
+    @media (max-width: 576px) {
+        .container-fluid {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+        .card-body {
+            padding: 1rem;
+        }
+        
+        .btn {
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    /* Better spacing for mobile */
+    @media (max-width: 768px) {
+        .year-section {
+            margin-bottom: 3rem !important;
+        }
+    }
+</style>
+
+{% endblock %}
+
+
+
+

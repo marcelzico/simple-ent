@@ -1,0 +1,51 @@
+<!-- teacher/templates/teacher/flashcards/cartes.html -->
+{% extends 'base.html' %}
+{% load teacher_extras %}
+{% block title %}Cartes - {{ set.title.title }}{% endblock %}
+{% block content %}
+<div class="fade-in">
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{{ set.title.title }} - {{ set.cards.count }} cartes</h5>
+                <div>
+                    <a href="{% url 'teacher:flashcard_card_create' set.id %}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Ajouter</a>
+                    <a href="{% url 'teacher:flashcard_sets' %}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Retour</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header"><i class="fas fa-layer-group me-2"></i>Liste des cartes</div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Terme / Question</th>
+                        <th>Définition / Réponse</th>
+                        <th>Maîtrisée par</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for card in cards %}
+                    <tr>
+                        <td>{{ card.term|truncatechars:100 }}</td>
+                        <td>{{ card.definition|truncatechars:100 }}</td>
+                        <td>{% with mastered=mastered_stats|get_item:card.id %}{{ mastered|default:0 }} étudiant(s){% endwith %}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'teacher:flashcard_card_edit' card.id %}" class="btn btn-outline-primary"><i class="fas fa-edit"></i></a>
+                                <a href="{% url 'teacher:flashcard_card_delete' card.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}<tr><td colspan="4" class="text-center py-5">Aucune carte dans ce set</td></tr>{% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

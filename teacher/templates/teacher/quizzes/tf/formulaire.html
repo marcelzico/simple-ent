@@ -1,0 +1,39 @@
+<!-- teacher/templates/teacher/quizzes/tf/formulaire.html -->
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="fade-in">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header"><i class="fas fa-check-circle me-2"></i>{{ title }}</div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Question <span class="text-danger">*</span></label>
+                            {{ form.question }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Réponse correcte <span class="text-danger">*</span></label>
+                            {{ form.answer }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Explication</label>
+                            {{ form.explanation }}
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Temps limite (secondes)</label>
+                            {{ form.time_limit }}
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'teacher:tf_list_by_unite' unite.id %}" class="btn btn-secondary">Annuler</a>
+                            <button type="submit" class="btn btn-primary">{{ button_text }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

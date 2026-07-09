@@ -1,0 +1,8 @@
+<h2>Delete Copy</h2>
+<p>Are you sure you want to delete "{{ copy }}"?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, delete</button>
+    <a href="{% url 'lessoncopy:lesson' chapter.ue.id chapter.id %}" class="btn btn-secondary">Cancel</a>
+</form>

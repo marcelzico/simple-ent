@@ -1,0 +1,47 @@
+<!-- teacher/templates/teacher/cas_cliniques/liste.html -->
+{% extends 'base.html' %}
+{% block title %}Cas cliniques{% endblock %}
+{% block content %}
+<div class="fade-in">
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="{% url 'teacher:cas_creer_sans_unite' %}" class="btn btn-primary"><i class="fas fa-plus-circle me-2"></i>Nouveau cas</a>
+                </div>
+                <div class="col-md-8">
+                    <form method="get" class="row g-2">
+                        <div class="col-md-5"><input type="text" name="q" class="form-control" placeholder="Rechercher..." value="{{ search_query }}"></div>
+                        <div class="col-md-4"><select name="publie" class="form-select"><option value="">Tous</option><option value="oui">Publiés</option><option value="non">Non publiés</option></select></div>
+                        <div class="col-md-3"><button type="submit" class="btn btn-secondary w-100"><i class="fas fa-filter"></i> Filtrer</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header"><i class="fas fa-stethoscope me-2"></i>Mes cas cliniques ({{ total_cas }})</div>
+        <div class="card-body p-0">
+            <table class="table">
+                <thead><tr><th>ID</th><th>Sujet</th><th>Spécialité</th><th>Niveau</th><th>Questions</th><th>Statut</th><th>Actions</th></tr></thead>
+                <tbody>
+                    {% for cas in page_obj %}
+                    <tr>
+                        <td>#{{ cas.id }}</td>
+                        <td>{{ cas.anonce_du_sujet|truncatechars:60 }}</td>
+                        <td>{{ cas.specialté|default:"-" }}</td>
+                        <td>{{ cas.get_niveau_cible_display }}</td>
+                        <td>{{ cas.qcm_set.count }}+{{ cas.qestionréponse_set.count }}+{{ cas.vraifaux_set.count }}</td>
+                        <td>{% if cas.publié %}<span class="badge bg-success">Publié</span>{% else %}<span class="badge bg-secondary">Brouillon</span>{% endif %}</td>
+                        <td><div class="btn-group btn-group-sm"><a href="{% url 'teacher:cas_detail' cas.id %}" class="btn btn-outline-info"><i class="fas fa-eye"></i></a><a href="{% url 'teacher:cas_modifier' cas.id %}" class="btn btn-outline-primary"><i class="fas fa-edit"></i></a><a href="{% url 'teacher:cas_supprimer' cas.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i></a></div></td>
+                    </tr>
+                    {% empty %}<tr><td colspan="7" class="text-center py-5"><p>Aucun cas clinique</p><a href="{% url 'teacher:cas_creer_sans_unite' %}" class="btn btn-primary">Créer mon premier cas</a></td></tr>{% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% if page_obj.has_other_pages %}<nav class="mt-3"><ul class="pagination justify-content-center">...</ul></nav>{% endif %}
+</div>
+{% endblock %}
+

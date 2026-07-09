@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Vrai/Faux - Mes questions{% endblock %}
+
+{% block page_title %}
+<h5 class="mb-0">
+    <i class="fas fa-check-circle me-2 text-primary"></i>
+    Questions Vrai/Faux
+    {% if unite %}
+    <span class="badge bg-info ms-2">{{ unite.title }}</span>
+    {% endif %}
+</h5>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    {% if chapitre %}
+                    <a href="{% url 'teacher:tf_create' chapitre.id %}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-2"></i>Nouvelle question
+                    </a>
+                    <a href="{% url 'teacher:chapitres_list' unite.id %}" class="btn btn-secondary ms-2">
+                        <i class="fas fa-arrow-left me-2"></i>Retour
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <form method="get" class="row g-2">
+                        <div class="col-md-8">
+                            <input type="text" name="q" class="form-control" placeholder="Rechercher..." value="{{ search_query }}">
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-secondary w-100"><i class="fas fa-search me-2"></i>Rechercher</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stat-card"><i class="fas fa-database"></i><div class="stat-value">{{ total_tfs }}</div><div class="stat-label">Total questions</div></div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card"><i class="fas fa-chart-line"></i><div class="stat-value">{{ avg_score }}%</div><div class="stat-label">Score moyen</div></div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header"><i class="fas fa-list me-2"></i>Liste des questions Vrai/Faux</div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr><th>Question</th><th>Chapitre</th><th>Réponse</th><th>Temps</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for tf in page_obj %}
+                        <tr>
+                            <td>{{ tf.question|truncatechars:80 }}</td>
+                            <td><small>{{ tf.chapter.title }}</small><br><span class="badge bg-light">{{ tf.chapter.ue.title }}</span></td>
+                            <td>{% if tf.answer %}<span class="badge bg-success">Vrai</span>{% else %}<span class="badge bg-danger">Faux</span>{% endif %}</td>
+                            <td>{{ tf.time_limit }}s</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'teacher:tf_edit' tf.id %}" class="btn btn-outline-primary"><i class="fas fa-edit"></i></a>
+                                    <a href="{% url 'teacher:tf_delete' tf.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5" class="text-center py-5">
+                            <i class="fas fa-check-circle fa-3x text-muted mb-3 d-block"></i>
+                            <p>Aucune question Vrai/Faux</p>
+                            {% if chapitre %}<a href="{% url 'teacher:tf_create' chapitre.id %}" class="btn btn-primary">Créer ma première question</a>{% endif %}
+                        </td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% if page_obj.has_other_pages %}
+        <div class="card-footer">
+            <nav><ul class="pagination justify-content-center mb-0">
+                {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Précédent</a></li>{% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}<li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}<li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>{% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivant</a></li>{% endif %}
+            </ul></nav>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

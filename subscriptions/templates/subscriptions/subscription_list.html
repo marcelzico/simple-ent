@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load subscription_tags %}
+
+{% block title %}Tous les Abonnements - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <h2><i class="fas fa-calendar-alt"></i> Tous les Abonnements</h2>
+            <p class="text-muted">Gérez et examinez tous les abonnements</p>
+        </div>
+    </div>
+
+    <!-- Formulaire de Filtre -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label for="status" class="form-label">Statut</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="">Tous les Statuts</option>
+                        <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>En attente</option>
+                        <option value="approved" {% if status_filter == 'approved' %}selected{% endif %}>Approuvé</option>
+                        <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejeté</option>
+                        <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Actif</option>
+                        <option value="expired" {% if status_filter == 'expired' %}selected{% endif %}>Expiré</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="student" class="form-label">ID Étudiant</label>
+                    <input type="text" name="student" id="student" class="form-control" 
+                           value="{{ student_filter }}" placeholder="Entrez l'ID étudiant">
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">
+                        <i class="fas fa-filter"></i> Filtrer
+                    </button>
+                    <a href="{% url 'subscriptions:subscription_list' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-times"></i> Effacer
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tableau des Abonnements -->
+    <div class="card">
+        <div class="card-body">
+            {% if subscriptions %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Étudiant</th>
+                            <th>Fonctionnalité</th>
+                            <th>Montant</th>
+                            <th>Statut</th>
+                            <th>Date de Début</th>
+                            <th>Expiration</th>
+                            <th>Jours Restants</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for subscription in subscriptions %}
+                        <tr>
+                            <td>{{ subscription.id }}</td>
+                            <td>{{ subscription.student.user.get_full_name|default:subscription.student.user.username }}</td>
+                            <td>{{ subscription.feature.name }}</td>
+                            <td>{{ subscription.amount }} Ar</td>
+                            <td>
+                                {% with status=subscription.get_subscription_status %}
+                                {% if status == 'active' %}
+                                <span class="badge bg-success">Actif</span>
+                                {% elif status == 'pending' %}
+                                <span class="badge bg-warning">En attente</span>
+                                {% elif status == 'approved' %}
+                                <span class="badge bg-info">Approuvé</span>
+                                {% elif status == 'rejected' %}
+                                <span class="badge bg-danger">Refusé</span>
+                                {% elif status == 'expired' %}
+                                <span class="badge bg-secondary">Expiré</span>
+                                {% endif %}
+                                {% endwith %}
+                            </td>
+                            <td>
+                                {% if subscription.start_date %}
+                                {{ subscription.start_date|date:"d M Y" }}
+                                {% else %}
+                                <span class="text-muted">Non démarré</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if subscription.expires_at %}
+                                {{ subscription.expires_at|date:"d M Y" }}
+                                {% else %}
+                                <span class="text-muted">N/A</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% with days_left=subscription.calculate_days_available %}
+                                {% if days_left > 0 %}
+                                <span class="badge {% if days_left > 7 %}bg-success{% elif days_left > 3 %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ days_left }} jours
+                                </span>
+                                {% else %}
+                                <span class="text-muted">-</span>
+                                {% endif %}
+                                {% endwith %}
+                            </td>
+                            <td>
+                                {% if subscription.payement_status == 'pending' %}
+                                <a href="{% url 'subscriptions:admin_subscription_review' subscription.id %}" 
+                                   class="btn btn-sm btn-info">
+                                    <i class="fas fa-clipboard-check"></i> Examiner
+                                </a>
+                                {% endif %}
+                                <a href="#" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-eye"></i> Voir
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav aria-label="Navigation des pages" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if student_filter %}&student={{ student_filter }}{% endif %}">
+                            Précédent
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if student_filter %}&student={{ student_filter }}{% endif %}">
+                            {{ num }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if student_filter %}&student={{ student_filter }}{% endif %}">
+                            Suivant
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-calendar-alt fa-4x text-muted mb-3"></i>
+                <h5>Aucun abonnement trouvé</h5>
+                <p class="text-muted">Aucun abonnement ne correspond à vos filtres.</p>
+                <a href="{% url 'subscriptions:subscription_list' %}" class="btn btn-primary">
+                    <i class="fas fa-eye"></i> Voir Tous les Abonnements
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Total</h6>
+                    <h3 class="card-title">{{ subscriptions.count }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Actifs</h6>
+                    <h3 class="card-title">
+                        {% with active=subscriptions|filter_by_current_status:"active" %}
+                        {{ active|length }}
+                        {% endwith %}
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body text-center">
+                    <h6 class="card-title">En Attente</h6>
+                    <h3 class="card-title">
+                        {% with pending=subscriptions|filter_by_current_status:"pending" %}
+                        {{ pending|length }}
+                        {% endwith %}
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Expirés</h6>
+                    <h3 class="card-title">
+                        {% with expired=subscriptions|filter_by_current_status:"expired" %}
+                        {{ expired|length }}
+                        {% endwith %}
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

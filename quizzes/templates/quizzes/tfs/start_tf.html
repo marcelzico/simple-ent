@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>question Vraie ou Fausse sur {{chapter.title}}</h2>
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<form action="{% url 'quizzes:submit_tf' chapter.id %}" method='POST'>
+    {% csrf_token %}
+    {% for question in questions %}
+    <div class="question">
+        <p class="lead"><b>{{ forloop.counter }} - {{ question.question }}</b></p>
+        <div class="form-check">
+            <input type="radio" name="question_{{ question.id }}" id="answer-{{ question.id}}-t" value="True" class="form-check-input">
+            <label for="answer-{{ question.id}}-t" class="form-check-label">Vraie</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" name="question_{{ question.id }}" id="answer-{{ question.id}}-f" value="False" class="form-check-input">
+            <label for="answer-{{ question.id}}-f" class="form-check-label">Faux</label>
+        </div>
+        
+    </div>
+    {% endfor %}
+    
+    <button type="submit" class="btn btn-primary">Soumettre</button>
+    <a href="{% url "lecon:chapter_detail" chapter.ue.id chapter.id %}" class="btn btn-secondary">Annuler</a>
+</form>
+{% endblock %}

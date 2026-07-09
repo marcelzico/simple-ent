@@ -1,0 +1,54 @@
+<!-- users/role_specific_update.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Modifier le profil {{ role|title }} - EduTrack{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-0">
+                                <i class="bi bi-{% if role == 'student' %}mortarboard{% else %}person{% endif %} me-2"></i>
+                                Modifier le profil {{ role|title }}
+                            </h4>
+                        </div>
+                        <a href="{% url 'utilisateur:profile' %}" class="btn btn-light btn-sm">
+                            <i class="bi bi-arrow-left me-1"></i>Retour
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="POST" id="{{ role }}Form">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Veuillez corriger les erreurs ci-dessous.
+                        </div>
+                        {% endif %}
+                        
+                        {{ form|crispy }}
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'utilisateur:profile' %}" class="btn btn-secondary">
+                                <i class="bi bi-x-lg me-2"></i>Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg me-2"></i>Enregistrer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

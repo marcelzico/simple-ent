@@ -1,0 +1,42 @@
+<!-- teacher/templates/teacher/profil/index.html -->
+{% extends 'base.html' %}
+{% block title %}Mon profil{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-user-circle fa-5x text-primary mb-3"></i>
+                <h4>{{ teacher.get_full_name|default:teacher.username }}</h4>
+                <p class="text-muted">{{ profile.titre|default:"" }} {{ teacher.email }}</p>
+                <p>Unités enseignées: <strong>{{ teaching_unites_count }}</strong></p>
+                <a href="{% url 'teacher:profil_modifier' %}" class="btn btn-primary mt-2">
+                    <i class="fas fa-edit me-2"></i>Modifier
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">Informations professionnelles</div>
+            <div class="card-body">
+                <p><strong>Spécialité:</strong> {{ profile.specialite|default:"Non renseignée" }}</p>
+                <p><strong>Bureau:</strong> {{ profile.bureau|default:"-" }}</p>
+                <p><strong>Heures de consultation:</strong> {{ profile.heures_consultation|default:"-" }}</p>
+                <p><strong>Téléphone pro:</strong> {{ profile.phone_pro|default:"-" }}</p>
+                <p><strong>Bio:</strong></p>
+                <p class="border-start border-3 border-primary ps-3">{{ profile.bio|default:"-"|linebreaks }}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'teacher:profil_changer_mdp' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-key me-2"></i>Changer mot de passe
+                </a>
+                <a href="{% url 'teacher:profil_notifications' %}" class="btn btn-outline-primary ms-2">
+                    <i class="fas fa-bell me-2"></i>Notifications
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

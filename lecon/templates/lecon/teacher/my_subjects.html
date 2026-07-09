@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mes Matières - Enseignant{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2">Mes Matières</h1>
+            <p class="text-muted">Gérez les unités d'enseignement que vous enseignez</p>
+        </div>
+        <a href="{% url 'lecon:create_unite' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Nouvelle Matière
+        </a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Search Bar -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-2">
+                <div class="col-md-10">
+                    <input type="text" 
+                           name="search" 
+                           class="form-control" 
+                           placeholder="Rechercher une matière..." 
+                           value="{{ search_query }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-search me-2"></i>Rechercher
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Subjects List -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Matières ({{ total_count }})</h5>
+            <div class="text-muted small">
+                {% if search_query %}
+                    Recherche: "{{ search_query }}"
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if page_obj %}
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Titre</th>
+                            <th>Code</th>
+                            <th>Niveau</th>
+                            <th>Coefficient</th>
+                            <th>Chapitres</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for unite in page_obj %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'lecon:subject_detail' unite.pk %}" class="text-decoration-none">
+                                        <strong>{{ unite.title }}</strong>
+                                    </a>
+                                    {% if unite.description %}
+                                        <br>
+                                        <small class="text-muted">{{ unite.description|truncatewords:10 }}</small>
+                                    {% endif %}
+                                </td>
+                                <td><code>{{ unite.code }}</code></td>
+                                <td>
+                                    <span class="badge bg-primary">{{ unite.level }}</span>
+                                </td>
+                                <td>{{ unite.coefficient }}</td>
+                                <td>
+                                    <span class="badge bg-info">{{ unite.chapters.count }}</span>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{% url 'lecon:subject_detail' unite.pk %}" 
+                                           class="btn btn-outline-primary" title="Voir">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{% url 'lecon:update_unite' unite.id %}" 
+                                           class="btn btn-outline-warning" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'lecon:create_chapter' unite.id %}" 
+                                           class="btn btn-outline-success" title="Ajouter un chapitre">
+                                            <i class="fas fa-plus"></i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-outline-danger" 
+                                                title="Supprimer"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deleteModal{{ unite.id }}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- Delete Modal -->
+                                    <div class="modal fade" id="deleteModal{{ unite.id }}" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-danger text-white">
+                                                    <h5 class="modal-title">Confirmer la suppression</h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Êtes-vous sûr de vouloir supprimer la matière <strong>"{{ unite.title }}"</strong> ?</p>
+                                                    <p class="text-danger">
+                                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                                        Cette action est irréversible et supprimera tous les chapitres associés.
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form method="post" action="{% url 'lecon:delete_unite' unite.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+                <div class="card-footer">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center mb-0">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">
+                                        <i class="fas fa-angle-double-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                                        <i class="fas fa-angle-left"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ num }}</span>
+                                    </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                                        <i class="fas fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                                        <i class="fas fa-angle-double-right"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="card-body text-center py-5">
+                <div class="mb-3">
+                    <i class="fas fa-book fa-3x text-muted"></i>
+                </div>
+                <h4 class="text-muted">Aucune matière trouvée</h4>
+                <p class="text-muted">
+                    {% if search_query %}
+                        Aucune matière ne correspond à votre recherche.
+                    {% else %}
+                        Vous n'enseignez aucune matière pour le moment.
+                    {% endif %}
+                </p>
+                <a href="{% url 'lecon:create_unite' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Créer votre première matière
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

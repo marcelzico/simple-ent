@@ -1,0 +1,759 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load study_filters %}
+
+{% block title %}{{ unite.title }}{% endblock %}
+
+{% block appnav %}
+<li class="breadcrumb-item" >
+    <a href="{% url 'lecon:subject_list' %}">Liste UE</a>
+</li>
+<li class="breadcrumb-item active">{{ unite.title }}</li>
+{% endblock appnav %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+        <div>
+            <h1 class="h2 mb-1">{{ unite.title }}</h1>
+            <p class="text-muted mb-0">{{ unite.level }} • Semestre {{ unite.semester }}</p>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    <!-- Dashboard Stats -->
+    <div class="row g-3 mb-4">
+        <!-- Total Chapters -->
+        <div class="col-6 col-sm-4 col-lg-3">
+            <div class="card bg-primary text-white text-center shadow-sm">
+                <div class="card-body py-3">
+                    <i class="fas fa-book fa-2x mb-2"></i>
+                    <h4 class="mb-0">{{ chapters|length|default:0 }}</h4>
+                    <small>Chapitres</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Sections - ⚠️ Not in view context, fallback to 0 -->
+        <div class="col-6 col-sm-4 col-lg-3">
+            <div class="card bg-secondary text-white text-center shadow-sm">
+                <div class="card-body py-3">
+                    <i class="fas fa-folder fa-2x mb-2"></i>
+                    <h4 class="mb-0">{{ sections.count }}</h4>
+                    <small>Sections</small>
+                </div>
+            </div>
+        </div> 
+
+        <!-- Total Time to study - ✅ Fixed variable names -->
+        <div class="col-6 col-sm-4 col-lg-3">
+            <div class="card bg-primary text-white text-center shadow-sm">
+                <div class="card-body py-3">
+                    <i class="fas fa-hourglass-half fa-2x mb-2"></i>
+                    {% if request.user.is_student and total_study_hours or total_study_minutes %}
+                    <h4 class="mb-0">{{ total_study_hours }}h {{ total_study_minutes }}min</h4>
+                    <small>Temps étudié</small>
+                    {% else %}
+                    <h4 class="mb-0">0h 0min</h4>
+                    <small>Temps d'étude</small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Flashcard Sets - ⚠️ Calculate from available context -->
+        <div class="col-6 col-sm-4 col-lg-3">
+            <div class="card bg-purple text-white text-center shadow-sm">
+                <div class="card-body py-3">
+                    <i class="fas fa-layer-group fa-2x mb-2"></i>
+                    <h4 class="mb-0">{{ flashcard_sets_public.count|add:flashcard_sets_private.count|default:0 }}</h4>
+                    <small>Sets Flashcards</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total MCQs -->
+        <div class="col-6 col-sm-4 col-lg-3">
+            <div class="card bg-success text-white text-center shadow-sm">
+                <div class="card-body py-3">
+                    <i class="fas fa-list-ol fa-2x mb-2"></i>
+                    <h4 class="mb-0">{{ total_mcqs|default:0 }}</h4>
+                    <small>Questions QCM</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Q&A -->
+        <div class="col-6 col-sm-4 col-lg-3">
+            <div class="card bg-info text-white text-center shadow-sm">
+                <div class="card-body py-3">
+                    <i class="fas fa-comments fa-2x mb-2"></i>
+                    <h4 class="mb-0">{{ total_qas|default:0 }}</h4>
+                    <small>Questions Q&R</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total True/False -->
+        <div class="col-6 col-sm-4 col-lg-3">
+            <div class="card bg-warning text-white text-center shadow-sm">
+                <div class="card-body py-3">
+                    <i class="fas fa-check-circle fa-2x mb-2"></i>
+                    <h4 class="mb-0">{{ total_tfs|default:0 }}</h4>
+                    <small>Questions V/F</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Flashcards - ⚠️ Would need annotation in view, fallback -->
+        <div class="col-6 col-sm-4 col-lg-3">
+            <div class="card bg-indigo text-white text-center shadow-sm">
+                <div class="card-body py-3">
+                    <i class="fas fa-copy fa-2x mb-2"></i>
+                    <h4 class="mb-0">{{ total_flashcards }}</h4>
+                    <small>Total Flashcards</small>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+    <!-- Student Progress Dashboard -->
+    {% if request.user.is_student %}
+    <div class="row g-4 mb-4">
+
+        <!-- Flashcard Progress - ⚠️ user_flashcard_progress not in context, show placeholder -->
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-purple text-white d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Progrès Flashcards</h6>
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="card-body text-center">
+                    {% comment %}
+                    ⚠️ To enable this, add to view:
+                    user_flashcard_progress = calculate_flashcard_progress(request.user, active_chapters)
+                    {% endcomment %}
+                    <div class="py-3">
+                        <i class="fas fa-layer-group fa-2x text-muted mb-2"></i>
+                        <p class="text-muted small mb-0">Données de progression non disponibles</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MCQ Progress - ✅ Uses mcq_score from view -->
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Progrès QCM</h6>
+                    <i class="fas fa-list-ol"></i>
+                </div>
+                <div class="card-body text-center">
+                    {% if mcq_score %}
+                    <h4 class="text-success mb-1">{{ mcq_score|floatformat:1 }}%</h4>
+                    <div class="progress mb-2" style="height: 6px;">
+                        <div class="progress-bar bg-success" style="width: {{ mcq_score }}%"></div>
+                    </div>
+                    <small class="text-muted">Score moyen</small>
+                    {% else %}
+                    <div class="py-3">
+                        <i class="fas fa-list-ol fa-2x text-muted mb-2"></i>
+                        <p class="text-muted small mb-0">Aucun quiz complété</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Q&A Progress - ✅ Uses qa_score from view -->
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Progrès Q&R</h6>
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="card-body text-center">
+                    {% if qa_score %}
+                    <h4 class="text-info mb-1">{{ qa_score|floatformat:1 }}%</h4>
+                    <div class="progress mb-2" style="height: 6px;">
+                        <div class="progress-bar bg-info" style="width: {{ qa_score }}%"></div>
+                    </div>
+                    <small class="text-muted">Score moyen</small>
+                    {% else %}
+                    <div class="py-3">
+                        <i class="fas fa-comments fa-2x text-muted mb-2"></i>
+                        <p class="text-muted small mb-0">Aucun quiz complété</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Sections Section -->
+    {% if sections.exists %}
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-folder me-2"></i>Sections de l'unité
+                <span class="badge bg-light text-secondary ms-2">{{ sections|length }}</span>
+            </h5>
+            <button class="btn btn-sm btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#sectionsCollapse">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+        
+        <div class="collapse show" id="sectionsCollapse">
+            <div class="card-body">
+                <div class="row g-3">
+                    {% for section in sections %}
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card h-100 border-start border-4 border-secondary">
+                            <div class="card-body">
+                                <h6 class="card-title text-truncate">
+                                    <i class="fas fa-folder text-secondary me-2"></i>{{ section.title }}
+                                </h6>
+                                
+                                <div class="mb-2">
+                                    <span class="badge bg-secondary-light text-secondary">
+                                        <i class="fas fa-book me-1"></i>{{ section.chapters.count }} chapitre{{ section.chapters.count|pluralize:"s" }}
+                                    </span>
+                                </div>
+                                
+                                <!-- Study time for student -->
+                                {% if request.user.is_student %}
+                                    {% with section_chapters=section.chapters.all %}
+                                        {% with study_seconds=section_chapters|get_section_study_time:request.user %}
+                                            {% if study_seconds > 0 %}
+                                            <div class="mb-2">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-clock me-1"></i>
+                                                    {{ study_seconds|seconds_to_hours }}h {{ study_seconds|seconds_to_minutes }}min étudié
+                                                </small>
+                                            </div>
+                                            {% endif %}
+                                        {% endwith %}
+                                    {% endwith %}
+                                {% endif %}
+                                
+                                <div class="d-flex gap-2 mt-3">
+                                    {% if request.user.is_staff %}
+                                    <a href="{% url 'lecon:view_section' unite.id section.id %}" class="btn btn-sm btn-outline-secondary flex-fill">
+                                        <i class="fas fa-eye me-1"></i>Voir
+                                    </a>
+                                    
+                                    <a href="{% url 'lecon:update_section' section.id %}" class="btn btn-sm btn-outline-primary flex-fill">
+                                        <i class="fas fa-edit me-1"></i>Modifier
+                                    </a>
+                                    {% elif request.user.is_student %}
+                                    <a href="{% url 'lecon:view_section' unite.id section.id %}" class="btn btn-sm btn-outline-secondary flex-fill">
+                                        <i class="fas fa-eye me-1"></i>Voir
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Add Section Button -->
+                {% if request.user.is_staff %}
+                <div class="text-center mt-4 pt-3 border-top">
+                    <a href="{% url 'lecon:create_section' unite.id %}" class="btn btn-secondary">
+                        <i class="fas fa-plus me-2"></i>Créer une nouvelle section
+                    </a>
+                    <p class="text-muted small mt-2 mb-0">
+                        Organisez les chapitres en sections pour une meilleure structuration
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% elif request.user.is_staff %}
+
+    <!-- Show create section button when no sections exist -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body text-center py-5">
+            <i class="fas fa-folder fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">Aucune section créée</h5>
+            <p class="text-muted mb-4">Créez des sections pour organiser les chapitres de cette unité</p>
+            <a href="{% url 'lecon:create_section' unite.id %}" class="btn btn-secondary">
+                <i class="fas fa-plus me-2"></i>Créer la première section
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- All Private Flashcards Section - ✅ Fixed variable name -->
+    {% if flashcard_sets_private.exists %}
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-purple text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-layer-group me-2"></i>Toutes les cartes mentales personnelles
+                <span class="badge bg-light text-purple ms-2">{{ flashcard_sets_private.count }}</span>
+            </h5>
+            <button class="btn btn-sm btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#allFlashcardsCollapsePrivate">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+        
+        <div class="collapse" id="allFlashcardsCollapsePrivate">
+            <div class="card-body">
+                <div class="row g-3">
+                    {% for flashcard_set in flashcard_sets_private %}
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card h-100 border-start border-4 border-purple">
+                            <div class="card-body">
+                                <h6 class="card-title text-truncate">
+                                    <i class="fas fa-copy text-purple me-2"></i>{{ flashcard_set.title.title }}
+                                </h6>
+                                <p class="card-text small text-muted mb-2">
+                                    <i class="fas fa-book me-1"></i>Chapitre {{ flashcard_set.title.order|default:"?" }}
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge bg-purple-light text-purple">
+                                        <i class="fas fa-copy me-1"></i>{{ flashcard_set.cards.count|default:0 }} cartes
+                                    </span>
+                                    {% if request.user.is_student %}
+                                    <span class="badge bg-secondary">
+                                        {% comment %} user_mastery_percentage not available without annotation {% endcomment %}
+                                        0%
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                <div class="d-flex gap-2 mt-3">
+                                    <a href="{% url 'quizlet_copy:set-detail' flashcard_set.pk %}" class="btn btn-sm btn-outline-purple flex-fill">
+                                        <i class="fas fa-eye me-1"></i>Voir
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- All Public Flashcards Section - ✅ Fixed variable name -->
+    {% if can_view_flashcards and flashcard_sets_public.exists %}
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-purple text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-layer-group me-2"></i>Toutes les cartes mentales Publiques
+                <span class="badge bg-light text-purple ms-2">{{ flashcard_sets_public.count }}</span>
+            </h5>
+            <button class="btn btn-sm btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#allFlashcardsCollapsePublic">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+
+        <div class="collapse" id="allFlashcardsCollapsePublic">
+            <div class="card-body">
+                <div class="row g-3">
+                    {% for flashcard_set in flashcard_sets_public %}
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card h-100 border-start border-4 border-purple">
+                            <div class="card-body">
+                                <h6 class="card-title text-truncate">
+                                    <i class="fas fa-copy text-purple me-2"></i>{{ flashcard_set.title.title }}
+                                </h6>
+                                <p class="card-text small text-muted mb-2">
+                                    <i class="fas fa-book me-1"></i>Chapitre {{ flashcard_set.title.order|default:"?" }}
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge bg-purple-light text-purple">
+                                        <i class="fas fa-copy me-1"></i>{{ flashcard_set.cards.count|default:0 }} cartes
+                                    </span>
+                                </div>
+                                <div class="d-flex gap-2 mt-3">
+                                    <a href="{% url 'quizlet_copy:set-detail' flashcard_set.pk %}" class="btn btn-sm btn-outline-purple flex-fill">
+                                        <i class="fas fa-eye me-1"></i>Voir
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Chapters Section - ✅ Fixed to use 'chapters' queryset directly -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-book me-2"></i>Chapitres
+                <span class="badge bg-light text-primary ms-2">{{ chapters|length|default:0 }}</span>
+            </h5>
+            <button class="btn btn-sm btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#chaptersCollapse">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+        
+        <div class="collapse show" id="chaptersCollapse">
+            <div class="card-body p-0">
+                {% if chapters %}
+                <div class="list-group list-group-flush">
+                    {% for chapter in chapters %}
+                    <a href="{% if not request.user.is_student %}{% url 'lecon:chapter_detail' unite.id chapter.id %}{% else %}{% url 'lecon:chapter_detail_student' unite.id chapter.id %}{% endif %}" 
+                       class="list-group-item list-group-item-action p-3">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
+                            <div class="flex-grow-1 w-100">
+                                <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2 mb-2">
+                                    <span class="badge bg-secondary flex-shrink-0">Chapitre {{ chapter.order|default:"?" }}</span>
+                                    <h6 class="mb-0 text-break">{{ chapter.title }}</h6>
+                                </div>
+                                
+                                {% if chapter.description %}
+                                <p class="mb-2 text-muted small text-break">{{ chapter.description|truncatechars:120 }}</p>
+                                {% endif %}
+                                
+                                <div class="d-flex flex-wrap gap-3 small">
+                                    <!-- Flashcard Stats - ⚠️ Would need annotation in view -->
+                                    <span class="text-purple" data-bs-toggle="tooltip" title="Flashcards">
+                                        <i class="fas fa-layer-group me-1"></i>
+                                        {% comment %}
+                                        To show flashcard count per chapter, add to view:
+                                        chapters = active_chapters.annotate(
+                                            flashcards_count=Count('flashcardset__cards', distinct=True)
+                                        )
+                                        {% endcomment %}
+                                        0 cartes
+                                    </span>
+                                    
+                                    <!-- Quiz Stats - ✅ Use reverse relations -->
+                                    <span class="text-primary">
+                                        <i class="fas fa-question-circle me-1"></i>
+                                        {{ chapter.mcq_set.count|default:0 }} QCMs
+                                    </span>
+                                    <span class="text-info">
+                                        <i class="fas fa-comments me-1"></i>
+                                        {{ chapter.questionanswer_set.count|default:0 }} Q&Rs
+                                    </span>
+                                    <span class="text-warning">
+                                        <i class="fas fa-check-circle me-1"></i>
+                                        {{ chapter.truefalsequiz_set.count|default:0 }} V/F
+                                    </span>
+                                    
+                                    <!-- Study Time - ⚠️ Would need annotation in view -->
+                                    {% if request.user.is_student %}
+                                    <span class="text-success" data-bs-toggle="tooltip" title="Temps d'étude">
+                                        <i class="fas fa-clock me-1"></i>
+                                        0min
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="d-none d-md-block flex-shrink-0">
+                                <i class="fas fa-chevron-right text-muted"></i>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                           
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-book-open fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">Aucun chapitre disponible</h5>
+                    <p class="text-muted mb-3">Commencez par ajouter le premier chapitre à cette unité d'enseignement</p>
+                    {% if request.user.is_staff %}
+                    <a href="{% url 'lecon:create_chapter' unite.id %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Ajouter le premier chapitre
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ✅ Your original CSS/JS preserved exactly below -->
+<style>
+    :root {
+        --purple: #6f42c1;
+        --purple-light: #e2d9f3;
+        --indigo: #6610f2;
+        --secondary-light: rgba(108, 117, 125, 0.1);
+    }
+
+    .bg-purple { background-color: var(--purple) !important; }
+    .bg-indigo { background-color: var(--indigo) !important; }
+    .bg-purple-light { background-color: var(--purple-light) !important; }
+    .bg-secondary-light { background-color: var(--secondary-light) !important; }
+    
+    .text-purple { color: var(--purple) !important; }
+    .text-indigo { color: var(--indigo) !important; }
+    
+    .border-purple { border-color: var(--purple) !important; }
+    .border-secondary { border-color: #6c757d !important; }
+    
+    .btn-purple {
+        background-color: var(--purple);
+        border-color: var(--purple);
+        color: white;
+    }
+    .btn-purple:hover {
+        background-color: #5a32a3;
+        border-color: #5a32a3;
+    }
+    .btn-outline-purple {
+        color: var(--purple);
+        border-color: var(--purple);
+    }
+    .btn-outline-purple:hover {
+        background-color: var(--purple);
+        border-color: var(--purple);
+        color: white;
+    }
+
+    /* Stats cards hover effects */
+    .card.bg-primary:hover, 
+    .card.bg-secondary:hover,
+    .card.bg-success:hover, 
+    .card.bg-info:hover, 
+    .card.bg-warning:hover,
+    .card.bg-purple:hover,
+    .card.bg-indigo:hover {
+        transform: translateY(-5px);
+        transition: transform 0.3s ease;
+    }
+
+    /* Time display styling */
+    .time-display {
+        font-family: monospace;
+        font-weight: bold;
+    }
+
+    /* Section cards styling */
+    .card.border-secondary {
+        transition: all 0.3s ease;
+    }
+    
+    .card.border-secondary:hover {
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.2);
+        transform: translateY(-3px);
+    }
+
+    /* Mobile-first responsive design */
+    @media (max-width: 768px) {
+        .container-fluid {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+        .card-header h5, .card-header h6 {
+            font-size: 0.9rem;
+        }
+        
+        .list-group-item {
+            padding: 1rem !important;
+        }
+        
+        /* Better spacing for stats cards */
+        .row.g-3 .col-6 {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Smaller text for time displays on mobile */
+        .card.bg-primary .card-body h4,
+        .card.bg-secondary .card-body h4,
+        .card.bg-success .card-body h4,
+        .card.bg-info .card-body h4,
+        .card.bg-warning .card-body h4,
+        .card.bg-purple .card-body h4,
+        .card.bg-indigo .card-body h4 {
+            font-size: 1.1rem;
+        }
+    }
+
+    /* Touch-friendly improvements */
+    .btn, .list-group-item {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Card hover effects */
+    .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+    }
+
+    /* Progress dashboard specific styles */
+    .progress {
+        background-color: #e9ecef;
+        border-radius: 10px;
+    }
+
+    .progress-bar {
+        border-radius: 10px;
+    }
+
+    /* Text wrapping and breaking */
+    .text-break {
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* Ensure text doesn't overflow on mobile */
+    .list-group-item h6 {
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        max-width: 100%;
+    }
+
+    /* Stats cards specific styling */
+    .card.bg-primary, 
+    .card.bg-secondary,
+    .card.bg-success, 
+    .card.bg-info, 
+    .card.bg-warning,
+    .card.bg-purple,
+    .card.bg-indigo {
+        border: none;
+    }
+
+    .card.bg-primary .card-body, 
+    .card.bg-secondary .card-body,
+    .card.bg-success .card-body, 
+    .card.bg-info .card-body, 
+    .card.bg-warning .card-body,
+    .card.bg-purple .card-body,
+    .card.bg-indigo .card-body {
+        padding: 1rem 0.5rem;
+    }
+
+    /* Better spacing for mobile */
+    @media (max-width: 576px) {
+        .d-flex.flex-wrap.gap-3 small {
+            font-size: 0.7rem;
+            gap: 0.5rem !important;
+        }
+        
+        .card-body.text-center h4 {
+            font-size: 1.3rem;
+        }
+        
+        /* Better chapter item layout on mobile */
+        .list-group-item .d-flex {
+            gap: 0.75rem;
+        }
+        
+        .list-group-item .small span {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+        
+        /* Flashcard set cards on mobile */
+        .col-12.col-md-6.col-lg-4 {
+            margin-bottom: 1rem;
+        }
+        
+        /* Time display adjustments for mobile */
+        .time-display {
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Empty state styling */
+    .text-center.py-5 {
+        background-color: #f8f9fa;
+        border-radius: 0.375rem;
+        margin: 1rem;
+    }
+
+    /* Flashcard set card styling */
+    .border-start.border-4 {
+        border-left-width: 4px !important;
+    }
+
+    .badge.bg-purple-light,
+    .badge.bg-secondary-light {
+        background-color: rgba(111, 66, 193, 0.1);
+    }
+
+    .badge.bg-secondary-light {
+        background-color: rgba(108, 117, 125, 0.1);
+        color: #6c757d !important;
+    }
+
+    /* Collapse button styling */
+    .btn[data-bs-toggle="collapse"] .fa-chevron-down {
+        transition: transform 0.3s ease;
+    }
+
+    .btn[data-bs-toggle="collapse"][aria-expanded="true"] .fa-chevron-down {
+        transform: rotate(180deg);
+    }
+
+    /* Tooltip improvements */
+    [data-bs-toggle="tooltip"] {
+        cursor: help;
+    }
+
+    /* Section badges */
+    .badge.bg-secondary-light {
+        font-size: 0.75em;
+        padding: 0.25em 0.6em;
+    }
+
+    /* Time display in cards */
+    .card .text-muted small[title*="Temps"] {
+        font-weight: 500;
+    }
+</style>
+
+<script>
+    // Initialize tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+        
+        // Auto-collapse sections if there are more than 3
+        const sectionCards = document.querySelectorAll('.card.border-secondary');
+        if (sectionCards.length > 6) {
+            const collapseButton = document.querySelector('[data-bs-target="#sectionsCollapse"]');
+            if (collapseButton) {
+                collapseButton.click(); // Collapse if more than 6 sections
+            }
+        }
+        
+        // Format time displays
+        document.querySelectorAll('.time-display').forEach(function(element) {
+            const timeText = element.textContent;
+            if (timeText.includes('h') || timeText.includes('min')) {
+                element.classList.add('time-display');
+            }
+        });
+    });
+</script>
+
+{% endblock %}

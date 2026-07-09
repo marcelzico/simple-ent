@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Mes unités d'enseignement{% endblock %}
+
+{% block page_title %}
+<h5 class="mb-0">
+    <i class="fas fa-book me-2 text-primary"></i>
+    Mes unités d'enseignement
+</h5>
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- Barre d'actions -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <div class="btn-group">
+                        <a href="{% url 'teacher:unite_create' %}" class="btn btn-primary">
+                            <i class="fas fa-plus-circle me-2"></i>Nouvelle unité
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <form method="get" class="row g-2">
+                        <div class="col-md-8">
+                            <select name="level" class="form-select">
+                                <option value="">Tous les niveaux</option>
+                                {% for value, label in level_choices %}
+                                <option value="{{ value }}" {% if level_filter == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-secondary w-100">
+                                <i class="fas fa-filter me-2"></i>Filtrer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Liste des unités -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-list me-2"></i>
+            Mes unités ({{ total_unites }})
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Niveau</th>
+                            <th>Semestre</th>
+                            <th>Chapitres</th>
+                            <th>Étudiants</th>
+                            <th>Enseignants</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for unite in page_obj %}
+                        <tr>
+                            <td class="fw-bold">{{ unite.title }}</td>
+                            <td>
+                                <span class="badge bg-secondary">{{ unite.get_level_display }}</span>
+                            </td>
+                            <td>{{ unite.semester }}</td>
+                            <td>
+                                <a href="{% url 'teacher:chapitres_list' unite.id %}" class="text-decoration-none">
+                                    <i class="fas fa-folder-open me-1"></i>{{ unite.chapters_count }}
+                                </a>
+                            </td>
+                            <td>
+                                <i class="fas fa-users me-1"></i>{{ unite.students_count|default:0 }}
+                            </td>
+                            <td>
+                                <i class="fas fa-chalkboard-user me-1"></i>
+                                {{ unite.teachers.count }}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'teacher:chapitres_list' unite.id %}" class="btn btn-outline-info" title="Chapitres">
+                                        <i class="fas fa-folder-open"></i>
+                                    </a>
+                                    <a href="{% url 'teacher:unite_teachers_manage' unite.id %}" class="btn btn-outline-secondary" title="Enseignants">
+                                        <i class="fas fa-users"></i>
+                                    </a>
+                                    <a href="{% url 'teacher:unite_edit' unite.id %}" class="btn btn-outline-primary" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'teacher:unite_delete' unite.id %}" class="btn btn-outline-danger" title="Supprimer">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <i class="fas fa-folder-open fa-3x text-muted mb-3 d-block"></i>
+                                <p class="text-muted">Vous n'avez pas encore d'unité d'enseignement.</p>
+                                <a href="{% url 'teacher:unite_create' %}" class="btn btn-primary">
+                                    <i class="fas fa-plus-circle me-2"></i>Créer ma première unité
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="card-footer">
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center mb-0">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if level_filter %}&level={{ level_filter }}{% endif %}">
+                            <i class="fas fa-chevron-left"></i> Précédent
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">Précédent</span></li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if level_filter %}&level={{ level_filter }}{% endif %}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if level_filter %}&level={{ level_filter }}{% endif %}">
+                            Suivant <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">Suivant</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

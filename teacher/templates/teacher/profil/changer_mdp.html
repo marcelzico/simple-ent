@@ -1,0 +1,30 @@
+<!-- teacher/templates/teacher/profil/changer_mdp.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Changer mon mot de passe</div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'teacher:profil_index' %}" class="btn btn-secondary">Annuler</a>
+                        <button type="submit" class="btn btn-primary">Changer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

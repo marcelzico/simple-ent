@@ -1,0 +1,670 @@
+<!-- templates/dashboard/administration.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-purple { background-color: #6f42c1 !important; }
+    .bg-indigo { background-color: #6610f2 !important; }
+    .bg-teal { background-color: #20c997 !important; }
+    .bg-orange { background-color: #fd7e14 !important; }
+    .bg-white-20 { background-color: rgba(255,255,255,0.2) !important; }
+    .stat-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        border: none;
+        border-radius: 10px;
+    }
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .progress {
+        height: 8px;
+        border-radius: 4px;
+    }
+    .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+    }
+    .system-health-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 8px;
+    }
+    .health-healthy { background-color: #28a745; }
+    .health-warning { background-color: #ffc107; }
+    .health-critical { background-color: #dc3545; }
+    .quick-action-btn {
+        transition: all 0.2s ease-in-out;
+    }
+    .quick-action-btn:hover {
+        transform: scale(1.05);
+    }
+    .recent-activity-item {
+        border-left: 3px solid transparent;
+        transition: all 0.2s ease;
+    }
+    .recent-activity-item:hover {
+        border-left-color: #007bff;
+        background-color: #f8f9fa;
+    }
+
+    /* static/css/admin-dashboard.css */
+    .bg-purple { background-color: #6f42c1 !important; }
+    .bg-indigo { background-color: #6610f2 !important; }
+    .bg-teal { background-color: #20c997 !important; }
+    .bg-orange { background-color: #fd7e14 !important; }
+    .bg-white-20 { background-color: rgba(255,255,255,0.2) !important; }
+
+    .spin { 
+        animation: spin 1s linear infinite; 
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+        .stat-card .card-body {
+            padding: 1rem;
+        }
+        
+        .chart-container {
+            height: 250px;
+        }
+        
+        .quick-action-btn {
+            font-size: 0.8rem;
+            padding: 0.5rem;
+        }
+    }
+
+    /* Print styles */
+    @media print {
+        .btn, .alert, .card-header {
+            display: none !important;
+        }
+        
+        .card {
+            border: 1px solid #000 !important;
+            break-inside: avoid;
+        }
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h1 class="h3 mb-1">Administration Dashboard</h1>
+                    <p class="text-muted mb-0">Complete system overview and management</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/admin" class="btn btn-primary" target="_blank">
+                        <i class="bi bi-gear me-1"></i>Django Admin
+                    </a>
+                    <button class="btn btn-outline-secondary" id="refreshDashboard">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Health Alert -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="alert alert-success d-flex align-items-center">
+                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                <div>
+                    <strong>System Status:</strong> All systems operational 
+                    <span class="badge bg-success ms-2">
+                        <i class="bi bi-heart-pulse me-1"></i>Healthy
+                    </span>
+                </div>
+                <div class="ms-auto">
+                    <small class="text-muted">Last checked: {% now "H:i" %}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats Grid -->
+    <div class="row g-3 mb-4">
+        <!-- Users -->
+        <div class="col-6 col-md-3">
+            <div class="card stat-card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="card-title text-white-50 mb-2">Total Users</h6>
+                            <h3 class="mb-0">{{ total_users }}</h3>
+                            <small class="text-white-75">
+                                +{{ new_users_week }} this week
+                            </small>
+                        </div>
+                        <div class="bg-white-20 rounded p-2">
+                            <i class="bi bi-people fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Students -->
+        <div class="col-6 col-md-3">
+            <div class="card stat-card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="card-title text-white-50 mb-2">Students</h6>
+                            <h3 class="mb-0">{{ total_students }}</h3>
+                            <small class="text-white-75">
+                                {{ active_users.count }} active
+                            </small>
+                        </div>
+                        <div class="bg-white-20 rounded p-2">
+                            <i class="bi bi-person-check fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subjects -->
+        <div class="col-6 col-md-3">
+            <div class="card stat-card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="card-title text-white-50 mb-2">Subjects</h6>
+                            <h3 class="mb-0">{{ total_subjects }}</h3>
+                            <small class="text-white-75">
+                                {{ total_chapters }} chapters
+                            </small>
+                        </div>
+                        <div class="bg-white-20 rounded p-2">
+                            <i class="bi bi-book fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Row Stats -->
+    <div class="row g-3 mb-4">
+        <!-- Enrollments -->
+        <div class="col-6 col-md-3">
+            <div class="card stat-card bg-purple text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="card-title text-white-50 mb-2">Enrollments</h6>
+                            <h3 class="mb-0">{{ total_enrollments }}</h3>
+                            <small class="text-white-75">
+                                {{ pending_enrollments }} pending
+                            </small>
+                        </div>
+                        <div class="bg-white-20 rounded p-2">
+                            <i class="bi bi-clipboard-check fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Study Activity -->
+        <div class="col-6 col-md-3">
+            <div class="card stat-card bg-indigo text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="card-title text-white-50 mb-2">Study Hours</h6>
+                            <h3 class="mb-0">{{ total_study_hours }}</h3>
+                            <small class="text-white-75">
+                                {{ total_study_sessions }} sessions
+                            </small>
+                        </div>
+                        <div class="bg-white-20 rounded p-2">
+                            <i class="bi bi-clock-history fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactions -->
+        <div class="col-6 col-md-3">
+            <div class="card stat-card bg-teal text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="card-title text-white-50 mb-2">Interactions</h6>
+                            <h3 class="mb-0">{{ total_messages }}</h3>
+                            <small class="text-white-75">
+                                {{ total_conversations }} conversations
+                            </small>
+                        </div>
+                        <div class="bg-white-20 rounded p-2">
+                            <i class="bi bi-chat-dots fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance -->
+        <div class="col-6 col-md-3">
+            <div class="card stat-card bg-orange text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="card-title text-white-50 mb-2">Avg Performance</h6>
+                            <h3 class="mb-0">{{ overall_performance }}%</h3>
+                            <small class="text-white-75">
+                                Across all assessments
+                            </small>
+                        </div>
+                        <div class="bg-white-20 rounded p-2">
+                            <i class="bi bi-graph-up fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column - Charts & Analytics -->
+        <div class="col-12 col-lg-8">
+            <!-- Charts Row -->
+            <div class="row g-4 mb-4">
+                <!-- User Growth Chart -->
+                <div class="col-12 col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0"><i class="bi bi-graph-up me-2"></i>User Growth</h6>
+                            <select class="form-select form-select-sm w-auto" id="userGrowthRange">
+                                <option value="week">This Week</option>
+                                <option value="month" selected>This Month</option>
+                                <option value="year">This Year</option>
+                            </select>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="userGrowthChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subject Engagement Chart -->  
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0"><i class="bi bi-bar-chart me-2"></i>Students by Level</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="subjectEngagementChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Trends Chart -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0"><i class="bi bi-speedometer2 me-2"></i>Performance Trends</h6>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-secondary active" data-range="week">Week</button>
+                        <button class="btn btn-outline-secondary" data-range="month">Month</button>
+                        <button class="btn btn-outline-secondary" data-range="quarter">Quarter</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="performanceTrendsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Subjects & Management -->
+            <div class="row g-4">
+                <!-- Recent Subjects -->
+                <div class="col-12 col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0"><i class="bi bi-book me-2"></i>Recent Subjects</h6>
+                            <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+                        </div>
+                        <div class="card-body p-0">
+                            {% if recent_subjects %}
+                            <div class="list-group list-group-flush">
+                                {% for subject in recent_subjects %}
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">{{ subject.title }}</h6>
+                                            <small class="text-muted">
+                                                Level: {{ subject.level }} | 
+                                                Chapters: {{ subject.chapters.count }}
+                                            </small>
+                                        </div>
+                                        <span class="badge bg-secondary">{{ subject.semester }}</span>
+                                    </div>
+                                    <div class="mt-2">
+                                        <small>Created by: {{ subject.created_by.username }}</small>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="text-center py-4">
+                                <i class="bi bi-book fs-1 text-muted mb-3"></i>
+                                <p class="text-muted">No subjects created yet.</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Enrollments -->
+                <div class="col-12 col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0"><i class="bi bi-person-plus me-2"></i>Pending Enrollments</h6>
+                            <span class="badge bg-warning">{{ pending_enrollments }}</span>
+                        </div>
+                        <div class="card-body p-0">
+                            {% if recent_enrollments %}
+                            <div class="list-group list-group-flush">
+                                {% for enrollment in recent_enrollments %}
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">{{ enrollment.student.get_full_name|default:enrollment.student.username }}</h6>
+                                            <small class="text-muted">
+                                                {% for subject in enrollment.unite.all %}
+                                                {{ subject.title }}{% if not forloop.last %}, {% endif %}
+                                                {% endfor %}
+                                            </small>
+                                        </div>
+                                        <div class="btn-group btn-group-sm">
+                                            <button class="btn btn-success btn-sm approve-enrollment" data-id="{{ enrollment.id }}">
+                                                <i class="bi bi-check"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-sm reject-enrollment" data-id="{{ enrollment.id }}">
+                                                <i class="bi bi-x"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">
+                                        Requested: {{ enrollment.requested_at|timesince }} ago
+                                    </small>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="text-center py-4">
+                                <i class="bi bi-check-circle fs-1 text-success mb-3"></i>
+                                <p class="text-muted">No pending enrollments.</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - System Info & Quick Actions -->
+        <div class="col-12 col-lg-4">
+            <!-- System Health -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0"><i class="bi bi-heart-pulse me-2"></i>System Health</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Storage Usage</span>
+                            <span>{{ system_health.storage_usage }}%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar {% if system_health.storage_usage < 70 %}bg-success{% elif system_health.storage_usage < 90 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                 style="width: {{ system_health.storage_usage }}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Active Sessions</span>
+                            <span>{{ system_health.active_sessions }}</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" style="width: {% widthratio system_health.active_sessions 1 10 %}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="border rounded p-2 mb-2">
+                                <small class="text-muted d-block">Database</small>
+                                <span class="fw-bold text-success">{{ system_health.database_size }}</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2 mb-2">
+                                <small class="text-muted d-block">Error Rate</small>
+                                <span class="fw-bold text-success">{{ system_health.error_rate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Last backup: {{ system_health.last_backup }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0"><i class="bi bi-lightning me-2"></i>Quick Actions</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <a href="/admin" class="btn btn-outline-primary w-100 quick-action-btn" target="_blank">
+                                <i class="bi bi-gear me-1"></i>Admin Panel
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="#" class="btn btn-outline-success w-100 quick-action-btn">
+                                <i class="bi bi-person-plus me-1"></i>Add User
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="#" class="btn btn-outline-info w-100 quick-action-btn">
+                                <i class="bi bi-book me-1"></i>New Subject
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="#" class="btn btn-outline-warning w-100 quick-action-btn">
+                                <i class="bi bi-graph-up me-1"></i>Reports
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="#" class="btn btn-outline-secondary w-100 quick-action-btn">
+                                <i class="bi bi-database me-1"></i>Backup
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="#" class="btn btn-outline-danger w-100 quick-action-btn">
+                                <i class="bi bi-sliders me-1"></i>Settings
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Recent Activity -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0"><i class="bi bi-clock me-2"></i>Recent Activity</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% if recent_users %}
+                            {% for user in recent_users %}
+                            <div class="list-group-item recent-activity-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ user.get_full_name|default:user.username }}</h6>
+                                    <small class="text-muted">{{ user.date_joined|timesince }} ago</small>
+                                </div>
+                                <p class="mb-1 small text-muted">New user registered</p>
+                                <small class="text-muted">
+                                    <i class="bi bi-{{ user.is_student|yesno:'person-check,person-badge' }} me-1"></i>
+                                    {{ user.is_student|yesno:'Etudiant,Anonyme' }}
+                                </small>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="list-group-item text-center text-muted py-4">
+                                <i class="bi bi-people fs-1 mb-2 d-block"></i>
+                                <p class="mb-0">No recent user activity</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- In your administration.html template -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        initializeCharts();
+        setupChartInteractions();
+    } catch (error) {
+        console.error('Error initializing charts:', error);
+        showToast('Error loading charts', 'error');
+    }
+});
+
+function initializeCharts() {
+    // User Growth Chart
+    const userGrowthCtx = document.getElementById('userGrowthChart');
+    if (userGrowthCtx) {
+        try {
+            const userGrowthData = {{ user_growth_json|safe }};
+            new Chart(userGrowthCtx, {
+                type: 'line',
+                data: userGrowthData,
+                options: getLineChartOptions('New Users')
+            });
+        } catch (error) {
+            console.error('Error creating user growth chart:', error);
+        }
+    }
+    
+    // Subject Engagement Chart
+    const subjectEngagementCtx = document.getElementById('subjectEngagementChart');
+    if (subjectEngagementCtx) {
+        try {
+            const subjectEngagementData = {{ subject_engagement_json|safe }};
+            new Chart(subjectEngagementCtx, {
+                type: 'bar',
+                data: subjectEngagementData,
+                options: getBarChartOptions('Number of Students')
+            });
+        } catch (error) {
+            console.error('Error creating subject engagement chart:', error);
+        }
+    }
+    
+    // Performance Trends Chart
+    const performanceTrendsCtx = document.getElementById('performanceTrendsChart');
+    if (performanceTrendsCtx) {
+        try {
+            const performanceTrendsData = {{ performance_trends_json|safe }};
+            new Chart(performanceTrendsCtx, {
+                type: 'line',
+                data: performanceTrendsData,
+                options: getLineChartOptions('Average Score (%)', true)
+            });
+        } catch (error) {
+            console.error('Error creating performance trends chart:', error);
+        }
+    }
+}
+
+// Reusable chart options
+function getLineChartOptions(yAxisTitle, max100 = false) {
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: max100 ? 100 : undefined,
+                title: {
+                    display: true,
+                    text: yAxisTitle
+                }
+            }
+        }
+    };
+}
+
+function getBarChartOptions(yAxisTitle) {
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: yAxisTitle
+                }
+            }
+        }
+    };
+}
+</script>
+{% endblock %}

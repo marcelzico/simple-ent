@@ -1,0 +1,306 @@
+<!-- templates/admin/notifications/send.html -->
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}Envoyer notification - Admin MedZone{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- En-tête -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">Envoyer une notification</h1>
+            <p class="text-muted mb-0">Notification aux utilisateurs</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Nouvelle notification</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="notificationForm">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Destinataires</label>
+                            <select class="form-select" name="target" required>
+                                <option value="">Sélectionner les destinataires...</option>
+                                {% for value, label in target_groups %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Type de notification</label>
+                            <select class="form-select" name="notification_type" required>
+                                <option value="">Sélectionner le type...</option>
+                                {% for value, label in notification_types %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Sujet</label>
+                            <input type="text" class="form-control" name="subject" required 
+                                   placeholder="Sujet de la notification...">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-control" name="message" rows="8" required 
+                                      placeholder="Contenu de la notification..."></textarea>
+                            <div class="mt-2 text-end">
+                                <small id="charCount" class="text-muted">0/5000 caractères</small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">Options supplémentaires</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="urgent" id="urgent">
+                                <label class="form-check-label" for="urgent">
+                                    Notification urgente
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="save_template" id="save_template">
+                                <label class="form-check-label" for="save_template">
+                                    Sauvegarder comme template
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary" onclick="previewNotification()">
+                                <i class="fas fa-eye me-2"></i>Prévisualiser
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Envoyer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <!-- Statistiques -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0">Statistiques d'envoi</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Total utilisateurs:</span>
+                            <span id="totalUsers">Chargement...</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Étudiants:</span>
+                            <span id="totalStudents">Chargement...</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Enseignants:</span>
+                            <span id="totalTeachers">Chargement...</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Premium:</span>
+                            <span id="totalPremium">Chargement...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Templates sauvegardés -->
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Templates</h6>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <button class="list-group-item list-group-item-action" onclick="loadTemplate('welcome')">
+                            <strong>Bienvenue</strong><br>
+                            <small>Message de bienvenue aux nouveaux utilisateurs</small>
+                        </button>
+                        <button class="list-group-item list-group-item-action" onclick="loadTemplate('premium_expiring')">
+                            <strong>Premium expire</strong><br>
+                            <small>Notification d'expiration d'abonnement</small>
+                        </button>
+                        <button class="list-group-item list-group-item-action" onclick="loadTemplate('maintenance')">
+                            <strong>Maintenance</strong><br>
+                            <small>Avis de maintenance système</small>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal prévisualisation -->
+<div class="modal fade" id="previewModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Prévisualisation de la notification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="previewContent">
+                    <!-- Contenu généré par JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Compteur de caractères
+    const messageTextarea = document.querySelector('textarea[name="message"]');
+    const charCount = document.getElementById('charCount');
+    
+    messageTextarea.addEventListener('input', function() {
+        const count = this.value.length;
+        charCount.textContent = `${count}/5000 caractères`;
+        
+        if (count > 5000) {
+            charCount.classList.add('text-danger');
+        } else {
+            charCount.classList.remove('text-danger');
+        }
+    });
+    
+    // Charger les statistiques
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('{% url "admin-user:notification_stats" %}')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('totalUsers').textContent = data.total_users || 0;
+            document.getElementById('totalStudents').textContent = data.total_students || 0;
+            document.getElementById('totalTeachers').textContent = data.total_teachers || 0;
+            document.getElementById('totalPremium').textContent = data.total_premium || 0;
+        });
+    });
+    
+    function previewNotification() {
+        const form = document.getElementById('notificationForm');
+        const formData = new FormData(form);
+        
+        // Récupérer les valeurs
+        const target = formData.get('target');
+        const subject = formData.get('subject');
+        const message = formData.get('message');
+        const notificationType = formData.get('notification_type');
+        const urgent = formData.get('urgent') ? 'Oui' : 'Non';
+        
+        // Générer la prévisualisation
+        const previewContent = document.getElementById('previewContent');
+        previewContent.innerHTML = `
+            <div class="card">
+                <div class="card-header ${urgent === 'Oui' ? 'bg-warning' : 'bg-primary'} text-white">
+                    <strong>${subject}</strong>
+                    ${urgent === 'Oui' ? '<span class="badge bg-danger float-end">URGENT</span>' : ''}
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Destinataires:</strong> ${getTargetLabel(target)}<br>
+                        <strong>Type:</strong> ${getNotificationTypeLabel(notificationType)}<br>
+                        <strong>Urgent:</strong> ${urgent}
+                    </div>
+                    <hr>
+                    <div class="notification-content">
+                        ${message.replace(/\n/g, '<br>')}
+                    </div>
+                </div>
+                <div class="card-footer text-muted small">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Ceci est une prévisualisation. Le message réel sera formaté selon le type sélectionné.
+                </div>
+            </div>
+        `;
+        
+        const modal = new bootstrap.Modal(document.getElementById('previewModal'));
+        modal.show();
+    }
+    
+    function getTargetLabel(targetValue) {
+        const targets = {
+            'all': 'Tous les utilisateurs',
+            'students': 'Étudiants uniquement',
+            'teachers': 'Enseignants uniquement',
+            'premium': 'Utilisateurs premium',
+            'staff': 'Staff uniquement'
+        };
+        return targets[targetValue] || targetValue;
+    }
+    
+    function getNotificationTypeLabel(typeValue) {
+        const types = {
+            'email': 'Email',
+            'in_app': 'Notification interne',
+            'both': 'Email + Notification interne'
+        };
+        return types[typeValue] || typeValue;
+    }
+    
+    function loadTemplate(templateName) {
+        const templates = {
+            'welcome': {
+                subject: 'Bienvenue sur MedZone !',
+                message: 'Cher(e) utilisateur(trice),\n\nNous sommes ravis de vous accueillir sur MedZone, la plateforme d\'apprentissage médical de référence.\n\nPour commencer votre expérience, nous vous invitons à :\n1. Compléter votre profil\n2. Explorer les cours disponibles\n3. Vous inscrire à vos premières matières\n\nN\'hésitez pas à nous contacter si vous avez des questions.\n\nCordialement,\nL\'équipe MedZone'
+            },
+            'premium_expiring': {
+                subject: 'Votre abonnement Premium expire bientôt',
+                message: 'Bonjour,\n\nVotre abonnement Premium MedZone expire le [DATE].\n\nPour continuer à bénéficier de tous les avantages Premium :\n• Accès illimité aux cours\n• Support prioritaire\n• Certifications\n\nRenouvelez dès maintenant en vous rendant dans votre espace Premium.\n\nL\'équipe MedZone'
+            },
+            'maintenance': {
+                subject: 'Maintenance planifiée',
+                message: 'Cher(e) utilisateur(trice),\n\nUne maintenance système est prévue le [DATE] à [HEURE].\n\nLa plateforme sera temporairement indisponible pendant environ 2 heures.\n\nNous vous remercions de votre compréhension.\n\nL\'équipe technique MedZone'
+            }
+        };
+        
+        const template = templates[templateName];
+        if (template) {
+            document.querySelector('input[name="subject"]').value = template.subject;
+            document.querySelector('textarea[name="message"]').value = template.message;
+            
+            // Déclencher le compteur de caractères
+            messageTextarea.dispatchEvent(new Event('input'));
+        }
+    }
+    
+    // Soumission du formulaire
+    document.getElementById('notificationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (confirm('Êtes-vous sûr de vouloir envoyer cette notification ?')) {
+            const formData = new FormData(this);
+            
+            fetch('{% url "admin-user:send_notification" %}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', 'Notification envoyée avec succès !');
+                    this.reset();
+                    messageTextarea.dispatchEvent(new Event('input'));
+                } else {
+                    showToast('error', data.message || 'Erreur lors de l\'envoi');
+                }
+            })
+            .catch(error => {
+                showToast('error', 'Erreur de connexion');
+            });
+        }
+    });
+</script>
+{% endblock %}

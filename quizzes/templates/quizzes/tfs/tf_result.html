@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}True/False Results - {{ chapter.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <!-- Results Header -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-check-circle me-2"></i>
+                        True/False Quiz Result
+                    </h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="display-4 text-{% if score >= 60 %}success{% else %}warning{% endif %} mb-3">
+                        {{ score|floatformat:1 }}%
+                    </div>
+                    <p class="lead">
+                        Vous avez {{ correct }} sur {{ total }} questions correctes
+                    </p>
+                    
+                    <div class="progress mb-4" style="height: 20px;">
+                        <div class="progress-bar bg-success" style="width: {{ score }}%">
+                            {{ score|floatformat:1 }}%
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-center">
+                        <a href="{% url 'lessoncopy:lesson' chapter.ue.id chapter.id %}" class="btn btn-outline-primary">
+                            <i class="fas fa-book me-2"></i>Revoir le chapitre
+                        </a>
+                        <a href="{% url 'quizzes:start_tf' chapter.id %}" class="btn btn-primary">
+                            <i class="fas fa-redo me-2"></i>Essayer à nouveau
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questions Review -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2"></i>
+                        Question Review ({{ questions|length }} questions)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for question in questions %}
+                    <div class="card mb-3 {% if question.is_correct %}border-success{% else %}border-danger{% endif %}">
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                <span class="badge bg-secondary me-2">Q{{ forloop.counter }}</span>
+                                {{ question.question }}
+                            </h6>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="p-2 rounded 
+                                            {% if question.answer == True and question.user_answer == True %}bg-success text-white
+                                            {% elif question.answer == True and question.user_answer == False %}bg-danger text-white
+                                            {% elif question.answer == True %}bg-light
+                                            {% endif %}">
+                                        <strong>Vraie:</strong> 
+                                        {% if question.answer == True %}
+                                            <i class="fas fa-check ms-2"></i> (Correct)
+                                        {% endif %}
+                                        {% if question.user_answer == True and question.answer == True %}
+                                            <span class="ms-2">✓ Votre réponse</span>
+                                        {% elif question.user_answer == True and question.answer == False %}
+                                            <span class="ms-2">✗ Votre réponse</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="p-2 rounded 
+                                            {% if question.answer == False and question.user_answer == False %}bg-success text-white
+                                            {% elif question.answer == False and question.user_answer == True %}bg-danger text-white
+                                            {% elif question.answer == False %}bg-light
+                                            {% endif %}">
+                                        <strong>Faux:</strong>
+                                        {% if question.answer == False %}
+                                            <i class="fas fa-check ms-2"></i> (Correct)
+                                        {% endif %}
+                                        {% if question.user_answer == False and question.answer == False %}
+                                            <span class="ms-2">✓ Votre réponse</span>
+                                        {% elif question.user_answer == False and question.answer == True %}
+                                            <span class="ms-2">✗ Votre réponse</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Feedback -->
+                            <div class="mt-3">
+                                {% if question.is_correct %}
+                                <div class="alert alert-success py-2 mb-0">
+                                    <i class="fas fa-check me-2"></i>
+                                    <strong>Correct!</strong>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-danger py-2 mb-0">
+                                    <i class="fas fa-times me-2"></i>
+                                    <strong>Incorrect.</strong>
+                                    Vous avez sélectionné "{% if question.user_answer %}Vraie{% else %}Faux{% endif %}", 
+                                    mais la bonne réponse est "{% if question.answer %}Vraie{% else %}Faux{% endif %}".
+                                </div>
+                                {% endif %}
+                                
+                                {% if question.explanation %}
+                                <div class="mt-2 p-2 bg-light rounded">
+                                    <small class="text-muted">
+                                        <strong>Explanation:</strong> {{ question.explanation }}
+                                    </small>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

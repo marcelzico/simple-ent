@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ quiz.title }} - Details{% endblock %}
+
+{% block appnav %}
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:subject_list" %}">Liste UE</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url "lecon:subject_detail" quiz.subject.id %}">{{ quiz.subject.title }}</a>
+    </li>
+    <li class="breadcrumb-item active">{{ quiz.title }}</li>
+{% endblock appnav %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ quiz.title }}</h4>
+                <div>
+                    {% if user.is_teacher or user.is_superuser %}
+                    <a href="{% url 'quizzes:edit_mcq_quiz' quiz.id %}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a href="{% url 'quizzes:delete_mcq_quiz' quiz.id %}" class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <h5>Description</h5>
+            <p>{{ quiz.description|linebreaks }}</p>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h5>Quiz Information</h5>
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>Subject:</strong></td>
+                            <td>{{ quiz.subject.title }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Time Limit:</strong></td>
+                            <td>{{ quiz.time_limit }} minutes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Questions:</strong></td>
+                            <td>{{ quiz.questions.count }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Passing Score:</strong></td>
+                            <td>{{ quiz.score_to_pass }}%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Max Attempts:</strong></td>
+                            <td>{{ quiz.max_attempts }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <h5>Schedule</h5>
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>Start Date:</strong></td>
+                            <td>{{ quiz.start_date|date:"M d, Y H:i" }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>End Date:</strong></td>
+                            <td>{{ quiz.end_date|date:"M d, Y H:i" }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Status:</strong></td>
+                            <td>
+                                {% if quiz.is_available %}
+                                <span class="badge bg-success">Active</span>
+                                {% elif now < quiz.start_date %}
+                                <span class="badge bg-warning">Upcoming</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Ended</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <h5 class="mt-4">Chapters Covered</h5>
+            <div class="mb-3">
+                {% for chapter in quiz.chapters.all %}
+                <span class="badge bg-info me-1">{{ chapter.title }}</span>
+                {% endfor %}
+            </div>
+            
+            <h5 class="mt-4">Your Attempts</h5>
+            {% if attempts %}
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Attempt Date</th>
+                            <th>Score</th>
+                            <th>Status</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attempt in attempts %}
+                        <tr>
+                            <td>{{ attempt.end_time|date:"M d, Y H:i" }}</td>
+                            <td>{{ attempt.score|floatformat:1 }}%</td>
+                            <td>
+                                {% if attempt.completed %}
+                                <span class="badge bg-success">Completed</span>
+                                {% else %}
+                                <span class="badge bg-warning">In Progress</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if attempt.score >= quiz.score_to_pass %}
+                                <span class="badge bg-success">Passed</span>
+                                {% else %}
+                                <span class="badge bg-danger">Failed</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted">No attempts yet.</p>
+            {% endif %}
+        </div>
+        <div class="card-footer">
+            {% if quiz.is_available and can_attempt %}
+            <a href="{% url 'quizzes:start_mcq_quiz' quiz.id %}" class="btn btn-primary btn-lg w-100">
+                Start Quiz
+            </a>
+            {% elif attempts.count >= quiz.max_attempts %}
+            <button class="btn btn-secondary btn-lg w-100" disabled>
+                No Attempts Remaining
+            </button>
+            {% elif now < quiz.start_date %}
+            <button class="btn btn-warning btn-lg w-100" disabled>
+                Quiz starts {{ quiz.start_date|date:"M d, Y H:i" }}
+            </button>
+            {% elif now > quiz.end_date %}
+            <button class="btn btn-secondary btn-lg w-100" disabled>
+                Quiz has ended
+            </button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

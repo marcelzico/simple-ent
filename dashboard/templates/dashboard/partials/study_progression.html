@@ -1,0 +1,1613 @@
+<!-- dashboard/templates/dashboard/student_progression.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tableau de Bord - Progression des Étudiants{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Responsive Styles */
+    :root {
+        --primary-color: #4e73df;
+        --success-color: #1cc88a;
+        --warning-color: #f6c23e;
+        --danger-color: #e74a3b;
+        --info-color: #36b9cc;
+    }
+
+    /* Mobile-first responsive design */
+    .kpi-card {
+        transition: transform 0.2s;
+        cursor: pointer;
+        margin-bottom: 15px;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .kpi-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .filter-section {
+        /*background: #f8f9fa;*/
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .dashboard-card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        margin-bottom: 20px;
+    }
+    
+    .dashboard-card .card-header {
+        background: white;
+        border-bottom: 2px solid #f0f0f0;
+        border-radius: 15px 15px 0 0;
+        font-weight: 600;
+        padding: 12px 15px;
+    }
+    
+    /* Responsive table */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .table {
+        min-width: 600px;
+    }
+    
+    /* Student rows for mobile */
+    .student-row {
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    
+    .student-row:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .clickable-badge {
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+    
+    .clickable-badge:hover {
+        opacity: 0.8;
+    }
+    
+    .student-list-item {
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    
+    .student-list-item:hover {
+        background-color: #f0f0f0;
+    }
+    
+    /* Loading overlay */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Canvas responsiveness */
+    canvas {
+        max-width: 100%;
+        height: auto !important;
+        min-height: 250px;
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+        .container-fluid {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+        h1.h2 {
+            font-size: 1.5rem;
+        }
+        
+        .kpi-card h2 {
+            font-size: 1.5rem;
+        }
+        
+        .kpi-card h6 {
+            font-size: 0.75rem;
+        }
+        
+        .filter-section .row > div {
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        
+        .btn-group-mobile {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .btn-group-mobile .btn {
+            margin-left: 0 !important;
+        }
+        
+        .tab-content {
+            font-size: 0.9rem;
+        }
+        
+        .modal-dialog {
+            margin: 10px;
+        }
+        
+        .modal-body {
+            padding: 10px;
+        }
+        
+        /* Improve touch targets */
+        .clickable-badge,
+        .student-list-item,
+        .student-row,
+        button {
+            min-height: 44px;
+        }
+        
+        /* Better spacing for cards on mobile */
+        .dashboard-card {
+            margin-bottom: 15px;
+        }
+        
+        /* Adjust chart sizes */
+        canvas {
+            min-height: 200px !important;
+        }
+    }
+    
+    /* Tablet optimizations */
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .kpi-card h2 {
+            font-size: 1.8rem;
+        }
+        
+        .container-fluid {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    }
+    
+    /* Print styles */
+    @media print {
+        .filter-section,
+        .btn,
+        .clickable-badge {
+            display: none;
+        }
+        
+        .dashboard-card {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+        
+        canvas {
+            max-width: 100% !important;
+        }
+    }
+    
+    /* Custom scrollbar for tables */
+    .table-responsive::-webkit-scrollbar {
+        height: 8px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+    
+    /* Progress bar styles */
+    .progress {
+        background-color: #e9ecef;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    .progress-bar {
+        transition: width 0.3s ease;
+    }
+    
+    /* Badge styles */
+    .badge {
+        font-weight: 500;
+        padding: 5px 10px;
+    }
+    
+    /* Stats summary */
+    #study-stats-summary {
+        border-top: 1px solid #dee2e6;
+        margin-top: 15px;
+        padding-top: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-2 px-md-4 py-3 py-md-4">
+    <div class="col">
+        <a href="{% url "dashboard:dashboard" %}" class="btn btn-outline-info m-1">Gestion des utilisateurs</a>
+        <a href="{% url "dashboard:home" %}" class="btn btn-outline-secondary m-1">Gestion des progressions</a>
+    </div>
+    
+    <!-- En-tête de page -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+        <div class="mb-2 mb-md-0">
+            <h1 class="h2 mb-1">📊 Progression des Étudiants</h1>
+            <p class="text-muted">Suivi des performances académiques, engagement et habitudes d'étude</p>
+        </div>
+        <div class="btn-group-mobile">
+            <button class="btn btn-outline-secondary" onclick="refreshDashboard()">
+                🔄 Actualiser
+            </button>
+        </div>
+    </div>
+    
+    <!-- SECTION FILTRES -->
+    <div class="filter-section">
+        <div class="row g-2 g-md-3">
+            <div class="col-12 col-md-6 col-lg-2">
+                <label class="form-label fw-semibold">Niveau</label>
+                <select id="filter-level" class="form-select cascading-select" onchange="onLevelChange()">
+                    <option value="">Tous les niveaux</option>
+                    {% for level_code, level_name in levels %}
+                        <option value="{{ level_code }}">{{ level_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <label class="form-label fw-semibold">UE / Matière</label>
+                <select id="filter-unite" class="form-select cascading-select" onchange="onUniteChange()" disabled>
+                    <option value="">Sélectionnez d'abord un niveau</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3">
+                <label class="form-label fw-semibold">Chapitre</label>
+                <select id="filter-chapter" class="form-select cascading-select" disabled>
+                    <option value="">Sélectionnez d'abord une UE</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-6 col-lg-2">
+                <label class="form-label fw-semibold">Étudiant</label>
+                <select id="filter-student" class="form-select cascading-select" disabled>
+                    <option value="">Sélectionnez d'abord un niveau</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-6 col-lg-2">
+                <label class="form-label fw-semibold">Date limite</label>
+                <input type="date" id="filter-date-to" class="form-control">
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 d-flex flex-column flex-sm-row gap-2 justify-content-end">
+                <button class="btn btn-primary" onclick="applyFilters()">
+                    🔍 Appliquer les filtres
+                </button>
+                <button class="btn btn-outline-secondary" onclick="resetFilters()">
+                    Réinitialiser
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Indicateur de chargement -->
+    <div id="loading-indicator" class="text-center py-5 d-none">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="mt-2">Chargement des données...</p>
+    </div>
+    
+    <!-- Contenu du tableau de bord -->
+    <div id="dashboard-content">
+        
+        <!-- COMPOSANT 1: KPI Globaux -->
+        <div class="row mb-4" id="kpi-section"></div>
+        
+        <!-- COMPOSANT 2: Progression par UE -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card dashboard-card">
+                    <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
+                        <span><i class="bi bi-bar-chart-steps"></i> Progression par UE / Matière</span>
+                        <small class="text-muted">Cliquez sur une ligne pour voir les détails du chapitre</small>
+                    </div>
+                    <div class="card-body p-0 p-md-3">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0" id="ue-progression-table">
+                                <thead>
+                                    <tr>
+                                        <th>UE / Matière</th>
+                                        <th>Niveau</th>
+                                        <th>Semestre</th>
+                                        <th>Taux d'achèvement</th>
+                                        <th>Score moyen</th>
+                                        <th>Étudiants</th>
+                                        <th>Chapitres</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ue-progression-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MODAL: Détails du Chapitre -->
+        <div class="modal fade" id="chapterModal" tabindex="-1">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">📖 Détails du Chapitre</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" id="chapter-modal-body"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MODAL: Liste des Étudiants -->
+        <div class="modal fade" id="studentListModal" tabindex="-1">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="studentListModalTitle">Liste des Étudiants</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" id="studentListModalBody"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MODAL: Détail de l'Étudiant -->
+        <div class="modal fade" id="studentModal" tabindex="-1">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">👨‍🎓 Progression Détaillée de l'Étudiant</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" id="student-modal-body"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- COMPOSANT 3 & 4: Distribution des Performances -->
+        <div class="row mb-4">
+            <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <i class="bi bi-graph-up"></i> Distribution des Scores
+                    </div>
+                    <div class="card-body">
+                        <canvas id="scoreHistogram" height="250"></canvas>
+                        <hr>
+                        <div class="row text-center" id="score-stats"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <i class="bi bi-trophy"></i> Meilleurs et Moins Bons Performeurs
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#top-performers">🏆 Meilleurs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#bottom-performers">⚠️ À améliorer</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content mt-3">
+                            <div class="tab-pane active" id="top-performers">
+                                <div id="top-performers-list"></div>
+                                <div class="text-center mt-3" id="top-performers-view-all"></div>
+                            </div>
+                            <div class="tab-pane" id="bottom-performers">
+                                <div id="bottom-performers-list"></div>
+                                <div class="text-center mt-3" id="bottom-performers-view-all"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- COMPOSANT 5: Analyses Temporelles -->
+        <div class="row mb-4">
+            <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <i class="bi bi-calendar-week"></i> Temps d'Étude Quotidien (30 jours)
+                    </div>
+                    <div class="card-body">
+                        <canvas id="dailyStudyChart" height="250" style="width: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <i class="bi bi-bar-chart"></i> Tentatives de Quiz par Semaine
+                    </div>
+                    <div class="card-body">
+                        <canvas id="weeklyQuizChart" height="250" style="width: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- COMPOSANT 6: Métriques d'Engagement -->
+        <div class="row mb-4">
+            <div class="col-12 col-md-6 col-lg-4 mb-3 mb-md-0">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <i class="bi bi-pencil-square"></i> Activité d'Annotation
+                    </div>
+                    <div class="card-body text-center" id="annotation-stats"></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-3 mb-md-0">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <i class="bi bi-card-list"></i> Engagement Flashcards
+                    </div>
+                    <div class="card-body text-center" id="flashcard-stats"></div>
+                </div>
+            </div>
+            <div class="col-12 col-md-12 col-lg-4">
+                <div class="card dashboard-card">
+                    <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
+                        <span><i class="bi bi-people"></i> Statut d'Activité des Étudiants</span>
+                        <span id="activity-status-badge"></span>
+                    </div>
+                    <div class="card-body" id="activity-status"></div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Chart instances
+let scoreChart = null;
+let dailyStudyChart = null;
+let weeklyQuizChart = null;
+
+// Current filters
+let currentFilters = {};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    loadDashboardData();
+});
+
+// Niveau change handler
+function onLevelChange() {
+    const level = document.getElementById('filter-level').value;
+    
+    // Reset dependent selects
+    document.getElementById('filter-unite').innerHTML = '<option value="">Sélectionnez une UE...</option>';
+    document.getElementById('filter-unite').disabled = true;
+    document.getElementById('filter-chapter').innerHTML = '<option value="">Sélectionnez d\'abord une UE...</option>';
+    document.getElementById('filter-chapter').disabled = true;
+    document.getElementById('filter-student').innerHTML = '<option value="">Sélectionnez d\'abord un niveau...</option>';
+    document.getElementById('filter-student').disabled = true;
+    
+    if (level) {
+        // Load UEs for this level
+        fetch(`/dashboard/api/unites-by-level/?level=${encodeURIComponent(level)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.unites.length > 0) {
+                    const uniteSelect = document.getElementById('filter-unite');
+                    uniteSelect.innerHTML = '<option value="">Toutes les UE</option>';
+                    data.unites.forEach(unite => {
+                        uniteSelect.innerHTML += `<option value="${unite.id}">${unite.title} (${unite.semester || ''})</option>`;
+                    });
+                    uniteSelect.disabled = false;
+                } else {
+                    document.getElementById('filter-unite').innerHTML = '<option value="">Aucune UE pour ce niveau</option>';
+                }
+            });
+        
+        // Load students for this level
+        fetch(`/dashboard/api/students-by-level/?level=${encodeURIComponent(level)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const studentSelect = document.getElementById('filter-student');
+                    studentSelect.innerHTML = '<option value="">Tous les étudiants</option>';
+                    data.students.forEach(student => {
+                        studentSelect.innerHTML += `<option value="${student.id}">${student.display_name}</option>`;
+                    });
+                    studentSelect.disabled = false;
+                }
+            });
+    }
+}
+
+// UE change handler
+function onUniteChange() {
+    const uniteId = document.getElementById('filter-unite').value;
+    const chapterSelect = document.getElementById('filter-chapter');
+    
+    if (uniteId) {
+        chapterSelect.innerHTML = '<option value="">Tous les chapitres</option>';
+        chapterSelect.disabled = true;
+        
+        fetch(`/dashboard/api/chapters-by-unite/?unite_id=${uniteId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.chapters.length > 0) {
+                    data.chapters.forEach(chapter => {
+                        chapterSelect.innerHTML += `<option value="${chapter.id}">${chapter.title}</option>`;
+                    });
+                    chapterSelect.disabled = false;
+                } else {
+                    chapterSelect.innerHTML = '<option value="">Aucun chapitre</option>';
+                }
+            });
+    } else {
+        chapterSelect.innerHTML = '<option value="">Sélectionnez d\'abord une UE...</option>';
+        chapterSelect.disabled = true;
+    }
+}
+
+// Apply filters
+function applyFilters() {
+    currentFilters = {
+        level: document.getElementById('filter-level').value,
+        unite: document.getElementById('filter-unite').value,
+        chapter: document.getElementById('filter-chapter').value,
+        student: document.getElementById('filter-student').value,
+        date_to: document.getElementById('filter-date-to').value,
+    };
+    loadDashboardData();
+}
+
+// Reset filters
+function resetFilters() {
+    document.getElementById('filter-level').value = '';
+    document.getElementById('filter-unite').innerHTML = '<option value="">Sélectionnez d\'abord un niveau</option>';
+    document.getElementById('filter-unite').disabled = true;
+    document.getElementById('filter-chapter').innerHTML = '<option value="">Sélectionnez d\'abord une UE</option>';
+    document.getElementById('filter-chapter').disabled = true;
+    document.getElementById('filter-student').innerHTML = '<option value="">Sélectionnez d\'abord un niveau</option>';
+    document.getElementById('filter-student').disabled = true;
+    document.getElementById('filter-date-to').value = '';
+    currentFilters = {};
+    loadDashboardData();
+}
+
+// Load dashboard data
+function loadDashboardData() {
+    showLoading();
+    
+    fetch('/dashboard/api/filter/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify(currentFilters)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateDashboard(data.data);
+        } else {
+            console.error('Erreur:', data.error);
+            showError(data.error);
+        }
+        hideLoading();
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        hideLoading();
+        showError('Échec du chargement des données');
+    });
+}
+
+// Update dashboard
+function updateDashboard(dashboardData) {
+    updateKPIs(dashboardData.kpis);
+    updateProgressionByUE(dashboardData.progression_by_ue);
+    updatePerformanceDistribution(dashboardData.performance_distribution);
+    updateTimeAnalytics(dashboardData);
+    updateEngagementMetrics(dashboardData.engagement);
+    
+    if (dashboardData.student_detail) {
+        showStudentDetailModal(dashboardData.student_detail);
+    }
+}
+
+// Update KPIs
+function updateKPIs(kpis) {
+    const html = `
+        <div class="col-sm-6 col-lg-3">
+            <div class="card kpi-card text-center p-3">
+                <h6 class="text-muted">Total Étudiants</h6>
+                <h2 class="mb-0">${kpis.total_students}</h2>
+                <small>Actifs: ${kpis.active_students} (${kpis.active_percentage}%)</small>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card kpi-card text-center p-3">
+                <h6 class="text-muted">Score Moyen Quiz</h6>
+                <h2 class="mb-0 ${kpis.overall_avg_score >= 70 ? 'text-success' : (kpis.overall_avg_score >= 50 ? 'text-warning' : 'text-danger')}">
+                    ${kpis.overall_avg_score}%
+                </h2>
+                <small>Moyenne générale</small>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card kpi-card text-center p-3 clickable-badge" onclick="showAtRiskStudents()">
+                <h6 class="text-muted">Étudiants à Risque</h6>
+                <h2 class="mb-0 text-danger">${kpis.at_risk_students}</h2>
+                <small>${kpis.at_risk_percentage}% du total - Cliquez pour voir</small>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card kpi-card text-center p-3">
+                <h6 class="text-muted">Taux d'Achèvement</h6>
+                <h2 class="mb-0">${kpis.completion_rate}%</h2>
+                <div class="progress mt-2" style="height: 8px;">
+                    <div class="progress-bar ${kpis.completion_rate >= 70 ? 'bg-success' : (kpis.completion_rate >= 50 ? 'bg-warning' : 'bg-danger')}" 
+                        style="width: ${kpis.completion_rate}%"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.getElementById('kpi-section').innerHTML = html;
+}
+
+// Update progression by UE
+function updateProgressionByUE(progressionData) {
+    // Sort by level
+    const levelOrder = {'paces': 1, '2ème année': 2, '3ème année': 3, '4ème année': 4, '5ème année': 5, '6ème année': 6, 'interne': 7};
+    progressionData.sort((a, b) => {
+        const orderA = levelOrder[a.level] || 99;
+        const orderB = levelOrder[b.level] || 99;
+        return orderA - orderB;
+    });
+    
+    let html = '';
+    progressionData.forEach(ue => {
+        const completionClass = ue.completion_rate >= 70 ? 'bg-success' : (ue.completion_rate >= 50 ? 'bg-warning' : 'bg-danger');
+        const scoreClass = ue.avg_score >= 70 ? 'text-success' : (ue.avg_score >= 50 ? 'text-warning' : 'text-danger');
+        
+        html += `
+            <tr class="student-row" onclick="showChaptersForUE(${ue.id})">
+                <td><strong>${ue.name}</strong></td>
+                <td>${ue.level || '-'}</td>
+                <td>${ue.semester || '-'}</td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <div class="progress flex-grow-1" style="height: 8px;">
+                            <div class="progress-bar ${completionClass}" style="width: ${ue.completion_rate}%"></div>
+                        </div>
+                        <span class="ms-2 small">${ue.completion_rate}%</span>
+                    </div>
+                </td>
+                <td class="${scoreClass} fw-bold">${ue.avg_score}%</td>
+                <td>${ue.total_students}</td>
+                <td>${ue.total_chapters}</td>
+            </tr>
+        `;
+    });
+    
+    if (progressionData.length === 0) {
+        html = '<tr><td colspan="7" class="text-center">Aucune donnée disponible</td></tr>';
+    }
+    
+    document.getElementById('ue-progression-body').innerHTML = html;
+}
+
+// Update performance distribution
+function updatePerformanceDistribution(data) {
+    if (scoreChart) {
+        scoreChart.destroy();
+    }
+    
+    const ctx = document.getElementById('scoreHistogram').getContext('2d');
+    scoreChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.distribution.map(d => d.range),
+            datasets: [{
+                label: 'Nombre de Tentatives',
+                data: data.distribution.map(d => d.count),
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'Nombre de Tentatives' } },
+                x: { title: { display: true, text: 'Plage de Scores (%)' } }
+            }
+        }
+    });
+    
+    document.getElementById('score-stats').innerHTML = `
+        <div class="col-4">
+            <small class="text-muted">Total Tentatives</small>
+            <h5>${data.total_attempts}</h5>
+        </div>
+        <div class="col-4">
+            <small class="text-muted">Score Moyen</small>
+            <h5 class="${data.average_score >= 70 ? 'text-success' : (data.average_score >= 50 ? 'text-warning' : 'text-danger')}">
+                ${data.average_score}%
+            </h5>
+        </div>
+        <div class="col-4">
+            <small class="text-muted">Score Médian</small>
+            <h5>${data.median_score}%</h5>
+        </div>
+    `;
+    
+    // Top performers
+    let topHtml = '';
+    data.top_performers.slice(0, 5).forEach((student, index) => {
+        topHtml += `
+            <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded student-list-item" onclick="showStudentDetail(${student.id})">
+                <div>
+                    <span class="badge bg-warning me-2">#${index + 1}</span>
+                    <strong>${student.name}</strong>
+                    <br><small class="text-muted">${student.level || 'N/A'}</small>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-success fs-6">${Math.round(student.avg_score)}%</span>
+                    <br><small>${student.quiz_count} quiz</small>
+                </div>
+            </div>
+        `;
+    });
+    document.getElementById('top-performers-list').innerHTML = topHtml || '<p class="text-muted">Aucune donnée disponible</p>';
+    document.getElementById('top-performers-view-all').innerHTML = data.top_performers.length > 5 ? 
+        `<button class="btn btn-sm btn-outline-primary" onclick="showTopPerformers()">Voir les ${data.top_performers.length} meilleurs →</button>` : '';
+
+    // Bottom performers
+    let bottomHtml = '';
+    data.bottom_performers.slice(0, 5).forEach((student, index) => {
+        bottomHtml += `
+            <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded student-list-item" onclick="showStudentDetail(${student.id})">
+                <div>
+                    <span class="badge bg-danger me-2">⚠️</span>
+                    <strong>${student.name}</strong>
+                    <br><small class="text-muted">${student.level || 'N/A'}</small>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-danger fs-6">${Math.round(student.avg_score)}%</span>
+                    <br><small>${student.quiz_count} quiz</small>
+                </div>
+            </div>
+        `;
+    });
+    document.getElementById('bottom-performers-list').innerHTML = bottomHtml || '<p class="text-muted">Aucune donnée disponible</p>';
+    document.getElementById('bottom-performers-view-all').innerHTML = data.bottom_performers.length > 5 ?
+        `<button class="btn btn-sm btn-outline-danger" onclick="showBottomPerformers()">Voir les ${data.bottom_performers.length} à améliorer →</button>` : '';
+}
+
+// Update time analytics
+function updateTimeAnalytics(data) {
+    let timeData = data;
+    if (data.time_analytics) {
+        timeData = data.time_analytics;
+    }
+    
+    // Destroy existing charts
+    if (dailyStudyChart) {
+        dailyStudyChart.destroy();
+        dailyStudyChart = null;
+    }
+    if (weeklyQuizChart) {
+        weeklyQuizChart.destroy();
+        weeklyQuizChart = null;
+    }
+    
+    const dailyCanvas = document.getElementById('dailyStudyChart');
+    const weeklyCanvas = document.getElementById('weeklyQuizChart');
+    
+    if (!dailyCanvas || !weeklyCanvas) {
+        console.error('Canvas elements not found');
+        return;
+    }
+    
+    // Daily Study Chart
+    if (timeData.daily_study && Array.isArray(timeData.daily_study) && timeData.daily_study.length > 0) {
+        const ctx = dailyCanvas.getContext('2d');
+        
+        const totalSessions = timeData.daily_study.reduce((sum, d) => sum + (Number(d.sessions) || 0), 0);
+        const totalHours = timeData.daily_study.reduce((sum, d) => sum + (Number(d.hours) || 0), 0);
+        
+        if (totalSessions === 0 && totalHours === 0) {
+            ctx.clearRect(0, 0, dailyCanvas.width, dailyCanvas.height);
+            ctx.font = '16px Arial';
+            ctx.fillStyle = '#999';
+            ctx.textAlign = 'center';
+            ctx.fillText('Aucune donnée d\'étude disponible', dailyCanvas.width / 2, dailyCanvas.height / 2);
+        } else {
+            let dailyData = [...timeData.daily_study];
+            if (dailyData.length > 30) {
+                dailyData = dailyData.slice(-30);
+            }
+            
+            dailyStudyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dailyData.map(d => d.date),
+                    datasets: [
+                        {
+                            label: 'Sessions d\'Étude (Nombre)',
+                            data: dailyData.map(d => Number(d.sessions) || 0),
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y',
+                            order: 2
+                        },
+                        {
+                            label: 'Temps d\'Étude (Heures)',
+                            data: dailyData.map(d => Number(d.hours) || 0),
+                            type: 'line',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.1,
+                            pointRadius: 3,
+                            pointHoverRadius: 5,
+                            yAxisID: 'y1',
+                            order: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { 
+                            position: 'top',
+                            labels: { usePointStyle: true }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    let value = context.raw;
+                                    if (context.dataset.label.includes('Sessions')) {
+                                        return `${label}: ${value} session${value !== 1 ? 's' : ''}`;
+                                    } else {
+                                        return `${label}: ${value.toFixed(1)} heures`;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { 
+                                display: true, 
+                                text: 'Nombre de Sessions',
+                                color: 'rgba(75, 192, 192, 1)'
+                            },
+                            ticks: { stepSize: 1, precision: 0 }
+                        },
+                        y1: {
+                            position: 'right',
+                            beginAtZero: true,
+                            title: { 
+                                display: true, 
+                                text: 'Temps d\'Étude (Heures)',
+                                color: 'rgba(255, 99, 132, 1)'
+                            },
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return value.toFixed(1) + 'h';
+                                }
+                            },
+                            grid: { drawOnChartArea: false }
+                        },
+                        x: {
+                            title: { display: true, text: 'Date' },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45,
+                                autoSkip: true,
+                                maxTicksLimit: 10
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Add summary stats
+            const avgHoursPerSession = totalSessions > 0 ? (totalHours / totalSessions).toFixed(1) : 0;
+            const avgDailyHours = (totalHours / dailyData.length).toFixed(1);
+            
+            let statsDiv = document.getElementById('study-stats-summary');
+            if (!statsDiv) {
+                statsDiv = document.createElement('div');
+                statsDiv.id = 'study-stats-summary';
+                statsDiv.className = 'row text-center mt-3 pt-2';
+                dailyCanvas.parentElement.appendChild(statsDiv);
+            }
+            statsDiv.innerHTML = `
+                <div class="col-4">
+                    <small class="text-muted">Total Sessions</small>
+                    <h6 class="mb-0">${totalSessions}</h6>
+                </div>
+                <div class="col-4">
+                    <small class="text-muted">Total Heures</small>
+                    <h6 class="mb-0">${totalHours.toFixed(1)}h</h6>
+                </div>
+                <div class="col-4">
+                    <small class="text-muted">Moyenne par Session</small>
+                    <h6 class="mb-0">${avgHoursPerSession}h</h6>
+                </div>
+            `;
+        }
+    }
+    
+    // Weekly Quiz Chart
+    if (timeData.weekly_quiz && Array.isArray(timeData.weekly_quiz) && timeData.weekly_quiz.length > 0) {
+        const ctx = weeklyCanvas.getContext('2d');
+        
+        const totalAttempts = timeData.weekly_quiz.reduce((sum, w) => sum + (w.total || 0), 0);
+        
+        if (totalAttempts === 0) {
+            ctx.clearRect(0, 0, weeklyCanvas.width, weeklyCanvas.height);
+            ctx.font = '16px Arial';
+            ctx.fillStyle = '#999';
+            ctx.textAlign = 'center';
+            ctx.fillText('Aucune donnée de quiz disponible', weeklyCanvas.width / 2, weeklyCanvas.height / 2);
+        } else {
+            weeklyQuizChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: timeData.weekly_quiz.map(w => w.week),
+                    datasets: [
+                        {
+                            label: 'QCM',
+                            data: timeData.weekly_quiz.map(w => w.mcq || 0),
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Vrai/Faux',
+                            data: timeData.weekly_quiz.map(w => w.tf || 0),
+                            backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Q&R',
+                            data: timeData.weekly_quiz.map(w => w.qa || 0),
+                            backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw} tentative${context.raw !== 1 ? 's' : ''}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Nombre de Tentatives' },
+                            ticks: { stepSize: 1, precision: 0 }
+                        },
+                        x: {
+                            title: { display: true, text: 'Semaine' }
+                        }
+                    }
+                }
+            });
+        }
+    }
+}
+
+// Update engagement metrics
+function updateEngagementMetrics(data) {
+    document.getElementById('annotation-stats').innerHTML = `
+        <h2 class="mb-0">${data.annotation.total}</h2>
+        <p class="text-muted">Total Annotations</p>
+        <hr>
+        <div class="row">
+            <div class="col-6">
+                <h5>${data.annotation.students_annotating}</h5>
+                <small>Étudiants</small>
+            </div>
+            <div class="col-6">
+                <h5>${data.annotation.percentage}%</h5>
+                <small>Participation</small>
+            </div>
+        </div>
+        <small class="text-muted">Moyenne ${data.annotation.avg_per_student} par étudiant</small>
+    `;
+    
+    document.getElementById('flashcard-stats').innerHTML = `
+        <h2 class="mb-0">${data.flashcard.total_cards_studied}</h2>
+        <p class="text-muted">Cartes Étudiées</p>
+        <hr>
+        <div class="row">
+            <div class="col-6">
+                <h5>${data.flashcard.mastered_cards}</h5>
+                <small>Maîtrisées</small>
+            </div>
+            <div class="col-6">
+                <h5>${data.flashcard.mastery_rate}%</h5>
+                <small>Taux de Maîtrise</small>
+            </div>
+        </div>
+        <div class="mt-2">
+            <span class="badge bg-info clickable-badge" onclick="showFlashcardUsers()">${data.flashcard.total_students_using} étudiants (${data.flashcard.percentage}%)</span>
+        </div>
+    `;
+    
+    document.getElementById('activity-status-badge').innerHTML = `
+        <button class="btn btn-sm btn-outline-info" onclick="showActiveInactiveStudents()">
+            Voir les listes →
+        </button>
+    `;
+    
+    document.getElementById('activity-status').innerHTML = `
+        <div class="mb-3">
+            <div class="d-flex justify-content-between clickable-badge" onclick="showActiveStudents()">
+                <span>✅ Actifs (7 jours)</span>
+                <strong class="text-success">${data.activity_breakdown.active_7d} (${data.activity_breakdown.active_7d_percentage}%)</strong>
+            </div>
+            <div class="progress" style="height: 10px;">
+                <div class="progress-bar bg-success" style="width: ${data.activity_breakdown.active_7d_percentage}%"></div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="d-flex justify-content-between clickable-badge" onclick="showActiveInactiveStudents(30)">
+                <span>📅 Actifs (30 jours)</span>
+                <strong class="text-info">${data.activity_breakdown.active_30d} (${data.activity_breakdown.active_30d_percentage}%)</strong>
+            </div>
+            <div class="progress" style="height: 10px;">
+                <div class="progress-bar bg-info" style="width: ${data.activity_breakdown.active_30d_percentage}%"></div>
+            </div>
+        </div>
+        <div>
+            <div class="d-flex justify-content-between clickable-badge" onclick="showInactiveStudents()">
+                <span>💤 Inactifs (30 jours)</span>
+                <strong class="text-danger">${data.activity_breakdown.inactive_30d} (${data.activity_breakdown.inactive_30d_percentage}%)</strong>
+            </div>
+            <div class="progress" style="height: 10px;">
+                <div class="progress-bar bg-danger" style="width: ${data.activity_breakdown.inactive_30d_percentage}%"></div>
+            </div>
+        </div>
+        <hr>
+        <div class="row text-center">
+            <div class="col-4">
+                <h6>${data.quiz_engagement.mcq}</h6>
+                <small>QCM</small>
+            </div>
+            <div class="col-4">
+                <h6>${data.quiz_engagement.truefalse}</h6>
+                <small>VF</small>
+            </div>
+            <div class="col-4">
+                <h6>${data.quiz_engagement.qa}</h6>
+                <small>Q&R</small>
+            </div>
+        </div>
+        <hr>
+        <div class="text-center">
+            <strong>${data.study_engagement.total_study_hours} heures</strong> total d'étude<br>
+            <small>${data.study_engagement.total_sessions} sessions • ${data.study_engagement.avg_session_minutes} min en moyenne</small>
+        </div>
+    `;
+}
+
+// Modal Functions
+function showAtRiskStudents() {
+    const level = document.getElementById('filter-level').value;
+    fetch(`/dashboard/api/at-risk-students/?level=${encodeURIComponent(level || '')}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let html = `<div class="list-group">`;
+                if (data.students && data.students.length > 0) {
+                    data.students.forEach(student => {
+                        html += `
+                            <div class="list-group-item student-list-item" onclick="showStudentDetail(${student.id})">
+                                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center">
+                                    <div class="mb-2 mb-sm-0">
+                                        <strong>${student.name}</strong>
+                                        <br><small class="text-muted">${student.level || 'N/A'} • ${student.email}</small>
+                                    </div>
+                                    <div class="text-sm-end">
+                                        <span class="badge bg-danger fs-6">${student.avg_score}%</span>
+                                        <br><small>Dernière activité: ${student.last_activity || 'Jamais'}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += `<div class="list-group-item text-muted text-center">Aucun étudiant à risque trouvé</div>`;
+                }
+                html += `</div>`;
+                document.getElementById('studentListModalTitle').innerHTML = `⚠️ Étudiants à Risque (${data.students ? data.students.length : 0})`;
+                document.getElementById('studentListModalBody').innerHTML = html;
+                new bootstrap.Modal(document.getElementById('studentListModal')).show();
+            }
+        });
+}
+
+function showTopPerformers() {
+    const level = document.getElementById('filter-level').value;
+    fetch(`/dashboard/api/top-performers/?level=${encodeURIComponent(level || '')}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let html = `<div class="list-group">`;
+                data.students.forEach((student, index) => {
+                    html += `
+                        <div class="list-group-item student-list-item" onclick="showStudentDetail(${student.id})">
+                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center">
+                                <div class="mb-2 mb-sm-0">
+                                    <span class="badge bg-warning me-2">#${index + 1}</span>
+                                    <strong>${student.name}</strong>
+                                    <br><small class="text-muted">${student.level || 'N/A'} • ${student.quiz_count} quiz</small>
+                                </div>
+                                <div class="text-sm-end">
+                                    <span class="badge bg-success fs-6">${student.avg_score}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                document.getElementById('studentListModalTitle').innerHTML = `🏆 Meilleurs Performeurs (${data.students.length})`;
+                document.getElementById('studentListModalBody').innerHTML = html;
+                new bootstrap.Modal(document.getElementById('studentListModal')).show();
+            }
+        });
+}
+
+function showBottomPerformers() {
+    const level = document.getElementById('filter-level').value;
+    fetch(`/dashboard/api/top-performers/?level=${encodeURIComponent(level || '')}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const bottomPerformers = [...data.students].sort((a, b) => a.avg_score - b.avg_score).slice(0, 20);
+                let html = `<div class="list-group">`;
+                bottomPerformers.forEach((student, index) => {
+                    html += `
+                        <div class="list-group-item student-list-item" onclick="showStudentDetail(${student.id})">
+                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center">
+                                <div class="mb-2 mb-sm-0">
+                                    <span class="badge bg-danger me-2">⚠️</span>
+                                    <strong>${student.name}</strong>
+                                    <br><small class="text-muted">${student.level || 'N/A'} • ${student.quiz_count} quiz</small>
+                                </div>
+                                <div class="text-sm-end">
+                                    <span class="badge bg-danger fs-6">${student.avg_score}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                document.getElementById('studentListModalTitle').innerHTML = `⚠️ À Améliorer (${bottomPerformers.length})`;
+                document.getElementById('studentListModalBody').innerHTML = html;
+                new bootstrap.Modal(document.getElementById('studentListModal')).show();
+            }
+        });
+}
+
+function showActiveInactiveStudents(days = 30) {
+    const level = document.getElementById('filter-level').value;
+    fetch(`/dashboard/api/active-inactive-students/?level=${encodeURIComponent(level || '')}&days=${days}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let html = `
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#active-tab">✅ Actifs (${data.total_active})</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#inactive-tab">💤 Inactifs (${data.total_inactive})</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content mt-3">
+                        <div class="tab-pane active" id="active-tab">
+                            <div class="list-group">
+                `;
+                
+                data.active_students.forEach(student => {
+                    html += `
+                        <div class="list-group-item student-list-item" onclick="showStudentDetail(${student.id})">
+                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center">
+                                <div class="mb-2 mb-sm-0">
+                                    <strong>${student.name}</strong>
+                                    <br><small class="text-muted">${student.level} • ${student.email}</small>
+                                </div>
+                                <div class="text-sm-end">
+                                    <span class="badge bg-success">Actif</span>
+                                    <br><small>Dernière: ${student.last_activity}</small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div></div><div class="tab-pane" id="inactive-tab"><div class="list-group">`;
+                
+                data.inactive_students.forEach(student => {
+                    html += `
+                        <div class="list-group-item student-list-item" onclick="showStudentDetail(${student.id})">
+                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center">
+                                <div class="mb-2 mb-sm-0">
+                                    <strong>${student.name}</strong>
+                                    <br><small class="text-muted">${student.level} • ${student.email}</small>
+                                </div>
+                                <div class="text-sm-end">
+                                    <span class="badge bg-secondary">Inactif</span>
+                                    <br><small>Dernière: ${student.last_activity}</small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div></div></div>`;
+                
+                document.getElementById('studentListModalTitle').innerHTML = `📊 Statut d'Activité des Étudiants (${days} jours)`;
+                document.getElementById('studentListModalBody').innerHTML = html;
+                new bootstrap.Modal(document.getElementById('studentListModal')).show();
+            }
+        });
+}
+
+function showActiveStudents() {
+    showActiveInactiveStudents(7);
+}
+
+function showInactiveStudents() {
+    showActiveInactiveStudents(30);
+}
+
+function showFlashcardUsers() {
+    document.getElementById('studentListModalTitle').innerHTML = `Utilisateurs de Flashcards`;
+    document.getElementById('studentListModalBody').innerHTML = `
+        <div class="alert alert-info">
+            Cette fonctionnalité montrera les étudiants qui ont utilisé les flashcards.
+            Cliquez sur un étudiant pour voir sa progression de maîtrise des flashcards.
+        </div>
+    `;
+    new bootstrap.Modal(document.getElementById('studentListModal')).show();
+}
+
+function showChaptersForUE(ueId) {
+    fetch(`/dashboard/api/chapters/${ueId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let html = `
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr><th>Titre du Chapitre</th><th>Professeur</th><th>Taux d'Achèvement</th><th>Score Moyen</th><th>Temps d'Étude</th><th>Étudiants Complétés</th></tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                data.data.forEach(ch => {
+                    html += `
+                        <tr>
+                            <td><strong>${ch.title}</strong></td>
+                            <td>${ch.prof || '-'}</td>
+                            <td class="${ch.completion_rate >= 70 ? 'text-success' : (ch.completion_rate >= 50 ? 'text-warning' : 'text-danger')}">${ch.avg_score}%</td>
+                            <td>${ch.study_time_hours} h</td>
+                            <td>${ch.students_completed}/${ch.total_students}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                document.getElementById('chapter-modal-body').innerHTML = html;
+                new bootstrap.Modal(document.getElementById('chapterModal')).show();
+            }
+        });
+}
+
+function showStudentDetail(studentId) {
+    fetch(`/dashboard/api/student/${studentId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showStudentDetailModal(data.data);
+            } else {
+                showError('Étudiant non trouvé');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            showError('Impossible de charger les détails de l\'étudiant');
+        });
+}
+
+function showStudentDetailModal(data) {
+    if (!data) return;
+    
+    // Build UE progress HTML
+    let ueHtml = '<div class="table-responsive"><table class="table table-sm"><thead><tr><th>UE</th><th>Achèvement</th><th>Score Moyen</th><th>Heures d\'Étude</th></tr></thead><tbody>';
+    data.ue_progress.forEach(ue => {
+        ueHtml += `<tr>
+            <td><strong>${ue.ue_name}</strong></td>
+            <td>${ue.completion_rate}% (${ue.chapters_completed}/${ue.total_chapters})</td>
+            <td class="${ue.avg_score >= 70 ? 'text-success' : (ue.avg_score >= 50 ? 'text-warning' : 'text-danger')}">${ue.avg_score}%</td>
+            <td>${ue.study_time_hours}h</td>
+        </tr>`;
+    });
+    ueHtml += '</tbody></table></div>';
+    
+    // Build weak areas HTML
+    let weakHtml = '<div class="list-group">';
+    if (data.weak_areas && data.weak_areas.length > 0) {
+        data.weak_areas.forEach(weak => {
+            weakHtml += `<div class="list-group-item d-flex flex-column flex-sm-row justify-content-between align-items-sm-center">
+                <div class="mb-2 mb-sm-0">
+                    <strong>${weak.chapter_title}</strong>
+                    <br><small class="text-muted">${weak.ue_name}</small>
+                </div>
+                <span class="badge bg-danger align-self-start align-self-sm-center">${weak.avg_score}%</span>
+            </div>`;
+        });
+    } else {
+        weakHtml += '<div class="list-group-item text-muted">Aucune faiblesse identifiée (scores supérieurs à 60%)</div>';
+    }
+    weakHtml += '</div>';
+    
+    // Build recent activity HTML
+    let activityHtml = '<div class="list-group">';
+    if (data.recent_activity && data.recent_activity.length > 0) {
+        data.recent_activity.slice(0, 5).forEach(act => {
+            activityHtml += `<div class="list-group-item">
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center">
+                    <div>
+                        <strong>${act.type}</strong>
+                        <br><small class="text-muted">${act.chapter}</small>
+                    </div>
+                    <div class="text-sm-end mt-2 mt-sm-0">
+                        <span class="badge ${act.type === 'Study Session' ? 'bg-info' : 'bg-primary'}">
+                            ${act.type === 'Study Session' ? `${act.duration || act.details}` : `${act.score}%`}
+                        </span>
+                        <br><small>${new Date(act.date).toLocaleDateString('fr-FR')}</small>
+                    </div>
+                </div>
+            </div>`;
+        });
+    } else {
+        activityHtml += '<div class="list-group-item text-muted">Aucune activité récente</div>';
+    }
+    activityHtml += '</div>';
+    
+    const modalHtml = `
+        <div class="row">
+            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                <div class="text-center p-3 bg-light rounded">
+                    <h4>${data.student.name}</h4>
+                    <p class="mb-1"><strong>${data.student.level || 'N/A'}</strong></p>
+                    <p class="text-muted small">${data.student.email}</p>
+                    <p class="small">IM: ${data.student.student_id || 'N/A'}</p>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5>${data.flashcard_stats.total_studied}</h5>
+                            <small>Flashcards</small>
+                        </div>
+                        <div class="col-6">
+                            <h5>${data.flashcard_stats.mastery_rate}%</h5>
+                            <small>Maîtrise</small>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge bg-info">${data.annotation_count} annotations</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-8">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#ue-progress">📚 Progression UE</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#weak-areas">⚠️ Points Faibles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#recent-activity">🕐 Activité Récente</a>
+                    </li>
+                </ul>
+                <div class="tab-content mt-3">
+                    <div class="tab-pane active" id="ue-progress">${ueHtml}</div>
+                    <div class="tab-pane" id="weak-areas">${weakHtml}</div>
+                    <div class="tab-pane" id="recent-activity">${activityHtml}</div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('student-modal-body').innerHTML = modalHtml;
+    new bootstrap.Modal(document.getElementById('studentModal')).show();
+}
+
+// Utility functions
+function showLoading() {
+    let loader = document.getElementById('global-loader');
+    if (!loader) {
+        loader = document.createElement('div');
+        loader.id = 'global-loader';
+        loader.className = 'loading-overlay';
+        loader.innerHTML = '<div class="spinner-border text-light" style="width: 3rem; height: 3rem;"></div>';
+        document.body.appendChild(loader);
+    }
+    loader.style.display = 'flex';
+}
+
+function hideLoading() {
+    const loader = document.getElementById('global-loader');
+    if (loader) {
+        loader.style.display = 'none';
+    }
+}
+
+function showError(message) {
+    // Create a temporary toast notification
+    const toastContainer = document.createElement('div');
+    toastContainer.className = 'position-fixed bottom-0 end-0 p-3';
+    toastContainer.style.zIndex = '9999';
+    toastContainer.innerHTML = `
+        <div class="toast show" role="alert">
+            <div class="toast-header bg-danger text-white">
+                <strong class="me-auto">Erreur</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                ${message}
+            </div>
+        </div>
+    `;
+    document.body.appendChild(toastContainer);
+    
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+        toastContainer.remove();
+    }, 3000);
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function refreshDashboard() {
+    loadDashboardData();
+}
+
+// Add resize handler to redraw charts on window resize
+let resizeTimeout;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+        if (dailyStudyChart) {
+            dailyStudyChart.resize();
+        }
+        if (weeklyQuizChart) {
+            weeklyQuizChart.resize();
+        }
+        if (scoreChart) {
+            scoreChart.resize();
+        }
+    }, 250);
+});
+
+// Initialize tooltips if Bootstrap is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize any Bootstrap tooltips
+    if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    }
+});
+
+// Export functions for global access
+window.showAtRiskStudents = showAtRiskStudents;
+window.showTopPerformers = showTopPerformers;
+window.showBottomPerformers = showBottomPerformers;
+window.showActiveInactiveStudents = showActiveInactiveStudents;
+window.showActiveStudents = showActiveStudents;
+window.showInactiveStudents = showInactiveStudents;
+window.showFlashcardUsers = showFlashcardUsers;
+window.showChaptersForUE = showChaptersForUE;
+window.showStudentDetail = showStudentDetail;
+window.refreshDashboard = refreshDashboard;
+window.applyFilters = applyFilters;
+window.resetFilters = resetFilters;
+window.onLevelChange = onLevelChange;
+window.onUniteChange = onUniteChange;
+
+</script>
+{% endblock %}

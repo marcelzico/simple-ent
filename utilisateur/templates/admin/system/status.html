@@ -1,0 +1,472 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Statut système - Admin MedZone{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- En-tête -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">Statut système</h1>
+            <p class="text-muted mb-0">Superuser seulement - Surveillance du système</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary" onclick="refreshStatus()">
+                <i class="fas fa-sync-alt me-2"></i>Actualiser
+            </button>
+            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#maintenanceModal">
+                <i class="fas fa-tools me-2"></i>Maintenance
+            </button>
+        </div>
+    </div>
+
+    <!-- Cartes de statut -->
+    <div class="row g-4 mb-4">
+        <!-- Base de données -->
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card status-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="mb-1">Base de données</h6>
+                            <div class="text-muted small">Connexion et performances</div>
+                        </div>
+                        <div class="status-indicator {% if db_status == 'OK' %}bg-success{% else %}bg-danger{% endif %}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-control bg-light small">
+                            <i class="fas fa-database me-2"></i>
+                            {{ db_status }}
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary w-100" onclick="testDatabase()">
+                        <i class="fas fa-vial me-1"></i>Tester la connexion
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disque -->
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card status-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="mb-1">Utilisation du disque</h6>
+                            <div class="text-muted small">Stockage système</div>
+                        </div>
+                        <div class="progress" style="width: 60px; height: 6px;">
+                            <div class="progress-bar {% if disk_usage.percent > 90 %}bg-danger{% elif disk_usage.percent > 70 %}bg-warning{% else %}bg-success{% endif %}" 
+                                 style="width: {{ disk_usage.percent }}%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Utilisé:</span>
+                            <span>{{ disk_usage.percent }}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar {% if disk_usage.percent > 90 %}bg-danger{% elif disk_usage.percent > 70 %}bg-warning{% else %}bg-success{% endif %}" 
+                                 style="width: {{ disk_usage.percent }}%"></div>
+                        </div>
+                        <div class="small text-muted text-center mt-1">
+                            {{ disk_usage.used|filesizeformat }} / {{ disk_usage.total|filesizeformat }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mémoire -->
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card status-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="mb-1">Mémoire</h6>
+                            <div class="text-muted small">RAM système</div>
+                        </div>
+                        <div class="progress" style="width: 60px; height: 6px;">
+                            <div class="progress-bar {% if memory.percent > 90 %}bg-danger{% elif memory.percent > 70 %}bg-warning{% else %}bg-success{% endif %}" 
+                                 style="width: {{ memory.percent }}%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Utilisée:</span>
+                            <span>{{ memory.percent }}%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar {% if memory.percent > 90 %}bg-danger{% elif memory.percent > 70 %}bg-warning{% else %}bg-success{% endif %}" 
+                                 style="width: {{ memory.percent }}%"></div>
+                        </div>
+                        <div class="small text-muted text-center mt-1">
+                            {{ memory.available|filesizeformat }} disponible
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Environnement -->
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card status-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="mb-1">Environnement</h6>
+                            <div class="text-muted small">Configuration</div>
+                        </div>
+                        <span class="badge {% if debug %}bg-warning{% else %}bg-success{% endif %}">
+                            {% if debug %}DEBUG{% else %}PRODUCTION{% endif %}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-control bg-light small mb-2">
+                            <i class="fas fa-code me-2"></i>
+                            {{ environment }}
+                        </div>
+                        <div class="form-control bg-light small">
+                            <i class="fas fa-clock me-2"></i>
+                            {{ timezone }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tableau des tailles de base de données -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h6 class="mb-0">Base de données ({{ database|upper }}) - Taille des tables</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Table</th>
+                            <th>Taille</th>
+                            <th>Pourcentage</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for table_name, size in table_sizes %}
+                        <tr>
+                            <td>{{ table_name }}</td>
+                            <td>{{ size }}</td>
+                            <td>
+                                <div class="progress" style="height: 6px;">
+                                    <!-- Laisser vide pour MySQL, ou calculer le pourcentage si nécessaire -->
+                                    <div class="progress-bar bg-info" style="width: 0%"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-secondary" 
+                                        onclick="optimizeTable('{{ table_name }}')">
+                                    <i class="fas fa-broom"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logs d'erreur -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">Logs d'erreur récents</h6>
+            <button class="btn btn-sm btn-outline-danger" onclick="clearErrorLogs()">
+                <i class="fas fa-trash me-1"></i>Vider les logs
+            </button>
+        </div>
+        <div class="card-body">
+            {% if error_logs %}
+            <div class="console-log">
+                {% for log in error_logs %}
+                <div class="log-entry">
+                    <span class="log-time">{{ log|slice:":19" }}</span>
+                    <span class="log-level text-danger">ERROR</span>
+                    <span class="log-message">{{ log|slice:"20:" }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-4">
+                <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                <p class="text-muted">Aucune erreur récente</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Actions système -->
+    <div class="row g-4 mt-4">
+        <div class="col-12">
+            <h5 class="mb-3">Actions système</h5>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="quick-action-btn" onclick="systemAction('backup')">
+                <i class="fas fa-save fa-2x text-primary mb-2"></i>
+                <div>Sauvegarde BD</div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="quick-action-btn" onclick="systemAction('cache_clear')">
+                <i class="fas fa-broom fa-2x text-warning mb-2"></i>
+                <div>Vider le cache</div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="quick-action-btn" onclick="systemAction('migrate')">
+                <i class="fas fa-database fa-2x text-info mb-2"></i>
+                <div>Migrations</div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="quick-action-btn" onclick="systemAction('collectstatic')">
+                <i class="fas fa-folder fa-2x text-success mb-2"></i>
+                <div>Statics</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal maintenance -->
+<div class="modal fade" id="maintenanceModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mode maintenance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Le mode maintenance bloque l'accès aux utilisateurs normaux.
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Message de maintenance</label>
+                    <textarea class="form-control" id="maintenanceMessage" rows="3">
+                        Le site est actuellement en maintenance. Veuillez réessayer ultérieurement.
+                    </textarea>
+                </div>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="maintenanceSwitch">
+                    <label class="form-check-label" for="maintenanceSwitch">
+                        Activer le mode maintenance
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-danger" onclick="toggleMaintenance()">
+                    Appliquer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .status-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    .status-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+    
+    .console-log {
+        background: #1e1e1e;
+        color: #f8f9fa;
+        border-radius: 8px;
+        padding: 1rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.85rem;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    .log-entry {
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #2d2d2d;
+    }
+    
+    .log-time {
+        color: #6c757d;
+        margin-right: 1rem;
+    }
+    
+    .log-level {
+        font-weight: bold;
+        margin-right: 1rem;
+    }
+    
+    .quick-action-btn {
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 1.5rem 1rem;
+        text-align: center;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+    
+    .quick-action-btn:hover {
+        border-color: #3498db;
+        background: #f8f9fa;
+        transform: translateY(-3px);
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function refreshStatus() {
+        fetch('{% url "admin-user:refresh_system_status" %}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('success', 'Statut actualisé');
+                // Rafraîchir la page après un délai
+                setTimeout(() => location.reload(), 1000);
+            }
+        });
+    }
+    
+    function testDatabase() {
+        fetch('{% url "admin-user:test_database" %}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('success', 'Test de base de données réussi');
+            } else {
+                showToast('error', 'Erreur de base de données: ' + data.message);
+            }
+        });
+    }
+    
+    function optimizeTable(tableName) {
+        if (confirm(`Optimiser la table "${tableName}" ?`)) {
+            fetch(`/admin/system/optimize-table/${tableName}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', 'Table optimisée');
+                } else {
+                    showToast('error', data.message);
+                }
+            });
+        }
+    }
+    
+    function clearErrorLogs() {
+        if (confirm('Vider tous les logs d\'erreur ?')) {
+            fetch('{% url "admin-user:clear_error_logs" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('success', 'Logs vidés');
+                setTimeout(() => location.reload(), 1000);
+            }
+        });
+    }
+    }
+    
+    function toggleMaintenance() {
+        const enabled = document.getElementById('maintenanceSwitch').checked;
+        const message = document.getElementById('maintenanceMessage').value;
+        
+        fetch('{% url "admin-user:toggle_maintenance" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                enabled: enabled,
+                message: message
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('success', 'Mode maintenance ' + (enabled ? 'activé' : 'désactivé'));
+                $('#maintenanceModal').modal('hide');
+            } else {
+                showToast('error', data.message);
+            }
+        });
+    }
+    
+    function systemAction(action) {
+        let url, message;
+        
+        switch(action) {
+            case 'backup':
+                url = '{% url "admin-user:system_backup" %}';
+                message = 'Sauvegarde en cours...';
+                break;
+            case 'cache_clear':
+                url = '{% url "admin-user:cache_clear" %}';
+                message = 'Cache en cours de vidage...';
+                break;
+            case 'migrate':
+                url = '{% url "admin-user:system_migrate" %}';
+                message = 'Migrations en cours...';
+                break;
+            case 'collectstatic':
+                url = '{% url "admin-user:collect_static" %}';
+                message = 'Collecte des fichiers statiques...';
+                break;
+        }
+        
+        if (confirm(`Exécuter l'action "${action}" ?`)) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message || 'Action réussie');
+                } else {
+                    showToast('error', data.message || 'Erreur');
+                }
+            });
+            
+            showToast('info', message);
+        }
+    }
+</script>
+{% endblock %}

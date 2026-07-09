@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Sélection du rôle - MedZone{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h4><i class="fas fa-user-tag"></i> Bienvenue {{ user.first_name|default:user.username }} !</h4>
+                <p class="mb-0">Veuillez sélectionner votre rôle sur la plateforme</p>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    Vous pouvez sélectionner plusieurs rôles si vous êtes à la fois étudiant et enseignant.
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        {{ form.errors.role }}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="row">
+                        <!-- Student Role Card -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 role-card" data-role="student">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="fas fa-user-graduate fa-4x text-primary"></i>
+                                    </div>
+                                    <h5>Étudiant</h5>
+                                    <p class="text-muted small">
+                                        Je suis étudiant en médecine et je souhaite suivre des cours, 
+                                        m'inscrire à des matières et travailler avec des enseignants.
+                                    </p>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="role" 
+                                               id="role_student" value="student" required>
+                                        <label class="form-check-label fw-bold" for="role_student">
+                                            Choisir ce rôle
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>   
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="fas fa-check-circle"></i> Confirmer le choix
+                        </button>
+                        <p class="mt-2 text-muted small">
+                            Vous pourrez modifier vos rôles plus tard dans les paramètres du profil.
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    // Card selection effect
+    document.querySelectorAll('.role-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const role = this.getAttribute('data-role');
+            const radio = document.getElementById('role_' + role);
+            radio.checked = true;
+            
+            // Remove active class from all cards
+            document.querySelectorAll('.role-card').forEach(c => {
+                c.classList.remove('border-primary', 'border-3');
+                c.classList.remove('border-success', 'border-3');
+                c.classList.remove('border-secondary', 'border-3');
+            });
+            
+            // Add active class to selected card
+            if (role === 'student') {
+                this.classList.add('border-primary', 'border-3');
+            } else {
+                this.classList.add('border-secondary', 'border-3');
+            }
+        });
+    });
+    
+    // Auto-select card when radio is clicked
+    document.querySelectorAll('input[name="role"]').forEach(radio => {
+        radio.addEventListener('click', function() {
+            const role = this.value;
+            const card = document.querySelector(`.role-card[data-role="${role}"]`);
+            
+            // Remove active class from all cards
+            document.querySelectorAll('.role-card').forEach(c => {
+                c.classList.remove('border-primary', 'border-3');
+                c.classList.remove('border-success', 'border-3');
+                c.classList.remove('border-secondary', 'border-3');
+            });
+            
+            // Add active class to selected card
+            if (role === 'student') {
+                card.classList.add('border-primary', 'border-3');
+            } else {
+                card.classList.add('border-secondary', 'border-3');
+            }
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}

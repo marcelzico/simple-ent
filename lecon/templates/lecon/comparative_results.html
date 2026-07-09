@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-3">🔍 Comparative Chapter Filter</h2>
+
+  <!-- Filter Form -->
+  <form method="GET" class="card p-3 mb-4">
+    <div class="row g-2">
+      <div class="col-md-4">
+        {{ form.unite.label_tag }}
+        {{ form.unite }}
+      </div>
+      <div class="col-md-3">
+        {{ form.level.label_tag }}
+        {{ form.level }}
+      </div>
+      <div class="col-md-5">
+        {{ form.content_query.label_tag }}
+        {{ form.content_query }}
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Search & Compare</button>
+  </form>
+
+  <!-- Results Table -->
+  {% if chapters %}
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-top">
+      <thead class="table-dark">
+        <tr>
+          <th style="width: 20%;">Chapter</th>
+          <th style="width: 15%;">Unité / Level</th>
+          <th>Matching Content</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for chapter in chapters %}
+        <tr>
+          <td>
+            <strong>{{ chapter.title }}</strong>
+            <br>
+            <small class="text-muted">
+              <a href="{% url 'lecon:chapter_detail' chapter.ue.id chapter.id %}">View Full Chapter</a>
+            </small>
+          </td>
+          <td>
+            {{ chapter.unite.name }}<br>
+            <span class="badge bg-secondary">{{ chapter.level }}</span>
+          </td>
+          <td>
+            {% for copy in chapter.filtered_copies %}
+            <div class="mb-2 p-2 border-start border-4 border-primary bg-white rounded">
+              {% if copy.heading %}
+                <h6 class="mb-1">{{ copy.heading }}</h6>
+              {% endif %}
+              <div class="copy-content">
+                {{ copy.content|safe }}
+              </div>
+              {% if copy.table %}
+                <div class="mt-2 p-2 rounded">
+                  <strong>📊 Table:</strong>
+                  <div class="table-responsive mt-1">{{ copy.table|safe }}</div>
+                </div>
+              {% endif %}
+            </div>
+            {% empty %}
+            <span class="text-muted">No matching blocks</span>
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% elif form.is_valid and not chapters %}
+  <div class="alert alert-info">No chapters match your filters. Try broadening the search term or adjusting the level.</div>
+  {% endif %}
+</div>
+{% endblock %}

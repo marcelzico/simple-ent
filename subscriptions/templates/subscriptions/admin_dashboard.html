@@ -1,0 +1,342 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load subscription_tags %}
+
+{% block title %}Tableau de Bord Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <h2><i class="fas fa-tachometer-alt"></i> Tableau de Bord Admin</h2>
+            <p class="text-muted">Gérez les paiements et abonnements</p>
+        </div>
+    </div>
+
+    <!-- Cartes de Statistiques -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Paiements Totaux</h6>
+                            <h3 class="card-title">{{ stats.total_payments }}</h3>
+                        </div>
+                        <i class="fas fa-money-bill-wave fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Paiements Approuvés</h6>
+                            <h3 class="card-title">{{ stats.approved_payments }}</h3>
+                        </div>
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Abonnements Actifs</h6>
+                            <h3 class="card-title">{{ stats.active_subscriptions }}</h3>
+                        </div>
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Abonnements Totaux</h6>
+                            <h3 class="card-title">{{ stats.total_subscriptions }}</h3>
+                        </div>
+                        <i class="fas fa-calendar-alt fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Éléments en Attente -->
+    <div class="row">
+        <!-- Paiements en Attente -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock"></i> Paiements en Attente
+                        <span class="badge bg-light text-dark float-end">{{ pending_payments.count }}</span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if pending_payments %}
+                    <div class="list-group list-group-flush">
+                        {% for payment in pending_payments|slice:":5" %}
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ payment.student }}</h6>
+                                    <p class="mb-1">
+                                        <strong>{{ payment.amount }} Ar</strong> - {{ payment.feature.name }}
+                                    </p>
+                                    <small class="text-muted">
+                                        Il y a {{ payment.created_at|timesince }}
+                                    </small>
+                                </div>
+                                <a href="{% url 'subscriptions:admin_payment_review' payment.id %}" 
+                                   class="btn btn-sm btn-warning">
+                                    <i class="fas fa-clipboard-check"></i> Examiner
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if pending_payments.count > 5 %}
+                    <div class="text-center mt-3">
+                        <a href="{% url 'subscriptions:payment_list' %}?status=pending" 
+                           class="btn btn-outline-warning btn-sm">
+                            Voir Tout ({{ pending_payments.count }})
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                        <h5>Aucun paiement en attente</h5>
+                        <p class="text-muted">Tous les paiements ont été examinés.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Abonnements en Attente -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calendar-check"></i> Abonnements en Attente
+                        <span class="badge bg-light text-dark float-end">{{ pending_subscriptions.count }}</span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if pending_subscriptions %}
+                    <div class="list-group list-group-flush">
+                        {% for subscription in pending_subscriptions|slice:":5" %}
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ subscription.student }}</h6>
+                                    <p class="mb-1">
+                                        <strong>{{ subscription.amount }} Ar</strong> - {{ subscription.feature.name }}
+                                    </p>
+                                    <small class="text-muted">
+                                        Il y a {{ subscription.created_at|timesince }}
+                                    </small>
+                                </div>
+                                <a href="{% url 'subscriptions:admin_subscription_review' subscription.id %}" 
+                                   class="btn btn-sm btn-info">
+                                    <i class="fas fa-clipboard-check"></i> Examiner
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if pending_subscriptions.count > 5 %}
+                    <div class="text-center mt-3">
+                        <a href="{% url 'subscriptions:subscription_list' %}?status=pending" 
+                           class="btn btn-outline-info btn-sm">
+                            Voir Tout ({{ pending_subscriptions.count }})
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                        <h5>Aucun abonnement en attente</h5>
+                        <p class="text-muted">Tous les abonnements ont été examinés.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activité Récente -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history"></i> Paiements Approuvés Récents
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_approved_payments %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Étudiant</th>
+                                    <th>Montant</th>
+                                    <th>Approuvé Par</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for payment in recent_approved_payments %}
+                                <tr>
+                                    <td>{{ payment.student }}</td>
+                                    <td>{{ payment.amount }} Ar</td>
+                                    <td>{{ payment.approved_by.username }}</td>
+                                    <td>{{ payment.approved_at|date:"d M" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center py-3">Aucun paiement approuvé récent</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history"></i> Abonnements Approuvés Récents
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_approved_subscriptions %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Étudiant</th>
+                                    <th>Fonctionnalité</th>
+                                    <th>Approuvé Par</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subscription in recent_approved_subscriptions %}
+                                <tr>
+                                    <td>{{ subscription.student }}</td>
+                                    <td>{{ subscription.feature.name }}</td>
+                                    <td>{{ subscription.approved_by.username }}</td>
+                                    <td>{{ subscription.approved_at|date:"d M" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted text-center py-3">Aucun abonnement approuvé récent</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Abonnements Expirant Bientôt -->
+    {% if expiring_subscriptions %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exclamation-triangle"></i> Abonnements Expirant Bientôt (7 Prochains Jours)
+                        <span class="badge bg-light text-dark float-end">{{ expiring_subscriptions.count }}</span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Étudiant</th>
+                                    <th>Fonctionnalité</th>
+                                    <th>Expiration</th>
+                                    <th>Jours Restants</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subscription in expiring_subscriptions %}
+                                <tr>
+                                    <td>{{ subscription.student }}</td>
+                                    <td>{{ subscription.feature.name }}</td>
+                                    <td>{{ subscription.expires_at|date:"d M Y" }}</td>
+                                    <td>
+                                        <span class="badge {% if subscription.calculate_days_available > 3 %}bg-warning{% else %}bg-danger{% endif %}">
+                                            {{ subscription.calculate_days_available }} jours
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'subscriptions:subscription_detail' subscription.id %}" 
+                                           class="btn btn-sm btn-outline-warning">
+                                            Voir
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Actions Rapides -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-bolt"></i> Actions Rapides</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-2">
+                            <a href="{% url 'subscriptions:payment_list' %}" class="btn btn-outline-primary btn-block">
+                                <i class="fas fa-list"></i> Tous les Paiements
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="{% url 'subscriptions:subscription_list' %}" class="btn btn-outline-success btn-block">
+                                <i class="fas fa-list"></i> Tous les Abonnements
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="{% url 'subscriptions:feature_management' %}" class="btn btn-outline-info btn-block">
+                                <i class="fas fa-cog"></i> Gérer les Fonctionnalités
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <a href="{% url 'subscriptions:usage_audit' %}" class="btn btn-outline-warning btn-block">
+                                <i class="fas fa-clipboard-list"></i> Audit d'Utilisation
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

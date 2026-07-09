@@ -1,0 +1,469 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}MCQ Quizzes - Weekly Evaluation{% endblock %}
+
+{% block extra_css %}
+<style>
+    .quiz-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: 2px solid #dee2e6;
+        border-left: 5px solid #0d6efd; /* #0dcaf0 for QA quizzes */
+        border-radius: 10px;
+    }
+    .quiz-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+    .quiz-status {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+    .subject-badge {
+        background-color: #e8f4fd;
+        color: #0d6efd;
+        border: 1px solid #b6d4fe;
+    }
+    .chapter-tag {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        font-size: 0.8rem;
+    }
+    .attempt-progress {
+        height: 8px;
+    }
+    .stat-card {
+        border-radius: 10px;
+        padding: 1.5rem;
+    }
+    .upcoming-badge {
+        background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        color: white;
+    }
+    .ended-badge {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
+        <div>
+            <h1 class="h2 mb-2">
+                <i class="fas fa-list-ol text-primary me-2"></i>
+                Multiple Choice Quizzes
+            </h1>
+            <p class="text-muted mb-0">
+                Test your knowledge with multiple choice questions
+                {% if subject %}
+                <span class="text-dark"> in <strong>{{ subject.title }}</strong></span>
+                {% endif %}
+            </p>
+        </div>
+        
+        <div class="mt-3 mt-md-0">
+            <!-- Only show create button when viewing a specific subject -->
+            {% if user.is_teacher or user.is_superuser %}
+                {% if subject %}
+                <a href="{% url 'quizzes:create_mcq_quiz' subject.pk %}" 
+                class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus-circle me-2"></i>Create MCQ Quiz
+                </a>
+                {% endif %} 
+            {% endif %} 
+            
+            {% if subject %}
+            <a href="{% url 'quizzes:list_mcq_quizzes' %}" class="btn btn-outline-secondary btn-lg ms-2">
+                <i class="fas fa-list me-1"></i>All Subjects
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Subject Info Card (if viewing specific subject) -->
+    {% if subject %}
+    <div class="alert alert-primary border-0 shadow-sm mb-4">
+        <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+                <h5 class="mb-1">
+                    <i class="fas fa-book-open me-2"></i>{{ subject.title }}
+                </h5>
+                <p class="mb-0 text-muted">{{ subject.description|truncatewords:30 }}</p>
+            </div>
+            <div class="text-end">
+                <span class="badge bg-white text-primary fs-6 px-3 py-2 border">
+                    {{ mcq_quizzes.paginator.count|default:mcq_quizzes|length }} quiz{{ mcq_quizzes.paginator.count|default:mcq_quizzes|length|pluralize:"zes,es" }}
+                </span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Results & Stats Toggle for Teachers/Admins -->
+    {% if user.is_teacher or user.is_superuser %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">
+                                <i class="fas fa-chart-line text-primary me-2"></i>
+                                Quiz Results & Statistics
+                            </h6>
+                            <small class="text-muted">
+                                Monitor student performance and quiz analytics
+                            </small>
+                        </div>
+                        <div class="btn-group">
+                            <a href="{% url 'quizzes:mcq_quiz_results' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-chart-bar me-1"></i>View Results
+                            </a>
+                            {% if subject %}
+                            <a href="{% url 'quizzes:list_subject_mcq_quizzes' subject.pk %}?view=all" 
+                               class="btn btn-outline-info">
+                                <i class="fas fa-users me-1"></i>All Attempts
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Quizzes Grid -->
+    {% if mcq_quizzes %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for quiz in mcq_quizzes %}
+        <div class="col">
+            <div class="card quiz-card h-100 border-0 shadow-sm">
+                <!-- Quiz Header -->
+                <div class="card-header bg-white border-bottom-0 pb-0">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <span class="badge subject-badge mb-2">
+                                <i class="fas fa-book me-1"></i>{{ quiz.subject.title }}
+                            </span>
+                            {% if not quiz.is_available %}
+                                {% if now < quiz.start_date %}
+                                <span class="badge upcoming-badge quiz-status">
+                                    <i class="fas fa-clock me-1"></i>Upcoming
+                                </span>
+                                {% else %}
+                                <span class="badge ended-badge quiz-status">
+                                    <i class="fas fa-calendar-times me-1"></i>Ended
+                                </span>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="text-end">
+                            <small class="text-muted d-block">
+                                {{ quiz.questions.count }} Q{{ quiz.questions.count|pluralize:"uestion,uestion" }}
+                            </small>
+                            <small class="text-muted d-block">
+                                {{ quiz.time_limit }} min
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <h5 class="card-title mb-2">{{ quiz.title }}</h5>
+                    
+                    {% if quiz.description %}
+                    <p class="card-text text-muted small mb-3">
+                        {{ quiz.description|truncatewords:20 }}
+                    </p>
+                    {% endif %}
+                            
+                    <!-- Chapters Covered -->
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-1">
+                            <i class="fas fa-tags me-1"></i>Chapters covered:
+                        </small>
+                        <div class="d-flex flex-wrap gap-1">
+                            {% for chapter in quiz.chapters.all|slice:":3" %}
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary">
+                                {{ chapter.title|truncatewords:2 }}
+                            </span>
+                            {% endfor %}
+                            {% if quiz.chapters.count > 3 %}
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary border">
+                                +{{ quiz.chapters.count|add:"-3" }} more
+                            </span>
+                            {% endif %}
+                            {% if quiz.chapters.count == 0 %}
+                            <span class="badge bg-warning bg-opacity-10 text-warning border">
+                                No chapters
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Schedule Info -->
+                    <div class="mb-3">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <small class="text-muted d-block">
+                                    <i class="fas fa-play me-1"></i>Starts
+                                </small>
+                                <small class="text-dark fw-semibold">
+                                    {{ quiz.start_date|date:"M d" }}<br>
+                                    <span class="text-muted">{{ quiz.start_date|time:"H:i" }}</span>
+                                </small>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">
+                                    <i class="fas fa-stop me-1"></i>Ends
+                                </small>
+                                <small class="text-dark fw-semibold">
+                                    {{ quiz.end_date|date:"M d" }}<br>
+                                    <span class="text-muted">{{ quiz.end_date|time:"H:i" }}</span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attempts Info -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <small class="text-muted d-block">Your attempts:</small>
+                            <div class="d-flex align-items-center">
+                                <div class="progress flex-grow-1 me-2 attempt-progress" style="width: 80px;">
+                                    <div class="progress-bar {% if quiz.user_attempts >= quiz.max_attempts %}bg-danger{% else %}bg-success{% endif %}" 
+                                         role="progressbar" 
+                                         style="width: {% widthratio quiz.user_attempts quiz.max_attempts 100 %}%;">
+                                    </div>
+                                </div>
+                                <small class="text-dark fw-semibold">
+                                    {{ quiz.user_attempts }}/{{ quiz.max_attempts }}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <small class="text-muted d-block">Pass score:</small>
+                            <span class="badge bg-light text-dark border">
+                                {{ quiz.score_to_pass }}%
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Teacher Actions -->
+                    {% if user.is_teacher or user.is_superuser %}
+                    <div class="border-top pt-3 mt-3">
+                        <div class="btn-group w-100" role="group">
+                            <a href="{% url 'quizzes:edit_mcq_quiz' quiz.id %}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit me-1"></i>View
+                            </a>
+                            <a href="{% url 'quizzes:mcq_quiz_detail' quiz.id %}" 
+                               class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash me-1"></i>Delete
+                            </a>
+                            <a href="{% url 'quizzes:mcq_quiz_results' %}?quiz={{ quiz.id }}" 
+                               class="btn btn-sm btn-outline-info">
+                                <i class="fas fa-chart-bar me-1"></i>Results
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Quiz Footer -->
+                <div class="card-footer bg-white border-top-0 pt-0">
+                    {% if quiz.is_available and quiz.can_attempt %}
+                    <a href="{% url 'quizzes:start_mcq_quiz' quiz.id %}" 
+                       class="btn btn-primary w-100 btn-lg">
+                        <i class="fas fa-play-circle me-2"></i>Start MCQ Quiz
+                    </a>
+                    {% elif quiz.user_attempts >= quiz.max_attempts %}
+                    <button class="btn btn-secondary w-100 btn-lg" disabled>
+                        <i class="fas fa-ban me-2"></i>No Attempts Left
+                    </button>
+                    <small class="text-center d-block mt-2">
+                        <a href="{% url 'quizzes:mcq_quiz_detail' quiz.id %}" class="text-primary">
+                            View your previous attempts
+                        </a>
+                    </small>
+                    {% elif now < quiz.start_date %}
+                    <button class="btn btn-warning w-100 btn-lg" disabled>
+                        <i class="fas fa-clock me-2"></i>Starts in {{ quiz.start_date|timeuntil }}
+                    </button>
+                    <small class="text-center d-block mt-2">
+                        <a href="{% url 'quizzes:mcq_quiz_detail' quiz.id %}" class="text-primary">
+                            View quiz details
+                        </a>
+                    </small>
+                    {% elif now > quiz.end_date %}
+                    <button class="btn btn-secondary w-100 btn-lg" disabled>
+                        <i class="fas fa-calendar-times me-2"></i>Quiz Ended
+                    </button>
+                    <small class="text-center d-block mt-2">
+                        <a href="{% url 'quizzes:mcq_quiz_detail' quiz.id %}" class="text-primary">
+                            View final results
+                        </a>
+                    </small>
+                    {% else %}
+                    <a href="{% url 'quizzes:mcq_quiz_detail' quiz.id %}" 
+                       class="btn btn-outline-primary w-100 btn-lg">
+                        <i class="fas fa-info-circle me-2"></i>View Details
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if mcq_quizzes.paginator and mcq_quizzes.paginator.num_pages > 1 %}
+    <nav aria-label="MCQ Quizzes pagination" class="mt-5">
+        <ul class="pagination justify-content-center">
+            {% if mcq_quizzes.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ mcq_quizzes.previous_page_number }}{% if subject %}&subject={{ subject.pk }}{% endif %}">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+            {% endif %}
+            
+            {% for num in mcq_quizzes.paginator.page_range %}
+            {% if mcq_quizzes.number == num %}
+            <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% elif num > mcq_quizzes.number|add:'-3' and num < mcq_quizzes.number|add:'3' %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ num }}{% if subject %}&subject={{ subject.pk }}{% endif %}">{{ num }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            
+            {% if mcq_quizzes.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ mcq_quizzes.next_page_number }}{% if subject %}&subject={{ subject.pk }}{% endif %}">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    <!-- Statistics Card -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-chart-pie text-primary me-2"></i>Quiz Statistics
+                    </h5>
+                    <div class="row text-center">
+                        <div class="col-6 col-md-3 mb-3">
+                            <div class="stat-card bg-primary bg-opacity-10">
+                                <h3 class="text-primary mb-1">{{ total_quizzes_count }}</h3>
+                                <small class="text-muted">Total Quizzes</small>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 mb-3">
+                            <div class="stat-card bg-success bg-opacity-10">
+                                <h3 class="text-success mb-1">
+                                    {{ active_quizzes_count }}
+                                </h3>
+                                <small class="text-muted">Active Quizzes</small>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 mb-3">
+                            <div class="stat-card bg-warning bg-opacity-10">
+                                <h3 class="text-warning mb-1">
+                                    {{ participation_rate|floatformat:1 }}%
+                                </h3>
+                                <small class="text-muted">Your Participation</small>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3 mb-3">
+                            <div class="stat-card bg-info bg-opacity-10">
+                                <h3 class="text-info mb-1">
+                                    {{ average_score|floatformat:1 }}%
+                                </h3>
+                                <small class="text-muted">Avg. Score</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-5 my-5">
+        <div class="mb-4">
+            <i class="fas fa-list-ol fa-4x text-muted mb-4"></i>
+            <h3 class="text-muted">No MCQ Quizzes Available</h3>
+            <p class="text-muted">
+                {% if user.is_student %}
+                There are no MCQ quizzes available for you at the moment.
+                {% elif user.is_teacher %}
+                You haven't created any MCQ quizzes yet.
+                {% else %}
+                No MCQ quizzes have been created yet.
+                {% endif %}
+            </p>
+        </div>
+        
+        <div class="d-flex justify-content-center gap-3">
+            {% comment %} {% if user.is_teacher or user.is_superuser and subject %}
+            <a href="{% url 'quizzes:create_mcq_quiz' subject.pk %}" 
+               class="btn btn-primary btn-lg">
+                <i class="fas fa-plus-circle me-2"></i>Create Your First MCQ Quiz
+            </a>
+            {% endif %} {% endcomment %}
+            
+            {% if user.is_student %}
+            <a href="{% url 'quizzes:list_qa_quizzes' %}" class="btn btn-outline-info btn-lg">
+                <i class="fas fa-file-alt me-2"></i>View QA Quizzes
+            </a>
+            {% endif %}
+            
+            <a href="{% url 'lecon:subject_list' %}" class="btn btn-outline-secondary btn-lg">
+                <i class="fas fa-book me-2"></i>Browse Subjects
+            </a>
+        </div>
+        
+        {% if user.is_teacher and not subject %}
+        <div class="mt-4">
+            <small class="text-muted">
+                <i class="fas fa-lightbulb me-1"></i>
+                Tip: Select a subject first to create quizzes
+            </small>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        
+        // Auto-refresh page if there are upcoming quizzes
+        {% for quiz in mcq_quizzes %}
+            {% if now < quiz.start_date %}
+            setTimeout(function() {
+                location.reload();
+            }, 60000); // Refresh every minute
+            {% endif %}
+        {% endfor %}
+    });
+</script>
+{% endblock %}

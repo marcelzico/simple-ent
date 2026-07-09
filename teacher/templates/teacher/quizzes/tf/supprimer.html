@@ -1,0 +1,23 @@
+
+{% extends 'base.html' %}
+{% block title %}Supprimer{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">Confirmation</div>
+            <div class="card-body text-center">
+                <i class="fas fa-check-circle fa-4x text-danger mb-3"></i>
+                <h5>Supprimer cette question ?</h5>
+                <p class="text-muted">{{ tf.question|truncatechars:150 }}</p>
+                <div class="alert alert-warning">Cette action est irréversible.</div>
+                <form method="post">
+                    {% csrf_token %}
+                    <a href="{% url 'teacher:tf_list_by_unite' unite.id %}" class="btn btn-secondary">Annuler</a>
+                    <button type="submit" class="btn btn-danger">Confirmer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

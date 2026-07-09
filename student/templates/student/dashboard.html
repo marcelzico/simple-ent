@@ -1,0 +1,1101 @@
+<!-- templates/student/dashboard.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tableau de Bord Étudiant en Médecine{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-blue: #1a73e8;
+        --secondary-blue: #4285f4;
+        --medical-teal: #00bcd4;
+        --medical-green: #4caf50;
+        --medical-red: #f44336;
+        --medical-purple: #9c27b0;
+        --medical-orange: #ff9800;
+        --light-bg: #f8f9fa;
+        --card-shadow: 0 8px 30px rgba(140, 152, 164, 0.08);
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body {
+        {% comment %} background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%); {% endcomment %}
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+    }
+
+    .text-purple {
+        color: #9c27b0 !important;
+    }
+
+    .bg-purple {
+        background-color: #9c27b0 !important;
+    }
+
+    /* Medical Header */
+    .medical-header {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--medical-teal) 100%);
+        color: white;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .medical-header::before {
+        content: '⚕️';
+        position: absolute;
+        right: 30px;
+        top: 30px;
+        font-size: 80px;
+        opacity: 0.1;
+    }
+
+    /* Cards */
+    .dashboard-card {
+        {% comment %} background: white; {% endcomment %}
+        border-radius: 16px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: var(--card-shadow);
+        border: 1px solid rgba(0, 0, 0, 0.03);
+        transition: var(--transition);
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(140, 152, 164, 0.15);
+    }
+
+    /* Stat Cards */
+    .stat-card {
+        {% comment %} background: white; {% endcomment %}
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: var(--card-shadow);
+        border-left: 4px solid;
+        transition: var(--transition);
+        cursor: pointer;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .stat-card.study-hours { border-left-color: var(--primary-blue); }
+    .stat-card.quizzes { border-left-color: var(--medical-purple); }
+    .stat-card.chapters { border-left-color: var(--medical-green); }
+    .stat-card.schedules { border-left-color: var(--medical-teal); }
+
+    /* Icon Containers */
+    .icon-container {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .icon-study { background: linear-gradient(135deg, var(--primary-blue) 0%, #4285f4 100%); }
+    .icon-quiz { background: linear-gradient(135deg, var(--medical-purple) 0%, #ba68c8 100%); }
+    .icon-chapter { background: linear-gradient(135deg, var(--medical-green) 0%, #66bb6a 100%); }
+    .icon-schedule { background: linear-gradient(135deg, var(--medical-teal) 0%, #26c6da 100%); }
+
+    /* Progress Ring */
+    .progress-ring-container {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .circular-progress {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+    }
+
+    .circular-progress-bg {
+        fill: none;
+        stroke: #e2e8f0;
+        stroke-width: 8;
+    }
+
+    .circular-progress-bar {
+        fill: none;
+        stroke: var(--medical-green);
+        stroke-width: 8;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 1s ease-in-out;
+    }
+
+    .progress-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--primary-blue);
+    }
+
+    /* Medical Tabs */
+    .medical-tabs {
+        display: flex;
+        {% comment %} background: var(--light-bg); {% endcomment %}
+        border-radius: 12px;
+        padding: 4px;
+        margin-bottom: 20px;
+    }
+
+    .medical-tab {
+        flex: 1;
+        padding: 12px;
+        text-align: center;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: var(--transition);
+        font-weight: 500;
+    }
+
+    .medical-tab.active {
+        {% comment %} background: white; {% endcomment %}
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        color: var(--primary-blue);
+    }
+
+    /* Feature Progress */
+    .feature-progress {
+        height: 10px;
+        border-radius: 5px;
+        {% comment %} background: #e2e8f0; {% endcomment %}
+        overflow: hidden;
+        margin: 10px 0;
+    }
+
+    .feature-progress-bar {
+        height: 100%;
+        border-radius: 5px;
+        {% comment %} background: linear-gradient(90deg, var(--medical-teal), var(--primary-blue)); {% endcomment %}
+        transition: width 0.6s ease;
+    }
+
+    /* Subject Cards */
+    .subject-card {
+        {% comment %} background: white; {% endcomment %}
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-left: 3px solid var(--primary-blue);
+        transition: var(--transition);
+    }
+
+    .subject-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Schedule Items */
+    .schedule-item {
+        {% comment %} background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); {% endcomment %}
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-left: 3px solid var(--medical-green);
+        transition: var(--transition);
+    }
+
+    .schedule-item:hover {
+        transform: translateX(5px);
+        {% comment %} background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); {% endcomment %}
+    }
+
+    /* Quiz Type Cards */
+    .quiz-type-card {
+        {% comment %} background: white; {% endcomment %}
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: var(--transition);
+        cursor: pointer;
+    }
+
+    .quiz-type-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Alerts */
+    .alert-medical {
+        {% comment %} background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); {% endcomment %}
+        border: none;
+        border-left: 4px solid #ffc107;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 10px;
+    }
+
+    /* Chart Container */
+    .chart-container {
+        position: relative;
+        {% comment %} background: linear-gradient(to bottom, #ffffff, #fafafa); {% endcomment %}
+        border-radius: 16px;
+        padding: 20px;
+        min-height: 400px;
+    }
+
+    /* Performance Stats Summary */
+    #performance-stats-summary .alert {
+        {% comment %} background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); {% endcomment %}
+        border-radius: 16px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    #performance-stats-summary strong {
+        font-size: 1.75rem;
+        font-weight: 700;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .medical-header {
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .medical-header h1 {
+            font-size: 1.5rem;
+        }
+        
+        .dashboard-card {
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .chart-container {
+            min-height: 300px;
+            padding: 10px;
+        }
+        
+        .medical-tabs {
+            flex-direction: column;
+        }
+        
+        .medical-tab {
+            margin-bottom: 5px;
+        }
+        
+        .stat-card h3 {
+            font-size: 1.5rem;
+        }
+        
+        .quiz-type-card .display-5 {
+            font-size: 1.75rem;
+        }
+        
+        #performance-stats-summary strong {
+            font-size: 1.25rem;
+        }
+        
+        #performance-stats-summary .col-6 {
+            margin-bottom: 10px;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .stat-card h3 {
+            font-size: 1.8rem;
+        }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in-up {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .animate-delay-1 { animation-delay: 0.1s; }
+    .animate-delay-2 { animation-delay: 0.2s; }
+    .animate-delay-3 { animation-delay: 0.3s; }
+
+    /* Print Styles */
+    @media print {
+        .medical-header,
+        .stat-card,
+        .quiz-type-card,
+        .medical-tabs,
+        .btn,
+        .schedule-item {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+        
+        .chart-container {
+            break-inside: avoid;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    
+    <!-- Medical Header with Welcome -->
+    <div class="medical-header animate-fade-in-up">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="h2 mb-2">👨‍⚕️ Bonjour, {{ request.user.get_full_name|default:request.user.username }}!</h1>
+                <p class="mb-0 text-white-80">
+                    Niveau : <strong>{{ student_profile.get_level_display|default:"Non spécifié" }}</strong>
+                    {% if current_streak > 0 %}
+                    <span class="ms-3">
+                        <i class="fas fa-fire"></i> {{ current_streak }} jours consécutifs
+                    </span>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <div class="d-flex flex-wrap justify-content-md-end gap-2">
+                    <span class="badge bg-white text-primary py-2 px-3 rounded-pill">
+                        📚 {{ subject_count }} UE
+                    </span>
+                    <span class="badge bg-white text-success py-2 px-3 rounded-pill">
+                        📈 {{ progress_percentage }}% Progression
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medical Alerts Section -->
+    {% comment %} {% if alerts %}
+    <div class="row mb-4 animate-fade-in-up animate-delay-1">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="icon-container icon-quiz me-3">
+                        <i class="fas fa-bell text-white"></i>
+                    </div>
+                    <h5 class="mb-0">🔔 Mes notifications !</h5>
+                </div>
+                {% for alert in alerts %}
+                <div class="alert-medical d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <i class="fas fa-exclamation-circle text-warning me-2"></i>
+                        {{ alert.message }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %} {% endcomment %}
+
+    <!-- Medical Stats Row -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4 animate-fade-in-up">
+            <div class="stat-card study-hours">
+                <div class="icon-container icon-study">
+                    <i class="fas fa-clock text-white"></i>
+                </div>
+                <h6 class="text-muted mb-1">Heures d'Étude</h6>
+                <h3 class="mb-2">{{ quick_stats.total_study_hours|default:"0" }}h</h3>
+                <small class="text-muted">📅 Cette semaine: {{ weekly_hours }}h</small>
+                <div class="feature-progress mt-3">
+                    <div class="feature-progress-bar" style="width: {{ weekly_hours|floatformat:0 }}%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4 animate-fade-in-up animate-delay-1">
+            <div class="stat-card quizzes">
+                <div class="icon-container icon-quiz">
+                    <i class="fas fa-vial text-white"></i>
+                </div>
+                <h6 class="text-muted mb-1">Tentatives de Quiz</h6>
+                <h3 class="mb-2">{{ quick_stats.total_quiz_attempts }}</h3>
+                <small class="text-muted">⚡ Moyenne: {{ quick_stats.avg_quiz_score|default:"0"|floatformat:1 }}%</small>
+                <div class="feature-progress mt-3">
+                    <div class="feature-progress-bar" style="width: {{ quick_stats.avg_quiz_score|default:0|floatformat:0 }}%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4 animate-fade-in-up animate-delay-2">
+            <div class="stat-card chapters">
+                <div class="icon-container icon-chapter">
+                    <i class="fas fa-book-medical text-white"></i>
+                </div>
+                <h6 class="text-muted mb-1">Chapitres Étudiés</h6>
+                <h3 class="mb-2">{{ studied_chapters }}/{{ total_chapters }}</h3>
+                <small class="text-muted">🎯 {{ progress_percentage }}% complété</small>
+                <div class="progress-ring-container mt-3">
+                    <svg class="circular-progress" viewBox="0 0 36 36">
+                        <path class="circular-progress-bg"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        <path class="circular-progress-bar"
+                            stroke-dasharray="{{ progress_percentage }}, 100"
+                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                    </svg>
+                    <div class="progress-text">{{ progress_percentage }}%</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4 animate-fade-in-up animate-delay-3">
+            <div class="stat-card schedules">
+                <div class="icon-container icon-schedule">
+                    <i class="fas fa-calendar-check text-white"></i>
+                </div>
+                <h6 class="text-muted mb-1">Plannings Complétés</h6>
+                <h3 class="mb-2">{{ quick_stats.schedules_completed }}</h3>
+                <small class="text-muted">📌 {{ upcoming_schedules|length }} à venir</small>
+                <div class="feature-progress mt-3">
+                    <div class="feature-progress-bar" style="width: {{ quick_stats.schedules_completed|divisibleby:10|yesno:'100,70,40' }}%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance & Subscription Section -->
+    <div class="row mb-4">
+        <div class="">
+            <div class="dashboard-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h5 class="mb-1">📊 Performance</h5>
+                        <small class="text-muted">Évolution de vos scores par type d'examen</small>
+                    </div>
+                    <div class="medical-tabs">
+                        <div class="medical-tab active" onclick="switchChart('performance')">
+                            <i class="fas fa-chart-line me-2"></i>Performance
+                        </div>
+                        <div class="medical-tab" onclick="switchChart('distribution')">
+                            <i class="fas fa-chart-pie me-2"></i>Répartition
+                        </div>
+                        <div class="medical-tab" onclick="switchChart('study')">
+                            <i class="fas fa-book me-2"></i>Étude
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Performance Stats Summary -->
+                <div id="performance-stats-summary" class="row mb-4" style="display: none;">
+                    <div class="col-12">
+                        <div class="alert alert-light border-0 rounded-3 p-3">
+                            <div class="row text-center">
+                                <div class="col-md-4 col-12 mb-3 mb-md-0">
+                                    <div class="p-2 border-end-md">
+                                        <small class="text-muted d-block">🔵 QCM</small>
+                                        <strong class="fs-4 text-primary" id="total-mcq">0</strong>
+                                        <small class="text-muted d-block">tentatives totales</small>
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar-day me-1"></i>
+                                            Moyenne: <span id="avg-daily-mcq">0</span>/jour
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12 mb-3 mb-md-0">
+                                    <div class="p-2 border-end-md">
+                                        <small class="text-muted d-block">🟣 Q&R</small>
+                                        <strong class="fs-4 text-purple" id="total-qa">0</strong>
+                                        <small class="text-muted d-block">tentatives totales</small>
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar-day me-1"></i>
+                                            Moyenne: <span id="avg-daily-qa">0</span>/jour
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="p-2">
+                                        <small class="text-muted d-block">🟠 Vrai/Faux</small>
+                                        <strong class="fs-4 text-warning" id="total-tf">0</strong>
+                                        <small class="text-muted d-block">tentatives totales</small>
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar-day me-1"></i>
+                                            Moyenne: <span id="avg-daily-tf">0</span>/jour
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Performance Chart -->
+                <div id="performance-chart" class="chart-container">
+                    <canvas id="performanceChart" height="400" style="width:100%;"></canvas>
+                </div>
+                
+                <!-- Distribution Chart -->
+                <div id="distribution-chart" class="chart-container d-none">
+                    <canvas id="quizDistributionChart" height="400" style="width:100%;"></canvas>
+                </div>
+                
+                <!-- Study Chart -->
+                <div id="study-chart" class="chart-container d-none">
+                    <canvas id="studyDistributionChart" height="400" style="width:100%;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        {% comment %} <div class="col-lg-4 mb-4">
+            <div class="dashboard-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h5 class="mb-1">💰 Abonnement Médical</h5>
+                        <small class="text-muted">Vos avantages premium</small>
+                    </div>
+                    {% if active_subscription %}
+                    <span class="badge bg-success bg-gradient py-2 px-3 rounded-pill">
+                        <i class="fas fa-check-circle me-1"></i>Actif
+                    </span>
+                    {% elif pending_subscription %}
+                    <span class="badge bg-warning bg-gradient py-2 px-3 rounded-pill">
+                        <i class="fas fa-clock me-1"></i>En attente
+                    </span>
+                    {% else %}
+                    <span class="badge bg-danger bg-gradient py-2 px-3 rounded-pill">
+                        <i class="fas fa-times-circle me-1"></i>Inactif
+                    </span>
+                    {% endif %}
+                </div>
+                
+                {% if active_subscription %}
+                <div class="mb-4">
+                    <div class="text-center mb-4">
+                        <div class="icon-container icon-study mx-auto mb-3">
+                            <i class="fas fa-stethoscope text-white"></i>
+                        </div>
+                        <h5>{{ active_subscription.feature.name }}</h5>
+                        <p class="text-muted small">
+                            <i class="far fa-calendar-alt me-1"></i>
+                            Expire le {{ active_subscription.expires_at|date:"d/m/Y" }}
+                            ({{ active_subscription.calculate_days_available }} jours restants)
+                        </p>
+                    </div>
+                    
+                    {% for feature in feature_usage_list %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <small class="text-muted">{{ feature.name }}</small>
+                            <small class="text-primary fw-bold">{{ feature.percentage }}%</small>
+                        </div>
+                        <div class="feature-progress">
+                            <div class="feature-progress-bar" style="width: {{ feature.percentage }}%"></div>
+                        </div>
+                        <small class="text-muted d-block mt-1">
+                            {{ feature.used }}/{{ feature.total }} ({{ feature.remaining }} restants)
+                        </small>
+                    </div>
+                    {% endfor %}
+                    
+                    <a href="{% url 'subscriptions:subscription_detail' active_subscription.id %}" 
+                       class="btn btn-primary w-100 mt-3 py-2 rounded-pill">
+                        <i class="fas fa-chart-bar me-2"></i>Voir détails complets
+                    </a>
+                </div>
+                {% elif pending_subscription %}
+                <div class="alert-medical text-center py-4">
+                    <i class="fas fa-hourglass-half fa-3x text-warning mb-3"></i>
+                    <h6>Demande en attente</h6>
+                    <p class="text-muted mb-0">Plan: {{ pending_subscription.feature.name }}</p>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <div class="icon-container icon-quiz mx-auto mb-3">
+                        <i class="fas fa-graduation-cap text-white"></i>
+                    </div>
+                    <h6 class="mb-3">Accédez à tout le contenu médical</h6>
+                    <a href="{% url 'subscriptions:create_subscription' %}" class="btn btn-primary rounded-pill py-2 px-4">
+                        <i class="fas fa-rocket me-2"></i>Souscrire maintenant
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div> {% endcomment %}
+    </div>
+
+    <!-- Quiz Performance Details -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <h5 class="mb-4">🏥 Performance par Type d'exercice</h5>
+                <div class="row">
+                    <div class="col-md-2 col-6 mb-3">
+                        <div class="quiz-type-card" style="border-top: 4px solid var(--primary-blue);">
+                            <div class="display-6 text-primary mb-2">{{ mcq_stats.avg_score|default:"0"|floatformat:1 }}%</div>
+                            <h6 class="mb-1">QCM</h6>
+                            <small class="text-muted">{{ mcq_stats.total_attempts|default:"0" }} tentatives</small>
+                            <div class="mt-2">
+                                <small class="text-success">
+                                    <i class="fas fa-trophy me-1"></i>Best: {{ mcq_stats.best_score|default:"0"|floatformat:1 }}%
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2 col-6 mb-3">
+                        <div class="quiz-type-card" style="border-top: 4px solid var(--medical-purple);">
+                            <div class="display-6 text-primary mb-2">{{ mcq_exam_stats.avg_score|default:"0"|floatformat:1 }}%</div>
+                            <h6 class="mb-1">Exam de QCM</h6>
+                            <small class="text-muted">{{ mcq_exam_stats.total_attempts|default:"0" }} tentatives</small>
+                            <div class="mt-2">
+                                <small class="text-success">
+                                    <i class="fas fa-trophy me-1"></i>Best: {{ mcq_exam_stats.best_score|default:"0"|floatformat:1 }}%
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2 col-6 mb-3">
+                        <div class="quiz-type-card" style="border-top: 4px solid var(--medical-green);">
+                            <div class="display-6 text-success mb-2">{{ qa_stats.avg_score|default:"0"|floatformat:1 }}%</div>
+                            <h6 class="mb-1">Q&R</h6>
+                            <small class="text-muted">{{ qa_stats.total_attempts|default:"0" }} tentatives</small>
+                            <div class="mt-2">
+                                <small class="text-success">
+                                    <i class="fas fa-trophy me-1"></i>Best: {{ qa_stats.best_score|default:"0"|floatformat:1 }}%
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2 col-6 mb-3">
+                        <div class="quiz-type-card" style="border-top: 4px solid var(--medical-teal);">
+                            <div class="display-6 text-success mb-2">{{ qa_exam_stats.avg_score|default:"0"|floatformat:1 }}%</div>
+                            <h6 class="mb-1">Exam Q&R</h6>
+                            <small class="text-muted">{{ qa_exam_stats.total_attempts|default:"0" }} tentatives</small>
+                            <div class="mt-2">
+                                <small class="text-success">
+                                    <i class="fas fa-trophy me-1"></i>Best: {{ qa_exam_stats.best_score|default:"0"|floatformat:1 }}%
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2 col-6 mb-3">
+                        <div class="quiz-type-card" style="border-top: 4px solid var(--medical-orange);">
+                            <div class="display-6 text-warning mb-2">{{ tf_stats.avg_score|default:"0"|floatformat:1 }}%</div>
+                            <h6 class="mb-1">Vrai/Faux</h6>
+                            <small class="text-muted">{{ tf_stats.total_attempts|default:"0" }} tentatives</small>
+                            <div class="mt-2">
+                                <small class="text-success">
+                                    <i class="fas fa-trophy me-1"></i>Best: {{ tf_stats.best_score|default:"0"|floatformat:1 }}%
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2 col-6 mb-3">
+                        <div class="quiz-type-card" style="border-top: 4px solid #00bcd4;">
+                            <div class="display-6 text-info mb-2">{{ quick_stats.avg_quiz_score|default:"0"|floatformat:1 }}%</div>
+                            <h6 class="mb-1">Général</h6>
+                            <small class="text-muted">Tous types</small>
+                            <div class="mt-2">
+                                <small class="text-success">
+                                    <i class="fas fa-chart-line me-1"></i>Moyenne générale
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medical Subjects & Schedules -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="dashboard-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h5 class="mb-1">📚 Unités d'enseignement</h5>
+                        <small class="text-muted">Vos UE</small>
+                    </div>
+                    <a href="{% url 'lecon:subject_list' %}" class="btn btn-sm btn-outline-primary rounded-pill">
+                        Voir tout <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+                
+                {% for subject in subjects_with_content|slice:":4" %}
+                <div class="subject-card">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center">
+                        <div class="mb-2 mb-sm-0">
+                            <h6 class="mb-1">
+                                <i class="fas fa-book-medical me-2 text-primary"></i>
+                                {{ subject.title }}
+                            </h6>
+                            <small class="text-muted">
+                                <i class="fas fa-layer-group me-1"></i>
+                                {{ subject.chapter_count }} chapitres • 
+                                <span class="text-success">{{ subject.completed_chapters }} déjà appris</span>
+                            </small>
+                        </div>
+                        <div class="text-sm-end">
+                            <small class="d-block text-muted mb-2">
+                                <i class="fas fa-clock me-1"></i>
+                                {% if subject.total_study_time %}
+                                {{ subject.total_study_hours }}h
+                                {% else %}
+                                0h
+                                {% endif %}
+                            </small>
+                            <a href="{% url 'lecon:subject_detail' subject.id %}" 
+                               class="btn btn-sm btn-primary rounded-pill px-3">
+                                <i class="fas fa-play me-1"></i>Étudier
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-5">
+                    <i class="fas fa-books fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Aucun sujet accessible</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-4">
+            <div class="dashboard-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h5 class="mb-1">📅 Planning</h5>
+                        <small class="text-muted">Vos prochaines révisions</small>
+                    </div>
+                    <a href="{% url 'journal:entry_create' %}" class="btn btn-sm btn-primary rounded-pill">
+                        <i class="fas fa-plus me-1"></i>Ajouter
+                    </a>
+                </div>
+                
+                {% if upcoming_schedules %}
+                <div>
+                    {% for schedule in upcoming_schedules %}
+                    <div class="schedule-item">
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center">
+                            <div class="mb-2 mb-sm-0">
+                                <h6 class="mb-1">{{ schedule.chapter.title }}</h6>
+                                <small class="text-muted">
+                                    <i class="fas fa-stethoscope me-1"></i>{{ schedule.subject.title }}
+                                </small>
+                            </div>
+                            <div class="text-sm-end">
+                                <small class="d-block text-primary fw-bold mb-2">
+                                    <i class="far fa-calendar me-1"></i>
+                                    {{ schedule.scheduled_date|date:"d/m H:i" }}
+                                </small>
+                                <a href="{% url 'lecon:chapter_detail_student' schedule.chapter.ue.id schedule.chapter.id %}" 
+                                   class="btn btn-sm btn-success rounded-pill px-3">
+                                    <i class="fas fa-play me-1"></i>Commencer
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% comment %} {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-calendar-plus fa-3x text-muted mb-3"></i>
+                    <p class="text-muted mb-3">Aucun planning à venir</p>
+                    <a href="{% url 'schedules:create_schedule' %}" class="btn btn-primary rounded-pill">
+                        <i class="fas fa-plus me-1"></i>Planifier une révision
+                    </a>
+                </div> {% endcomment %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Initializing all charts...');
+        
+        // Initialize Performance Chart
+        const performanceCtx = document.getElementById('performanceChart');
+        if (performanceCtx) {
+            const performanceData = {{ performance_data_json|safe }};
+            
+            console.log('Performance Data:', performanceData);
+
+            // Show stats summary if we have data
+            const totalAttempts = (performanceData.metadata?.total_mcq || 0) + 
+                                (performanceData.metadata?.total_qa || 0) + 
+                                (performanceData.metadata?.total_tf || 0);
+
+            if (totalAttempts > 0 && performanceData.metadata) {
+                document.getElementById('performance-stats-summary').style.display = 'block';
+                
+                // Update stats
+                document.getElementById('total-mcq').innerText = performanceData.metadata.total_mcq;
+                document.getElementById('total-qa').innerText = performanceData.metadata.total_qa;
+                document.getElementById('total-tf').innerText = performanceData.metadata.total_tf;
+                
+                document.getElementById('avg-daily-mcq').innerText = performanceData.metadata.avg_daily_mcq;
+                document.getElementById('avg-daily-qa').innerText = performanceData.metadata.avg_daily_qa;
+                document.getElementById('avg-daily-tf').innerText = performanceData.metadata.avg_daily_tf;
+            }
+            
+            new Chart(performanceCtx, {
+                type: 'line',
+                data: performanceData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            align: 'center',
+                            labels: {
+                                font: { size: 13, family: 'Inter', weight: '600' },
+                                usePointStyle: true,
+                                padding: 20,
+                                boxWidth: 12,
+                                boxHeight: 12
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                            titleFont: { size: 13, family: 'Inter', weight: 'bold' },
+                            bodyFont: { size: 12, family: 'Inter' },
+                            padding: 12,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    let value = context.raw;
+                                    if (value === null || value === undefined) {
+                                        return null;
+                                    }
+                                    return `${label}: ${value.toFixed(1)}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.06)',
+                                drawBorder: true,
+                                lineWidth: 1
+                            },
+                            title: {
+                                display: true,
+                                text: "Nombre d'essais par jour",
+                                font: { size: 14, weight: 'bold', family: 'Inter' },
+                                color: '#555'
+                            },
+                            ticks: {
+                                stepSize: 1,
+                                precision: 0,  // Show only integers
+                                font: { size: 11, weight: '500' },
+                                color: '#666'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: true
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date',
+                                font: { size: 14, weight: 'bold', family: 'Inter' },
+                                color: '#555'
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45,
+                                autoSkip: true,
+                                maxTicksLimit: 12,
+                                font: { size: 11, weight: '500' },
+                                color: '#666'
+                            }
+                        }
+                    },
+                    elements: {
+                        line: {
+                            borderWidth: 3,
+                            tension: 0.3,
+                            capBezierPoints: true
+                        },
+                        point: {
+                            radius: 6,
+                            hoverRadius: 10,
+                            borderWidth: 2,
+                            borderColor: '#fff',
+                            hitRadius: 10
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            top: 20,
+                            bottom: 10,
+                            left: 10,
+                            right: 10
+                        }
+                    }
+                }
+            });
+            
+            console.log('Performance chart created successfully');
+        }
+        
+        // Initialize Quiz Distribution Chart
+        const distributionCtx = document.getElementById('quizDistributionChart');
+        if (distributionCtx) {
+            const quizDistributionData = {{ quiz_distribution_json|safe }};
+            console.log('Quiz Distribution Data:', quizDistributionData);
+            
+            new Chart(distributionCtx, {
+                type: 'doughnut',
+                data: quizDistributionData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: { 
+                            position: 'bottom', 
+                            labels: { font: { size: 12 }, usePointStyle: true } 
+                        },
+                        tooltip: { 
+                            callbacks: { 
+                                label: function(context) { 
+                                    return `${context.label}: ${context.raw} tentatives`; 
+                                } 
+                            } 
+                        }
+                    }
+                }
+            });
+            console.log('Quiz distribution chart created');
+        }
+        
+        // Initialize Study Distribution Chart
+        const studyCtx = document.getElementById('studyDistributionChart');
+        if (studyCtx) {
+            const studyDistributionData = {{ study_distribution_json|safe }};
+            console.log('Study Distribution Data:', studyDistributionData);
+            
+            new Chart(studyCtx, {
+                type: 'pie',
+                data: studyDistributionData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { 
+                            position: 'bottom', 
+                            labels: { font: { size: 12 }, usePointStyle: true } 
+                        },
+                        tooltip: { 
+                            callbacks: { 
+                                label: function(context) { 
+                                    return `${context.label}: ${context.raw} heures`; 
+                                } 
+                            } 
+                        }
+                    }
+                }
+            });
+            console.log('Study distribution chart created');
+        }
+    });
+    
+    // Chart switching function
+    function switchChart(chartType) {
+        console.log('Switching to chart:', chartType);
+        
+        // Update tabs
+        document.querySelectorAll('.medical-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        if (event && event.target) {
+            event.target.classList.add('active');
+        }
+        
+        // Show/hide charts
+        const performanceDiv = document.getElementById('performance-chart');
+        const distributionDiv = document.getElementById('distribution-chart');
+        const studyDiv = document.getElementById('study-chart');
+        
+        if (chartType === 'performance') {
+            if (performanceDiv) performanceDiv.classList.remove('d-none');
+            if (distributionDiv) distributionDiv.classList.add('d-none');
+            if (studyDiv) studyDiv.classList.add('d-none');
+        } else if (chartType === 'distribution') {
+            if (performanceDiv) performanceDiv.classList.add('d-none');
+            if (distributionDiv) distributionDiv.classList.remove('d-none');
+            if (studyDiv) studyDiv.classList.add('d-none');
+        } else if (chartType === 'study') {
+            if (performanceDiv) performanceDiv.classList.add('d-none');
+            if (distributionDiv) distributionDiv.classList.add('d-none');
+            if (studyDiv) studyDiv.classList.remove('d-none');
+        }
+    }
+    
+    // Mobile swipe functionality for tabs
+    let startX = 0;
+    let endX = 0;
+    
+    const tabsContainer = document.querySelector('.medical-tabs');
+    if (tabsContainer) {
+        tabsContainer.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+        });
+        
+        tabsContainer.addEventListener('touchend', function(e) {
+            endX = e.changedTouches[0].clientX;
+            const threshold = 50;
+            const difference = startX - endX;
+            
+            if (Math.abs(difference) > threshold) {
+                const tabs = document.querySelectorAll('.medical-tab');
+                const activeIndex = Array.from(tabs).findIndex(tab => tab.classList.contains('active'));
+                
+                if (difference > 0 && activeIndex < tabs.length - 1) {
+                    tabs[activeIndex + 1].click();
+                } else if (difference < 0 && activeIndex > 0) {
+                    tabs[activeIndex - 1].click();
+                }
+            }
+        });
+    }
+    
+    // Add click animations to cards
+    document.querySelectorAll('.stat-card, .quiz-type-card').forEach(card => {
+        card.addEventListener('click', function() {
+            this.style.transform = 'scale(0.98)';
+            setTimeout(() => { this.style.transform = ''; }, 150);
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,823 @@
+<!-- utilisateur/profile.html - Reorganized with transparent backgrounds -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mon Profil - EduTrack{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #1abc9c;
+        --success-color: #27ae60;
+        --warning-color: #f39c12;
+        --danger-color: #e74c3c;
+        --light-color: #ecf0f1;
+        --dark-color: #2c3e50;
+        --text-color: #34495e;
+        --text-light: #7f8c8d;
+        --border-color: #dfe6e9;
+        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+        --card-shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.12);
+        --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    /* Dark mode support */
+    [data-bs-theme="dark"] {
+        --primary-color: #1a1a2e;
+        --secondary-color: #0f3460;
+        --accent-color: #1abc9c;
+        --text-color: #e0e0e0;
+        --text-light: #a0a0a0;
+        --border-color: #2c2c2c;
+        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        --card-shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Profile Container */
+    .profile-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    /* Profile Header - Transparent background */
+    .profile-header {
+        background: var(--bs-body-bg);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 3rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        transition: var(--transition-smooth);
+        border: 1px solid var(--border-color);
+    }
+
+    .profile-header:hover {
+        box-shadow: var(--card-shadow-hover);
+    }
+
+    /* Profile Avatar with Hidden Actions */
+    .profile-avatar-wrapper {
+        position: relative;
+        width: 180px;
+        height: 180px;
+        margin: 0 auto;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+    }
+
+    .profile-avatar-wrapper:hover {
+        transform: translateY(-5px);
+    }
+
+    .profile-avatar {
+        width: 100%;
+        height: 100%;
+        border: 4px solid var(--bs-body-bg);
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        transition: var(--transition-smooth);
+    }
+
+    .avatar-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.75);
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition-smooth);
+        color: white;
+        padding: 1rem;
+    }
+
+    .profile-avatar-wrapper.active .avatar-overlay {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .avatar-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .avatar-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: white;
+        color: var(--primary-color);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        transition: var(--transition-smooth);
+        font-size: 1.1rem;
+    }
+
+    .avatar-btn:hover {
+        background: var(--accent-color);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .avatar-instruction {
+        font-size: 0.85rem;
+        color: rgba(255,255,255,0.9);
+        text-align: center;
+        margin-top: 0.5rem;
+    }
+
+    /* Profile Navigation */
+    .profile-nav {
+        background: var(--bs-body-bg);
+        border-radius: 15px;
+        padding: 0;
+        margin-bottom: 2.5rem;
+        box-shadow: var(--card-shadow);
+        position: sticky;
+        top: 20px;
+        z-index: 100;
+        border: 1px solid var(--border-color);
+    }
+
+    .profile-nav .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 0.5rem;
+    }
+
+    .profile-nav .nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .profile-nav .nav-link {
+        padding: 1rem 1.5rem;
+        color: var(--text-light);
+        border: none;
+        border-bottom: 3px solid transparent;
+        transition: var(--transition-smooth);
+        font-weight: 500;
+        white-space: nowrap;
+        border-radius: 8px;
+        margin: 0 0.25rem;
+        background: transparent;
+    }
+
+    .profile-nav .nav-link:hover {
+        color: var(--secondary-color);
+        background: rgba(52, 152, 219, 0.1);
+    }
+
+    .profile-nav .nav-link.active {
+        color: var(--secondary-color);
+        border-bottom-color: var(--secondary-color);
+        background: rgba(52, 152, 219, 0.15);
+        font-weight: 600;
+    }
+
+    .profile-nav .nav-link i {
+        margin-right: 8px;
+        font-size: 1.1rem;
+    }
+
+    /* Profile Cards - Transparent background */
+    .profile-card {
+        background: var(--bs-body-bg);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        transition: var(--transition-smooth);
+        position: relative;
+    }
+
+    .profile-card:hover {
+        box-shadow: var(--card-shadow-hover);
+        transform: translateY(-2px);
+    }
+
+    .profile-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(to bottom, var(--secondary-color), var(--accent-color));
+        border-radius: 16px 0 0 16px;
+    }
+
+    .profile-card .card-title {
+        color: var(--text-color);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.3rem;
+    }
+
+    .profile-card .card-title i {
+        color: var(--secondary-color);
+        font-size: 1.4rem;
+    }
+
+    /* Info Items */
+    .info-item {
+        margin-bottom: 1.25rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .info-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: var(--text-light);
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .info-value {
+        color: var(--text-color);
+        font-size: 1.05rem;
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    /* Role Badges */
+    .role-badges {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+    }
+
+    .role-badge {
+        padding: 0.6rem 1.25rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        transition: var(--transition-smooth);
+    }
+
+    .role-badge.student {
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        color: white;
+    }
+
+    .role-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-edit {
+        background: var(--secondary-color);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.75rem;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: var(--transition-smooth);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+
+    .btn-edit:hover {
+        background: var(--accent-color);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        color: white;
+    }
+
+    .btn-subscribe {
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.75rem;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: var(--transition-smooth);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+
+    .btn-subscribe:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(243, 156, 18, 0.3);
+        color: white;
+    }
+
+    /* Tab Content */
+    .tab-content {
+        margin-top: 1rem;
+    }
+
+    .tab-pane {
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Feature Badges */
+    .feature-badge {
+        background: linear-gradient(135deg, #8e44ad, #9b59b6);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        display: inline-block;
+        margin: 0.25rem;
+    }
+
+    /* Subscription Highlight */
+    .subscription-highlight {
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(26, 188, 156, 0.1));
+        border-left: 4px solid var(--accent-color);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin: 1.5rem 0;
+    }
+
+    /* Bio Text */
+    .bio-text {
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: var(--text-color);
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .profile-container {
+            padding: 1.5rem;
+        }
+        
+        .profile-header {
+            padding: 2rem;
+        }
+        
+        .profile-avatar-wrapper {
+            width: 150px;
+            height: 150px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .profile-header {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .profile-nav .nav-link {
+            padding: 0.875rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .profile-card {
+            padding: 1.5rem;
+        }
+        
+        .role-badges {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .profile-container {
+            padding: 1rem;
+        }
+        
+        .profile-header {
+            padding: 1.25rem;
+        }
+        
+        .profile-avatar-wrapper {
+            width: 130px;
+            height: 130px;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+            width: 100%;
+        }
+        
+        .btn-edit, .btn-subscribe {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="row align-items-center">
+            <!-- Profile Picture with Hidden Actions -->
+            <div class="col-lg-3 text-center text-lg-start mb-4 mb-lg-0">
+                <div class="profile-avatar-wrapper" id="avatarWrapper">
+                    <img 
+                        src="{{ user.profile_pic.url|default:'/static/images/default-avatar.png' }}" 
+                        alt="{{ user.display_name }}"
+                        class="profile-avatar"
+                        id="profileAvatar"
+                        data-current-pic="{{ user.profile_pic.url|default:'/static/images/default-avatar.png' }}"
+                    >
+                    <div class="avatar-overlay" id="avatarOverlay">
+                        <span class="fw-semibold text-white mb-2 small">Photo de profil</span>
+                        <div class="avatar-actions">
+                            <button class="avatar-btn" onclick="document.getElementById('profilePicInput').click()" 
+                                    title="Changer la photo">
+                                <i class="bi bi-camera-fill"></i>
+                            </button>
+                            {% if user.profile_pic and user.profile_pic.name != 'profile_pics/default.png' %}
+                            <button class="avatar-btn" onclick="deleteProfilePicture()" title="Supprimer la photo">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                            {% endif %}
+                        </div>
+                        <div class="avatar-instruction small">
+                            Cliquez pour modifier
+                        </div>
+                    </div>
+                </div>
+                <input type="file" id="profilePicInput" accept="image/*" style="display: none;" 
+                       onchange="uploadProfilePicture(this.files[0])">
+            </div>
+            
+            <!-- Profile Information -->
+            <div class="col-lg-9">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start">
+                    <div>
+                        <h1 class="h2 fw-bold mb-2">{{ user.display_name }}</h1>
+                        <p class="text-muted mb-3">
+                            <i class="bi bi-envelope me-2"></i>{{ user.email }}
+                        </p>
+                        
+                        <!-- Role Display -->
+                        <div class="role-badges">
+                            {% if user.is_student %}
+                            <span class="role-badge student">
+                                <i class="bi bi-mortarboard-fill"></i>Étudiant
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="action-buttons mt-3 mt-lg-0">
+                        <a href="{% url 'utilisateur:profile_update' %}" class="btn-edit">
+                            <i class="bi bi-pencil-square me-2"></i>Modifier
+                        </a>
+                        <a href="{% url 'subscriptions:create_subscription' %}" class="btn-subscribe">
+                            <i class="bi bi-star me-2"></i>S'abonner
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Profile Navigation -->
+    <nav class="profile-nav">
+        <ul class="nav" id="profileTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {% if active_tab == 'general' %}active{% endif %}" 
+                       id="general-tab" data-bs-toggle="tab" data-bs-target="#general-pane" 
+                       type="button" role="tab" aria-controls="general-pane" aria-selected="{% if active_tab == 'general' %}true{% else %}false{% endif %}">
+                    <i class="bi bi-person-fill"></i>Général
+                </button>
+            </li>
+            {% if user.is_student %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="student-tab" data-bs-toggle="tab" data-bs-target="#student-pane" 
+                       type="button" role="tab" aria-controls="student-pane" aria-selected="false">
+                    <i class="bi bi-mortarboard-fill"></i>Étudiant
+                </button>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    
+    <!-- Tab Content -->
+    <div class="tab-content" id="profileTabContent">
+        <!-- General Tab -->
+        <div class="tab-pane fade {% if active_tab == 'general' %}show active{% endif %}" 
+             id="general-pane" role="tabpanel" aria-labelledby="general-tab">
+            {% include 'utilisateur/includes/general_tab.html' %}
+        </div>
+        
+        <!-- Student Tab -->
+        {% if user.is_student %}
+        <div class="tab-pane fade" id="student-pane" role="tabpanel" aria-labelledby="student-tab">
+            {% include 'utilisateur/includes/student_tab.html' %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Profile Picture Upload Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-semibold">
+                    <i class="bi bi-camera-fill me-2"></i>Changer la photo de profil
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <img id="previewImage" class="img-fluid rounded-circle mb-3" 
+                         style="width: 200px; height: 200px; object-fit: cover; border: 3px solid var(--border-color);">
+                </div>
+                <div class="mb-3">
+                    <label for="modalProfilePicInput" class="form-label fw-semibold">Sélectionner une image</label>
+                    <input type="file" id="modalProfilePicInput" accept="image/*" class="form-control">
+                </div>
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Taille maximale : 5MB. Formats acceptés : JPG, PNG, GIF, WebP
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" onclick="confirmUpload()">
+                    <i class="bi bi-check-lg me-1"></i>Enregistrer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Profile picture click handler
+    const avatarWrapper = document.getElementById('avatarWrapper');
+    const avatarOverlay = document.getElementById('avatarOverlay');
+
+    avatarWrapper.addEventListener('click', function(e) {
+        e.stopPropagation();
+        this.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!avatarWrapper.contains(e.target)) {
+            avatarWrapper.classList.remove('active');
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            avatarWrapper.classList.remove('active');
+        }
+    });
+
+    // Tab switching with URL update
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
+        tabEls.forEach(tab => {
+            tab.addEventListener('shown.bs.tab', function (event) {
+                const targetId = event.target.getAttribute('data-bs-target').replace('#', '');
+                const role = targetId.replace('-pane', '');
+                
+                const url = new URL(window.location);
+                url.searchParams.set('tab', role);
+                history.replaceState(null, '', url.toString());
+                
+                document.querySelectorAll('.profile-nav .nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                event.target.classList.add('active');
+            });
+        });
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const tabParam = urlParams.get('tab');
+        if (tabParam) {
+            const tabButton = document.querySelector(`[data-bs-target="#${tabParam}-pane"]`);
+            if (tabButton) {
+                const tab = new bootstrap.Tab(tabButton);
+                tab.show();
+            }
+        }
+    });
+
+    // Profile picture upload functions
+    let selectedFile = null;
+    let previewUrl = null;
+
+    function uploadProfilePicture(file) {
+        if (!file) return;
+        
+        if (file.size > 5 * 1024 * 1024) {
+            showToast('error', 'Fichier trop volumineux (max 5MB)');
+            return;
+        }
+        
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
+            showToast('error', 'Format non supporté. Utilisez JPG, PNG, GIF ou WebP.');
+            return;
+        }
+        
+        selectedFile = file;
+        previewUrl = URL.createObjectURL(file);
+        document.getElementById('previewImage').src = previewUrl;
+        
+        const modal = new bootstrap.Modal(document.getElementById('uploadModal'));
+        modal.show();
+    }
+
+    function confirmUpload() {
+        if (!selectedFile) return;
+        
+        const formData = new FormData();
+        formData.append('profile_pic', selectedFile);
+        
+        const btn = document.querySelector('#uploadModal .btn-primary');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enregistrement...';
+        btn.disabled = true;
+        
+        fetch('{% url "utilisateur:update_profile_pic" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const profileAvatar = document.getElementById('profileAvatar');
+                profileAvatar.src = data.url + '?' + new Date().getTime();
+                
+                bootstrap.Modal.getInstance(document.getElementById('uploadModal')).hide();
+                avatarWrapper.classList.remove('active');
+                showToast('success', data.message);
+            } else {
+                showToast('error', data.error || 'Erreur lors de l\'upload');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('error', 'Erreur réseau');
+        })
+        .finally(() => {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            if (previewUrl) {
+                URL.revokeObjectURL(previewUrl);
+            }
+            selectedFile = null;
+            previewUrl = null;
+        });
+    }
+
+    function deleteProfilePicture() {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer votre photo de profil ?')) {
+            return;
+        }
+        
+        fetch('{% url "utilisateur:delete_profile_pic" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const profileAvatar = document.getElementById('profileAvatar');
+                profileAvatar.src = data.url;
+                
+                const deleteBtn = document.querySelector('.avatar-btn[title="Supprimer la photo"]');
+                if (deleteBtn) deleteBtn.style.display = 'none';
+                
+                avatarWrapper.classList.remove('active');
+                showToast('success', data.message);
+            } else {
+                showToast('error', 'Erreur lors de la suppression');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('error', 'Erreur réseau');
+        });
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function showToast(type, message) {
+        let toastContainer = document.getElementById('toastContainer');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.id = 'toastContainer';
+            toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            document.body.appendChild(toastContainer);
+        }
+        
+        const toastId = 'toast-' + Date.now();
+        const toast = document.createElement('div');
+        toast.id = toastId;
+        toast.className = `toast align-items-center text-bg-${type === 'success' ? 'success' : 'danger'} border-0`;
+        toast.setAttribute('role', 'alert');
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi ${type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'} me-2"></i>
+                    ${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+        
+        toastContainer.appendChild(toast);
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+        
+        toast.addEventListener('hidden.bs.toast', function () {
+            toast.remove();
+        });
+    }
+
+    // Smooth scroll for mobile
+    document.querySelectorAll('.profile-nav .nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (window.innerWidth < 768) {
+                setTimeout(() => {
+                    document.querySelector('.profile-nav').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }, 300);
+            }
+        });
+    });
+</script>
+{% endblock %}
