@@ -58,20 +58,10 @@ urlpatterns = [
     path('quiz/', include('quizzes.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('note/', include('lessoncopy.urls', namespace='lessoncopy')),
-    path('quizlet/', include('quizlet_copy.urls')),
-    path('word-convert/', include('pdf_pptx_to_word.urls')),
-    path('split/', include('splitter_app.urls')),
-    path('split-word/', include('handler.urls')),
-    path('heading-manipulation/', include('heading_manipulation.urls')),
     path('subscription/', include('subscriptions.urls')),
     path('student/', include('student.urls')),
-    path('bulk-import/', include('bulk_import.urls')),
-    path('img-to-pdf/', include('img_to_pdf.urls')),
-    path('journal/', include('journal.urls')),
     path('teacher/', include('teacher.urls')),
-    path('feedback/', include('feedback.urls')),
-    path('clinical-case/', include('clinical_case_simple.urls')),
-    path('echange/', include('echange.urls')),
+
 
 ]
 
