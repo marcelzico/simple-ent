@@ -5,7 +5,7 @@ from .forms import  ChapterForm, SubjectForm, UniteSectionForm, ChapterSearchFor
 from django.contrib import messages
 from quizzes.models import MCQ, MCQResult, QAResult, QuestionAnswer, TrueFalseQuiz, TrueFalseResult
 from lessoncopy.models import StudySession, Resume, ResumeIA, Copy, Importer
-from quizlet_copy.models import FlashcardSet, Flashcard, UserProgress
+# from quizlet_copy.models import FlashcardSet, Flashcard, UserProgress
 from django.db.models import Avg, Sum, Q, Prefetch
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
@@ -150,32 +150,32 @@ def chapter_detail(request, subject_pk, chapter_pk):
     tfs = chapter.truefalsequiz_set.all()
     
     # Get Flashcard Sets for this chapter
-    flashcard_sets = FlashcardSet.objects.filter(title=chapter, created_by=request.user)
-    flashcard_sets_private = FlashcardSet.objects.filter(title=chapter, created_by=request.user, is_public=False)
-    flashcard_sets_public = FlashcardSet.objects.filter(title=chapter, is_public=True)
+    # flashcard_sets = FlashcardSet.objects.filter(title=chapter, created_by=request.user)
+    # flashcard_sets_private = FlashcardSet.objects.filter(title=chapter, created_by=request.user, is_public=False)
+    # flashcard_sets_public = FlashcardSet.objects.filter(title=chapter, is_public=True)
     
     # Get user's flashcard progress
     user_flashcard_progress = None
     total_flashcards = 0
     mastered_flashcards = 0
     
-    if request.user.is_authenticated:
-        # Calculate flashcard progress
-        flashcards = Flashcard.objects.filter(flashcard_set__title=chapter)
-        total_flashcards = flashcards.count()
+    # if request.user.is_authenticated:
+    #     # Calculate flashcard progress
+    #     flashcards = Flashcard.objects.filter(flashcard_set__title=chapter)
+    #     total_flashcards = flashcards.count()
         
-        if total_flashcards > 0:
-            user_progress = UserProgress.objects.filter(
-                user=request.user,
-                flashcard__in=flashcards
-            )
-            mastered_flashcards = user_progress.filter(mastered=True).count()
-            user_flashcard_progress = {
-                'total': total_flashcards,
-                'mastered': mastered_flashcards,
-                'percentage': (mastered_flashcards / total_flashcards * 100) if total_flashcards > 0 else 0,
-                'in_progress': user_progress.filter(mastered=False).count()
-            }
+    #     if total_flashcards > 0:
+    #         user_progress = UserProgress.objects.filter(
+    #             user=request.user,
+    #             flashcard__in=flashcards
+    #         )
+    #         mastered_flashcards = user_progress.filter(mastered=True).count()
+    #         user_flashcard_progress = {
+    #             'total': total_flashcards,
+    #             'mastered': mastered_flashcards,
+    #             'percentage': (mastered_flashcards / total_flashcards * 100) if total_flashcards > 0 else 0,
+    #             'in_progress': user_progress.filter(mastered=False).count()
+    #         }
     
     # Get AI Resume
     ai_resume = ResumeIA.objects.filter(chapitre=chapter).first()
@@ -203,10 +203,10 @@ def chapter_detail(request, subject_pk, chapter_pk):
         'tfs': tfs,
         'ai_resume': ai_resume,
         'user_resume': user_resume,
-        'flashcard_sets': flashcard_sets,
-        'flashcard_sets_private': flashcard_sets_private,
-        'flashcard_sets_public': flashcard_sets_public,
-        'user_flashcard_progress': user_flashcard_progress,
+        # 'flashcard_sets': flashcard_sets,
+        # 'flashcard_sets_private': flashcard_sets_private,
+        # 'flashcard_sets_public': flashcard_sets_public,
+        # 'user_flashcard_progress': user_flashcard_progress,
         'study_time_hours': study_time_seconds // 3600,
         'study_time_minutes': (study_time_seconds % 3600) // 60,
     }
@@ -227,26 +227,26 @@ def subject_detail(request, pk):
     total_tfs = TrueFalseQuiz.objects.filter(chapter__ue=unite, chapter__is_active=True).count()
     
     # Flashcard statistics for the entire subject
-    total_flashcard_sets = FlashcardSet.objects.filter(title__ue=unite).count()
+    # total_flashcard_sets = FlashcardSet.objects.filter(title__ue=unite).count()
     
     # Get all flashcards across all chapters in this subject
-    all_flashcards = Flashcard.objects.filter(flashcard_set__title__ue=unite)
-    total_flashcards = all_flashcards.count()
+    # all_flashcards = Flashcard.objects.filter(flashcard_set__title__ue=unite)
+    # total_flashcards = all_flashcards.count()
     
     # Calculate user's flashcard progress if student
     user_flashcard_progress = None
-    if request.user.is_student and total_flashcards > 0:
-        user_progress = UserProgress.objects.filter(
-            user=request.user,
-            flashcard__in=all_flashcards
-        )
-        mastered_flashcards = user_progress.filter(mastered=True).count()
-        user_flashcard_progress = {
-            'total': total_flashcards,
-            'mastered': mastered_flashcards,
-            'percentage': (mastered_flashcards / total_flashcards * 100) if total_flashcards > 0 else 0,
-            'sets_count': total_flashcard_sets
-        }
+    # if request.user.is_student and total_flashcards > 0:
+    #     user_progress = UserProgress.objects.filter(
+    #         user=request.user,
+    #         flashcard__in=all_flashcards
+    #     )
+    #     mastered_flashcards = user_progress.filter(mastered=True).count()
+    #     user_flashcard_progress = {
+    #         'total': total_flashcards,
+    #         'mastered': mastered_flashcards,
+    #         'percentage': (mastered_flashcards / total_flashcards * 100) if total_flashcards > 0 else 0,
+    #         'sets_count': total_flashcard_sets
+    #     }
     
     # Prepare chapters with study time and flashcard data
     chapters_with_data = []
@@ -263,8 +263,8 @@ def subject_detail(request, pk):
         }
         
         # Calculate flashcard data for this chapter
-        chapter_flashcards = Flashcard.objects.filter(flashcard_set__title=chapter)
-        chapter_data['flashcards_count'] = chapter_flashcards.count()
+        # chapter_flashcards = Flashcard.objects.filter(flashcard_set__title=chapter)
+        # chapter_data['flashcards_count'] = chapter_flashcards.count()
         
         if request.user.is_student:
             # Calculate study time for this chapter
@@ -281,13 +281,13 @@ def subject_detail(request, pk):
             total_study_seconds += chapter_study_seconds
             
             # Calculate flashcard mastery for this chapter
-            if chapter_data['flashcards_count'] > 0:
-                user_chapter_progress = UserProgress.objects.filter(
-                    user=request.user,
-                    flashcard__in=chapter_flashcards
-                )
-                mastered = user_chapter_progress.filter(mastered=True).count()
-                chapter_data['flashcard_mastery'] = (mastered / chapter_data['flashcards_count'] * 100) if chapter_data['flashcards_count'] > 0 else 0
+            # if chapter_data['flashcards_count'] > 0:
+            #     user_chapter_progress = UserProgress.objects.filter(
+            #         user=request.user,
+            #         flashcard__in=chapter_flashcards
+            #     )
+            #     mastered = user_chapter_progress.filter(mastered=True).count()
+            #     chapter_data['flashcard_mastery'] = (mastered / chapter_data['flashcards_count'] * 100) if chapter_data['flashcards_count'] > 0 else 0
         
         chapters_with_data.append(chapter_data)
     
@@ -325,9 +325,9 @@ def subject_detail(request, pk):
         sections_with_data.append(section_data)
     
     # Get all flashcard sets for the "All Flashcards" view
-    all_flashcard_sets = FlashcardSet.objects.filter(title__ue=unite).select_related('title').order_by('title__order', 'created_at')
-    all_flashcard_sets_private = FlashcardSet.objects.filter(title__ue=unite, is_public=False, created_by=request.user).order_by('title__order', 'created_at')
-    all_flashcard_sets_public = FlashcardSet.objects.filter(title__ue=unite, is_public=True).order_by('title__order', 'created_at')
+    # all_flashcard_sets = FlashcardSet.objects.filter(title__ue=unite).select_related('title').order_by('title__order', 'created_at')
+    # all_flashcard_sets_private = FlashcardSet.objects.filter(title__ue=unite, is_public=False, created_by=request.user).order_by('title__order', 'created_at')
+    # all_flashcard_sets_public = FlashcardSet.objects.filter(title__ue=unite, is_public=True).order_by('title__order', 'created_at')
     
     # Calculate total study time for the subject (for student)
     total_study_time_hours = total_study_seconds // 3600
@@ -372,11 +372,11 @@ def subject_detail(request, pk):
         'total_mcqs': total_mcqs,
         'total_qas': total_qas,
         'total_tfs': total_tfs,
-        'total_flashcard_sets': total_flashcard_sets,
-        'total_flashcards': total_flashcards,
-        'all_flashcard_sets': all_flashcard_sets,
-        'all_flashcard_sets_private': all_flashcard_sets_private,
-        'all_flashcard_sets_public': all_flashcard_sets_public,
+        # 'total_flashcard_sets': total_flashcard_sets,
+        # 'total_flashcards': total_flashcards,
+        # 'all_flashcard_sets': all_flashcard_sets,
+        # 'all_flashcard_sets_private': all_flashcard_sets_private,
+        # 'all_flashcard_sets_public': all_flashcard_sets_public,
         'user_flashcard_progress': user_flashcard_progress,
         'total_study_time_hours': total_study_time_hours,
         'total_study_time_minutes': total_study_time_minutes,
