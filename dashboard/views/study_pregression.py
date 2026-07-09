@@ -11,8 +11,8 @@ from utilisateur.models import User
 from student.models import StudentProfile
 from lecon.models import Unite, Chapter
 from quizzes.models import MCQResult, TrueFalseResult, QAResult
-from clinical_case_simple.models import ExamAttempt
-from quizlet_copy.models import UserProgress
+# from clinical_case_simple.models import ExamAttempt
+# from quizlet_copy.models import UserProgress
 from lessoncopy.models import StudySession, UserAnnotation
 from quizzes.models import MCQQuiz, QAQuiz
 from django.views.decorators.http import require_http_methods
@@ -387,11 +387,11 @@ class StudentProgressionDashboard:
         weak_areas.sort(key=lambda x: x['avg_score'])
         
         # Flashcard progress
-        flashcard_stats = UserProgress.objects.filter(user=student).aggregate(
-            total_studied=Count('id'),
-            mastered=Count('id', filter=Q(mastered=True)),
-            avg_confidence=Avg('confidence_level')
-        )
+        # flashcard_stats = UserProgress.objects.filter(user=student).aggregate(
+        #     total_studied=Count('id'),
+        #     mastered=Count('id', filter=Q(mastered=True)),
+        #     avg_confidence=Avg('confidence_level')
+        # )
         
         # Annotation activity
         annotation_count = UserAnnotation.objects.filter(user=student).count()
@@ -407,12 +407,12 @@ class StudentProgressionDashboard:
             'ue_progress': ue_progress,
             'recent_activity': recent_activity[:10],
             'weak_areas': weak_areas[:10],
-            'flashcard_stats': {
-                'total_studied': flashcard_stats['total_studied'] or 0,
-                'mastered': flashcard_stats['mastered'] or 0,
-                'mastery_rate': round((flashcard_stats['mastered'] / flashcard_stats['total_studied'] * 100), 1) if flashcard_stats['total_studied'] > 0 else 0,
-                'avg_confidence': round(flashcard_stats['avg_confidence'] or 0, 1),
-            },
+            # 'flashcard_stats': {
+            #     'total_studied': flashcard_stats['total_studied'] or 0,
+            #     'mastered': flashcard_stats['mastered'] or 0,
+            #     'mastery_rate': round((flashcard_stats['mastered'] / flashcard_stats['total_studied'] * 100), 1) if flashcard_stats['total_studied'] > 0 else 0,
+            #     'avg_confidence': round(flashcard_stats['avg_confidence'] or 0, 1),
+            # },
             'annotation_count': annotation_count,
         }
     
@@ -805,17 +805,17 @@ class StudentProgressionDashboard:
         )
         
         # Flashcard engagement
-        flashcard_progress = UserProgress.objects.filter(user__is_student=True)
-        if filters and filters.get('level'):
-            flashcard_progress = flashcard_progress.filter(user__student_profile__level=filters['level'])
+        # flashcard_progress = UserProgress.objects.filter(user__is_student=True)
+        # if filters and filters.get('level'):
+        #     flashcard_progress = flashcard_progress.filter(user__student_profile__level=filters['level'])
         
-        flashcard_stats = flashcard_progress.aggregate(
-            total_cards_studied=Count('id'),
-            mastered_cards=Count('id', filter=Q(mastered=True)),
-            unique_students=Count('user', distinct=True),
-            avg_confidence=Avg('confidence_level'),
-            avg_times_studied=Avg('times_studied'),
-        )
+        # flashcard_stats = flashcard_progress.aggregate(
+        #     total_cards_studied=Count('id'),
+        #     mastered_cards=Count('id', filter=Q(mastered=True)),
+        #     unique_students=Count('user', distinct=True),
+        #     avg_confidence=Avg('confidence_level'),
+        #     avg_times_studied=Avg('times_studied'),
+        # )
         
         # Active vs inactive breakdown
         week_ago = timezone.now() - timedelta(days=7)
@@ -870,15 +870,15 @@ class StudentProgressionDashboard:
                 'percentage': round((annotation_stats['unique_students'] / total_students * 100), 1) if total_students > 0 else 0,
                 'avg_per_student': round(annotation_stats['avg_per_student'], 1),
             },
-            'flashcard': {
-                'total_students_using': flashcard_stats['unique_students'],
-                'percentage': round((flashcard_stats['unique_students'] / total_students * 100), 1) if total_students > 0 else 0,
-                'total_cards_studied': flashcard_stats['total_cards_studied'],
-                'mastered_cards': flashcard_stats['mastered_cards'],
-                'mastery_rate': round((flashcard_stats['mastered_cards'] / flashcard_stats['total_cards_studied'] * 100), 1) if flashcard_stats['total_cards_studied'] > 0 else 0,
-                'avg_confidence': round(flashcard_stats['avg_confidence'] or 0, 1),
-                'avg_times_studied': round(flashcard_stats['avg_times_studied'] or 0, 1),
-            },
+            # 'flashcard': {
+            #     'total_students_using': flashcard_stats['unique_students'],
+            #     'percentage': round((flashcard_stats['unique_students'] / total_students * 100), 1) if total_students > 0 else 0,
+            #     'total_cards_studied': flashcard_stats['total_cards_studied'],
+            #     'mastered_cards': flashcard_stats['mastered_cards'],
+            #     'mastery_rate': round((flashcard_stats['mastered_cards'] / flashcard_stats['total_cards_studied'] * 100), 1) if flashcard_stats['total_cards_studied'] > 0 else 0,
+            #     'avg_confidence': round(flashcard_stats['avg_confidence'] or 0, 1),
+            #     'avg_times_studied': round(flashcard_stats['avg_times_studied'] or 0, 1),
+            # },
             'activity_breakdown': {
                 'active_7d': active_7d,
                 'active_7d_percentage': round((active_7d / total_students * 100), 1) if total_students > 0 else 0,
