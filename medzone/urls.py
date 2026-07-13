@@ -60,7 +60,7 @@ urlpatterns = [
     path('note/', include('lessoncopy.urls', namespace='lessoncopy')),
     path('subscription/', include('subscriptions.urls')),
     path('student/', include('student.urls')),
-    path('teacher/', include('teacher.urls')),
+    # path('teacher/', include('teacher.urls')),
 
 
 ]

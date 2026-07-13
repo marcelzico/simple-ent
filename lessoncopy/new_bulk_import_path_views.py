@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from lecon.models import Unite, Chapter
 from quizzes.models import MCQ, QuestionAnswer, TrueFalseQuiz
 from . models import ResumeIA, Copy
-from quizlet_copy.models import FlashcardSet, Flashcard
+# from quizlet_copy.models import FlashcardSet, Flashcard
 from .forms import ChapterDataFolderImportForm
 import unicodedata
 
@@ -103,32 +103,32 @@ def process_tf_file(file_path, chapter, user):
     return count, errors
 
 
-def process_flashcard_file(file_path, chapter, user):
-    """Import Flashcards from CSV."""
-    count = 0
-    errors = []
-    try:
-        # Get or create a flashcard set for this chapter
-        flashcard_set, created = FlashcardSet.objects.get_or_create(
-            title=chapter,  # if title is FK; otherwise use chapter and a default name
-            is_public=True,
-            defaults={'created_by': user, 'description': ''}
-        )
-        with open(file_path, 'r', encoding='utf-8-sig') as f:
-            reader = csv.DictReader(f)
-            for row_num, row in enumerate(reader, start=2):
-                try:
-                    Flashcard.objects.create(
-                        flashcard_set=flashcard_set,
-                        term=row.get('term', '').strip() or row.get('front', '').strip(),
-                        definition=row.get('definition', '') or row.get('meaning', '') or row.get('back', ''),
-                    )
-                    count += 1 
-                except Exception as e:
-                    errors.append(f"Ligne {row_num}: {str(e)}")
-    except Exception as e:
-        errors.append(f"Erreur lecture fichier: {str(e)}")
-    return count, errors
+# def process_flashcard_file(file_path, chapter, user):
+#     """Import Flashcards from CSV."""
+#     count = 0
+#     errors = []
+#     try:
+#         # Get or create a flashcard set for this chapter
+#         flashcard_set, created = FlashcardSet.objects.get_or_create(
+#             title=chapter,  # if title is FK; otherwise use chapter and a default name
+#             is_public=True,
+#             defaults={'created_by': user, 'description': ''}
+#         )
+#         with open(file_path, 'r', encoding='utf-8-sig') as f:
+#             reader = csv.DictReader(f)
+#             for row_num, row in enumerate(reader, start=2):
+#                 try:
+#                     Flashcard.objects.create(
+#                         flashcard_set=flashcard_set,
+#                         term=row.get('term', '').strip() or row.get('front', '').strip(),
+#                         definition=row.get('definition', '') or row.get('meaning', '') or row.get('back', ''),
+#                     )
+#                     count += 1 
+#                 except Exception as e:
+#                     errors.append(f"Ligne {row_num}: {str(e)}")
+#     except Exception as e:
+#         errors.append(f"Erreur lecture fichier: {str(e)}")
+#     return count, errors
 
 
 def process_summary_file(file_path, chapter, user):
@@ -365,10 +365,10 @@ def _process_chapter_files(folder, chapter, user, results):
                     cnt, errs = process_tf_file(file_path, chapter, user)
                     results['tf'] += cnt
                     results['errors'].extend(errs)
-                elif 'flash' in fname or 'flashcard' in fname:
-                    cnt, errs = process_flashcard_file(file_path, chapter, user)
-                    results['flash'] += cnt
-                    results['errors'].extend(errs)
+                # elif 'flash' in fname or 'flashcard' in fname:
+                #     cnt, errs = process_flashcard_file(file_path, chapter, user)
+                #     results['flash'] += cnt
+                #     results['errors'].extend(errs)
             elif fname.endswith('.txt'):
                 if 'summary' in fname:
                     cnt, errs = process_summary_file(file_path, chapter, user)

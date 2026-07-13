@@ -6,7 +6,7 @@ from datetime import date, timedelta
 from lecon.models import Unite, Chapter
 from quizzes.models import MCQResult, QAResult, TrueFalseResult, MCQAttempt, QAAttempt
 from lessoncopy.models import StudySession
-from journal.models import StructuredStudySession
+# from journal.models import StructuredStudySession
 from subscriptions.models import Subscription, Payment, Feature
 from utilisateur.models import User
 from student.models import StudentProfile
@@ -168,16 +168,16 @@ def student_dashboard(request):
     
     weekly_hours = round((weekly_study['total_seconds'] or 0) / 3600, 1)
 
-    upcoming_schedules = StructuredStudySession.objects.filter(
-        user=request.user,
-        status="planned" or "in_progress",
-        is_completed=False,
-    ).order_by('planned_date')[:5]
+    # upcoming_schedules = StructuredStudySession.objects.filter(
+    #     user=request.user,
+    #     status="planned" or "in_progress",
+    #     is_completed=False,
+    # ).order_by('planned_date')[:5]
     
-    completed_schedules = StructuredStudySession.objects.filter(
-        user=request.user,
-        status="completed",
-    ).order_by('-study_date')[:5]
+    # completed_schedules = StructuredStudySession.objects.filter(
+    #     user=request.user,
+    #     status="completed",
+    # ).order_by('-study_date')[:5]
 
     
     # ========== PROGRESS STATISTICS ==========
@@ -272,15 +272,15 @@ def student_dashboard(request):
     #             })
     
     # Upcoming schedules alert
-    if upcoming_schedules.exists():
-        next_schedule = upcoming_schedules.first()
-        hours_until = (next_schedule.planned_date - timezone.now()).total_seconds() / 3600
-        if hours_until <= 24:
-            alerts.append({
-                'type': 'info',
-                'message': f'Vous avez un planning de lecture dans {int(hours_until)} heure(s)',
-                'link': '/schedules/'
-            })
+    # if upcoming_schedules.exists():
+    #     next_schedule = upcoming_schedules.first()
+    #     hours_until = (next_schedule.planned_date - timezone.now()).total_seconds() / 3600
+    #     if hours_until <= 24:
+    #         alerts.append({
+    #             'type': 'info',
+    #             'message': f'Vous avez un planning de lecture dans {int(hours_until)} heure(s)',
+    #             'link': '/schedules/'
+    #         })
     
     # ========== QUICK STATS ==========
     # Total study hours
@@ -322,8 +322,8 @@ def student_dashboard(request):
         'today_sessions': today_sessions,
         'weekly_hours': weekly_hours,
         'weekly_sessions': weekly_study['session_count'] or 0,
-        'upcoming_schedules': upcoming_schedules,
-        'completed_schedules': completed_schedules,
+            # 'upcoming_schedules': upcoming_schedules,
+            # 'completed_schedules': completed_schedules,
         
         # Progress
         'studied_chapters': studied_chapters,
@@ -349,7 +349,7 @@ def student_dashboard(request):
                                   (tf_stats['total_attempts'] or 0),
             'avg_quiz_score': overall_avg,
             'total_study_hours': total_study_hours,
-            'schedules_completed': completed_schedules.count(),
+            # 'schedules_completed': completed_schedules.count(),
         }
     }
     

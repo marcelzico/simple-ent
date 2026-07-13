@@ -5,7 +5,7 @@ from lecon.models import Unite, Chapter
 from quizzes.models import MCQResult, QAResult, TrueFalseResult, MCQAttempt, QAAttempt
 from django.contrib.auth import get_user_model
 from student.models import StudentProfile
-from clinical_case_simple.models import ExamAttempt
+# from clinical_case_simple.models import ExamAttempt
 
 User = get_user_model()
 

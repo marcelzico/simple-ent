@@ -2,8 +2,8 @@ from django import forms
 from django.forms import inlineformset_factory
 from lecon.models import Unite, Chapter
 from quizzes.models import MCQ, QuestionAnswer, TrueFalseQuiz, MCQQuiz, QAQuiz
-from quizlet_copy.models import FlashcardSet, Flashcard
-from clinical_case_simple.models import Enoncé, QCM, QestionRéponse, VraiFaux, Illustraion
+# from quizlet_copy.models import FlashcardSet, Flashcard
+# from clinical_case_simple.models import Enoncé, QCM, QestionRéponse, VraiFaux, Illustraion
 from django.contrib.auth import get_user_model
 from utilisateur.models import User
 from .models import TeacherProfile
@@ -264,121 +264,121 @@ class QAQuizForm(forms.ModelForm):
 
 # ==================== FORMULAIRES FLASHCARDS ====================
 
-class FlashcardSetForm(forms.ModelForm):
-    """Formulaire pour créer/modifier un set de flashcards"""
+# class FlashcardSetForm(forms.ModelForm):
+#     """Formulaire pour créer/modifier un set de flashcards"""
     
-    class Meta:
-        model = FlashcardSet
-        fields = ['title', 'description', 'is_public']
-        widgets = {
-            'title': forms.Select(attrs={'class': 'form-select'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Description...'}),
-            'is_public': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-        }
-        labels = {
-            'title': 'Chapitre',
-            'description': 'Description',
-            'is_public': 'Set public',
-        }
+#     class Meta:
+#         model = FlashcardSet
+#         fields = ['title', 'description', 'is_public']
+#         widgets = {
+#             'title': forms.Select(attrs={'class': 'form-select'}),
+#             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Description...'}),
+#             'is_public': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+#         }
+#         labels = {
+#             'title': 'Chapitre',
+#             'description': 'Description',
+#             'is_public': 'Set public',
+#         }
     
-    def __init__(self, *args, **kwargs):
-        teacher = kwargs.pop('teacher', None)
-        unite_id = kwargs.pop('unite_id', None)
-        super().__init__(*args, **kwargs)
+#     def __init__(self, *args, **kwargs):
+#         teacher = kwargs.pop('teacher', None)
+#         unite_id = kwargs.pop('unite_id', None)
+#         super().__init__(*args, **kwargs)
         
-        if teacher and unite_id:
-            chapters = Chapter.objects.filter(ue_id=unite_id, ue__teachers=teacher)
-            self.fields['title'].queryset = chapters
+#         if teacher and unite_id:
+#             chapters = Chapter.objects.filter(ue_id=unite_id, ue__teachers=teacher)
+#             self.fields['title'].queryset = chapters
 
 
-class FlashcardForm(forms.ModelForm):
-    """Formulaire pour créer/modifier une flashcard"""
+# class FlashcardForm(forms.ModelForm):
+#     """Formulaire pour créer/modifier une flashcard"""
     
-    class Meta:
-        model = Flashcard
-        fields = ['term', 'definition']
-        widgets = {
-            'term': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Terme / Question...'}),
-            'definition': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Définition / Réponse...'}),
-        }
-        labels = {
-            'term': 'Terme / Question',
-            'definition': 'Définition / Réponse',
-        }
+#     class Meta:
+#         model = Flashcard
+#         fields = ['term', 'definition']
+#         widgets = {
+#             'term': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Terme / Question...'}),
+#             'definition': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Définition / Réponse...'}),
+#         }
+#         labels = {
+#             'term': 'Terme / Question',
+#             'definition': 'Définition / Réponse',
+#         }
 
 
-# ==================== FORMULAIRES CAS CLINIQUES ====================
+# # ==================== FORMULAIRES CAS CLINIQUES ====================
 
-class EnonceForm(forms.ModelForm):
-    """Formulaire pour créer/modifier un énoncé de cas clinique"""
+# class EnonceForm(forms.ModelForm):
+#     """Formulaire pour créer/modifier un énoncé de cas clinique"""
     
-    class Meta:
-        model = Enoncé
-        fields = ['anonce_du_sujet', 'specialté', 'niveau_cible', 'publié']
-        widgets = {
-            'anonce_du_sujet': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Présentation du cas clinique...'}),
-            'specialté': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Cardiologie, Neurologie...'}),
-            'niveau_cible': forms.Select(attrs={'class': 'form-select'}),
-            'publié': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-        }
-        labels = {
-            'anonce_du_sujet': 'Présentation du cas',
-            'specialté': 'Spécialité',
-            'niveau_cible': 'Niveau cible',
-            'publié': 'Publier ce cas',
-        }
+#     class Meta:
+#         model = Enoncé
+#         fields = ['anonce_du_sujet', 'specialté', 'niveau_cible', 'publié']
+#         widgets = {
+#             'anonce_du_sujet': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Présentation du cas clinique...'}),
+#             'specialté': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Cardiologie, Neurologie...'}),
+#             'niveau_cible': forms.Select(attrs={'class': 'form-select'}),
+#             'publié': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+#         }
+#         labels = {
+#             'anonce_du_sujet': 'Présentation du cas',
+#             'specialté': 'Spécialité',
+#             'niveau_cible': 'Niveau cible',
+#             'publié': 'Publier ce cas',
+#         }
 
 
-class ClinicalCaseQCMForm(forms.ModelForm):
-    """Formulaire pour ajouter un QCM à un cas clinique"""
+# class ClinicalCaseQCMForm(forms.ModelForm):
+#     """Formulaire pour ajouter un QCM à un cas clinique"""
     
-    class Meta:
-        model = QCM
-        fields = ['question', 'option1', 'option2', 'option3', 'option4', 'option5', 'réponse1', 'réponse2', 'réponse3', 'explication']
-        widgets = {
-            'question': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Question...'}),
-            'option1': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Option 1'}),
-            'option2': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Option 2'}),
-            'option3': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Option 3'}),
-            'option4': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Option 4'}),
-            'option5': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Option 5 (optionnel)'}),
-            'réponse1': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: A, B, AB, ABC', 'maxlength': '2'}),
-            'réponse2': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Réponse 2 (si multiple)', 'maxlength': '2'}),
-            'réponse3': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Réponse 3 (si multiple)', 'maxlength': '2'}),
-            'explication': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Explication...'}),
-        }
-        labels = {
-            'réponse1': 'Réponse correcte (lettre)',
-            'réponse2': 'Réponse correcte 2 (optionnel)',
-            'réponse3': 'Réponse correcte 3 (optionnel)',
-        }
+#     class Meta:
+#         model = QCM
+#         fields = ['question', 'option1', 'option2', 'option3', 'option4', 'option5', 'réponse1', 'réponse2', 'réponse3', 'explication']
+#         widgets = {
+#             'question': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Question...'}),
+#             'option1': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Option 1'}),
+#             'option2': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Option 2'}),
+#             'option3': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Option 3'}),
+#             'option4': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Option 4'}),
+#             'option5': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Option 5 (optionnel)'}),
+#             'réponse1': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: A, B, AB, ABC', 'maxlength': '2'}),
+#             'réponse2': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Réponse 2 (si multiple)', 'maxlength': '2'}),
+#             'réponse3': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Réponse 3 (si multiple)', 'maxlength': '2'}),
+#             'explication': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Explication...'}),
+#         }
+#         labels = {
+#             'réponse1': 'Réponse correcte (lettre)',
+#             'réponse2': 'Réponse correcte 2 (optionnel)',
+#             'réponse3': 'Réponse correcte 3 (optionnel)',
+#         }
 
 
-class ClinicalCaseQRForm(forms.ModelForm):
-    """Formulaire pour ajouter une question/réponse à un cas clinique"""
+# class ClinicalCaseQRForm(forms.ModelForm):
+#     """Formulaire pour ajouter une question/réponse à un cas clinique"""
     
-    class Meta:
-        model = QestionRéponse
-        fields = ['question', 'dificulté', 'réponse', 'explication']
-        widgets = {
-            'question': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Question...'}),
-            'dificulté': forms.Select(attrs={'class': 'form-select'}),
-            'réponse': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Réponse attendue...'}),
-            'explication': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Explication...'}),
-        }
+#     class Meta:
+#         model = QestionRéponse
+#         fields = ['question', 'dificulté', 'réponse', 'explication']
+#         widgets = {
+#             'question': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Question...'}),
+#             'dificulté': forms.Select(attrs={'class': 'form-select'}),
+#             'réponse': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Réponse attendue...'}),
+#             'explication': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Explication...'}),
+#         }
 
 
-class ClinicalCaseVFForm(forms.ModelForm):
-    """Formulaire pour ajouter une question Vrai/Faux à un cas clinique"""
+# class ClinicalCaseVFForm(forms.ModelForm):
+#     """Formulaire pour ajouter une question Vrai/Faux à un cas clinique"""
     
-    class Meta:
-        model = VraiFaux
-        fields = ['question', 'réponse', 'explication']
-        widgets = {
-            'question': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Question...'}),
-            'réponse': forms.Select(attrs={'class': 'form-select'}, choices=[(True, 'Vrai'), (False, 'Faux')]),
-            'explication': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Explication...'}),
-        }
+#     class Meta:
+#         model = VraiFaux
+#         fields = ['question', 'réponse', 'explication']
+#         widgets = {
+#             'question': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Question...'}),
+#             'réponse': forms.Select(attrs={'class': 'form-select'}, choices=[(True, 'Vrai'), (False, 'Faux')]),
+#             'explication': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Explication...'}),
+#         }
 
 
 # ==================== FORMULAIRES PROFIL ====================

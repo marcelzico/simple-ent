@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from lecon.models import Chapter
 from .forms import BulkUploadForm
 from quizzes.models import MCQ, QuestionAnswer, TrueFalseQuiz
-from quizlet_copy.models import FlashcardSet, Flashcard
+# from quizlet_copy.models import FlashcardSet, Flashcard
 
 # Decorator from your existing code
 from subscriptions.decorators import non_student_required
@@ -66,8 +66,8 @@ def bulk_upload_chapter(request, chapter_id):
                         count, errors = process_qa_file(uploaded_file, chapter, user)
                     elif file_type == 'tf':
                         count, errors = process_tf_file(uploaded_file, chapter, user)
-                    elif file_type == 'flash':
-                        count, errors = process_flashcard_file(uploaded_file, chapter, user)
+                    # elif file_type == 'flash':
+                    #     count, errors = process_flashcard_file(uploaded_file, chapter, user)
                     else:
                         continue  # should not happen
 
@@ -190,55 +190,55 @@ def process_tf_file(uploaded_file, chapter, user):
     return count, errors
 
 
-def process_flashcard_file(uploaded_file, chapter, user):
-    """Process a Flashcard CSV file."""
-    count = 0
-    errors = []
-    try:
-        decoded = uploaded_file.read().decode('utf-8-sig')
-        io_string = io.StringIO(decoded)
-        reader = csv.DictReader(io_string)
-        for row_num, row in enumerate(reader, start=2):
-            try:
-                set_title = row.get('set_title', '').strip()
-                if not set_title:
-                    errors.append(f"Row {row_num}: Missing 'set_title'")
-                    continue
+# def process_flashcard_file(uploaded_file, chapter, user):
+#     """Process a Flashcard CSV file."""
+#     count = 0
+#     errors = []
+#     try:
+#         decoded = uploaded_file.read().decode('utf-8-sig')
+#         io_string = io.StringIO(decoded)
+#         reader = csv.DictReader(io_string)
+#         for row_num, row in enumerate(reader, start=2):
+#             try:
+#                 set_title = row.get('set_title', '').strip()
+#                 if not set_title:
+#                     errors.append(f"Row {row_num}: Missing 'set_title'")
+#                     continue
 
-                # Assuming FlashcardSet.title is a CharField (not FK). If it's FK to Chapter, adjust.
-                # Based on your model: FlashcardSet.title = models.ForeignKey(Chapter, ...)
-                # Actually, in your models, FlashcardSet.title is a ForeignKey to Chapter.
-                # So we need to get or create a set for this chapter. But you might want different sets per chapter.
-                # Let's assume you want one set per chapter. So we use chapter as the set identifier.
-                # However, your model allows multiple sets for a chapter? Probably yes, because title is FK, not unique.
-                # We'll use set_title as a name for the set, but since title is FK, we need a separate name field.
-                # Wait, your FlashcardSet model:
-                # title = models.ForeignKey(Chapter, on_delete=models.CASCADE)
-                # So title points to a Chapter, not a string. That means each set is tied to one chapter, and you cannot have multiple sets per chapter unless you have another field.
-                # But in your FlashcardSet, there's no 'name' field; the __str__ returns str(self.title) which is the chapter.
-                # So essentially each chapter can have only ONE flashcard set? That's limiting.
-                # I'll assume you want to allow multiple sets per chapter, so we need a name field. But your current model doesn't have it.
-                # For now, I'll create a set per chapter using the chapter FK and a hardcoded name.
-                # Actually, let's create a set if not exists, and attach flashcards to it. Since title is FK, we can create multiple sets for same chapter because there's no unique constraint.
-                # But we need a way to distinguish them. The set_title from CSV can be used as description or ignored.
-                # I'll just create one set per chapter (first one found or created) for simplicity.
-                flashcard_set, _ = FlashcardSet.objects.get_or_create(
-                    title=chapter,
-                    is_public=True,
-                    defaults={'created_by': user, 'description': ''}
-                )
+#                 # Assuming FlashcardSet.title is a CharField (not FK). If it's FK to Chapter, adjust.
+#                 # Based on your model: FlashcardSet.title = models.ForeignKey(Chapter, ...)
+#                 # Actually, in your models, FlashcardSet.title is a ForeignKey to Chapter.
+#                 # So we need to get or create a set for this chapter. But you might want different sets per chapter.
+#                 # Let's assume you want one set per chapter. So we use chapter as the set identifier.
+#                 # However, your model allows multiple sets for a chapter? Probably yes, because title is FK, not unique.
+#                 # We'll use set_title as a name for the set, but since title is FK, we need a separate name field.
+#                 # Wait, your FlashcardSet model:
+#                 # title = models.ForeignKey(Chapter, on_delete=models.CASCADE)
+#                 # So title points to a Chapter, not a string. That means each set is tied to one chapter, and you cannot have multiple sets per chapter unless you have another field.
+#                 # But in your FlashcardSet, there's no 'name' field; the __str__ returns str(self.title) which is the chapter.
+#                 # So essentially each chapter can have only ONE flashcard set? That's limiting.
+#                 # I'll assume you want to allow multiple sets per chapter, so we need a name field. But your current model doesn't have it.
+#                 # For now, I'll create a set per chapter using the chapter FK and a hardcoded name.
+#                 # Actually, let's create a set if not exists, and attach flashcards to it. Since title is FK, we can create multiple sets for same chapter because there's no unique constraint.
+#                 # But we need a way to distinguish them. The set_title from CSV can be used as description or ignored.
+#                 # I'll just create one set per chapter (first one found or created) for simplicity.
+#                 flashcard_set, _ = FlashcardSet.objects.get_or_create(
+#                     title=chapter,
+#                     is_public=True,
+#                     defaults={'created_by': user, 'description': ''}
+#                 )
 
-                Flashcard.objects.create(
-                    flashcard_set=flashcard_set,
-                    term=row.get('term').strip(),
-                    definition=row.get('definition') or row.get('meaning'),
-                )
-                count += 1
-            except Exception as e:
-                errors.append(f"Row {row_num}: {str(e)}")
-    except Exception as e:
-        errors.append(f"File read error: {str(e)}")
-    return count, errors
+#                 Flashcard.objects.create(
+#                     flashcard_set=flashcard_set,
+#                     term=row.get('term').strip(),
+#                     definition=row.get('definition') or row.get('meaning'),
+#                 )
+#                 count += 1
+#             except Exception as e:
+#                 errors.append(f"Row {row_num}: {str(e)}")
+#     except Exception as e:
+#         errors.append(f"File read error: {str(e)}")
+#     return count, errors
 
 
 

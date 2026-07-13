@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'dashboard',
     'student',
     'subscriptions',
-    'teacher',
+    # 'teacher',
     
 ]
 

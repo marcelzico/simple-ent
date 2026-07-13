@@ -8,8 +8,8 @@ from ..decorators import teacher_required
 from ..utils import TeacherStats
 from lecon.models import Unite, Chapter
 from quizzes.models import MCQResult, QAResult, TrueFalseResult
-from clinical_case_simple.models import Enoncé
-from quizlet_copy.models import FlashcardSet
+# from clinical_case_simple.models import Enoncé
+# from quizlet_copy.models import FlashcardSet
 from teacher.models import TeacherDashboardWidget
 from student.models import StudentProfile
 
@@ -56,12 +56,12 @@ def dashboard_view(request):
         'mcq_count': stats.get_mcq_count(),
         'qa_count': stats.get_qa_count(),
         'tf_count': stats.get_tf_count(),
-        'flashcard_sets_count': FlashcardSet.objects.filter(
-            created_by=teacher
-        ).count(),
-        'clinical_cases_count': Enoncé.objects.filter(
-            auteur=teacher
-        ).count(),
+        # 'flashcard_sets_count': FlashcardSet.objects.filter(
+        #     created_by=teacher
+        # ).count(),
+        # 'clinical_cases_count': Enoncé.objects.filter(
+        #     auteur=teacher
+        # ).count(),
         
         # Scores moyens
         'avg_mcq_score': stats.get_average_mcq_score(),
