@@ -10,7 +10,7 @@ from .models import (
 from lecon.models import Chapter
 from subscriptions.models import Subscription, SubscriptionUsageAudit
 from subscriptions.decorators import student_required, active_subscription_required
-from .utils import similarity_analyzer  # for QA scoring
+# from .utils import similarity_analyzer  # for QA scoring
 from lecon.models import Chapter, Unite
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger

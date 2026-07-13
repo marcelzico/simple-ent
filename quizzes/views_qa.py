@@ -10,7 +10,7 @@ from django.contrib import messages
 import csv
 from io import TextIOWrapper
 from django.views.decorators.csrf import csrf_exempt
-from .utils import similarity_analyzer
+# from .utils import similarity_analyzer
 from django.db import models
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .decorators import staff_required
