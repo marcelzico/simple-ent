@@ -312,25 +312,25 @@ def upload_document(request, chapter_id):
                 except Exception as e:
                     messages.warning(request, f'Document enregistré, mais erreur lors de l\'extraction : {str(e)}')
                     
-            elif ext == '.pdf':
-                uploaded_file.file_type = 'pdf'
-                uploaded_file.processed = True
-                uploaded_file.save()
+            # elif ext == '.pdf':
+            #     uploaded_file.file_type = 'pdf'
+            #     uploaded_file.processed = True
+            #     uploaded_file.save()
                  
-                try:
-                    # Extract PDF content
-                    extract_pdf_to_model(uploaded_file.file.path, chapter_id, uploaded_file)
+            #     try:
+            #         # Extract PDF content
+            #         extract_pdf_to_model(uploaded_file.file.path, chapter_id, uploaded_file)
                     
-                    # Get page count
-                    with uploaded_file.file.open('rb') as f:
-                        import PyPDF2
-                        pdf_reader = PyPDF2.PdfReader(f)
-                        uploaded_file.page_count = len(pdf_reader.pages)
-                        uploaded_file.save()
+            #         # Get page count
+            #         with uploaded_file.file.open('rb') as f:
+            #             import PyPDF2
+            #             pdf_reader = PyPDF2.PdfReader(f)
+            #             uploaded_file.page_count = len(pdf_reader.pages)
+            #             uploaded_file.save()
                     
-                    messages.success(request, 'PDF importé avec succès !')
-                except Exception as e:
-                    messages.warning(request, f'PDF enregistré, mais erreur lors de l\'extraction : {str(e)}')
+            #         messages.success(request, 'PDF importé avec succès !')
+            #     except Exception as e:
+            #         messages.warning(request, f'PDF enregistré, mais erreur lors de l\'extraction : {str(e)}')
                 
             elif ext == '.pptx':
                 uploaded_file.file_type = 'pptx'

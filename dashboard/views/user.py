@@ -7,9 +7,7 @@ from django.utils import timezone
 from datetime import timedelta, date, datetime
 import json
 from decimal import Decimal
-import numpy as np
 from collections import defaultdict
-import pandas as pd
 from django.db.models.functions import TruncMonth
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 

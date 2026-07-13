@@ -307,91 +307,91 @@ def extract_pptx_to_model(pptx_path, chapter_id, importer_instance=None):
         )
 
 
-def extract_pdf_to_model(pdf_path, chapter_id, importer_instance=None):
-    """
-    Extract PDF content and create copies.
-    Each page becomes a separate copy with its content as structured JSON.
-    """
-    chapter = Chapter.objects.get(id=chapter_id)
-    doc = fitz.open(pdf_path)
+# def extract_pdf_to_model(pdf_path, chapter_id, importer_instance=None):
+#     """
+#     Extract PDF content and create copies.
+#     Each page becomes a separate copy with its content as structured JSON.
+#     """
+#     chapter = Chapter.objects.get(id=chapter_id)
+#     doc = fitz.open(pdf_path)
     
-    # Delete existing copies for this importer
-    if importer_instance:
-        Copy.objects.filter(chapter=chapter, importer=importer_instance).delete()
+#     # Delete existing copies for this importer
+#     if importer_instance:
+#         Copy.objects.filter(chapter=chapter, importer=importer_instance).delete()
     
-    for i, page in enumerate(doc):
-        text = page.get_text().strip()
-        if text:
-            # Try to detect title (first line or all caps line)
-            lines = text.split('\n')
-            title = None
-            content_blocks = []
+#     for i, page in enumerate(doc):
+#         text = page.get_text().strip()
+#         if text:
+#             # Try to detect title (first line or all caps line)
+#             lines = text.split('\n')
+#             title = None
+#             content_blocks = []
             
-            for j, line in enumerate(lines):
-                line = line.strip()
-                if not line:
-                    continue
+#             for j, line in enumerate(lines):
+#                 line = line.strip()
+#                 if not line:
+#                     continue
                 
-                # First line might be title
-                if j == 0 and len(line) < 100:
-                    title = line
-                # Line in all caps might be heading
-                elif line.isupper() and len(line) < 100:
-                    # Create a new heading copy
-                    if content_blocks:
-                        # Save previous content
-                        content_data = {
-                            'type': 'section',
-                            'heading': title or f"Page {i+1}",
-                            'level': 2,
-                            'children': content_blocks
-                        }
-                        Copy.objects.create(
-                            chapter=chapter,
-                            heading=title or f"Page {i+1}",
-                            heading_level="2",
-                            content=content_data,
-                            importer=importer_instance
-                        )
-                        content_blocks = []
+#                 # First line might be title
+#                 if j == 0 and len(line) < 100:
+#                     title = line
+#                 # Line in all caps might be heading
+#                 elif line.isupper() and len(line) < 100:
+#                     # Create a new heading copy
+#                     if content_blocks:
+#                         # Save previous content
+#                         content_data = {
+#                             'type': 'section',
+#                             'heading': title or f"Page {i+1}",
+#                             'level': 2,
+#                             'children': content_blocks
+#                         }
+#                         Copy.objects.create(
+#                             chapter=chapter,
+#                             heading=title or f"Page {i+1}",
+#                             heading_level="2",
+#                             content=content_data,
+#                             importer=importer_instance
+#                         )
+#                         content_blocks = []
                      
-                    title = line
-                    Copy.objects.create(
-                        chapter=chapter,
-                        heading=line,
-                        heading_level="2",
-                        content=None,
-                        importer=importer_instance
-                    )
-                # Check for bullet points
-                elif line.startswith(('•', '-', '●', '·', '*')) or re.match(r'^\d+\.', line):
-                    clean_text = re.sub(r'^[•\-●·*\d\.\s]+', '', line).strip()
-                    content_blocks.append({
-                        'type': 'bullet',
-                        'level': 0,
-                        'text': clean_text
-                    })
-                else:
-                    content_blocks.append({
-                        'type': 'paragraph',
-                        'text': line
-                    })
+#                     title = line
+#                     Copy.objects.create(
+#                         chapter=chapter,
+#                         heading=line,
+#                         heading_level="2",
+#                         content=None,
+#                         importer=importer_instance
+#                     )
+#                 # Check for bullet points
+#                 elif line.startswith(('•', '-', '●', '·', '*')) or re.match(r'^\d+\.', line):
+#                     clean_text = re.sub(r'^[•\-●·*\d\.\s]+', '', line).strip()
+#                     content_blocks.append({
+#                         'type': 'bullet',
+#                         'level': 0,
+#                         'text': clean_text
+#                     })
+#                 else:
+#                     content_blocks.append({
+#                         'type': 'paragraph',
+#                         'text': line
+#                     })
             
-            # Save remaining content
-            if content_blocks:
-                content_data = {
-                    'type': 'section',
-                    'heading': title or f"Page {i+1}",
-                    'level': 2,
-                    'children': content_blocks
-                }
-                Copy.objects.create(
-                    chapter=chapter,
-                    heading=title or f"Page {i+1}",
-                    heading_level="2",
-                    content=content_data,
-                    importer=importer_instance
-                )
+#             # Save remaining content
+#             if content_blocks:
+#                 content_data = {
+#                     'type': 'section',
+#                     'heading': title or f"Page {i+1}",
+#                     'level': 2,
+#                     'children': content_blocks
+#                 }
+#                 Copy.objects.create(
+#                     chapter=chapter,
+#                     heading=title or f"Page {i+1}",
+#                     heading_level="2",
+#                     content=content_data,
+#                     importer=importer_instance
+#                 )
 
 
 def extract_and_map_images(docx_path):
