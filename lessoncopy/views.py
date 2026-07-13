@@ -6,7 +6,7 @@ from django.urls import reverse
 from lecon.models import Chapter, Unite
 from .forms import CopyForm, DocumentUploadForm, ResumeIaForm, ResumeForm
 from .models import Copy, StudySession, UserAnnotation, ResumeIA, Resume, Importer
-from .utils import extract_docx_to_model, prepare_table_data, extract_pptx_to_model, extract_pdf_to_model
+from .utils import extract_docx_to_model, prepare_table_data, extract_pptx_to_model #, extract_pdf_to_model
 from django.contrib import messages
 import os
 import json
