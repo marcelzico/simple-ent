@@ -781,9 +781,9 @@
                         <h5 class="mb-1">📅 Planning</h5>
                         <small class="text-muted">Vos prochaines révisions</small>
                     </div>
-                    <a href="{% url 'journal:entry_create' %}" class="btn btn-sm btn-primary rounded-pill">
+                    {% comment %} <a href="{% url 'journal:entry_create' %}" class="btn btn-sm btn-primary rounded-pill">
                         <i class="fas fa-plus me-1"></i>Ajouter
-                    </a>
+                    </a> {% endcomment %}
                 </div>
                 
                 {% if upcoming_schedules %}
