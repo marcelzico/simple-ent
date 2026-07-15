@@ -16,7 +16,7 @@
     </a>
     
     <!-- Cartes mentales -->
-    <a href="#flashcardsCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="flashcardsCollapse">
+    {% comment %} <a href="#flashcardsCollapse" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="flashcardsCollapse">
         <i class="fas fa-brain me-2"></i>
         <span>Cartes mentales</span>
         <i class="fas fa-chevron-down ms-auto collapse-icon"></i>
@@ -32,7 +32,7 @@
                 <span>Personnelles</span>
             </a>
         </div>
-    </div>
+    </div> {% endcomment %}
 </div>
 
 <!-- ========== JOURNAL & TRACKING SECTION ========== -->
@@ -161,10 +161,10 @@
     </a>
     
     <!-- Feedback -->
-    <a href="{% url 'feedback:submit_feedback' %}" class="nav-link">
+    {% comment %} <a href="{% url 'feedback:submit_feedback' %}" class="nav-link">
         <i class="fas fa-star me-2"></i>
         <span>Feedback</span>
-    </a>
+    </a> {% endcomment %}
 </div>
 {% endif %}
 

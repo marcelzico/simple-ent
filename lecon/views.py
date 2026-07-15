@@ -40,8 +40,8 @@ def subject_list(request):
     
     elif request.user.is_student:
         return redirect('lecon:subject_list_student')
-    elif request.user.is_teacher:
-        return redirect('teacher:unites_list')
+    # elif request.user.is_teacher:
+    #     return redirect('teacher:unites_list')
 
     else: 
         context = []
@@ -385,8 +385,8 @@ def subject_detail(request, pk):
         'tf_score': tf_score,
     }
 
-    if request.user.is_teacher:
-        return redirect("teacher:chapitres_list", unite_id=pk)
+    # if request.user.is_teacher:
+    #     return redirect("teacher:chapitres_list", unite_id=pk)
     
     return render(request, 'lecon/subject_detail.html', context)
 
