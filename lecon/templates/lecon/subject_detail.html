@@ -69,7 +69,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 mb-3">
+                {% comment %} <div class="col-md-6 mb-3">
                     <div class="card text-center h-100">
                         <div class="card-body">
                             <i class="fas fa-file-alt fa-3x text-info mb-3"></i>
@@ -80,7 +80,7 @@
                             </a>
                         </div>
                     </div>
-                </div>
+                </div> {% endcomment %}
             </div>
             
             <!-- Links to view existing quizzes -->
@@ -90,11 +90,11 @@
                         <i class="fas fa-eye me-1"></i>Voir les examens de QCM
                     </a>
                 </div>
-                <div class="col-md-6">
+                {% comment %} <div class="col-md-6">
                     <a href="{% url 'quizzes:list_subject_qa_quizzes' unite.id %}" class="btn btn-outline-info w-100">
                         <i class="fas fa-eye me-1"></i>Voir les examens de Q&R
                     </a>
-                </div>
+                </div> {% endcomment %}
             </div>
         </div>
     </div>
@@ -163,7 +163,7 @@
         </div>
 
         <!-- Total Q&A -->
-        <div class="col-6 col-sm-4 col-lg-3">
+        {% comment %} <div class="col-6 col-sm-4 col-lg-3">
             <div class="card bg-info text-white text-center shadow-sm">
                 <div class="card-body py-3">
                     <i class="fas fa-comments fa-2x mb-2"></i>
@@ -171,7 +171,7 @@
                     <small>Questions Q&R</small>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
 
         <!-- Total True/False -->
         <div class="col-6 col-sm-4 col-lg-3">
@@ -249,7 +249,7 @@
         </div>
 
         <!-- Q&A Progress -->
-        <div class="col-12 col-md-6 col-lg-3">
+        {% comment %} <div class="col-12 col-md-6 col-lg-3">
             <div class="card shadow-sm h-100">
                 <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">Progrès Q&R</h6>
@@ -270,7 +270,7 @@
                     {% endif %}
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
     </div>
     {% endif %}
 

@@ -1379,10 +1379,10 @@
                 <i class="fas fa-play me-2"></i>
                 Commencer QCM
             </a>
-            <a href="{% url 'quizzes:start_qa' chapter.id %}" class="btn btn-info flex-fill flex-md-grow-0">
+            {% comment %} <a href="{% url 'quizzes:start_qa' chapter.id %}" class="btn btn-info flex-fill flex-md-grow-0">
                 <i class="fas fa-play me-2"></i>
                 Commencer Q&R
-            </a>
+            </a> {% endcomment %}
             <a href="{% url 'quizzes:start_tf' chapter.id %}" class="btn btn-info flex-fill flex-md-grow-0">
                 <i class="fas fa-play me-2"></i>
                 Commencer V/F

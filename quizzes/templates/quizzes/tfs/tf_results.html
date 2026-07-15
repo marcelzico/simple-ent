@@ -66,17 +66,17 @@
                     <li><a class="dropdown-item" href="{% url 'quizzes:mcq_quiz_results' %}">
                         <i class="fas fa-list-ol me-2"></i>MCQ Quiz Results
                     </a></li>
-                    <li><a class="dropdown-item" href="{% url 'quizzes:qa_quiz_results' %}">
+                    {% comment %} <li><a class="dropdown-item" href="{% url 'quizzes:qa_quiz_results' %}">
                         <i class="fas fa-edit me-2"></i>QA Quiz Results
-                    </a></li>
+                    </a></li> {% endcomment %}
                     <li><hr class="dropdown-divider"></li>
                     <li><h6 class="dropdown-header">Daily Learning</h6></li>
                     <li><a class="dropdown-item" href="{% url 'quizzes:mcq_results' %}">
                         <i class="fas fa-check-circle me-2"></i>MCQ Results
                     </a></li>
-                    <li><a class="dropdown-item" href="{% url 'quizzes:qa_results' %}">
+                    {% comment %} <li><a class="dropdown-item" href="{% url 'quizzes:qa_results' %}">
                         <i class="fas fa-question-circle me-2"></i>QA Results
-                    </a></li>
+                    </a></li> {% endcomment %}
                     <li><a class="dropdown-item" href="{% url 'quizzes:tf_results' %}">
                         <i class="fas fa-toggle-on me-2"></i>True/False Results
                     </a></li>

@@ -99,18 +99,18 @@
                 <i class="fas fa-file-alt me-2"></i>
                 <span>Examens QCM</span>
             </a>
-            <a href="{% url 'quizzes:qa_quiz_results' %}" class="nav-link">
+            {% comment %} <a href="{% url 'quizzes:qa_quiz_results' %}" class="nav-link">
                 <i class="fas fa-file-alt me-2"></i>
                 <span>Examens Q&R</span>
-            </a>
+            </a> {% endcomment %}
             <a href="{% url 'quizzes:mcq_results' %}" class="nav-link">
                 <i class="fas fa-question-circle me-2"></i>
                 <span>QCM</span>
             </a>
-            <a href="{% url 'quizzes:qa_results' %}" class="nav-link">
+            {% comment %} <a href="{% url 'quizzes:qa_results' %}" class="nav-link">
                 <i class="fas fa-comments me-2"></i>
                 <span>Q&R</span>
-            </a>
+            </a> {% endcomment %}
             <a href="{% url 'quizzes:tf_results' %}" class="nav-link">
                 <i class="fas fa-check-double me-2"></i>
                 <span>Vrai ou Faux</span>

@@ -540,7 +540,8 @@
                     <div class="stat-icon bg-info-soft">
                         <i class="fas fa-question-circle text-info"></i>
                     </div>
-                    <div class="stat-value">{{ mcqs.count|add:qas.count|add:tfs.count }}</div>
+                    {% comment %} <div class="stat-value">{{ mcqs.count|add:qas.count|add:tfs.count }}</div> {% endcomment %}
+                    <div class="stat-value">{{ mcqs.count|add:tfs.count }}</div>
                     <div class="stat-label">Total questions</div>
                 </div>
 
@@ -862,7 +863,7 @@
                     </a>
 
                     <!-- Q&R -->
-                    <a href="#qaSection" 
+                    {% comment %} <a href="#qaSection" 
                        class="list-group-item list-group-item-action d-flex align-items-center border-0">
                         <div class="icon-container bg-info-soft rounded-circle p-2 me-3">
                             <i class="fas fa-comments text-info"></i>
@@ -872,7 +873,7 @@
                             <small class="text-muted">{{ qas.count }} questions</small>
                         </div>
                         <i class="fas fa-chevron-right text-muted"></i>
-                    </a>
+                    </a> {% endcomment %}
 
                     <!-- Vrai/Faux -->
                     <a href="#tfSection" 
@@ -1008,7 +1009,7 @@
         </div>
 
         <!-- Q&A Section -->
-        <div id="qaSection" class="exercise-section exercise-card qa mb-4">
+        {% comment %} <div id="qaSection" class="exercise-section exercise-card qa mb-4">
             <div class="exercise-header">
                 <div>
                     <h4 class="h5 mb-0">
@@ -1078,7 +1079,7 @@
                 </div>
                 {% endif %}
             </div>
-        </div>
+        </div> {% endcomment %}
 
         <!-- True/False Section -->
         <div id="tfSection" class="exercise-section exercise-card tf mb-4">
