@@ -167,7 +167,7 @@ CACHES = {
 
 # Add custom file upload handlers
 FILE_UPLOAD_HANDLERS = [
-    'splitter_app.handlers.LargeFileUploadHandler',  # Our custom handler first
+    # 'splitter_app.handlers.LargeFileUploadHandler',  # Our custom handler first
     'django.core.files.uploadhandler.MemoryFileUploadHandler',
     'django.core.files.uploadhandler.TemporaryFileUploadHandler',
 ]
