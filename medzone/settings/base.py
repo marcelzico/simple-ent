@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'dashboard',
     'student',
     'subscriptions',
-    # 'teacher',
+    'bulk_import',  # ← add this line for the bulk_import app
     
 ]
 
@@ -184,7 +184,7 @@ CRON_CLASSES = [
 
 
 # Base directory for bulk imports
-BULK_IMPORT_ROOT = 'C:/Users/ZICO/Desktop/medzone-documents'   # Change to your actual path
+BULK_IMPORT_ROOT = '/root/medzone-documents'   # Change to your actual path
 
 # Subfolder names (must match exactly)
 BULK_SPLITTED_DIR = 'splitted'

@@ -61,6 +61,8 @@ urlpatterns = [
     path('subscription/', include('subscriptions.urls')),
     path('student/', include('student.urls')),
     # path('teacher/', include('teacher.urls')),
+    # Include bulk_import app URLs
+    path('bulk-import/', include('bulk_import.urls', namespace='bulk_import')),
 
 
 ]

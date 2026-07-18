@@ -1,0 +1,33 @@
+<!-- import_report.html -->
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ title }}</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h3>Summary</h3>
+        <ul>
+            {% for key, value in stats.items %}
+                {% if key != 'errors' %}
+                    <li>{{ key }}: {{ value }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% if stats.errors %}
+<div class="card mt-3">
+    <div class="card-header bg-danger text-white">Errors</div>
+    <div class="card-body">
+        <ul>
+            {% for err in stats.errors %}
+                <li>{{ err }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+
+<a href="{% url 'bulk_import:dashboard' %}" class="btn btn-primary mt-3">Back to Dashboard</a>
+{% endblock %}

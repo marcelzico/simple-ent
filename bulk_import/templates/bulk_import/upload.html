@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h1>Upload Bulk Import Data</h1>
+    <div class="alert alert-info">
+        <strong>Important:</strong> Web browsers do not allow servers to directly read local folder paths for security reasons. 
+        To import your folder structure, please compress your folders (splitted, exercices, shifted_down, etc.) into a <strong>ZIP file</strong> and upload it below.
+        <br><br>
+        The server will extract the contents into the <code>media/bulk_import</code> directory and prepare them for processing.
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="bulk_zip" class="form-label">Select ZIP File</label>
+            <input type="file" class="form-control" id="bulk_zip" name="bulk_zip" accept=".zip" required>
+            <small class="form-text text-muted">Ensure the ZIP contains your folders (e.g., <code>splitted/</code>, <code>exercices/</code>) at its root.</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload and Extract</button>
+        <a href="{% url 'bulk_import:dashboard' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

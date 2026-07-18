@@ -1,0 +1,410 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'bulk_import:dashboard' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'bulk_import:level_list' %}">Levels</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'bulk_import:unite_list' unite.level %}">{{ unite.level }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ unite.title }}</li>
+                </ol>
+            </nav>
+            <h1 class="h2">Chapters for <span class="text-primary">{{ unite.title }}</span></h1>
+            <p class="lead">Select chapters and choose an action below.</p>
+        </div>
+    </div>
+
+    <!-- Bulk Action Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card h-100 border-primary">
+                <div class="card-body text-center">
+                    <i class="bi bi-files fs-1 text-primary"></i>
+                    <h5 class="card-title mt-2">Import Copies</h5>
+                    <p class="card-text small">Import all versioned .docx files from "shifted down" folder.</p>
+                    <form method="post" action="{% url 'bulk_import:bulk_import_copies' %}" class="bulk-import-form" id="copiesForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="selected_chapters" value="">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-download"></i> Import Copies
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 border-success">
+                <div class="card-body text-center">
+                    <i class="bi bi-pencil-square fs-1 text-success"></i>
+                    <h5 class="card-title mt-2">Import Exercises</h5>
+                    <p class="card-text small">Import quiz, flashcard, and summary files from "exercices" folder.</p>
+                    <form method="post" action="{% url 'bulk_import:bulk_import_exercises' %}" class="bulk-import-form" id="exercisesForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="selected_chapters" value="">
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-upload"></i> Import Exercises
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 border-warning">
+                <div class="card-body text-center">
+                    <i class="bi bi-file-earmark-plus fs-1 text-warning"></i>
+                    <h5 class="card-title mt-2">Generate Exercise Files</h5>
+                    <p class="card-text small">Create empty exercise template files in the "exercices" folder.</p>
+                    <form method="post" action="{% url 'bulk_import:generate_chapter_exercise_files' %}" class="bulk-import-form" id="generateForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="selected_chapters" value="">
+                        <button type="submit" class="btn btn-warning w-100">
+                            <i class="bi bi-plus-circle"></i> Generate Files
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card h-100 border-secondary">
+                <div class="card-body text-center">
+                    <i class="bi bi-arrow-left-circle fs-1 text-secondary"></i>
+                    <h5 class="card-title mt-2">Back to Unites</h5>
+                    <p class="card-text small">Return to the unite list for this level.</p>
+                    <a href="{% url 'bulk_import:unite_list' unite.level %}" class="btn btn-secondary w-100">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chapters Table -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Chapters in this Unite</h5>
+            <span class="badge bg-primary">{{ chapters|length }} chapter{{ chapters|length|pluralize }}</span>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 40px;">
+                            <input type="checkbox" id="select-all" class="form-check-input">
+                        </th>
+                        <th>#</th>
+                        <th>Chapter Title</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for chapter in chapters %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="chapter-checkbox form-check-input" value="{{ chapter.id }}">
+                        </td>
+                        <td>{{ chapter.order|default:"—" }}</td>
+                        <td>
+                            {{ chapter.title }}
+                            {% if chapter.has_copies %}
+                                <span class="badge bg-info ms-2" title="Copies already imported"><i class="bi bi-files"></i></span>
+                            {% endif %}
+                            {% if chapter.has_exercise_files %}
+                                <span class="badge bg-success ms-2" title="Exercise files present"><i class="bi bi-file-earmark-check"></i></span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="{% url 'bulk_import:import_chapter_copies' chapter.id %}" class="btn btn-outline-primary" title="Import copies">
+                                    <i class="bi bi-files"></i>
+                                </a>
+                                <a href="{% url 'bulk_import:import_chapter_exercises' chapter.id %}" class="btn btn-outline-success" title="Import exercises">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <form method="post" action="{% url 'bulk_import:generate_chapter_exercise_files' %}" class="d-inline single-generate-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="selected_chapters" value="{{ chapter.id }}">
+                                    <button type="submit" class="btn btn-outline-warning" title="Generate exercise files">
+                                        <i class="bi bi-file-earmark-plus"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            No chapters found for this unite.
+                            <a href="{% url 'bulk_import:import_unite_chapters' unite.id %}" class="btn btn-sm btn-primary ms-2">Import Chapters</a>
+                        </td>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Import Results Modal -->
+<div class="modal fade" id="importResultsModal" tabindex="-1" aria-labelledby="importResultsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="importResultsContent">
+            <!-- content loaded via AJAX -->
+        </div>
+    </div>
+</div>
+
+{% comment %} <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectAll = document.getElementById('select-all');
+        const chapterCheckboxes = document.querySelectorAll('.chapter-checkbox');
+
+        if (selectAll) {
+            selectAll.addEventListener('change', function() {
+                chapterCheckboxes.forEach(cb => cb.checked = this.checked);
+            });
+
+            chapterCheckboxes.forEach(cb => {
+                cb.addEventListener('change', function() {
+                    const allChecked = Array.from(chapterCheckboxes).every(cb => cb.checked);
+                    selectAll.checked = allChecked;
+                });
+            });
+        }
+
+        // Bulk copies form
+        const copiesForm = document.getElementById('copiesForm');
+        if (copiesForm) {
+            copiesForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const selected = getSelectedChapterIds();
+                if (selected.length === 0) {
+                    alert('Veuillez sélectionner au moins un chapitre.');
+                    return;
+                }
+                copiesForm.querySelector('input[name="selected_chapters"]').value = selected.join(',');
+                submitAjaxForm(copiesForm);
+            });
+        }
+
+        // Bulk exercises form
+        const exercisesForm = document.getElementById('exercisesForm');
+        if (exercisesForm) {
+            exercisesForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const selected = getSelectedChapterIds();
+                if (selected.length === 0) {
+                    alert('Veuillez sélectionner au moins un chapitre.');
+                    return;
+                }
+                exercisesForm.querySelector('input[name="selected_chapters"]').value = selected.join(',');
+                submitAjaxForm(exercisesForm);
+            });
+        }
+
+        // Generate files form
+        const generateForm = document.getElementById('generateForm');
+        if (generateForm) {
+            generateForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const selected = getSelectedChapterIds();
+                if (selected.length === 0) {
+                    alert('Veuillez sélectionner au moins un chapitre.');
+                    return;
+                }
+                generateForm.querySelector('input[name="selected_chapters"]').value = selected.join(',');
+                submitAjaxForm(generateForm);
+            });
+        }
+
+        // Individual generate buttons (single chapter)
+        document.querySelectorAll('.single-generate-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const selected = [this.querySelector('input[name="selected_chapters"]').value];
+                if (!selected[0]) {
+                    alert('ID de chapitre invalide.');
+                    return;
+                }
+                submitAjaxForm(this);
+            });
+        });
+
+        function getSelectedChapterIds() {
+            const checkboxes = document.querySelectorAll('.chapter-checkbox:checked');
+            return Array.from(checkboxes)
+                .map(cb => cb.value)
+                .filter(v => v && v.trim() !== '');
+        }
+
+        function submitAjaxForm(form) {
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('importResultsContent').innerHTML = data.html;
+                    new bootstrap.Modal(document.getElementById('importResultsModal')).show();
+                } else {
+                    alert('Erreur : ' + data.error);
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script> {% endcomment %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectAll = document.getElementById('select-all');
+        const chapterCheckboxes = document.querySelectorAll('.chapter-checkbox');
+
+        if (!selectAll || chapterCheckboxes.length === 0) return;
+
+        // Function to update select-all state
+        function updateSelectAll() {
+            const allChecked = Array.from(chapterCheckboxes).every(cb => cb.checked);
+            selectAll.checked = allChecked;
+        }
+
+        // When select-all changes, update all chapter checkboxes
+        selectAll.addEventListener('change', function() {
+            chapterCheckboxes.forEach(cb => cb.checked = this.checked);
+        });
+
+        // When any chapter checkbox changes, update select-all
+        chapterCheckboxes.forEach(cb => {
+            cb.addEventListener('change', updateSelectAll);
+        });
+
+        // Initial sync (in case any are pre-checked)
+        updateSelectAll();
+
+        // ---------- Bulk form handlers (unchanged) ----------
+        const copiesForm = document.getElementById('copiesForm');
+        if (copiesForm) {
+            copiesForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const selected = getSelectedChapterIds();
+                if (selected.length === 0) {
+                    alert('Veuillez sélectionner au moins un chapitre.');
+                    return;
+                }
+                copiesForm.querySelector('input[name="selected_chapters"]').value = selected.join(',');
+                submitAjaxForm(copiesForm);
+            });
+        }
+
+        const exercisesForm = document.getElementById('exercisesForm');
+        if (exercisesForm) {
+            exercisesForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const selected = getSelectedChapterIds();
+                if (selected.length === 0) {
+                    alert('Veuillez sélectionner au moins un chapitre.');
+                    return;
+                }
+                exercisesForm.querySelector('input[name="selected_chapters"]').value = selected.join(',');
+                submitAjaxForm(exercisesForm);
+            });
+        }
+
+        const generateForm = document.getElementById('generateForm');
+        if (generateForm) {
+            generateForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const selected = getSelectedChapterIds();
+                if (selected.length === 0) {
+                    alert('Veuillez sélectionner au moins un chapitre.');
+                    return;
+                }
+                generateForm.querySelector('input[name="selected_chapters"]').value = selected.join(',');
+                submitAjaxForm(generateForm);
+            });
+        }
+
+        document.querySelectorAll('.single-generate-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const selected = [this.querySelector('input[name="selected_chapters"]').value];
+                if (!selected[0]) {
+                    alert('ID de chapitre invalide.');
+                    return;
+                }
+                submitAjaxForm(this);
+            });
+        });
+
+        function getSelectedChapterIds() {
+            return Array.from(document.querySelectorAll('.chapter-checkbox:checked'))
+                .map(cb => cb.value)
+                .filter(v => v && v.trim() !== '');
+        }
+
+        function submitAjaxForm(form) {
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('importResultsContent').innerHTML = data.html;
+                    new bootstrap.Modal(document.getElementById('importResultsModal')).show();
+                } else {
+                    alert('Erreur : ' + data.error);
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+<!-- Bootstrap Icons (if not already included) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}

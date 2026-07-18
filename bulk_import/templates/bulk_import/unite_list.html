@@ -1,0 +1,100 @@
+<!-- unite_list.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h1>Unites for Level: {{ level_name }}</h1>
+    <p>
+        <a href="{% url 'bulk_import:level_list' %}" class="btn btn-sm btn-outline-secondary">← Back to Levels</a>
+        <a href="{% url 'bulk_import:import_level_unites' level_name %}" class="btn btn-sm btn-primary">Import all unites for this level</a>
+    </p>
+
+    <form method="post" action="{% url 'bulk_import:bulk_import_chapters' %}">
+        {% csrf_token %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all"></th>
+                    <th>Unite Title</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for unite in unites %}
+                <tr>
+                    <td><input type="checkbox" name="selected_unites" value="{{ unite.id }}"></td>
+                    <td>{{ unite.title }}</td>
+                    <td>
+                        <a href="{% url 'bulk_import:import_unite_chapters' unite.id %}" class="btn btn-sm btn-success">Import Chapters</a>
+                        <a href="{% url 'bulk_import:chapter_list' unite.id %}" class="btn btn-sm btn-secondary">View Chapters</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3">No unites found for this level. Use "Import all unites" to create them.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-success">Import chapters for selected unites</button>
+    </form>
+    <!-- Import Results Modal -->
+    <div class="modal fade" id="importResultsModal" tabindex="-1" aria-labelledby="importResultsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" id="importResultsContent">
+                <!-- content loaded via AJAX -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forms = document.querySelectorAll('.bulk-import-form');
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('importResultsContent').innerHTML = data.html;
+                        const modal = new bootstrap.Modal(document.getElementById('importResultsModal'));
+                        modal.show();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    document.getElementById('select-all').onclick = function() {
+        var checkboxes = document.getElementsByName('selected_unites');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }
+    }
+</script>
+{% endblock %}

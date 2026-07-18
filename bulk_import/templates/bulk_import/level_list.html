@@ -1,0 +1,98 @@
+<!-- level_list.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h1>Levels</h1>
+    <p>Select one or more levels to import all unites, or click "View Unites" to manage individually.</p>
+
+    <form method="post" action="{% url 'bulk_import:bulk_import_unites' %}">
+        {% csrf_token %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all"></th>
+                    <th>Level</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for level in levels %}
+                <tr>
+                    <td><input type="checkbox" name="selected_levels" value="{{ level }}"></td>
+                    <td>{{ level }}</td>
+                    <td>
+                        <a href="{% url 'bulk_import:import_level_unites' level %}" class="btn btn-sm btn-primary">Import Unites</a>
+                        <a href="{% url 'bulk_import:unite_list' level %}" class="btn btn-sm btn-secondary">View Unites</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3">No level folders found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-success">Import selected levels</button>
+    </form>
+
+    <!-- Import Results Modal -->
+    <div class="modal fade" id="importResultsModal" tabindex="-1" aria-labelledby="importResultsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" id="importResultsContent">
+                <!-- content loaded via AJAX -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forms = document.querySelectorAll('.bulk-import-form');
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('importResultsContent').innerHTML = data.html;
+                        const modal = new bootstrap.Modal(document.getElementById('importResultsModal'));
+                        modal.show();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    document.getElementById('select-all').onclick = function() {
+        var checkboxes = document.getElementsByName('selected_levels');
+        for (var checkbox of checkboxes) {
+            checkbox.checked = this.checked;
+        }
+    }
+</script>
+{% endblock %}

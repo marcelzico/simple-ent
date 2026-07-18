@@ -1,0 +1,26 @@
+<!-- import_report_modal_content.html -->
+<div class="modal-header">
+    <h5 class="modal-title">{{ title }}</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <h6>Summary</h6>
+    <ul>
+        {% for key, value in stats.items %}
+            {% if key != 'errors' %}
+                <li>{{ key|title }}: {{ value }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% if stats.errors %}
+        <h6 class="text-danger mt-3">Errors</h6>
+        <ul class="text-danger">
+            {% for err in stats.errors %}
+                <li>{{ err }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>
