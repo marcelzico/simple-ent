@@ -1,7 +1,7 @@
 from .base import *
 from decouple import config, Csv
 
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['*', '127.0.0.1']  # convenient for local network testing
 
 # Use console email in dev
