@@ -1,0 +1,95 @@
+NÉPHROPATHIE LUPIQUE – RÉSUMÉ MÉDICAL
+
+DÉFINITION :
+Présence de protéinurie >0,5 g/24h ou 3+ et/ou hématurie, leucocyturie, hémoglobinurie, cellules tubulaires ; ou rapport protéinurie/créatininurie >0,5 avec >5 GR ou GB par champ. Histologie : stigmates de glomérulonéphrite avec complexe immun compatible.
+
+ÉPIDÉMIOLOGIE :
+- 35% des lupiques ont une NL au moment du diagnostic.
+- Durant 10 ans d'évolution : apparition de NL dans 60% des cas.
+
+PHYSIOPATHOLOGIE :
+- Hyperactivité lymphocytaire T et B → production d'auto-Ac dirigés contre Ag intracellulaires, membranaires ou protéines plasmatiques.
+- Liaison auto-Ac/Ag → complexes immuns circulants (CIC) ou tissulaires.
+- CIC activent voie classique du complément et cellules leucocytaires (monocytes, macrophages, PN, NK).
+- Activation inflammatoire → lésions tissulaires.
+- GN à dépôts de complexes immuns et d'Ig.
+- Néphrite tubulo-interstitielle (± dépôts immuns le long MB tubulaires).
+- Dysfonction tubulaire distale → acidose tubulaire (auto-Ac dirigés contre cellules intercalaires).
+- Atteinte vasculaire : nécrose fibrinoïde obstructive, microangiopathie thrombotique. Ac anti-PL circulants associés (avortements spontanés).
+
+CLASSIFICATION HISTOLOGIQUE (Anatomie pathologique) :
+
+CLASSE I – Optique normale.
+
+CLASSE II – Prolifération mésangiale (fréquence 10-20%) :
+- Atteinte glomérulaire précoce, modérée.
+- Hématurie microscopique, protéinurie faible.
+- Syndrome néphrotique possible, HTA rare, pas d'IR.
+- Pas d'hypocomplémentémie, faible élévation Ac anti-DNA.
+- Pronostic rénal excellent. Traitement : non spécifique.
+
+CLASSE III – Prolifération endo +/- extracapillaire FOCALE (<50% des glomérules) (10-20%) :
+- Atteinte mésangiopathie avancée.
+- Protéinurie + hématurie quasi-constantes.
+- Syndrome néphrotique, HTA, IR possibles.
+- Lésions souvent segmentaires et nécrosantes, ébauche de croissant.
+- Dépôts IgG + C3 uniformes.
+- Sous-classes : IIIA (active) vs IIIC (chronique).
+- URGENCE THÉRAPEUTIQUE (pronostic mauvais à court terme sans traitement).
+
+CLASSE IV – Prolifération endo +/- extracapillaire DIFFUSE (>50% des glomérules) (50% des NL) :
+- Clinique la plus sévère et la plus fréquente.
+- Protéinurie + hématurie, syndrome néphrotique.
+- HTA + IR fréquentes.
+- Syndrome néphritique aigu possible (sédiment actif, IRA rapidement progressive).
+- Hypocomplémentémie, ↑significative Ac anti-DNA.
+- Dépôts sous-endothéliaux (endomembraneux) de complément et Ig.
+- « Wire loops » (anses « fil de fer ») : épaississement et rigidification paroi capillaire.
+- Sous-classes : IV-S (segmentaire) vs IV-G (globale) ; IVA (active) vs IVC (chronique).
+- URGENCE THÉRAPEUTIQUE.
+
+CLASSE V – Glomérulonéphrite extra-membraneuse (10-20%) :
+- Syndrome néphrotique, hématurie, HTA, IR.
+- Histologie : épaississement diffus MB glomérulaire, dépôts extra-membraneux (sous-épithéliaux).
+- Risque à long terme (évolution plus lente que classes III/IV).
+
+CLASSE VI – Glomérulonéphrite sclérosante :
+- Cicatrisation d'une lésion inflammatoire antérieure.
+- >90% des glomérules globalement sclérosés.
+- IRC, protéinurie variable.
+- Pas de signe d'activité du sédiment urinaire (ni hématurie, ni leucocyturie, ni cylindres).
+- Peut survenir sans signes cliniques/sérologiques d'activité lupique.
+- Traitement : préparation à l'hémodialyse.
+
+PRONOSTIC :
+- Facteurs pronostiques défavorables : race noire, conditions socio-économiques défavorables, HTA non contrôlée, score élevé de lésions actives/chroniques sur PBR initiale, IR d'emblée, mauvaise réponse à 1ère ligne, récidives rénales.
+
+TRAITEMENT :
+
+Non spécifique (toutes classes) :
+- TA <130/80 mmHg, activité physique, arrêt tabac.
+- IEC ou ARA2.
+- Traitement dyslipidémie.
+
+Spécifique selon classe :
+- Classe I et II : pas de traitement spécifique.
+- Classes III, IV, V : corticothérapie + immunosuppresseurs (hydroxychloroquine, azathioprine, cyclophosphamide, ciclosporine, mycophénolate mofétil [MMF], rituximab [Ac anti-CD20]).
+- Classe VI : préparation à l'hémodialyse.
+
+Critères de réponse au traitement :
+- Normalisation créatininémie <1 mois.
+- Normalisation marqueurs inflammation.
+- Diminution titre Ac (test de Farr).
+- Normalisation C3 et C4.
+- Diminution protéinurie >50% à 1 mois.
+- Normalisation protéinurie <3 mois.
+
+SUIVI :
+- Clinique (efficacité, tolérance).
+- Créatininémie, BU (mensuel puis trimestriel).
+- Protéine/créatinine urinaires.
+- C3, C4, Ac (test de Farr).
+- VS, fibrinogène, CRP.
+- Cinétique MMF (J8-J15 puis annuel).
+- Dosage hydroxychloroquine (3 mois).
+- Vitamine D (25-OHD3).

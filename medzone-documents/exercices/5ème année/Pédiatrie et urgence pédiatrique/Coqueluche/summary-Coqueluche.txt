@@ -1,0 +1,32 @@
+RÉSUMÉ : COQUELUCHE – MANIFESTATIONS CLINIQUES, GRAVITÉ, DIAGNOSTIC ET TRAITEMENT
+
+Définition : toxi-infection due à Bordetella pertussis (coccobacille Gram négatif, aérobie stricte). Seule maladie infectieuse sans transmission d’anticorps maternels au fœtus. Très contagieuse. Dans le monde : 60 millions de cas/an, 400 000 décès chez l’enfant. Populations à risque : jeunes nourrissons non vaccinés, adolescents et adultes.
+
+Manifestations cliniques : coqueluche du grand enfant non vacciné – 4 phases :
+- Incubation : 7-21 jours (moyenne 10 j), silencieuse.
+- Phase catarrhale (jusqu’à 10 j) : fièvre modérée ou absente, rhinorrhée, toux banale devenant tenace en quintes.
+- Phase d’état (3-4 semaines) : quintes – accès répétitifs violents de toux sans inspiration efficace, congestion du visage/cyanose, reprise inspiratoire en chant de coq, parfois vomissements (émétisante). Épuisantes, jusqu’à 50/jour, diurnes et nocturnes.
+- Phase de convalescence (plusieurs mois) : toux non quinteuse, asthénie.
+
+Formes cliniques :
+- Coqueluche du nourrisson : rare après 3 injections vaccinales (forme atténuée). Quintes atypiques (pas de chant de coq). Mal tolérance avant 3 mois : cyanose, apnée, bradycardie, malaise grave, troubles de conscience, vomissements.
+- Coqueluche de l’adolescent : toux persistante >1 semaine sans cause évidente + contage et incubation longue. Quintes à recrudescence nocturne.
+
+Formes compliquées :
+- Coqueluche maligne (avant 3 mois) : tachycardie >200/min, hypoxie réfractaire, défaillance multiviscérale (rénale, cardiaque, neurologique). Biologie : hyperlymphocytose >50 G/l, thrombocytose >600 G/l.
+- Encéphalopathie coquelucheuse : état de mal convulsif, troubles moteurs (hémiplégie, paraplégie, ataxie) et sensoriels (cécité, surdité).
+- Complications mécaniques : fracture des côtes, douleurs intercostales/abdominales, emphysème médiastinal, pneumothorax, otites barotraumatiques, hémorragies sous-conjonctivales, hernies (ombilicale, inguino-scrotale), prolapsus rectal.
+
+Diagnostic :
+- Positif : clinique (état vaccinal, contage, caractéristiques de la toux). Paraclinique : non spécifique (NFS : hyperlymphocytose inconstante ; radio thorax : normale ou syndrome bronchique) ; spécifique (PCR nasopharyngée – Se 90%, Sp 99%, résultat 24h ; culture Bordet-Gengou ; sérologie rétrospective 2 prélèvements à 3-4 semaines – non indiquée chez nourrisson).
+- Différentiel : toux avec catarrhe (bronchiolite, pneumonies, bronchite, infection ORL) ; toux persistante (tuberculose, corps étrangers, cardiopathies, asthme) ; malaise/cyanose (RGO, œsophagite, cardiopathies).
+- Gravité : signes respiratoires (quintes asphyxiantes/cyanosantes, apnées) ; cardiovasculaires (bradycardie ou tachycardie) ; neurologiques (malaise grave, troubles conscience, convulsions) ; déclenchement facile des quintes ; déshydratation/dénutrition, météorisme abdominal, hyperlymphocytose majeure, hyponatrémie (SIADH).
+- Étiologique : Bordetella pertussis, transmission par la toux.
+
+Traitement :
+- Buts : guérir, éviter complications, éviter contamination.
+- Moyens non médicamenteux : hospitalisation/isolement respiratoire, masque O2/ambu, monitoring cardiorespiratoire, hydratation/alimentation.
+- Moyens médicamenteux : macrolides – Azithromycine 20 mg/kg/j x3j (dès naissance) ; Clarithromycine 15 mg/kg/j x7j (dès 1 mois) ; Triméthoprime-Sulfaméthoxazole 30 mg/kg/j ( >3 mois). Antibiothérapie précoce : diminue contagiosité et écourte symptomatologie.
+- Critères d’hospitalisation : enfant <3 mois, signes de gravité, formes compliquées, nécessité O2/ambu, alimentation fractionnée ou NEDC, isolement respiratoire.
+- Surveillance hospitalière : fréquence des quintes, signes de mauvaise tolérance (malaise, cyanose, apnées, FC, vomissements, troubles conscience), état d’hydratation (pesée quotidienne), hyponatrémie (SIADH).
+- Prévention : vaccination acellulaire combinée (1ère dose à 6-8 semaines, 2 doses à 1-2 mois d’intervalle + rappels). Antibioprophylaxie des sujets contacts non/mal vaccinés (macrolides) si contage <21 jours.

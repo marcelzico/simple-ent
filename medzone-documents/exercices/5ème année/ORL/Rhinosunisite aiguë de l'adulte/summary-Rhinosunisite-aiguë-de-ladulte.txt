@@ -1,0 +1,82 @@
+RÉSUMÉ MÉDICAL SPÉCIALISÉ – RHINOSINUSITE AIGUË DE L’ADULTE
+
+DÉFINITION
+La rhinosinusite aiguë de l’adulte est une infection aiguë d’une ou de plusieurs cavités rhinosinusiennes, caractérisée par une rhinorrhée purulente et des algies faciales, évoluant depuis moins de 3 semaines. Elle concerne l’adulte et l’enfant à partir de 6 ans. Le risque majeur est celui des complications méningo-encéphaliques graves.
+
+RAPPELS ANATOMIQUES ET PHYSIOLOGIQUES
+
+Classification des sinus :
+- Sinus antérieurs : frontal, maxillaire, petite partie de l’éthmoïde (drainage par le méat moyen)
+- Sinus postérieurs : partie postérieure de l’éthmoïde et sphénoïdal (drainage par le méat supérieur)
+
+Mécanismes de défense :
+- Drainage mucociliaire : évacuation des particules des sinus vers les fosses nasales puis le cavum. L’obstruction de l’ostium altère le drainage et favorise l’infection.
+- Constituants du mucus : mucine, lysozymes, immunoglobulines, transferrine, antioxydants
+- Oxyde nitrique : produit en grande quantité, propriétés antibactériennes et antivirales
+- NALT (Nose Associated Lymphoïd Tissue) : défense tissulaire contre les antigènes
+
+DIAGNOSTIC POSITIF
+
+Type description – Rhinosinusite aiguë d’origine dentaire (TDD) :
+
+Interrogatoire : date de début, notion de rage dentaire récente, épisode fébrile brutal, ATCD nasosinusiens et allergiques, traitements entrepris.
+
+Signes généraux : état général conservé, asthénie (insomnie + douleur), faciès infecté.
+
+Signes fonctionnels :
+- Rhinorrhée purulente (jaunâtre/verdâtre)
+- Douleur faciale ou crânienne (absente dans la sinusite chronique)
+- Obstruction nasale à bascule
+- Sensation d’écoulement postérieur (jetage postérieur)
+- Cacosmie (mauvaise odeur permanente)
+
+Signes physiques :
+- Palpation des points sinusiens douloureuse
+- Rhinoscopie antérieure : pus au méat moyen, recherche de causes obstructives (hypertrophie cornet inférieur, polype, déviation septale)
+- Cavité orale : recherche de la dent causale (dents sinusiennes : 15-16-17 / 25-26-27)
+- Otoscopie systématique
+
+Examens paracliniques :
+- Biologiques : NFS (hyperleucocytose neutrophile), CRP élevée, glycémie (recherche diabète), bilan d’allergologie (non nécessaires au diagnostic)
+- Radiographie des sinus : 3 incidences (Blondeau, Face haute, Profil) → opacité des sinus maxillaires
+- Panoramique dentaire : clarté ou aspect soufflé de l’os alvéolaire (à ne pas oublier)
+- Scanner des sinus : non systématique, pour éliminer une cause tumorale avec lyse osseuse
+
+FORMES CLINIQUES
+
+1. Ethmoïdite de l’enfant : complication de la rhinosinusopharyngite. Enfant fébrile, œdème de l’angle interne de l’œil, rougeur palpébrale. Scanner : abcès sous-périosté.
+
+2. Sinusite bloquée : algie faciale très intense, opacité franche du sinus. Seule indication de ponction-drainage chirurgicale.
+
+3. Pansinusite : atteinte de tous les sinus → obstruction nasale + céphalées persistantes, opacité diffuse à la radiographie.
+
+4. Formes compliquées : ostéite, complications oculaires/orbitaires, otite, laryngite, complications méningo-encéphaliques.
+
+DIAGNOSTIC DIFFÉRENTIEL
+- Autres causes de douleur faciale (algies faciales, migraines)
+- Affections tumorales nasosinusiennes (obstruction nasale + épistaxis)
+- Infections spécifiques (VIH, tuberculose des sinus, mycose des sinus)
+
+DIAGNOSTIC ÉTIOLOGIQUE
+
+Causes dentaires : caries, chicots, dents sinusiennes.
+Causes rhinogènes : causes obstructives (déviation septale, hypertrophie des cornets, polypes) et causes allergiques (rhinite allergique).
+
+Bactéries en cause : Haemophilus influenzae, Streptococcus pneumoniae, Staphylococcus aureus, germes anaérobies.
+
+PRINCIPES DU TRAITEMENT
+
+Traitement médical (phase aiguë) :
+- Antibiotiques (ATB actif sur les anaérobies si origine dentaire)
+- Antalgiques
+- Vasoconstricteurs
+- Anti-inflammatoires (si sinusite bloquée)
+- Les macrolides ont une bonne diffusion amygdalienne (substituent pénicillines et amoxicilline-acide clavulanique en cas d’allergie)
+
+Traitement chirurgical :
+- Sinusite bloquée : ponction-drainage maxillaire ou frontal
+- Causes obstructives : septoplastie, turbinoplastie, méatotomie moyenne (si récidivante ou chronicisation)
+- Cause dentaire : avulsions ou soins dentaires
+
+CONCLUSION
+La rhinosinusite aiguë de l’adulte associe algies faciales et rhinorrhées purulentes. Le diagnostic est essentiellement clinique. Il faut rechercher les causes nasales d’altération du drainage et ne pas oublier d’examiner les dents sinusiennes. Le traitement médical est indiqué en première intention.

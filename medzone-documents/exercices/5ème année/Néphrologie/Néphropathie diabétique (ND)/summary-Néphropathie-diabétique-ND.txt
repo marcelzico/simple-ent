@@ -1,0 +1,76 @@
+NÉPHROPATHIE DIABÉTIQUE – RÉSUMÉ MÉDICAL
+
+DÉFINITION : Néphropathie principalement glomérulaire, non proliférative, complication micro-angiopathique du diabète.
+
+ÉPIDÉMIOLOGIE :
+- Diabète type 1 : délai microalbuminurie → IRCT = 10-15 ans ; IRCT moyenne = 25 ans après diagnostic.
+- Diabète type 2 : IRCT moyenne = 10 ans après diagnostic (retard de découverte → diabète évolue silencieusement).
+
+FACTEURS DE RISQUE :
+- Métaboliques : mauvais contrôle glycémique.
+- Environnementaux : tabac (accélère dégradation rénale).
+- Génétiques : allèle D → risque accru ; ACE plasmatique bas → risque moindre.
+
+PHYSIOPATHOLOGIE :
+Hyperfiltration glomérulaire (≈ congestion glomérulaire) due à :
+- Augmentation de la pression artérielle systémique.
+- Modifications microcirculation intrarénale (↑débits capillaires, ↑pression filtration intra-glomérulaire).
+- Hypertrophie glomérulaire (↑surface filtration).
+
+Albuminurie due à :
+- Anomalies perméabilité glomérulaire (altération qualitative du filtre, ↑taille pores).
+- Glycosylation des composants de la membrane basale.
+- Modification de la sélectivité de charge.
+- ↑gradient pression hydrostatique trans-membranaire (dépend de PA systémique et résistances artères afférente/efférente).
+
+Hypertrophie rénale : hyperglycémie chronique → stress oxydatif → vasodilatation artériole afférente + ↑sécrétion IGF1.
+
+DIAGNOSTIC DE NÉPHROPATHIE DIABÉTIQUE (critères) :
+1. Microalbuminurie positive et/ou élévation créatininémie ± HTA.
+2. Évolution diabète > 5 ans.
+3. Rétinopathie diabétique associée.
+4. Absence d'hématurie.
+5. Tailles des reins normales à l'échographie.
+6. Autres complications du diabète (à Madagascar : retard diagnostic jusqu'à 7 ans).
+
+HISTOLOGIE :
+- Lésions artériolaires précoces : infiltrats hyalins sous-endothéliaux (artérioles afférentes et efférentes).
+- Membrane basale glomérulaire : expansion (épaississement 30% à 5 ans ; double à la phase clinique).
+- Expansion mésangiale : augmentation matrice extracellulaire. Si volume mésangial 27-37% → ↑surface filtration → ↑DFG. Si >37% → gêne filtration → occlusion glomérulaire.
+- Glomérulosclérose : diffuse ou nodulaire (lésions nodulaires de Kimmelstiel-Wilson).
+
+CLASSIFICATION DE MOGENSEN (stades évolutifs) :
+
+STADE 1 – Hypertrophie rénale et hyperfiltration glomérulaire :
+- DFG de base > valeur théorique normale.
+- Augmentation taille des deux reins.
+
+STADE 2 – Phase latente ou silencieuse :
+- Après quelques années d'évolution.
+- Lésions histologiques minimes sans traduction clinique.
+
+STADE 3 – Néphropathie débutante (incipiens) :
+- Après ≥5 ans d'évolution.
+- Microalbuminurie 30-300 mg/24h (ou 20-200 mg/L) ± HTA.
+
+STADE 4 – Néphropathie patente clinique :
+- Protéinurie >300 mg/24h (parfois syndrome néphrotique : 10-20 g/24h).
+- HTA + insuffisance rénale chronique.
+- Protéinurie néphrotique → évolution très rapide (12 mois → terminal).
+
+STADE 5 – IRC préterminale ou terminale irréversible :
+- Protéinurie diminue (néphrons fonctionnels réduits).
+- Fonction rénale s'effondre.
+- Survient 10-15 ans après l'apparition du stade 3.
+
+Conduite pratique :
+- BU en premier ; si protéinurie négative → microalbuminurie pour dépister l'atteinte rénale.
+- Ne pas faire protéinurie et microalbuminurie simultanément.
+
+TRAITEMENT (néphroprotection : normaliser glycémie, protéinurie, TA) :
+1. HbA1c < 7%.
+2. Cible PA < 130/80 mmHg.
+3. Maintenir microalbuminurie <30 mg/24h.
+4. IEC ou ARA2 (dès la microalbuminurie, même si non hypertendu) : action hypotensive + réduction hyperpression intraglomérulaire (néphroprotecteur, vasculoprotecteur, cardioprotecteur).
+5. Arrêt du tabac.
+6. Traiter dyslipidémie, infections urinaires, obstacle voies urinaires, obésité.

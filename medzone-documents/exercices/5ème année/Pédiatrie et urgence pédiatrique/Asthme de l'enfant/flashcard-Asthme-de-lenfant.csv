@@ -1,0 +1,99 @@
+"front","back","cognitive_level"
+"Donnez la définition de l'asthme selon le document.","Maladie inflammatoire chronique des bronches entraînant une obstruction bronchique et une contraction musculaire parabronchique (bronchospasme) réversible spontanément ou sous traitement.","Recall"
+"Quelle est la différence entre une crise d'asthme et une exacerbation d'asthme ?","- Crise d'asthme : difficulté expiratoire, accès paroxystique, durée BREVE.
+- Exacerbation d'asthme : signes respiratoires persistant au-delà de 24h, quel que soit le mode de début (brutal ou progressif).","Understanding"
+"Définissez l'asthme aigu grave (AAG).","Crise ne répondant pas au traitement habituel ou dont l'intensité est inhabituelle dans son évolution ou sa symptomatologie. L'AAG est une urgence thérapeutique.","Recall"
+"Quelle est la prévalence de l'asthme chez l'enfant ?","10% de la population pédiatrique. C'est la maladie chronique la plus fréquente chez l'enfant, avec une augmentation de la fréquence et de la sévérité.","Recall"
+"Citez six stimuli pouvant déclencher une hyperréactivité bronchique (HRB).","- Infections : virales +++ ou bactérienne
+- Allergies
+- Tabagisme passif
+- Stress
+- Effort
+- Changement climatique","Recall"
+"Quelles sont les trois conséquences anatomiques de la réaction inflammatoire dans l'asthme ?","1. Réaction inflammatoire œdémateuse locale avec production de mucus = hypersécrétion bronchique
+2. Spasme des muscles lisses bronchiques = bronchospasme
+Conséquences : réduction du calibre bronchique et limitation de l'écoulement de l'air.","Understanding"
+"Quels sont les trois signes cliniques cardinaux de la crise d'asthme ?","Sibilances, dyspnée (+++ expiratoire), toux grasse.","Recall"
+"Quels éléments faut-il rechercher à l'anamnèse devant une suspicion de crise d'asthme ?","- Atopie familiale ou personnelle
+- Antécédent de crise et notion d'hospitalisation antérieure
+- Traitement de fond déjà entreprise
+- Facteurs déclenchants : contact récent avec allergène, virus, stress, effort","Recall"
+"Citez les prodromes de la crise d'asthme (quelques heures à 2 jours avant).","- Prurit nasal/oculaire
+- Rhinorrhée
+- Accès de toux +/- quinteuse","Recall"
+"Quels sont les signes d'inspection thoracique lors d'une crise d'asthme ?","- Enfant angoissé ou agité
+- Thorax distendu
+- Polypnée ou bradypnée expiratoire
+- Signes de lutte (SDL) selon la gravité","Recall"
+"Quels signes auscultatoires peut-on trouver dans la crise d'asthme ?","- Râles sibilants ou freinage expiratoire
+- Wheezing (sifflement audible à distance)
+- Râles bronchiques
+- Murmure vésiculaire (MV) : présent ou diminué selon la gravité","Recall"
+"Quelles sont les trois indications de la radiographie thoracique dans l'asthme ?","1. Première crise d'asthme (distension thoracique)
+2. Si doute diagnostique (corps étranger, malformation)
+3. Recherche de complications (pneumothorax, pneumomédiastin, atélectasie)","Application"
+"Quelles perturbations de l'EFR (exploration fonctionnelle respiratoire) trouve-t-on dans l'asthme ? (chez l'enfant >6 ans)","Syndrome obstructif :
+- VEMS/CV ou VEMS < 80%
+- Diminution du DEP par rapport à la valeur théorique
+- Augmentation > 12% après test de réversibilité
+L'EFR permet d'apprécier la sévérité de l'asthme et la qualité du contrôle sous traitement.","Understanding"
+"Quels sont les terrains à risque d'asthme aigu grave (AAG) ?","- Jeune âge < 4 ans ou adolescent
+- Antécédent d'hospitalisation en réanimation pour crise d'asthme sévère
+- Corticodépendance ou sevrage récent de corticoïdes","Recall"
+"Citez les signes cliniques de l'asthme aigu grave (AAG).","- Difficulté à parler, à tousser
+- Polypnée ou pause respiratoire, thorax bloqué, mise en jeu des muscles respiratoires accessoires
+- Diminution ou abolition des MV, silence auscultatoire
+- Signes d'hypoxie : cyanose
+- Signes d'hypercapnie : HTA, tachycardie, sueurs, somnolence","Recall"
+"Quels signes paracliniques (gaz du sang) orientent vers un asthme aigu grave ?","- Hypoxie ou diminution de PaO2
+- Normo- ou hypercapnie (PaCO2)","Recall"
+"Qu'est-ce que la toux équivalent d'asthme ?","- Toux à répétition à prédominance nocturne
+- Manifestation à l'effort
+- Sans sibilances, sans freinage","Recall"
+"Quels sont les critères diagnostiques de l'asthme du nourrisson ?","- 2 épisodes de bronchiolite + atopie avant 12 mois
+- OU 3 épisodes de bronchiolite avant 12 mois","Recall"
+"Sur quoi repose le diagnostic positif de l'asthme ?","Un faisceau d'arguments :
+- Anamnestiques
+- Cliniques
+- Paracliniques
+- Éventuellement thérapeutique après test de réversibilité aux β-2-mimétiques
+La disparition des symptômes spontanément ou avec bronchodilatateur est un bon argument.","Understanding"
+"À quoi sert le score de PRAM ?","Cotation de sévérité de la crise d'asthme basée sur : saturation O2, TSS (tirage sous-costal?), contraction des muscles scalènes, MV, sibilances.
+Interprétation :
+- 0-3 : légère
+- 4-7 : modérée
+- 8-12 : sévère","Recall"
+"Classez la sévérité de l'asthme selon les critères : symptômes, exacerbations, symptômes nocturnes, VEMS/DEP, variation nycthémérale du DEP.","Asthme intermittent : symptômes <1x/semaine, exacerbations brèves, symptômes nocturnes <2x/mois, VEMS/DEP>80%, variation <20%.
+Persistant léger : symptômes 1x/semaine, VEMS>80%, variation 20-30%.
+Persistant modéré : symptômes quotidiens, VEMS<80%, variation>30%.
+Persistant sévère : symptômes quotidiens, exacerbations fréquentes, VEMS<60%, variation>30%, β-2-mimétiques quotidiens, activités physiques limitées.","Analysis"
+"Citez 8 diagnostics différentiels de l'asthme chez l'enfant.","1. Obstacle trachéo-bronchique (corps étranger, sténose bronchique, tumeur, arc aortique anormal)
+2. Trachéobronchomalacie
+3. Dyskinésie ciliaire, DDB (dilatation des bronches)
+4. Mucoviscidose
+5. Dysplasie broncho-pulmonaire (prématuré oxygéno-dépendant >28j)
+6. RGO (reflux gastro-œsophagien)
+7. Insuffisance cardiaque (IC)","Recall"
+"Quels sont les buts de la prise en charge de la crise d'asthme ?","1. Stopper la crise d'asthme
+2. Eviter les complications","Recall"
+"Quels sont les buts de la prise en charge de la maladie asthmatique (traitement de fond) ?","1. Obtenir un bon contrôle des symptômes et permettre une activité normale
+2. Réduire les risques d'exacerbation, d'altération fonctionnelle et d'effets secondaires des corticoïdes oraux
+3. Préserver le capital pulmonaire (pas d'asthme à vie)","Recall"
+"Citez deux moyens non médicamenteux dans la prise en charge de la maladie asthmatique.","- Éducatif par hygiène de vie, sports adaptés
+- Observance thérapeutique (traitement de crise et traitement de fond)","Recall"
+"Quelles sont les doses de corticostéroïdes inhalés (béclometasone) : faibles, moyennes, fortes ?","- Faibles doses : 250 µg/jour
+- Moyennes doses : 500 µg/jour
+- Fortes doses : > 500 µg/jour","Recall"
+"Quel est le traitement de fond selon la sévérité de l'asthme persistant ?","- Léger : CSI (corticostéroïdes inhalés)
+- Modéré : CSI + BDLA (bronchodilatateur de longue durée d'action)
+- Sévère : CSI + BDLA + antileucotriènes","Recall"
+"Quelle est la durée minimale de traitement de fond et les conditions d'arrêt ?","Suivi de 2 ans au minimum + 1 an asymptomatique à faible dose + EFR normal + surveillance tous les 3 à 6 mois, avec reprise de corticothérapie inhalée dès reprise des symptômes même légères.","Recall"
+"Quels sont les quatre critères de mauvais contrôle de l'asthme ?","1. Symptôme dans la journée de durée de quelques minutes > 1 fois par semaine
+2. Au moins 1 réveil nocturne ou toux nocturne en rapport avec l'asthme
+3. Utilisation de bronchodilatateur de secours > 1 fois par semaine
+4. Limitation des activités liée à l'asthme (court ou joue moins, fatigue facile)","Recall"
+"Selon le tableau de contrôle, définissez le bon contrôle, le contrôle partiel et le mauvais contrôle.","Bon contrôle : aucun des 4 critères (symptômes diurnes ≥2x/semaine, réveil nocturne, utilisation BD de secours ≥2x/semaine, limitation d'activités).
+Contrôle partiel : 1-2 critères présents.
+Mauvais contrôle : 3-4 critères présents.","Analysis"
+"Quelle est la conclusion principale du document sur l'asthme de l'enfant ?","- Distinction entre traitement de la crise d'asthme et traitement de la maladie asthmatique (traitement de fond)
+- Préservation du capital pulmonaire +++","Recall"

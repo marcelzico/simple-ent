@@ -1,0 +1,14 @@
+"question","option1","option2","option3","option4","answer","explanation","difficulty"
+"Selon le document, l’hématurie est un motif de consultation le plus fréquent dans quelle spécialité ?","Néphrologie","Urologie","Pédiatrie générale","Hématologie","1","Le document indique : ''Un des motifs de consultation néphrologique les plus fréquents''.","Easy"
+"Quel examen confirme l’hématurie selon l’ECBU ?","> 5 GR/mm3","> 10 GR/mm3","> 2 GR/mm3","> 20 GR/mm3","1","Le document : ''ECBU : > 5GR/mm3''.","Easy"
+"La couleur ''bouillon sale'' est une caractéristique de l’hématurie à préciser.","Vrai","Faux","","","1","Le document liste ''Couleur : bouillon sale, rosée ou rouge porto''. Il s’agit d’une question QCM transformée : la proposition correcte est ''Vrai''. Cependant, le format QCM exige 4 options. Je vais adapter : la question est ''Parmi les couleurs d’hématurie citées, laquelle n’est pas mentionnée ?'' Non, mieux vaut rester simple. Je refais la question.","Easy"
+Je corrige : je vais produire 7 questions QCM valides. Voici la liste complète.
+
+"question","option1","option2","option3","option4","answer","explanation","difficulty"
+"Quelle est la valeur du Compte d’Addis pour une microhématurie ?","> 5.000 GR/mn","> 500.000 GR/mn","> 5 GR/mm3","> 500 GT/mn","1","Le document : ''Compte d’Addis : > 5.000 GR/mn (micro)''.","Easy"
+"Laquelle de ces étiologies fait partie des hématuries glomérulaires ?","Cystite","Lithiase","Purpura rhumatoïde","Néphroblastome","3","Le document classe ''Purpura rhumatoïde'' parmi les hématuries glomérulaires.","Easy"
+"Quel bilan est systématique selon le document ?","Échographie abdominale","IRM rénale","Urographie intraveineuse","Scintigraphie","1","Le document : ''Echographie abdominale systématique +/- ASP''.","Easy"
+"Parmi les causes non glomérulaires, laquelle est une infection ?","Polykystose rénale","Bilharziose","Syndrome d’Alport","Drépanocytose","2","Le document cite ''bilharziose'' dans ''Infections : cystite, urétrite, PNA (micro), bilharziose''.","Medium"
+"Quel est le traitement de l’hématurie selon l’introduction ?","Antibiotique","Chirurgical","Étiologique","Antihémorragique","3","Le document : ''Le traitement est étiologique''.","Medium"
+"La thrombose vasculaire comme cause d’hématurie non glomérulaire survient surtout dans quelles situations ? (Selon le document)","Traumatisme","Lithiase","Asphyxie périnatale, déshydratation, syndrome néphrotique","Tumeur","3","Le document : ''Thrombose vasculaire (survient surtout au cours de : asphyxie périnatale, déshydratation, syndrome néphrotique)''.","Medium"
+"Quelle est la particularité de la drépanocytose dans l’hématurie ?","Anémie hémolytique","Congestion et nécrose papillaire","Polykystose","Calculs rénaux","2","Le document : ''Drépanocytose (congestion et nécrose papillaire)''.","Difficult"

@@ -1,0 +1,30 @@
+Le psoriasis est une maladie systémique inflammatoire chronique à expression cutanée et articulaire, évoluant par poussées, déclenchée par des facteurs de risque (alcool, stress). L’activation des LTCD4 type Th17 est centrale. Prévalence 1,5-2%.
+
+**Forme typique : psoriasis vulgaire de l’adulte** – Lésions érythémato-squameuses arrondies, légèrement en relief, squames nacrées blanchâtres, bien limitées. Grattage : signe de la bougie (blanchissement) puis signe de la rosée sanglante (gouttelettes hémorragiques). Prurit dans 50% des cas. Dimensions : psoriasis en gouttes (0,5-2 cm), nummulaire (pièce de monnaie), en plaque/nappe. Topographie : zones de Bastion (exposées aux microtraumatismes), faces d’extension des articulations. Diagnostic clinique ; histologie si doute (hyperkératose, parakératose, hyperacanthose). Score PASI (érythème, induration, desquamation, 0-6).
+
+**Formes cliniques** :
+- Cuir chevelu : lésions en carapaces, non alopéciantes, couronne frontale.
+- Ongles : dé à coudre, onycholyse, pachyonychie, destruction.
+- Palmo-plantaire : squames jaunâtres, clous psoriasiques, kératodermie diffuse.
+- Psoriasis inversé (plis) : plaques rouges brillantes lisses, bords nets.
+- Muqueuse (rare) : macules rouges du gland ou langue.
+- Enfant : psoriasis de la langue (dès 3 mois), psoriasis aigu en gouttes (post-infection rhinopharyngée ou vaccination).
+- PVVIH : lésions grasses, rouges vives, tendance érythrodermique.
+
+**Formes graves** :
+- Érythrodermie psoriasique (>90% surface) : sèche (bon pronostic) ou humide œdémateuse (AEG, fièvre, surinfection, mauvais pronostic).
+- Psoriasis pustuleux : plaques rouges couvertes de pustules aseptiques, fièvre, AEG, hospitalisation.
+- Rhumatisme psoriasique : arthralgies inflammatoires, atteinte des petites articulations, oligo/monoarthrite, polyarthrite symétrique déformante ; radiographie : destruction anarchique.
+
+**Diagnostics différentiels** : pityriasis rosé de Gibert, toxidermie psoriasiforme, syphilides secondaires, dermatophytie, mycosis fongoïde, intertrigo, dermatite atopique/séborrhéique (enfant), polyarthrite rhumatoïde.
+
+**Étiologie et mécanisme** : facteurs génétiques, infectieux, médicamenteux (corticoïdes, bêtabloquants), psychiques. Mécanisme : prolifération anormale des kératinocytes par activation de fibroblastes, PNN, cellules de Langerhans, LTCD4 (cytokines mitogènes) et anomalies de transduction du signal et d’adhésion.
+
+**Traitement** :
+- Non médicamenteux (toujours) : information, éviction facteurs de risque, photothérapie, soutien psychologique.
+- Local : kératolytiques, émollients, dermocorticoïdes, dérivés vitD3 (si <40% surface corporelle).
+- Général : photothérapie UVA/UVB, méthotrexate, acitrétine, ciclosporine (si >40% surface, récurrent, échec local).
+- Formes graves : hospitalisation.
+- Rhumatisme psoriasique : AINS, antalgiques, méthotrexate, anti-TNF alpha.
+
+Surveillance : clinique (PASI), paraclinique si besoin, efficacité/tolérance du traitement.

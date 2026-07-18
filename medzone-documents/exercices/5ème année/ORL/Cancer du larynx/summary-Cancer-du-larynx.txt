@@ -1,0 +1,38 @@
+RÉSUMÉ MÉDICAL SPÉCIALISÉ – CANCER DU LARYNX
+
+ÉTIOLOGIE ET FACTEURS DE RISQUE
+Le cancer du larynx est une tumeur maligne intéressant les trois étages (sus‑, glottique et sous‑glottique), survenant le plus souvent sur une laryngite chronique dégénérative. Il représente 3 % des cancers chez l’homme, avec une prédominance masculine entre 45 et 70 ans. Le pronostic global à 5 ans est de 50 %. Les facteurs favorisants sont dominés par le tabac et l’alcool. S’y ajoutent des facteurs professionnels (acide sulfurique, amiante, formaldéhyde, poussières textiles ou de charbon), des prédispositions génétiques autosomiques récessives avec fragilité chromosomique (anémie sidéropénique, anémie de Fanconi, syndromes de Werner, Lynch, Li‑Fraumeni), des virus (Herpès simplex, HPV), une carence vitaminique, le reflux gastro‑œsophagien, un traumatisme vocal chronique et une irradiation cervicale antérieure (cancer radio‑induit).
+
+HISTOLOGIE
+Le carcinome épidermoïde représente 90 % des cas, avec trois variantes : forme classique, carcinome verruqueux (agressif localement, sans métastase à distance) et carcinome à cellules fusiformes (aspect polypoïde, haut risque métastatique, surtout glottique). Les autres tumeurs malignes sont rares (<2 % d’adénocarcinomes, carcinome adénoïde kystique, tumeur mucoépidermoïde, sarcome, lymphome, plasmocytome, tumeurs neuroendocrines). Des métastases secondaires peuvent venir d’un adénocarcinome rénal, d’un mélanome cutané ou de cancers du sein, poumon, voies génito‑urinaires ou tube digestif.
+
+BILAN CLINIQUE
+Les signes de découverte sont une dysphonie chronique (> 2 mois), une dysphagie (selon le site) et une dyspnée laryngée (bradypnée inspiratoire). Les signes associés comportent une toux sèche irritative persistante et des crachats hémoptoïques. L’examen cervical recherche une déformation ou un point douloureux du cartilage thyroïde et des adénopathies des aires II et IV. Les moyens diagnostiques sont la laryngoscopie indirecte, la nasofibrolaryngoscopie et la laryngoscopie directe en suspension sous anesthésie générale avec biopsie (examen de référence). L’examen de la cavité orale, de l’oropharynx et du cou recherche une deuxième localisation sur les VADS, du fait de l’exposition commune aux mêmes facteurs de risque.
+
+BILAN LÉSIONNEL ET D’EXTENSION
+La tomodensitométrie (sans puis avec injection, du cavum au médiastin supérieur) est l’examen spécifique. L’IRM (non systématique) examine les tissus mous. La TEP détecte précocement les métastases ganglionnaires et les récidives. L’extension ganglionnaire dépend de l’étage : supra‑glottique (chaîne jugulo‑carotidienne, aires sous‑digastriques et sus‑omohyoïdiennes), glottique (réseau lymphatique quasi inexistant ; ganglion prélaryngé si atteinte de la commissure antérieure), sous‑glottique (chaînes jugulaires internes et récurrentielles). Les métastases viscérales touchent par ordre de fréquence les poumons, les os, puis le foie. Il faut toujours rechercher des cancers métachrones sur d’autres sites des VADS.
+
+CLASSIFICATION TNM (UICC 2009)
+Localisations anatomiques :
+- Supra‑glottique : épiglotte, replis aryépiglottiques, aryténoïdes, bandes ventriculaires, ventricules.
+- Glotte : plis vocaux, commissures antérieure et postérieure.
+- Infra‑glottique : du bord inférieur des plis vocaux au premier anneau trachéal.
+
+Classification T (selon l’étage) :
+- Supra‑glottique : T1 (une sous‑localisation, mobilité normale), T2 (extension à plusieurs sous‑localisations ou à la glotte), T3 (fixation glottique, envahissement rétro‑cricoïdien, pré‑épiglottique ou para‑laryngé), T4a (cartilage thyroïde ou tissus extra‑laryngés), T4b (espace prévertébral, médiastin, carotide).
+- Glotte : T1 (mobilité normale ; T1a = un pli vocal, T1b = deux plis vocaux), T2 (extension supra‑ ou infra‑glottique, mobilité diminuée), T3 (fixation, espace para‑glottique, lyse minime du cartilage thyroïde interne), T4a (cartilage thyroïde ou extra‑laryngé), T4b (identique supra‑glottique).
+- Infra‑glottique : T1 (limitée), T2 (atteinte des plis vocaux, mobilité normale ou diminuée), T3 (fixation d’un pli vocal), T4a (cartilage cricoïde ou thyroïde, tissus extra‑laryngés), T4b (identique).
+
+Classification N :
+- N0 : pas d’atteinte
+- N1 : ganglion homolatéral ≤ 3 cm
+- N2 : homolatéral 3–6 cm, ou multiples ≤ 6 cm (N2a = unique >3–6 cm ; N2b = multiples homolatérales ; N2c = bilatérales ou controlatérales)
+- N3 : ganglion > 6 cm
+
+Classification M :
+- M0 : pas de métastase
+- M1 : métastase(s) à distance
+- Mx : non évaluable
+
+PRINCIPES THÉRAPEUTIQUES
+Les indications dépendent de la localisation, de l’aspect macroscopique, de l’extension locale (cartilage, mobilité du pli vocal), de l’extension ganglionnaire et des métastases, de l’état général (IPS), de l’âge, de la profession, des souhaits et de la compliance du patient. Les décisions sont prises en Réunion de Concertation Pluridisciplinaire (RCP), avec des traitements adaptés à chaque cas particulier.

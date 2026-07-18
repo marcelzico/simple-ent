@@ -1,0 +1,38 @@
+RÉSUMÉ : CHOCS CHEZ L’ENFANT – PHYSIOPATHOLOGIE, DIAGNOSTIC, ÉTIOLOGIES ET TRAITEMENT
+
+Définition : état de choc = défaillance circulatoire avec inadéquation entre apport et besoins tissulaires en oxygène (diminution d’apport, défaut d’utilisation, ou les deux). Urgence diagnostique et thérapeutique.
+
+Physiopathologie – quatre types :
+- Choc septique : invasion microbienne → activation des systèmes de défense → réponse inflammatoire excessive. Définition par SRIS (≥2 critères : T°>38,5/<36, FC>2DS ou bradycardie <1an, FR>2DS ou VM, leucocytes >12 000 ou <4000) ; sepsis = SRIS+infection ; sepsis grave = sepsis + défaillance CV ou SDRA ou 2 défaillances d’organes ; choc septique = sepsis grave + défaillance CV (TAS<2DS malgré remplissage 40 ml/kg/1h, ou besoin de vaso-actifs, ou ≥2 signes d’hypoperfusion : lactatémie>2N / DB>5, diurèse<0,5 ml/kg/h, TRC>5s, ΔT centrale-périphérique>3°C).
+- Choc cardiogénique : défaillance pompe cardiaque → baisse Qc (Qc=FC×VES) et augmentation pressions remplissage.
+- Choc hypovolémique : baisse volume intravasculaire → baisse retour veineux et précharge → baisse Qc. Mécanismes compensateurs : vasoconstriction artérielle (redistribution vers cerveau et myocarde) et veineuse (augmentation précharge). Particularité pédiatrique : eau = 90% poids extrême prématuré, 75% nourrisson ; perte de 10% poids → retentissement hémodynamique.
+- Choc anaphylactique (vasoplégique) : défaillance aiguë après allergène chez sujet sensibilisé → hypovolémie relative par vasodilatation majeure.
+
+Diagnostic positif : clinique +++
+- Tachycardie (premier signe ; bradycardie = tardif), hypotension.
+- Signes d’insuffisance circulatoire périphérique : teint gris, marbrure, extrémités froides, TRC>3s.
+- Signes de défaillance d’organes : troubles conscience (agitation, coma), oligurie (<0,5 ml/kg/h).
+- Choc chaud (anaphylactique et septique) : extrémités chaudes/rouges, pouls ample, PA normale ou basse.
+Paraclinique : lactatémie élevée (évalue retentissement, aide étiologique).
+
+Diagnostic étiologique : anamnèse (traumatisme/saignement, antécédents cardiaques, contexte infectieux, allergie). Examen physique : signes de déshydratation → hypovolémique ; hépatomégalie/TVJ/RHJ → cardiogénique ; fièvre/foyer/purpura → septique (purpura fébrile = méningocoque) ; teint rouge/urticaire → anaphylactique. Examens : NFS, CRP, hémoculture, ECBU, ionogramme, créatinine, hémostase, radiographie thorax, échographie cardiaque, échographie/scanner abdominal.
+
+Étiologies :
+- Septique : nouveau-né (streptocoque B, E. coli), enfant (pneumocoque, staphylocoque doré, haemophilus, méningocoque+++), immunodéprimé (entérobactéries, staphylocoque doré, candida, herpes/CMV).
+- Cardiogénique : cardiopathies malformatives, myocardites aiguës, troubles rythme/conduction, cardiomyopathies, post-chirurgie, valvulopathies.
+- Hypovolémique : gastro-entérite aiguë, hémorragies, pertes plasmatiques (brûlure, syndrome néphrotique), pathologies endocriniennes (diabète, insuffisance surrénalienne), diurétiques.
+- Anaphylactique : allergène.
+
+Traitement – urgence :
+Buts : rétablir PA, optimaliser oxygénation tissulaire.
+Moyens non médicamenteux : réanimation, monitoring, 2 VVP.
+Moyens médicamenteux généraux : oxygène, remplissage SSI 0,9% (20 ml/kg), catécholamines (adrénaline, noradrénaline, dopamine, dobutamine), antibiotiques.
+Spécifique :
+- Choc septique : remplissage, dopamine ± dobutamine, noradrénaline/adrénaline, hydrocortisone, antibiothérapie, O2.
+- Choc cardiogénique : O2, diurétique, restriction hydrique, dobutamine, traitement étiologique.
+- Choc anaphylactique : arrêt allergène, adrénaline (10 µg/kg IM renouvelable ou 0,1 µg/kg/min perfusion continue, stylo ANAPEN), expansion volémique, O2/VM, antihistaminique, corticoïde.
+- Choc hypovolémique : O2, remplissage, noradrénaline si besoin ; si hémorragie : contrôler saignement, corriger anémie.
+
+Surveillance : clinique (température, TA, FC, signes hypoperfusion, signes congestifs, SpO2, FR, diurèse – reprise de diurèse = bon signe), paraclinique (lactate, GDS, bilan hépatique, ECG).
+
+Conclusion : urgence diagnostique et thérapeutique. Diagnostic clinique primordial. Traitement symptomatique et étiologique.

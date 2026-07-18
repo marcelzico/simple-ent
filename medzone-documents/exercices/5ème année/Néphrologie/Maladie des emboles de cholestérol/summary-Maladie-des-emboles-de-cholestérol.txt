@@ -1,0 +1,62 @@
+MALADIE DES EMBOLES DE CHOLESTÉROL – RÉSUMÉ MÉDICAL
+
+DÉFINITION :
+Maladie athéroembolique systémique correspondant à de multiples emboles à partir de plaques d'athérome.
+
+INTÉRÊTS :
+- Pronostic sombre : évolution vers l'insuffisance rénale chronique terminale (IRCT), mortalité élevée.
+- Présentation clinique hétérogène.
+
+PHYSIOPATHOLOGIE :
+- Plaques instables des gros troncs artériels → ulcération + fragmentation.
+- Occlusion artériolaire → nécro-inflammation tissulaire + réaction inflammatoire systémique.
+- Au niveau rénal : ischémie → stimulation du système rénine-angiotensine-aldostérone (SRAA).
+
+SIGNES CLINIQUES :
+
+Terrain (facteurs de risque) :
+Homme, âge avancé, tabac, diabète, obésité, dyslipidémie, antécédents de maladies cardiovasculaires.
+
+Facteur déclenchant (survenant 8 jours à 8 semaines avant) :
+- Angiographie invasive.
+- Chirurgie cardiovasculaire.
+- Antithrombotiques / anticoagulants.
+
+Atteintes par système :
+
+1. CUTANÉES (30-90%) :
+   - Livedo réticulaire.
+   - Orteils pourpres, froids, douloureux.
+   - Purpura nécrotique.
+   - Ulcères chroniques.
+
+2. RÉNALES (50-75%) :
+   - Insuffisance rénale rapidement ou lentement progressive.
+   - HTA sévère.
+
+3. DIGESTIVES (10-40%) :
+   - Douleur abdominale, hémorragie digestive, ischémie mésentérique.
+   - Pronostic péjoratif.
+
+4. NEUROLOGIQUES :
+   - AVC ischémique.
+
+5. OCULAIRES :
+   - Emboles rétiniens jaune orangé réfringents (spécifiques).
+
+DIAGNOSTIC :
+
+Positif : triade caractéristique
+1. Exposition à un facteur déclenchant.
+2. Insuffisance rénale aiguë (IRA).
+3. Signes cutanés ou au fond d'œil.
+
+Diagnostics différentiels :
+- Cardiopathie emboligène.
+- Endocardite infectieuse.
+- NTA post-PCI : nécrose tubulaire aiguë post-produit de contraste iodé (délai de survenue : 48 heures).
+
+TRAITEMENT :
+- Symptomatique : antihypertenseurs, hémodialyse si nécessaire.
+- Statine à forte dose (stabilise la plaque d'athérome).
+- Corticothérapie (+/-).

@@ -1,0 +1,13 @@
+La lèpre est une infection bactérienne chronique due à Mycobacterium leprae (BAAR), touchant la peau, les muqueuses et les nerfs. Elle est transmissible par voie respiratoire (réservoir humain, essentiellement les formes multi bacillaires). Deux classifications : OMS (pauci bacillaire : <5 lésions, 1 nerf, bacilloscopie négative ; multi bacillaire : ≥5 lésions, >1 nerf, bacilloscopie positive) et Ridley Joplin (lépromateuse → borderline → tuberculoïde, de la plus à la moins grave).
+
+Clinique :
+- Forme lépromateuse (LL) : macules blanches/cuivrées, lépromes (nodules), lésions annulaires, confluence symétrique, faciès léonin. Atteinte neurologique : hypertrophie nerveuse, douleur électrique, paresthésies, anesthésie, mal perforant, paralysies (main en griffe, steppage).
+- Forme tuberculoïde (TT) : <5 lésions grandes asymétriques hypoesthésiques.
+- Formes borderline (BB, BT, BL) : lésions annulaires (5-10 cm) avec névrite.
+- Lèpre nerveuse pure : sans lésion cutanée, PCR nécessaire.
+
+Complications : réactions lépreuses (type 1 : réversion – poussée inflammatoire, névrite sévère ; type 2 : érythème noueux lépreux – nodules douloureux, fièvre, atteinte viscérale, hospitalisation obligatoire). Invalidités évaluées par le score YMP (yeux, mains, pieds).
+
+Diagnostic : clinique (lésion cutanée + atteinte nerveuse), bacilloscopie (Ziehl-Neelsen, index bactériologique), anatomie pathologique (cellule de Virchow), PCR (90% LL, 20% TT, utile pour lèpre nerveuse pure). Diagnostics différentiels : eczématide achromiante, dermatite séborrhéique, vitiligo, acné, sarcoïdose, maladie de Kaposi, etc.
+
+Traitement : polychimiothérapie gratuite OMS (rifampicine + sulfone + clofazimine) – 12 mois pour multi bacillaire, 6 mois pour pauci bacillaire. Les réactions lépreuses se traitent par corticoïdes (prednisolone 1 mg/kg/j) sans interrompre les anti-lépreux. Cas particuliers : enfant (transmission communautaire, traiter la famille), femme enceinte (traitable, risque pour le fœtus), co-infection VIH (forme borderline, syndrome de restauration immunitaire sous ARV).

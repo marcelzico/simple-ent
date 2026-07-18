@@ -1,0 +1,86 @@
+"front","back","cognitive_level"
+"Quelle est la définition de la diarrhée aiguë selon l’OMS ?","Augmentation brutale de la fréquence et du volume des selles depuis moins de 3 jours, avec modification de la consistance (molles, liquides, afécales), abondance, nature et aspect (glaire, sang, pus). Augmentation de la teneur en eau et électrolytes.","Recall"
+"Quels sont les deux principaux risques de la diarrhée aiguë ?","1. Déshydratation
+2. Dénutrition","Recall"
+"Quelle est la signification d’une couleur verte des selles dans la diarrhée ?","Sans signification péjorative (transit accéléré). Attention : couleur noire peut être un méléna ou liée à un traitement martial.","Recall"
+"Qu’est-ce que le syndrome dysentérique ?","Selles glairo-sanglantes, fièvre, épreintes (douleur à l’exonération) et ténesmes (fausses envies).","Recall"
+"Qu’est-ce que le syndrome cholériforme ?","Diarrhée aqueuse profuse.","Recall"
+"Décrivez le processus sécrétoire de la diarrhée.","Entérotoxines → cytoplasme → AMPc et GMPc → perturbations des transports ioniques → sortie de chlore augmentée et entrée de NaCl diminuée dans les entérocytes.","Understanding"
+"Décrivez le processus lésionnel des surfaces absorptives.","Cytotoxines → sommets villositaires (baisse de la réabsorption) → forte proportion des cellules cryptiques (sécrétoires) → diarrhées liquidiennes.","Understanding"
+"Quels sont les éléments à rechercher à l’anamnèse devant une diarrhée aiguë ?","- Date de début
+- Notion de diarrhée dans l’entourage
+- Régime (nouvel aliment, hygiène alimentaire)
+- Antibiothérapie récente (amoxiclav)
+- Courbe de croissance (dernier poids)
+- Caractéristiques : fréquence, consistance, aspect, abondance","Recall"
+"Quels sont les signes de déshydratation à l’examen physique ?","- Fontanelle déprimée
+- Enfoncement des yeux, hypotonie oculaire
+- Cerne, absence de larmes
+- Langue sèche
+- Tachycardie (premier signe de choc)
+- Pli cutané persistant (abdomen, transversal, >3 secondes)
+- Baisse du niveau de conscience
+- Oligurie","Recall"
+"Quelle est la classification des déshydratations selon la perte de poids ?","- Perte <5% : déshydratation minime sans traduction clinique
+- Perte 5-10% + signes cliniques : déshydratation modérée
+- Perte >10% + signes marqués +/- risque de choc : déshydratation sévère","Recall"
+"Quels sont les critères de déshydratation sévère (au moins 2) ?","1. Léthargique ou inconscient
+2. Yeux enfoncés
+3. Incapable de boire ou boit difficilement
+4. Pli cutané s’efface très lentement (persiste >3 secondes)","Recall"
+"Quels sont les signes évidents de déshydratation modérée (au moins 2) ?","1. Agité et irritable
+2. Yeux enfoncés
+3. Boit avidement, assoiffé
+4. Pli cutané s’efface lentement","Recall"
+"Quels examens paracliniques peuvent être demandés dans la diarrhée aiguë ?","- Pour rechercher la cause : NFS, CRP, coproculture, parasitologie des selles, hémoculture
+- Pour évaluer le retentissement : ionogramme sanguin et urinaire, gaz du sang (pH)","Recall"
+"Citez 3 facteurs de mauvais pronostic à court terme de la diarrhée aiguë.","- Dénutrition antérieure
+- Terrain débilité : drépanocytose, immunodépression, résection intestinale, maladie de Hirschsprung","Recall"
+"Citez 3 causes virales de diarrhée aiguë.","- Rotavirus (souvent)
+- Adénovirus
+- (Saisons froides, épidémie, âge<18 mois, selles aqueuses)","Recall"
+"Citez 4 causes bactériennes de diarrhée aiguë avec selles liquides.","- Escherichia coli entérotoxinogène
+- Vibrio cholerae
+- Toxi-infection (staphylocoque)","Recall"
+"Citez 5 causes bactériennes de diarrhée aiguë avec selles glairo-sanglantes.","- E. coli entéropathogène et entéro-invasif
+- Salmonelle (risque septicémie, méningite, ostéo-arthrite)
+- Shigelle (tropisme neurologique)
+- Campylobacter jejuni
+- Yersinia","Recall"
+"Citez 4 causes parasitaires de diarrhée aiguë.","- Cryptosporidies (enfant VIH+)
+- Lambliase ou giardiase (déficit en IgA)
+- Entamoeba histolytica
+- Schistosoma","Recall"
+"Qu’est-ce qu’une diarrhée parentérale ?","Diarrhée survenant au cours d’une infection extra-digestive : ORL, respiratoire, urinaire, méningée.","Recall"
+"Citez 5 autres causes non infectieuses de diarrhée aiguë.","- Erreur diététique
+- Allergie alimentaire
+- Diarrhée post-antibiotique
+- Insuffisance surrénale aiguë, hyperthyroïdie
+- Fausse diarrhée des constipés","Recall"
+"Quels sont les quatre buts du traitement de la diarrhée aiguë ?","1. Réhydrater (SRO + Zinc)
+2. Prévenir la dénutrition (réalimentation précoce : au bout de 4 heures)
+3. Traiter la cause
+4. (Diarrhée de l’enfant : pas de Smecta, Actapulgite, charbon)","Recall"
+"Quels sont les composants du SRO (soluté de réhydratation orale) et leurs rôles ?","- Électrolytes (Na, K, Cl) : compenser les pertes fécales
+- Bicarbonates et/ou citrates : prévenir et traiter l’acidose induite par la perte de bicarbonates
+- Glucides : apport énergétique minimum, accroître l’acceptabilité","Recall"
+"Quels sont les effets du Zinc dans le traitement de la diarrhée ? (4 effets)","- Effet « booster » immunitaire (cofacteur enzymatique, développe et active les LT)
+- Effet « anti-sécréteur » (bloque sécrétion chlore, augmente absorption sodium, réduit sécrétion chlore)
+- Effet « anti-oxydatif » (maintien intégrité tissus)
+- Réduit durée et gravité de la diarrhée, prévient les carences, stimule l’appétit, réduit infections respiratoires, anti-inflammatoire, cicatrisant","Recall"
+"Quelle est la posologie du Zinc selon l’âge ?","- 2 à 6 mois : 1/2 cp/j pendant 10 jours (10 mg/j)
+- 6 mois à 5 ans : 1 cp/j pendant 10 jours
+Si vomissement dans les 30 min : reprendre une dose. Continuer jusqu’au 10ème jour même si diarrhée arrêtée. Ne pas prendre avec le fer.","Recall"
+"Quel est l’effet du racécadotril (TIORFAN) ?","Inhibe l’hypersécrétion induite par l’agent infectieux. Diminue significativement le débit des selles, la durée de la diarrhée et les quantités consommées de SRO.","Recall"
+"Quels médicaments sont considérés comme inutiles, voire dangereux, dans la diarrhée aiguë ?","- Antiseptiques intestinaux (ERCEFURYL, PANFUREX)
+- Antiémétiques (aucune efficacité démontrée)
+- Lopéramide (IMODIUM) : inhibiteur de la motricité intestinale, effets indésirables sur le SNC","Recall"
+"Quel est l’avis sur les agents intraluminaux (Smecta, Actapulgite) ?","Modifient l’aspect des selles mais pas d’action significative sur le processus sécrétoire ni le débit des selles. Effet purement symptomatique, risque de rassurer à tort → INUTILE.","Recall"
+"Quand faut-il utiliser une réhydratation intraveineuse ?","Si déshydratation sévère ou vomissements +++ ou état de choc.","Application"
+"Quel est le plan de réhydratation orale pour une déshydratation modérée (Plan B) ?","75 ml/kg de SRO en 4 heures.","Recall"
+"Quel est le plan de réhydratation IV pour une déshydratation sévère (Plan C) ?","Nourrissons (<12 mois) : 30 ml/kg en 1h puis 70 ml/kg en 5h (total 100 ml/kg en 6h). Enfants (12 mois-5 ans) : 30 ml/kg en 30 min puis 70 ml/kg en 2h30. Si IV impossible : SRO par SNG 20 ml/kg/h pendant 6h.","Recall"
+"Quelle est la conclusion du document sur la diarrhée aiguë ?","1. Rechercher les signes de déshydratation
+2. Rechercher les signes de bactériémie
+3. Rechercher la cause
+4. Réhydrater
+5. Réévaluer","Recall"

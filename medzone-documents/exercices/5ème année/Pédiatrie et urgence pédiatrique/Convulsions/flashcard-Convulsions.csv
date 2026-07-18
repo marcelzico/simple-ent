@@ -1,0 +1,68 @@
+"front","back","cognitive_level"
+"Donnez la définition d’une crise épileptique selon le document.","Évènement clinique transitoire due à une activité excessive et anormale d’un groupe de neurones.","Recall"
+"Quelle est la différence entre une crise occasionnelle et l’épilepsie ?","- Crise occasionnelle : crises épileptiques qui ne s’inscrivent pas dans le cadre d’une maladie épileptique, réponse à une maladie passagère.
+- Épilepsie : affection chronique caractérisée par la répétition des crises épileptiques.","Understanding"
+"Quelle est la définition pratique de la convulsion dans le document ?","Crise épileptique occasionnelle (motrice ou non). Le document précise qu’en pratique, convulsion = crise épileptique occasionnelle.","Recall"
+"Quelle est la fréquence des convulsions chez les nourrissons ?","Touchent 4 à 8 % des nourrissons. La moitié sont des convulsions fébriles, de pronostic rassurant.","Recall"
+"Quels sont les éléments à préciser dans la description d’une crise convulsive ?","- Le caractère fébrile ou non
+- Les mouvements observés (toniques, cloniques, tonico-cloniques, révulsion oculaire, hypersialorrhée)
+- L’aspect focal ou généralisé
+- L’existence d’un déficit moteur ou non
+- La durée (secondes, minutes, heures)","Recall"
+"Quels sont les mouvements observables lors d’une crise convulsive ?","- Toniques
+- Cloniques
+- Tonico-cloniques
+- Révulsion oculaire
+- Hypersialorrhée (émission de bave)","Recall"
+"Quels éléments sont en faveur d’une épilepsie (début d’épilepsie) ?","- Récurrence des crises
+- Lien avec le sommeil (au cours du sommeil, au réveil, ou à l’endormissement)
+- Retard psychomoteur
+- Examen neurologique anormal","Recall"
+"Décrivez les trois phases de la crise épileptique « Grand Mal ».","1. Phase tonique : blocage de la respiration et cyanose
+2. Phase clonique : succession de contractions/décontractions des muscles fléchisseurs (face, langue, masticateurs) – rechercher morsure de langue
+3. Phase résolutive ou stertoreuse : hypotonie de tous les muscles, perte involontaire d’urine (relâchement sphinctérien), amnésie de la crise","Recall"
+"Quelles sont les caractéristiques d’une crise focale ?","Crise localisée à un hémicorps, spasmes, clignement des paupières, petites déviations de la bouche. Souvent sans perte de contact car l’autre partie du cerveau fonctionne normalement.","Recall"
+"Qu’est-ce qu’un état de mal convulsif ?","- Une crise qui dure plus de 15 minutes
+- Ou une crise itérative (durée brève mais répétitive) sans reprise de conscience entre les crises","Recall"
+"Citez 5 diagnostics différentiels des convulsions chez l’enfant de moins de 1 an.","- RGO : syndrome de Sandifer
+- Malaise cardiaque
+- Apnée
+- Trémulation
+- Myoclonies du sommeil","Recall"
+"Citez 5 diagnostics différentiels des convulsions chez l’enfant de plus de 1 an.","- Syncope vagale
+- Malaise cardiaque
+- Spasme du sanglot (nourrisson 12 mois : pleurs intenses, blocage respiratoire, cyanose, convulsion)
+- Vertige paroxystique bénin
+- Terreurs nocturnes
+- Crises d’hystérie
+- Myoclonies du sommeil","Recall"
+"Quelles sont les étiologies des convulsions occasionnelles sans fièvre ?","- Métaboliques (déshydratation, troubles ioniques – hypo/hypernatrémie, hypoglycémie)
+- Intoxications
+- Traumatisme crânien (HSD, syndrome de bébé secoué)
+- Hypoxie cérébrale aiguë (arrêt cardiaque, noyade)
+- AVC
+- Tumeurs
+- Épilepsie","Recall"
+"Quelle est la définition d’une convulsion hyperthermique simple ?","- Fréquence : 2-3% des enfants de 6 mois à 5 ans, avec T° >38,5°C
+- Histoire familiale : 30% des cas
+- Crise lors de la montée de la température
+- Exclusion des convulsions avec fièvre chez enfant ayant déjà eu des convulsions sans fièvre
+- Pas d’infection du SNC, examen neurologique normal après la crise
+- Crise tonico-clonique (parfois atonique), généralisée, durée <15 minutes (1-3 min)
+- Unique dans le même épisode fébrile
+- EEG normal","Recall"
+"Quelles sont les caractéristiques des convulsions hyperthermiques compliquées (complexes) ?","- Crises unilatérales ou avec déficit post-critique asymétrique
+- Prolongée (plus de 15 minutes)
+- Répétées au cours du même épisode fébrile","Recall"
+"Quel est le risque de récidive des convulsions hyperthermiques selon l’âge ?","- 50% si première crise avant 1 an
+- 10% si première crise après 3 ans","Recall"
+"Quel pourcentage d’enfants ayant des convulsions hyperthermiques deviendront épileptiques ?","2 à 3 % deviendront épileptiques.","Recall"
+"Citez les facteurs de risque de récidive des convulsions hyperthermiques.","- Âge au moment de la première crise (<1 an)
+- Antécédent familial de convulsions fébriles
+- Température au moment de la première crise (fièvre peu élevée)","Recall"
+"Quelles sont les quatre questions fondamentales à se poser en pratique devant une convulsion ?","1. Existe-t-il une maladie grave immédiate qu’il faut traiter tout de suite ? Nécessité ou non d’un traitement prolongé ?
+2. Détérioration neurologique préexistante ?
+3. La convulsion est-elle un accident sans lendemain ?
+4. En PCIME : crise convulsive = grave, il faut référer.","Application"
+"Quel est le traitement de la crise convulsive selon le document (PCIME) ?","Diazépam en intra-rectal (IR) à la dose de 0,5 mg/kg sans dépasser 10 mg. Peut être préparé avec de l’eau du robinet (n’importe quelle solution).","Recall"
+"Qu’est-ce que le syndrome de West ?","Spasme en flexion. (Mentionné en fin de document sans autre détail)","Recall"

@@ -1,0 +1,69 @@
+HYPERKALIÉMIE – RÉSUMÉ MÉDICAL
+
+DÉFINITION : Excès de potassium plasmatique > 5 mmol/L. L'hyperkaliémie de constitution brutale peut mettre rapidement en jeu le pronostic vital.
+
+DIAGNOSTIC POSITIF :
+
+Éliminer les fausses hyperkaliémies :
+- Hémolyse (prélèvement laborieux, garrot serré).
+- Centrifugation tardive.
+- Hyperleucocytose majeure (> 100 000/mm3) ou thrombocytémie (> 1 000 000/mm3).
+
+Signes cardiaques (ECG évolutif selon gravité) :
+- Onde T ample, pointue sur toutes les dérivations.
+- Disparition de l'onde P.
+- Bloc sino-auriculaire, élargissement du QRS.
+- Tachycardie ventriculaire, fibrillation ventriculaire.
+
+Signes neuromusculaires :
+- Paresthésies des extrémités et péribuccales.
+- Faiblesse musculaire ou paralysie d'évolution ascendante.
+
+Signes métaboliques : acidose métabolique.
+
+DIAGNOSTIC ÉTIOLOGIQUE (3 mécanismes) :
+
+1. Excès d'apport : apport abusif avec facteurs prédisposants (IRC, diurétiques antikaliurétiques, bloquants du SRAA).
+
+2. Transfert extracellulaire :
+   - Acidose métabolique aiguë (transfert extracellulaire de K+).
+   - Catabolisme cellulaire accru : rhabdomyolyse, écrasement musculaire, brûlures étendues, hémolyse massive, lyse tumorale (spontanée ou post-chimiothérapie), syndrome de revascularisation, hémorragie digestive sévère, hypothermie.
+   - Médicamenteux : β-bloquants non sélectifs, intoxication digitalique, agonistes α-adrénergiques, AINS, ciclosporine A, tacrolimus, héparine/HBPM, IEC/ARA2 (bloquent l'aldostérone).
+
+3. Réduction de l'excrétion :
+   - Insuffisance rénale aiguë et chronique.
+   - Insuffisance surrénalienne (maladie d'Addison) : déficit en aldostérone → défaut d'élimination rénale du K+.
+
+TRAITEMENT :
+
+Moyens thérapeutiques :
+
+A. Antagonistes membranaires directs (protection cardiaque) :
+   - Chlorure ou gluconate de calcium 10% : 1 ampoule (10 ml) IV en 2-3 min. Agit en 1-3 min. Renouvelable après 5 min si inefficace.
+
+B. Transfert du K+ vers le compartiment intracellulaire :
+   - Insuline : SGH 10% + 12-16 UI insuline ordinaire IV. Délai 1-2h.
+   - Salbutamol : 20 mg en nébulisation. Contre-indication : coronariens (tachycardie → risque myocardique).
+   - Alcalinisation : soluté bicarbonaté isotonique (1,4 g%). Délai 30-60 min.
+
+C. Élimination de la surcharge potassique :
+   - Diurétiques de l'anse (furosémide, bumétamide) : délai 1-4h. Augmentation débit urinaire et action pompe Na-K.
+   - Résines échangeuses d'ions : Kayexalate (échange K+ contre Na+) : 15-30 g/4-6h PO ou 50-100 g en lavement ; Resikali (sulfonate de calcium).
+   - Épuration extrarénale : hémodialyse (moyen le plus efficace).
+
+INDICATIONS :
+
+1. Hyperkaliémie sévère (> 7 mmol/L) – URGENCE ABSOLUE :
+   - Calcium IV.
+   - Soluté glucosé + insuline.
+   - Salbutamol (sans CI).
+   - Bicarbonates si acidose associée + résine en lavement.
+   - Dans l'attente de l'épuration extrarénale.
+
+2. Hyperkaliémie modérée (< 7 mmol/L) :
+   - Diminution des apports potassiques.
+   - Résines échangeuses d'ions per os.
+   - Bicarbonate per os (2-4 g/j) si acidose.
+   - Éviction des médicaments hyperkaliémiants.
+
+Valeur théorique létale : K+ > 8 mmol/L (avec exceptions possibles).

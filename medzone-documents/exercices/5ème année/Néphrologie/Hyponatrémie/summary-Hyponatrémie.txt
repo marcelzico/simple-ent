@@ -1,0 +1,69 @@
+HYPONATRÉMIE – RÉSUMÉ MÉDICAL
+
+DÉFINITION ET GÉNÉRALITÉS :
+Hyponatrémie = natrémie < 135 mmol/L + hypo-osmolalité plasmatique. Sévère si < 125 mmol/L ou symptomatique.
+Souvent associée à : insuffisance cardiaque, rénale, hépatique, pneumopathie, médicaments (diurétiques +++).
+
+PHYSIOPATHOLOGIE :
+- Sodium = principal ion responsable de l'osmolalité plasmatique.
+- Potassium = principal ion responsable de l'osmolalité intracellulaire (gradient maintenu par pompe Na-K membranaire).
+- Hyponatrémie → hypo-osmolalité plasmatique → gradient osmolaire (LIC > LEC) → mouvement d'eau vers la cellule → hyperhydratation intracellulaire.
+
+SYMPTOMATOLOGIE :
+Graduelle, fonction de la vitesse d'installation plus que de la valeur absolue de natrémie.
+- Nausées, dégoût de l'eau, asthénie.
+- Ralentissement idéo-moteur, céphalées, confusion.
+- Troubles de la vigilance (jusqu'au coma), convulsions.
+
+DIAGNOSTIC POSITIF :
+Évoqué devant contexte clinique (diurétiques, œdèmes) et signes cliniques. Confirmé par ionogramme (Na < 135 mmol/L).
+
+3 étapes diagnostiques :
+1. Évaluer la tonicité plasmatique (formule : (Na x 2) + glycémie mmol/L = 275-290 mosm/L).
+2. Évaluer le volume extracellulaire (VEC).
+3. Doser la natriurèse.
+
+Classification des hyponatrémies selon tonicité :
+- Isotonique (« pseudohyponatrémie ») : pas de trouble hydratation intracellulaire (hyperprotidémie, hyperlipidémie).
+- Hypertonique (« fausse hyponatrémie ») : déshydratation intracellulaire (hyperglycémie).
+- HYPOTONIQUE (vraie hyponatrémie) : hyperhydratation intracellulaire.
+
+DIAGNOSTIC ÉTIOLOGIQUE (selon VEC et natriurèse) :
+
+A. VEC NORMAL (capital sodé normal) – rétention d'eau :
+   - SSIADH, potomanie, endocrinienne (insuffisance surrénalienne, hypothyroïdie), thiazidiques.
+
+B. VEC AUGMENTÉ (capital sodé augmenté) – rétention eau + sel (prédominance eau) :
+   - Natriurèse >20 mmol/L : IRA oligurique, soluté hypotonique iatrogène.
+   - Natriurèse <20 mmol/L : œdèmes généralisés, iatrogène, dénutrition grave, grossesse.
+
+C. VEC DIMINUÉ (capital sodé diminué) – perte eau + sel (prédominance sel) :
+   - Natriurèse >20 mmol/L : diurétiques, Cerebral Salt Wasting Syndrome, insuffisance surrénalienne, néphropathie à perte de sel.
+   - Natriurèse <20 mmol/L : pertes gastro-intestinales, pertes cutanées.
+
+TRAITEMENT :
+
+Objectifs :
+- Correction de l'hypotonie plasmatique.
+- Traitement étiologique.
+
+Principes de vitesse de correction :
+- Trop lente → risque d'œdème cérébral.
+- Trop rapide → risque de myélinolyse centropontine.
+
+Moyens : arrêt des diurétiques, restriction hydrique, apport sodé.
+
+Indications :
+- Hyponatrémie sévère OU symptomatique : correction active (2-4 mmol/L en 2-4h jusqu'à disparition des signes neurologiques ; <10 mmol/L en 24h ; <18 mmol/L en 48h).
+- VEC augmenté : restriction hydrique d'abord.
+- VEC diminué : correction selon protocole si grave, + réhydratation isotonique.
+
+Surveillance :
+- Clinique : neurologique.
+- Biologique : ionogrammes répétés (1ère journée jusqu'à correction), glycémie, urée.
+
+TAKE HOME :
+1. Trois paramètres d'évaluation (tonicité, VEC, natriurèse).
+2. Risque : hyperhydratation intracellulaire (neurologique).
+3. Risque : si hyponatrémie sévère ou symptomatique → correction active.
+4. Restriction hydrique.

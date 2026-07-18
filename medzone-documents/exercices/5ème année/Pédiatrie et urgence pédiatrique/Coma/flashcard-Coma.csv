@@ -1,0 +1,80 @@
+"front","back","cognitive_level"
+"Quelle est la définition du coma chez l’enfant ?","Altération aiguë de la conscience avec disparition des activités de veille, sans ouverture spontanée des yeux, sans réveil possible.","Recall"
+"Quels sont les trois pronostics possibles du coma (selon le document) ?","Très variable : en fonction de l’âge et de l’étiologie. Le document cite : fréquent, étiologies : infections neuro-méningées, TCE, pas d’étiologie.","Recall"
+"Quel est le support neurophysiologique de la vigilance ?","Le cortex, activé par la FRAA (formation réticulée activatrice ascendante), structure nerveuse du tronc cérébral qui s’étend du bulbe au mésencéphale.","Recall"
+"Quels sont les deux ordres de mécanismes à l’origine du coma ?","1. Souffrance cérébrale diffuse : œdème cérébral + diminution de la perfusion cérébrale (infectieuse, vasculaire, traumatique) ou dysfonctionnement neuronal post-critique.
+2. Lésion directe de la FRAA : atteinte du tronc cérébral (compression, hémorragie, ischémie, engagement sur HTIC).","Understanding"
+"Quels sont les 8 étapes de la conduite à tenir devant un coma ?","1. Reconnaître le coma
+2. Évaluer et assurer les fonctions vitales
+3. Évaluer la profondeur du coma et le niveau lésionnel
+4. Évaluer la présence d’une HTIC
+5. Anamnèse succincte
+6. Examen neurologique rapide mais rigoureux
+7. Recherche étiologique
+8. Traitement (symptomatique puis étiologique)","Recall"
+"Quels scores définissent le coma chez l’enfant ?","Score de Glasgow pédiatrique < 8 ou score de Blantyre < 3.","Recall"
+"Quelles sont les trois premières mesures urgentes pour les fonctions vitales ?","- Assurer une ventilation (intubation)
+- Assurer une perfusion adéquate (prise en charge d’un état de choc, surveillance de l’équilibre hydro-électrolytique)
+- Surveillance de la pression artérielle, respecter une HTA modérée et bien tolérée","Recall"
+"Interprétez le score de Glasgow : 15, <12, <8.","15 : examen neurologique normal
+<12 : coma
+<8 : coma profond","Recall"
+"Quels signes oculaires doivent être examinés pour évaluer le niveau lésionnel ?","- Mydriase (bilatérale : engagement temporal)
+- Myosis (cause métabolique ou toxique)","Recall"
+"Quels sont les signes d’HTIC à rechercher chez l’enfant comateux ?","- Anamnèse : céphalées, vomissements, déficit localisé
+- Complication : engagement (limitation rotation passive de la tête, syndrome pyramidal, signes de focalisation, mydriase)
+- Signes neurovégétatifs : labilité TA, FC, FR, apnée
+- Disjonction des sutures, phénomène des yeux en coucher de soleil, bombement de la fontanelle antérieure
+- TDM cérébrale et fond d’œil","Recall"
+"Quels antécédents doivent être recherchés dans l’anamnèse d’un enfant comateux ?","- Antécédents familiaux
+- Déroulement grossesse et accouchement
+- Cardiopathie (shunt D-G : emboles), encéphalopathie, maladies endocrinienne, métabolique (diabète), rénale, hépatique
+- Poids, taille, périmètre crânien
+- Médicaments disponibles dans l’entourage (barbituriques, neuroleptiques)","Recall"
+"Quels éléments du mode de survenue et du contexte sont importants ?","Mode de survenue : brutal ou progressif.
+Contexte : TCE récent, voyage en zone endémique, maladie infectieuse, vaccination récente, diabète insulinoprive ou jeûn, symptômes récents (céphalées, convulsions).","Recall"
+"Quelle est la différence entre décortication et décérébration à l’examen neurologique ?","- Décortication : souffrance hémisphérique étendue
+- Décérébration : souffrance interne de la partie haute du tronc cérébral","Recall"
+"Que peut indiquer une hypotonie latéralisée versus une hypotonie généralisée ?","- Hypotonie latéralisée : hémiplégie
+- Hypotonie généralisée : comas toxiques, métaboliques, coma profond","Recall"
+"Quelle est la valeur d’un signe de Babinski unilatéral ?","Il a une valeur localisatrice (lésion cérébrale focalisée).","Recall"
+"Citez 4 odeurs de l’haleine évocatrices de causes toxiques.","- Acétone
+- Alcool
+- Ail (arsenic, paraldéhyde, sélénium)
+- Amande (cyanure)","Recall"
+"Quels sont les examens paracliniques de première intention devant un coma ?","Glycémie, bandelette urinaire, ionogramme, urée, créatinine, NFS, CPK, bilan hépatique et d’hémostase, gaz du sang et lactates, ammoniémie. Recherche de toxines et médicaments orientée par le contexte (CO, antiépileptiques, alcoolémie).","Recall"
+"Quels examens sélectifs peuvent être réalisés en deuxième intention ?","- Fond d’œil
+- Imagerie cérébrale (TDM)
+- EEG
+- Bilan infectieux si fièvre (NFS, CRP, GEFM, hémoculture, bilan tuberculeux)
+- Ponction lombaire (en urgence si suspicion infection neuroméningée ou hémorragie méningée, hors contre-indications)","Recall"
+"Citez les principales étiologies des comas chez l’enfant (6 catégories).","1. Traumatiques (AVP, chute, maltraitance)
+2. Infectieux (paludisme grave, méningo-encéphalite tuberculeuse, abcès cérébral)
+3. Métaboliques (hypoglycémie, troubles ioniques, encéphalopathies hépatique/urémique, hyperammoniémie)
+4. Neurologiques (anoxo-ischémie cérébrale, état de mal épileptique, anomalies héréditaires métabolisme)
+5. Toxiques (barbituriques, CO, autres toxiques)
+6. Vasculaires (hémorragie cérébrale par rupture anévrismale, infarctus cérébral, thrombophlébite cérébrale)","Recall"
+"Citez 4 diagnostics différentiels du coma.","1. Simulation ou conversion psychosomatique
+2. Hypersomnie (réversible aux stimulations)
+3. Mutisme akinétique (veille apparente sans réponse verbale/motrice)
+4. Syndrome de différenciation motrice (conscience intacte, tétraplégie, diplégie faciale, incapable de bouger ni parler)","Analysis"
+"Quelles sont les premières mesures de prise en charge du coma (hospitalisation, mise en condition) ?","- Hospitalisation en USI (Unité de Soins Intensifs)
+- Position latérale de sécurité (PLS), liberté des voies aériennes supérieures
+- Oxygène au masque ou intubation
+- Pose de 2 voies veineuses
+- Monitoring
+- Sonde vésicale et gastrique
+- Prévention des thromboses veineuses profondes","Recall"
+"Quels sont les soins de nursing chez l’enfant comateux ?","- Occlusion palpébrale + collyres de larmes artificielles + pommade ophtalmique à la vitamine A
+- Soins cutanés
+- Mobilisation douce
+- Matelas anti-escarre
+- Assurer une bonne alimentation parentérale","Recall"
+"Quel traitement spécifique de l’œdème cérébral est proposé ?","Mannitol en bolus de 5 à 10 minutes.","Recall"
+"Quel antidote est utilisé en cas de suspicion de coma toxique aux opiacés ?","Naloxone (antagoniste pur des opiacés).","Recall"
+"Quelle est la conduite à tenir en cas d’hypoglycémie comme cause du coma ?","Flash de G10% : 3 ml/kg.","Recall"
+"Quel est le traitement d’un coma fébrile suspecté infectieux ?","- C3G (céphalosporine de 3ème génération) si bactérien
+- Antituberculeux
+- Antiviral (aciclovir) pour herpès
+- Antipaludéen : artésunate injectable","Recall"
+"Quelle est la conclusion du document sur la prise en charge du coma ?","Urgent, grave. Stabilisation, orientation diagnostique et traitement doivent être menés en parallèle.","Recall"

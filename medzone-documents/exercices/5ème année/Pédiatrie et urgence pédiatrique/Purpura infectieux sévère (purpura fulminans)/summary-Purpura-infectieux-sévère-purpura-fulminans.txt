@@ -1,0 +1,17 @@
+Le purpura fulminans est une forme extrêmement sévère de septicémie, rare (1,2 cas/100 000 enfants <15 ans) mais très grave, avec une mortalité de 20-25% et plus de 6% des survivants nécessitant une amputation ou chirurgie reconstructrice.
+
+Définition : purpura (taches violacées ne s'effaçant pas à la vitropression) associé à un syndrome infectieux (fièvre/hypothermie). Le purpura fulminans est caractérisé par au moins un élément nécrotique ≥3mm ou ecchymotique large, associé à une CIVD ou un choc septique (sepsis sévère persistant après 2 remplissages). Le purpura infectieux sévère est rapidement extensif, associé à un sepsis sévère (hypotension, trouble de conscience, défaillance multiviscérale) et à une méningite.
+
+Diagnostic clinique : purpura extensif nécrotique, fièvre ou hypothermie, altération état général, signes de sepsis (tachycardie, marbrures, TRC allongé). L'hypotension est tardive (traitement très en retard car l'organisme réagit par la corticosurrénale). Signes de gravité : âge <12 mois, fièvre >39°C, teint gris, tachycardie/tachypnée, choc septique.
+
+Examens paracliniques de première intention : NFS, CRP, procalcitonine (bilan inflammatoire et bactériologique), hémoculture (ne jamais retarder l'antibiothérapie), bilan d'hémostase (recherche CIVD). La ponction lombaire est contre-indiquée en cas de choc ou CIVD. La biopsie cutanée est de dernière intention.
+
+Diagnostic différentiel : aucun en urgence car extension rapide (<1h). Discuter origine virale si purpura pétéchial non extensif, état général conservé, bilan inflammatoire normal. Chez le nouveau-né : déficit congénital en protéine C/S. Autres : vascularite, hémopathie maligne.
+
+Étiologie : méningocoque (sérotype B 55%, C 35%, W135 6%). Autres causes rares : pneumocoque, H. influenzae, S. aureus. Facteurs de risque : asplénie (dont drépanocytose), déficit en properdine/complément/protéine C, traitement par Eculizimab, facteurs génétiques.
+
+Prise en charge préhospitalière : VVP de bon calibre (ou intra-osseuse), remplissage par SSI 0,9% ou RL 20 ml/kg en 20 min, ceftriaxone 50 mg/kg (ou céfotaxime, amoxicilline, ampicilline 100 mg/kg) IV/IM, transfert en réanimation.
+
+Traitement curatif : antibiotique (ceftriaxone 50 mg/kg/j ou céfotaxime 100-200 mg/kg/j selon méningite associée), traitement du sepsis sévère (remplissage, O2), du choc septique (inotropes : adrénaline, noradrénaline, dopamine ; hémisuccinate d'hydrocortisone ; ventilation). Traitements non conventionnels : immunothérapie, hémofiltration, antithrombine, protéine C, activateur du plasminogène, vasodilatateurs.
+
+Prévention autour d'un cas : chimioprophylaxie entre H48 et J10 par rifampicine (10 mg/kg x2/j enfant, 5 mg/kg x2/j nouveau-né, 600 mg x2/j adulte) pendant 2 jours. Alternatives : spiramycine (750.000 UI/kg x2/j enfant 5 jours) si insuffisance hépatique, ou ceftriaxone/ciprofloxacine. Vaccination anti-méningococcique (A, C, Y, W135) à débuter avant J10 chez l'entourage familial.

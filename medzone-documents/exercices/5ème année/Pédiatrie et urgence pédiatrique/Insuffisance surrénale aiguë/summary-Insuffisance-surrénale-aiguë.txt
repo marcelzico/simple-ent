@@ -1,0 +1,46 @@
+RÉSUMÉ – INSUFFISANCE SURRÉNALE AIGUË
+
+L’insuffisance surrénale aiguë correspond à un effondrement de la sécrétion des hormones corticosurrénaliennes en dessous des besoins de l’organisme. Il s’agit d’une urgence médicale (diagnostique et thérapeutique) engageant rapidement le pronostic vital à très court terme.
+
+Rappels anatomo-physiologiques : la glande surrénale (poids 6-10 g) comporte deux parties. La corticosurrénale (externe) a trois couches : glomérulée (minéralocorticoïdes : aldostérone – rétention Na, excrétion K), fasciculée (glucocorticoïdes : cortisol), réticulée (stéroïdes sexuels). La médullosurrénale (interne) sécrète les catécholamines (adrénaline, noradrénaline) pour le stress et l’homéostasie.
+
+Signes cliniques :
+- Digestifs : douleurs abdominales diffuses, nausées, vomissements, diarrhées (abdomen souple sans défense).
+- Neurologiques : adynamie, coma ou agitation, confusion, délire (sans signe de localisation).
+- Autres : déshydratation extracellulaire, baisse de TA voire collapsus, algies diffuses (myalgies, arthralgies, céphalées), fièvre quasi-constante sans contexte infectieux.
+
+Signes biologiques :
+- Ionogramme sanguin : hyponatrémie, hyperkaliémie.
+- Ionogramme urinaire : natriurèse augmentée, kaliurèse diminuée.
+- Élévation de l’urée (insuffisance rénale fonctionnelle), protéinurie et hématocrite augmentés (= déshydratation).
+- Cortisolémie à 8h effondrée, acidose métabolique, tendance à l’hypoglycémie, parfois hypercalciurie.
+- Important : l’attente des résultats ne doit jamais retarder la mise en route du traitement.
+
+Diagnostic : suspecté cliniquement, confirmé par dosages hormonaux. Insuffisance surrénale = cortisolémie à 8h effondrée. Si primitive : ACTH élevé. Si secondaire (corticotrope) : ACTH bas, réponse anormale au test au Synacthène.
+
+Étiologies :
+
+Nouveau-né :
+- Formes familiales : hypoplasie congénitale (liée à l’X, garçons, mélanodermie, perte de sel +++), hyperplasie congénitale (autosomique récessif, fréquent, virilisation des filles, mélanodermie, perte de sel +++), résistance à l’ACTH (pas de perte de sel, hypoglycémie, mélanodermie, aldostérone normale).
+- Formes sporadiques : hémorragie surrénale néonatale après hypercorticisme maternel.
+
+Enfant :
+- Formes familiales : adrénoleucodystrophie liée à l’X (garçons, démyélinisation SNC + mélanodermie) ; maladie 3A (achalasie, alacrymie, Addison) ; déficit en glucocorticoïde avec mélanodermie et hypoglycémie ; pathologie auto-immune.
+- Tuberculose des surrénales.
+
+Traitement :
+
+Buts : rétablir la volémie, corriger les troubles ioniques, combler le déficit hormonal.
+
+Moyens :
+- Déshydratation sévère : sérum physiologique 20 ml/kg en 30 min (renouvelable) – règle des 20/20/20 (20 ml/kg en 20 min).
+- Hypoglycémie : SGH 10 % en flash.
+- Hyperkaliémie >7 mmol/L : gluconate de calcium 10 % (0,5 ml/kg IV en 5 min) + insuline 0,1 UI/kg/h + perfusion SGH 10 % (5 ml/kg/h).
+- Traitement substitutif corticoïde : hydrocortisone injectable 100 mg/kg/j en 4 fois IV ; acétate de désoxycorticostérone (Syncortil) 5-10 mg/m²/j en une injection.
+- Traitement de la cause déclenchante.
+
+Surveillance : éviter mobilisation intempestive ; surveillance clinique horaire (hydratation, pouls, TA, température, diurèse, conscience) ; paraclinique /4-6h (ionogramme sanguin et urinaire, glycémie, créatininémie, NFS).
+
+Prévention : arrêt progressif d’une corticothérapie au long cours avec substitution adéquate ; éducation des patients insuffisants surrénaux chroniques ; reconnaître les situations à risque (fièvre, diarrhée) et doubler la dose d’hydrocortisone ; port d’une carte de surrénalien.
+
+Conclusion : l’insuffisance surrénale aiguë doit être évoquée devant toute situation urgente mal comprise, surtout en présence de mélanodermie avec perte de sel. Le diagnostic et le traitement sont essentiels car le risque de décompensation engage rapidement le pronostic vital.

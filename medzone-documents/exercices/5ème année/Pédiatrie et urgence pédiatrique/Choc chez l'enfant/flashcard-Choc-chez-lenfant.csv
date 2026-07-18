@@ -1,0 +1,84 @@
+"front","back","cognitive_level"
+"Quelle est la définition de l'état de choc ?","Défaillance du système circulatoire aboutissant à une inadéquation entre l’apport et les besoins tissulaires périphériques en oxygène, due soit à une diminution de l’apport en oxygène, soit à un défaut d’utilisation de l’oxygène par la cellule, soit une combinaison des deux.","Recall"
+"Citez les quatre mécanismes de choc mentionnés dans le document.","1. Choc septique
+2. Choc cardiogénique
+3. Choc hypovolémique
+4. Choc vasoplégique (anaphylactique)","Recall"
+"Quels sont les critères du SRIS (Syndrome de Réponse Inflammatoire Systémique) chez l’enfant ?","Au moins 2 des critères suivants, dont au moins la température ou l’anomalie leucocytaire :
+- Température > 38,5°C ou < 36°C
+- FC > 2DS pour l’âge ou bradycardie (<1 an)
+- FR > 2DS pour l’âge ou ventilation mécanique
+- Leucocytose > 12 000/mm3 ou < 4 000/mm3","Recall"
+"Quelle est la définition du sepsis ?","SRIS + infection (prouvée ou suspectée).","Recall"
+"Quelle est la définition du sepsis grave ?","Sepsis + défaillance cardiovasculaire (tachycardie, troubles vasomoteurs) OU SDRA (Syndrome de Détresse Respiratoire Aiguë) OU deux autres défaillances d’organes au moins.","Recall"
+"Quelle est la définition du choc septique ?","Sepsis grave + défaillance cardiovasculaire avec :
+- TAS < 2DS pour l’âge malgré un remplissage vasculaire de 40 ml/kg en 1 heure
+OU nécessité d’administrer au moins un produit vaso-actif
+OU au moins 2 signes d’hypoperfusion : lactatémie > 2 fois normale / acidose avec DB > 5 mmol/L, diurèse < 0,5 ml/kg/h, TRC > 5 sec, différence température centrale-périphérique > 3°C","Recall"
+"Expliquez le mécanisme du choc cardiogénique.","Défaillance de la pompe cardiaque → diminution du débit cardiaque (Qc = FC x VES) + élévation des pressions de remplissage.","Understanding"
+"Expliquez le mécanisme du choc hypovolémique.","Diminution du volume intravasculaire (volume sanguin circulant) → diminution du retour veineux au cœur (diminution de la précharge cardiaque) → diminution du débit cardiaque.","Understanding"
+"Quels sont les deux mécanismes compensateurs du choc hypovolémique ?","1. Vasoconstriction artérielle périphérique → redistribution des débits sanguins régionaux vers les organes “nobles” (cerveau, myocarde)
+2. Vasoconstriction veineuse → augmentation de la pré-charge cardiaque","Recall"
+"Quelles sont les particularités pédiatriques concernant l’eau corporelle ?","L’eau représente 90% du poids d’un extrême prématuré, 75% du poids d’un nourrisson. Dès la perte de 10% du poids du corps, il y a un retentissement hémodynamique important.","Recall"
+"Expliquez le mécanisme du choc anaphylactique.","Défaillance circulatoire aiguë après pénétration d’un allergène dans un organisme préalablement sensibilisé. Il s’agit d’une hypovolémie relative : anomalie de la distribution du volume sanguin due à une vasodilatation systémique majeure.","Understanding"
+"Quels sont les signes cliniques du choc (diagnostic positif) ?","- Tachycardie +++ (premier signe, bradycardie = trop tard), hypotension
+- Signes d’insuffisance circulatoire périphérique : teint gris, marbrure, extrémités froides, TRC > 3 sec
+- Signes de défaillance d’organes : troubles de la conscience (agitation, coma), oligurie (<0,5 ml/kg/h)
+- Choc chaud (anaphylactique et septique) : extrémités chaudes/rouges, pouls ample, PA normale ou basse","Recall"
+"Quels examens paracliniques sont recommandés devant un état de choc ?","Lactatémie élevée (évalue le retentissement et aide au diagnostic étiologique).","Recall"
+"Quels éléments de l’anamnèse orientent le diagnostic étiologique du choc ?","- Trouble de l’hémostase, traumatisme, saignement, pâleur → hémorragie
+- Antécédents de cardiopathie
+- Contexte infectieux
+- Notion d’allergie, exposition à un allergène, symptômes respiratoires ou digestifs","Analysis"
+"Quels signes cliniques orientent vers un choc hypovolémique ?","Signes de déshydratation.","Application"
+"Quels signes cliniques orientent vers un choc cardiogénique ?","Hépatomégalie, turgescence des veines jugulaires (TVJ), reflux hépato-jugulaire (RHJ).","Application"
+"Quels signes cliniques orientent vers un choc septique ?","Fièvre, foyer infectieux (syndrome alvéolaire, crépitants, otite), purpura (purpura fébrile = méningocoque jusqu’à preuve du contraire).","Application"
+"Quels signes cliniques orientent vers un choc anaphylactique ?","Teint rouge, signes cutanés (urticaire).","Application"
+"Citez les principales étiologies du choc septique selon l’âge.","- Nouveau-né : streptocoque B, E. coli
+- Enfant : pneumocoque, staphylocoque doré, haemophilus, méningocoque +++ (purpura fébrile)
+- Immunodéprimé : entérobactéries, staphylocoque doré, candida, herpes/CMV","Recall"
+"Citez 6 étiologies du choc cardiogénique.","1. Cardiopathies malformatives
+2. Myocardites aiguës
+3. Troubles du rythme ou de la conduction
+4. Cardiomyopathies
+5. Post-chirurgie cardiaque
+6. Cardiopathies valvulaires","Recall"
+"Citez 5 étiologies du choc hypovolémique.","1. Gastro-entérite aiguë
+2. Hémorragies
+3. Pertes plasmatiques (brûlure, syndrome néphrotique)
+4. Pathologies endocriniennes (diabète sucré, insuffisance surrénalienne)
+5. Utilisation de diurétiques","Recall"
+"Quels sont les deux buts du traitement de l’état de choc ?","1. Rétablir une pression artérielle satisfaisante
+2. Optimaliser l’oxygénation tissulaire","Recall"
+"Quels sont les moyens non médicamenteux dans le traitement du choc ?","- Hospitalisation en réanimation
+- Mise en condition avec monitoring, mise en place de 2 voies veineuses périphériques (VVP)","Recall"
+"Quels sont les moyens médicamenteux généraux du traitement du choc ?","- Oxygénation
+- Remplissage vasculaire avec SSI 0,9% (20 ml/kg)
+- Catécholamines (adrénaline, noradrénaline, dopamine, dobutamine)
+- Antibiotiques","Recall"
+"Décrivez la prise en charge spécifique du choc septique.","- Remplissage vasculaire
+- Dopamine, +/- dobutamine, noradrénaline ou adrénaline si nécessaire
+- Corticothérapie (hydrocortisone)
+- Antibiothérapie
+- Oxygène","Recall"
+"Décrivez la prise en charge spécifique du choc cardiogénique.","- Oxygène
+- Diurétique
+- Restriction hydrique
+- Dobutamine
+- Traitement de la cause","Recall"
+"Décrivez la prise en charge spécifique du choc anaphylactique.","- Arrêt de l’exposition à l’allergène
+- Adrénaline : 10 µg/kg en IM renouvelable après 5-10 min ou perfusion continue 0,1 µg/kg/min (stylo prérempli : ANAPEN)
+- Expansion volémique
+- Oxygène, ventilation mécanique
+- Antihistaminique, corticoïde","Recall"
+"Décrivez la prise en charge spécifique du choc hypovolémique.","- Oxygène
+- Remplissage vasculaire
+- Noradrénaline si nécessaire
+- Si hémorragie : contrôler l’origine du saignement, correction de l’anémie","Recall"
+"Quels sont les éléments de surveillance clinique d’un enfant en état de choc ?","- Température
+- TA, FC, signes d’hypoperfusion cutanée, signes congestifs (OMI, hépatomégalie, TVJ, RHJ)
+- SpO2, FR
+- Diurèse (reprise de la diurèse = très bon signe de redistribution de la perfusion vers le myocarde)","Recall"
+"Quelle est la conclusion du document sur les chocs chez l’enfant ?","- Urgence diagnostique et thérapeutique
+- Diagnostic clinique +++
+- Traitement symptomatique et étiologique","Recall"

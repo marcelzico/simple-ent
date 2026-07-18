@@ -1,0 +1,20 @@
+RÉSUMÉ : ÉPILEPSIE CHEZ L’ENFANT – SYNDROMES, PRISE EN CHARGE
+
+Définition : la crise d’épilepsie est une manifestation clinique paroxystique due à une activité neuronale excessive et anormale (phénomènes positifs : moteurs, psychiques, sensoriels ; négatifs : perte de conscience ou tonus). L’épilepsie est une affection chronique caractérisée par la répétition des crises sans facteur particulier (opposée aux crises occasionnelles post-intercurrentes).
+
+Classification : crises généralisées (atteinte des deux hémisphères) et crises focales (activation localisée). Épilepsies généralisées primaires (idiopathiques, bon pronostic) : grand mal, petit mal absences, épilepsie myoclonique juvénile. Épilepsies généralisées secondaires (encéphalopathie sous-jacente) : syndrome de West, Lennox-Gastaut.
+
+Syndromes fréquents :
+- Petit mal absences (3-10 ans, pic 5-7 ans, 10%) : suspensions de conscience brèves, nombreuses, décrochage scolaire. EEG : bouffées synchrones à 3 c/s favorisées par l’hyperventilation.
+- Syndrome de West (3-9 mois, 15% des épilepsies de la 1ère année) : triade (spasmes en flexion/extension, arrêt/régression du DPM, hypsarythmie). Étiologie : 2/3 encéphalopathie sous-jacente (EAI, syndromes neurocutanés, malformations).
+- Epilepsie à paroxysme Rolandique (3-13 ans, pic 10 ans, 10-15%) : prédominance nocturne, sans altération conscience, signes facio-pharyngo-laryngés, paresthésies langue/lèvres. EEG : pointes-ondes rolandiques.
+- Syndrome POCS (pointes-ondes continues du sommeil) : encéphalopathie épileptogène rare avec régression cognitive.
+- Syndrome de Landau-Kleffner : agnosie auditive acquise + aphasie épileptique (enfant paraît sourd ou autiste).
+
+Conduite pratique devant une crise : coucher sur le côté droit, éviter blessures, évaluer EHD/respiratoire/neurologique. Traitement : Valium. En urgence : O2, Valium IR 1 mg/kg, voie veineuse, monitoring. Ne pas mettre les doigts dans la bouche, ne pas contenir.
+
+État de mal épileptique (crise >15 min malgré 2 doses de Diazépam) : Phénobarbital (nouveau-né 20 mg/kg/j, nourrisson 15 mg/kg/j) IVDL 20 min ; si persistance : clonazépam (DC 0,1 mg/kg, DE 0,01 mg/kg/h) ; réanimation.
+
+Examens complémentaires : EEG (standard, sieste, sommeil 24h, vidéo), IRM, recherche maladie neurocutanée/systémique/dégénérative, génétique.
+
+Traitement de fond : on traite la clinique, pas l’EEG. Modalités : selon type de crise et âge, introduction progressive (dépakine – contre-indiquée chez fille pubère –, phénobarbital), doses au poids, test jusqu’à dose max, dosage plasmatique. Efficacité : clinique, suivi tous les 6-12 mois. Arrêt : après 2 ans sans crise, diminution très progressive. Conseils : pas de bain seul, éviter les sports.

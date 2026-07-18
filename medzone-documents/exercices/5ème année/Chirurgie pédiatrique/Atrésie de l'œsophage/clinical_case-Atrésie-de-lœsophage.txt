@@ -1,0 +1,6 @@
+"case_description","question","sample_answer","reasoning_reference"
+"Un nouveau-né présente hypersialorrhée et détresse respiratoire dès la première tétée.","Quel diagnostic suspecter ?","Une atrésie de l’œsophage.","Les signes cliniques décrits correspondent au tableau néonatal."
+"Un fœtus présente hydramnios et absence de visualisation de l’estomac.","Quelle anomalie doit être suspectée ?","Atrésie de l’œsophage.","Le document indique ces signes indirects anténataux."
+"Un nouveau-né avec atrésie présente un abdomen très aéré.","Quelle forme est probable ?","Forme avec fistule distale trachéo-œsophagienne.","L’air passe des voies respiratoires vers le tube digestif."
+
+

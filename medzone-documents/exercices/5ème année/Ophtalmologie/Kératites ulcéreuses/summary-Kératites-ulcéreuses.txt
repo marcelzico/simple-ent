@@ -1,0 +1,28 @@
+RÉSUMÉ – KÉRATITES ULCÉREUSES
+
+Définition : perte tissulaire de l’épaisseur superficielle de la cornée, en réponse à une agression. Diagnostic : test à la fluorescéine positif (différence avec les kératites interstitielles où le test est négatif). Engagent la transparence et l’intégrité cornéennes.
+
+Rappels : cornée avasculaire, richement innervée (V1, 7× pulpe dentaire). Histologie : épithélium (renouvellement régulier), Bowman, stroma (renouvellement lent, 2/3 épaisseur), Descemet, endothélium (ne se renouvelle pas).
+
+Diagnostic positif :
+- Anamnèse : ATCD herpès, chir ocular, allergie ; histoire : lentilles, traumatisme.
+- Signes fonctionnels : douleur brutale importante, photophobie, larmoiement, blépharospasme, BAV variable.
+- Examen LAF : hyperhémie conjonctivale, cercle péri-kératique, ulcération cornéenne (forme, profondeur, bord, nombre, état stroma). État conjonctive, film lacrymal (Schirmer, BUT), CA, iris, sensibilité cornéenne, PIO (sauf infection).
+
+Évolution : superficielle bien traitée → restitution complète. Profonde (Bowman/stroma) → taie cornéenne. Complications : surinfection bactérienne/mycosique, perforation, hypopion.
+
+Diagnostics différentiels (rougeur oculaire) : conjonctivites (pas douleur, cornée claire, fluo –), uvéite antérieure aiguë (inflammation CA, fluo –), glaucome aigu (œdème cornée, HTO, fluo –).
+
+Diagnostic étiologique :
+- Infectieuses : herpétique (unilatérale, ATCD, ulcère dendritique/en carte, hypoesthésie), zostérienne (éruption V1, ulcère pseudo-dendritique), bactérienne (pus stroma, hypopion, perforation), mycosique (torpide, infiltrats satellites, après corticoides ou traumatisme végétal : Candida, aspergillus), ambienne (lentilles).
+- Non infectieuses : traumatiques, allergiques (KC printanière : plaque supérieure), toxiques (collyres), pathologies annexes (entropion, ectropion, lagophtalmie), syndrome sec (filaments).
+
+Traitement :
+- Buts : cicatrisation, éradiquer infection, douleur.
+- Antiviraux : Aciclovir pommade 3 % (5x/j 7j puis 3x/j jusqu’à J3 post-cicatrisation). Per os : Aciclovir 200 mg ×5/j 7-10j ou Valaciclovir 500 mg ×2/j 7j. Zona : Valaciclovir 3 g/j 10j.
+- Antiseptique : Desomédine 5x/j 7j.
+- Antibiotiques large spectre (renforcés si abcès), antifongiques (Amphotéricine B), anti-allergiques, larmes artificielles.
+- Physiques : ablation corps étranger, débridement épithélial.
+- Surveillance biomicroscope : état ulcère, test fluorescéine (négatif = cicatrisé), CA.
+
+Pronostic : atteinte épithéliale seule → pas d’opacité. Atteinte Bowman/stroma → taie cornéenne. Pathologie potentiellement grave menaçant la vue.

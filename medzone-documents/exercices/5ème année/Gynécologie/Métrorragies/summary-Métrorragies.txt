@@ -1,0 +1,50 @@
+RÉSUMÉ : MÉTRORRAGIES – DIAGNOSTIC, ÉTIOLOGIES ET PRISE EN CHARGE
+
+DÉFINITIONS
+- Métrorragie : hémorragie anormale d’origine utérine extériorisée par le col entre les règles.
+- Ménorragie : augmentation du volume des règles.
+- Ménométrorragies : association des deux.
+- Polyménorrhée : augmentation de la fréquence des règles (cycle < 25 jours).
+- Hyperménorrhée : règles anormalement abondantes et prolongées.
+
+DIAGNOSTIC POSITIF
+
+Interrogatoire :
+- Âge (puberté, activité génitale, pré-ménopause). Date des dernières règles. Contraception. Caractères des cycles (régularité, durée, signes accompagnateurs : douleurs, nausées, tension mammaire).
+- Antécédents gynéco-obstétricaux (ménarche, gestité-parité, infections génitales, pathologies gynécologiques). Antécédents médicaux (HTA, troubles coagulation, AVK). Antécédents chirurgicaux.
+- Caractéristiques de l’hémorragie : survenue par rapport au cycle, abondance, aspect (caillots), signes accompagnateurs (douleurs, état de choc, leucorrhée, signes de grossesse).
+
+Examen clinique :
+- État général : conscience, TA, FC, FR (état de choc), conjonctives, fatigue.
+- Examen gynécologique : spéculum (lésion visible, origine saignement), TV (volume utérin, col, culs-de-sac : masse, douleur, empâtement).
+- Score de Higham (PCBACS) : évaluation objective des pertes sanguines.
+
+Examens paracliniques :
+- Biologie : β-hCG (ou TDG), NFS, plaquettes, Hb, CRP, bilan coagulation (TP, TCA, fibrine), biopsie si lésion visible, prélèvement vaginal.
+- Imagerie : échographie pelvienne, TDM/IRM.
+- Autres : colposcopie, hystéroscopie.
+
+DIAGNOSTICS DIFFÉRENTIELS
+Hémorragies vulvo-vaginales (plaies, vaginites, tumeurs col/vagin, cervicites) ; saignements urinaires (urètre, vessie) ; digestifs (rectorragie).
+
+DIAGNOSTIC ÉTIOLOGIQUE
+
+1. Période pubertaire (petite fille) :
+Prise d’œstrogènes accidentelle, traumatisme, troubles fonctionnels (immaturité axe hypothalamo-hypophysaire), tumeur œstrogéno-sécrétante, puberté précoce, trouble coagulation (Willebrand).
+
+2. Période d’activité génitale :
+- β-hCG positif : GEU, menace FCP, fausse couche en cours, rétention trophoblastique, maladies gestationnelles trophoblastiques.
+- β-hCG négatif :
+  • Col utérin : cervicite, cancer du col, tumeur ulcérante/bourgeonnante, polype accouché (diagnostic : colposcopie, biopsie).
+  • Corps utérin : hyperplasie endomètre (>7 cm – hyperimprégnation œstrogénique), fibrome utérin, cancer endomètre (HTA, diabète, obésité – diagnostic par curetage biopsique), polype utérin (échographie, hystéroscopie).
+  • Pathologies annexielles : salpingites +++, kystes/cancer ovaire (échographie, coelioscopie).
+  • Métrorragies fonctionnelles : diagnostic d’élimination – dysfonctionnement hormonal (insuffisance progestérone).
+  • Iatrogènes : spotting sous progestatifs (injectables, Implanon, Mirena) ; abondantes sous DIU cuivre.
+
+3. Période ménopausique :
+- Lésions endomètre : hyperplasie, cancer (diagnostic OBLIGATOIRE par curetage biopsique + hystéroscopie).
+- Iatrogènes : THS œstrogénique, produits de beauté.
+- Hyperœstrogénémie : obésité, tumeur sécrétante ovarienne.
+
+CONCLUSION
+Les métrorragies sont un symptôme fréquent à tout âge. Leurs étiologies sont multiples : fonctionnelles ou organiques. Le danger est de passer à côté d’une pathologie néoplasique devant un diagnostic trop évident.

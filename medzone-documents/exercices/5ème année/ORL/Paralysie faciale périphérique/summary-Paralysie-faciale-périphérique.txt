@@ -1,0 +1,97 @@
+RÉSUMÉ MÉDICAL SPÉCIALISÉ – PARALYSIE FACIALE PÉRIPHÉRIQUE (PFP)
+
+DÉFINITION
+La paralysie faciale périphérique (PFP) est une atteinte paralytique du nerf facial touchant ses quatre fonctions (sensitive, sensorielle, sécrétoire et motrice) au niveau du motoneurone périphérique. Elle se manifeste par une paralysie globale et complète. L’intérêt d’un traitement précoce est majeur.
+
+DIAGNOSTIC POSITIF
+
+Paralysie faciale du sujet conscient (forme la plus fréquente) :
+- Asymétrie faciale
+- Au repos : abolition des rides frontales, effacement du sillon naso-génien, chute du sourcil, de la paupière et de la commissure labiale. Attraction du nez et de la bouche du côté sain.
+- À la mimique : asymétrie maximale.
+- Signe de Charles Bell : impossibilité de fermer les paupières, globe oculaire fuyant en haut et en dehors.
+- Fuite buccale, impossibilité de siffler ou souffler.
+- Signe de Souques (formes frustres) : les sourcils du côté atteint paraissent plus longs.
+
+Examen : otoscopie (recherche d’otite moyenne), palpation cervicale (tumeur parotidienne), examen ORL complet, examen neurologique (atteinte d’autres paires crâniennes).
+
+DIAGNOSTIC TOPOGRAPHIQUE
+
+Repères anatomiques : ganglion géniculé (larmes), muscle de l’étrier (réflexe stapédien), corde du tympan (goût).
+
+| Siège | Larmes | Réflexe stapédien | Goût |
+|-------|--------|------------------|------|
+| Supra-géniculé | atteinte | absent | troubles |
+| Trans-géniculé | atteinte | absent | troubles |
+| Supra-stapédien | normale | absent | troubles |
+| Infra-stapédien | normale | présent | troubles |
+| Infra-cordal | normale | présent | normal |
+
+Tests topographiques : test de Schirmer (larmes), impédancemétrie (réflexe stapédien), gustométrie, test de Blatt (salivation).
+
+Testing musculaire de Freyss (cotation 0-3 sur 10 muscles) : PFP sévère si score ≤ 5/30. Grading de House et Brackmann (grade I à VI).
+
+Examens complémentaires : électrophysiologie, TDM, IRM.
+
+FORMES CLINIQUES
+
+1. Paralysie faciale chez le comateux :
+- Gonflement expiratoire de la joue
+- Manœuvre de Pierre-Marie-Fox : pression derrière la mandibule → stimulation du nerf facial → grimace asymétrique
+
+2. Paralysie faciale chez le nouveau-né/enfant :
+Diagnostic lors des pleurs : asymétrie faciale (territoires supérieur et inférieur). Causes : traumatisme obstétrical, malformation.
+
+3. Paralysie faciale bilatérale :
+Syndrome de Guillain-Barré, maladie de Lyme, syndrome de Moebius.
+
+4. Paralysie faciale récidivante :
+Syndrome de Melkersson-Rosenthal : PFP récidivante ou à bascule + œdème de la face/lèvres + langue plicaturée.
+
+COMPLICATIONS
+- Syncinésies
+- Hémispasme post-paralytique
+- Complications oculaires (kératite d’exposition)
+- Syndrome des larmes de crocodile (larmoiement lors de la mastication)
+
+DIAGNOSTIC ÉTIOLOGIQUE
+- Traumatique
+- Tumorale
+- Infectieuse : parotidite
+- Iatrogène : post-chirurgie parotidienne totale ou sélective
+- PF à frigore : la plus fréquente, sans cause évidente (hypothèse : inflammation nerveuse, possible après exposition au froid)
+
+DIAGNOSTIC DIFFÉRENTIEL – PARALYSIE FACIALE CENTRALE
+- Territoire du VII supérieur non atteint (front épargné)
+- Absence de signe de Charles Bell
+- Dissociation entre mimique volontaire et réflexe
+- Signes neurologiques associés (atteinte d’autres paires crâniennes)
+
+TRAITEMENT
+
+Buts :
+1. Restaurer la fonction du VII
+2. Éviter les complications
+3. Éviter les séquelles
+
+Moyens :
+- Corticostéroïdes (CTC)
+- Antiviraux
+- Toxine botulique
+- Antibiotiques
+- Chirurgie
+- Kinésithérapie faciale
+
+Indications selon l’étiologie :
+- A frigore (la plus fréquente) : corticothérapie +/- antiviraux
+- Traumatique : corticothérapie, chirurgie (décompression faciale ou anastomose faciale)
+- Infectieuse : corticoïdes, antiviraux, chirurgie
+- Séquelles : chirurgie (réhabilitation faciale), toxine botulique (spasme facial)
+
+Résultats (selon sévérité initiale) :
+- Récupération ad integrum (grade I-II)
+- Récupération incomplète
+- Séquelles
+
+CONCLUSION
+La paralysie faciale périphérique peut être « a frigore » ou avoir une cause évidente. C’est soit une maladie, soit un symptôme. Le diagnostic est clinique.

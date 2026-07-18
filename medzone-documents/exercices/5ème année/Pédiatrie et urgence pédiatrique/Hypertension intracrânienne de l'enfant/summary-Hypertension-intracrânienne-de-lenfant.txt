@@ -1,0 +1,24 @@
+RÉSUMÉ – HYPERTENSION INTRACRÂNIENNE DE L’ENFANT
+
+L’hypertension intracrânienne (HTIC) résulte de l’augmentation de volume de l’un des trois secteurs de la boîte crânienne : parenchyme cérébral (80 %), LCR (10 %), secteur vasculaire (10 %). La pression intracrânienne normale varie selon l’âge : nouveau-né 1-4 mmHg, nourrisson 1-6 mmHg, 1-6 ans 3-8 mmHg, adulte 10-15 mmHg. L’HTIC est une urgence médicale et parfois neurochirurgicale, engageant le pronostic vital et fonctionnel (visuel).
+
+Sémiologie variable selon l’âge :
+- Chez le nouveau-né : troubles végétatifs (hyper- ou hypothermie), troubles vasomoteurs (tachycardie, bradycardie), apnées avec cyanose.
+- Chez le nourrisson : bombement de la fontanelle antérieure (calme, hors pleurs), disjonction des sutures, augmentation rapide du périmètre crânien, signe de Parinaud (yeux en coucher de soleil), troubles du comportement, hypotonie axiale, syndrome pyramidal.
+- Chez l’enfant plus âgé : céphalées posturales et matinales, vomissements en jet (ou nausées), diplopie par paralysie du VI, œdème papillaire (son absence n’élimine pas l’HTIC si précoce), signes de localisation (crises partielles, paralysies des paires crâniennes sauf VI, déficit moteur, signes pyramidaux, syndrome cérébelleux).
+
+Les signes de gravité sont la rapidité d’installation, l’engagement temporal ou amygdalien (raideur du rachis, bâillement, hoquets, troubles de conscience, troubles végétatifs, cris plaintifs aigus), et les signes visuels (baisse d’acuité, cécité).
+
+Examens : radiographie du crâne (empreintes digitiformes), échographie transfontanellaire (avant 6 mois), IRM/TDM cérébrale, doppler transcrânien, mesure de la PIC. L’imagerie peut montrer un engagement, un processus expansif, une hydrocéphalie, un épanchement sous-dural ou extradural, un abcès cérébral. Une imagerie normale oriente vers une HTIC bénigne (pression d’ouverture du LCR > 20-25 mmHg, risque de neuropathie optique).
+
+Étiologies principales :
+- Tumeurs de la fosse postérieure (60 % des tumeurs cérébrales) : astrocytome kystique, médulloblastome malin, gliomes du tronc cérébral.
+- Abcès cérébral (évolution lente, fièvre irrégulière, signes focaux, œdème papillaire).
+- Hématome sous-dural du nourrisson (macrocéphalie, PC élevé, disjonction sutures, troubles humeur, turgescence veines scalp, anémie, hémorragie FO ; causes : traumatisme, méningite, déshydratation sévère).
+- Hydrocéphalie (inflammatoire, malformative, tumorale).
+- Craniosténoses.
+- HTIC bénigne/idiopathique (sans anomalie d’imagerie).
+
+Traitement : objectifs – éviter d’augmenter la PIC, lutter contre l’œdème cérébral, traiter l’étiologie.
+Moyens pour éviter l’augmentation de la PIC : position neutre sans compression jugulaire, mobilisation douce, éviter l’encombrement bronchique, optimiser la ventilation, baisser la température si fièvre.
+Moyens contre l’œdème cérébral : perfusion SGH + restriction hydrique, mannitol (0,5-1 g/kg en 15-20 min), SSH 3 % (0,1-1 ml/kg), acétazolamide (20 mg/kg/j), anticonvulsivants, barbituriques (thiopental si HTIC menaçante), corticoïdes (HDC 50-150 mg/j) pour les HTIC tumorales.

@@ -1,0 +1,40 @@
+CLASSIFICATION DES NÉPHROPATHIES – RÉSUMÉ MÉDICAL
+
+La classification des néphropathies repose sur trois axes : anatomique, évolutif et sémiologique (nature des lésions).
+
+1. CLASSIFICATION ANATOMIQUE
+Macroscopique : lésions vasculaires (thrombose, sténose artère rénale) ou parenchymateuses (nécrose, kystes, abcès, tumeur).
+Microscopique (site précis sur néphron) :
+- Vasculaire : artériole afférente (vascularite auto-immune, thrombose, embolie cristalline).
+- Glomérulaire, tubulaire, interstitielle.
+
+2. CLASSIFICATION ÉVOLUTIVE
+- Aiguë : potentiellement réversible.
+- Chronique : évolutive avec dégradation, distinguant maladie active (« chaude ») vs séquelles.
+
+3. CLASSIFICATION SELON LA NATURE DES LÉSIONS
+- Inflammatoires (primitives ou secondaires).
+- Dégénératives : principales causes d’IRCT (diabète, goutte, néphro-angiosclérose, sténose athéromateuse).
+- Malformatives/congénitales/héréditaires.
+- Tumorales (bénignes/malignes).
+
+4. CLASSIFICATION DES GLOMÉRULOPATHIES
+Rappels histologiques : membrane basale glomérulaire (lamina rara interna, densa, externa) ; cellules épithéliales (pariétales, podocytes), endothéliales, mésangiales ; appareil juxta-glomérulaire (cellules granuleuses artériole afférente, macula densa, cellules du lacis).
+
+Techniques : microscopie optique (trichrome, PAS, argentique), immunofluorescence (Ig, C3, C1q, fibrine), microscopie électronique (ultrastructure membrane basale et podocytes).
+
+Types de lésions glomérulaires :
+- Prolifération cellulaire (cellules natives ou étrangères).
+- Dépôts : immunologiques (immunoglobulines, compléments, CIC) ou non immuns (amyloïdes, cristaux).
+- Sclérose : lésion cicatricielle irréversible (collagène).
+
+Topographie lésionnelle :
+- Site par rapport à la membrane basale : endomembraneuse, extramembraneuse.
+- Étendue : focale (<50% des glomérules) vs diffuse (>50%) ; segmentaire (partie du glomérule) vs globale (glomérule entier).
+
+EXEMPLES CLINIQUES (Quizz) :
+- Lésion glomérulaire minime (LGM) : aucune lésion en optique, syndrome néphrotique pur.
+- Glomérulonéphrite proliférative extracapillaire : inflammation, prolifération dans chambre urinaire.
+- Hyalinose segmentaire et focale : dépôts hyalins PAS+, partie des glomérules (<50%).
+- Glomérulonéphrite extra membraneuse (GEM) : dépôts inflammatoires versant externe membrane basale (podocytes).
+- Glomérulonéphrite membrano-proliférative : épaississement membrane basale + prolifération cellulaire intra-membraneuse.

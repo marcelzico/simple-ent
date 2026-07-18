@@ -1,0 +1,49 @@
+RÉSUMÉ : GALACTORRHÉE – DIAGNOSTIC, ÉTIOLOGIES ET PRISE EN CHARGE
+
+DÉFINITION ET IMPORTANCE
+La galactorrhée est un écoulement mamelonnaire lactescent provenant des pores galactophoriques, survenant en dehors de la grossesse, du post-partum immédiat et de l’allaitement (6 à 12 mois après l’arrêt). Elle représente 3 à 10 % des pathologies mammaires et constitue le troisième motif de consultation sénologique après la mastodynie et la masse mammaire.
+
+DÉMARCHE DIAGNOSTIQUE
+
+Interrogatoire :
+- Écoulement : date de début, spontané/provoqué, couleur, aspect, unipore/multipore, unilatéral/bilatéral, intermittent/continu.
+- Signes associés : signes sympathiques de grossesse, mastodynie ; signes d’hyperprolactinémie (troubles du cycle, baisse de libido, infertilité) ; signes de lésion compressive hypothalamo-hypophysaire.
+- Antécédents : prise médicamenteuse (IPP, métoclopramide, Haldol), insuffisance rénale chronique, insuffisance hépatique, hypothyroïdie, SOPK.
+
+Examen clinique :
+Recherche de l’écoulement en position assise et allongée. Masser le sein dans les 4 quadrants puis ramener l’écoulement jusqu’à l’aréole.
+
+Examens paracliniques :
+- Dosage de la prolactinémie (normale : 5-20 ng/l).
+- Tests dynamiques (TRH ou antidopaminergiques) : une réponse normale rend peu vraisemblable une lésion hypothalamo-hypophysaire et évite l’IRM.
+- Si prolactine élevée : IRM hypophysaire avec gadolinium + bilan biologique (TSH, ionogramme, urée, créatinine, bilan hépatique, FSH, LH, β-hCG).
+
+ÉTIOLOGIES
+
+1. Galactorrhée physiologique :
+Grossesse/allaitement, stress intense, activité physique intense, crise convulsive, stimulation mamelonnaire, traumatisme/brûlure thoracique, sommeil.
+
+2. Galactorrhée avec hyperprolactinémie :
+- Macroprolactinémie : galactorrhée isolée sans trouble du cycle, prolactinémie modérément élevée, absence de normalisation par agonistes dopaminergiques.
+- Adénome hypophysaire (prolactinome) : microprolactinome (tumeur < 1 cm, prolactine < 200 µg/l), macroprolactinome (prolactine > 200-1000 µg/l, taille plus grande). Si macroadénome, rechercher signes tumoraux.
+- Lésions hypothalamo-hypophysaires : craniopharyngiome, histiocytose X, tuberculose, sarcoïdose, lésion traumatique de la tige pituitaire (hyperprolactinémie de déconnexion), métastase.
+- Causes médicamenteuses : œstroprogestatifs, antidépresseurs/anxiolytiques (alprazolam, fluoxétine, sertraline), antipsychotiques (rispéridone, olanzapine), anti-HTA (aténolol, méthyldopa, vérapamil), antiémétiques (dompéridone, métoclopramide), cimétidine.
+- Insuffisance rénale chronique (30 % ont prolactine élevée – mécanisme : ↓ clearance prolactine).
+- Cirrhose (↓ clearance dopamine).
+- Dysthyroïdie (↑ TRH → stimulation prolactine).
+- Idiopathique.
+
+3. Galactorrhée sans hyperprolactinémie :
+Acromégalie, hyperprolactinémie intermittente ou non dosable, idiopathique.
+
+4. Galactorrhée du nouveau-né :
+5,9 % des nouveau-nés dans les 2 premiers mois. Liée aux œstrogènes maternels. Pas de traitement.
+
+TRAITEMENT
+- Gérer les facteurs favorisants (stimulation mammaire, stress).
+- Arrêt ou changement du médicament causal, ou agoniste dopaminergique à faible dose.
+- Microadénome : agoniste dopaminergique (cabergoline) – normalisation prolactine et diminution tumorale. Chirurgie si résistance ou intolérance.
+- Macroadénome : agoniste dopaminergique à doses croissantes suffisamment élevées. Chirurgie si résistance/intolérance. Radiothérapie hypophysaire si évolution tumorale ou prolactinome malin.
+
+CONCLUSION
+La galactorrhée est un écoulement lactescent fréquent, d’étiologies multiples (médicamenteuse, maladie grave, idiopathique). Elle peut révéler une maladie générale. Le traitement est avant tout étiologique.

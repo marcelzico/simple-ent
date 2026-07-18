@@ -1,0 +1,34 @@
+NÉPHROPATHIE TUBULO-INTERSTITIELLE CHRONIQUE (NTIC) – RÉSUMÉ MÉDICAL
+
+DÉFINITION : Néphropathie évoluant depuis plus de 3 mois, touchant le tube et l’interstitium rénaux.
+
+SIGNES CLINIQUES CARACTÉRISTIQUES :
+- Paradoxe : TA anormalement basse pour un sujet hyperurémique.
+- Déshydratation extracellulaire, hypotension orthostatique.
+- Polyurie et nycturie (diminution du pouvoir de concentration urinaire).
+
+ÉCHOGRAPHIE : Reins atrophiés, bosselés (pyélonéphrite chronique) ; cortex aminci (obstacle prolongé).
+
+BIOLOGIE :
+- Protéinurie faible ou absente, de type tubulaire (albuminurie <25%).
+- β2-microglobulinurie, leucocyturie stérile, cylindruries leucocytaires.
+- Natriurèse importante (→ déshydratation → TA basse).
+- Marqueurs enzymatiques : NAG, alanine-aminopeptidase, lysozyme, LDH.
+
+Atteintes tubulaires selon le siège :
+- Tube proximal (métaux lourds, myélome) : acidose par perte de bicarbonates, hypophosphatémie, hypouricémie, glycosurie, amino-acidurie.
+- Tube distal (obstacle, hypercalcémie) : acidose + hyperkaliémie, pH urinaire >6, perte de sel.
+- Médullaire/papille (AINS, drépanocytose) : diabète insipide néphrogénique (polyurie sans hyperglycémie).
+
+HISTOLOGIE : Fibrose interstitielle, infiltrat lymphocytaire CD8+ (« tubulite »), atrophie/dilatation tubulaire, glomérule ischémique, dépôts mésangiaux focaux d’IgM/IgA/C3.
+
+ÉTIOLOGIES (par ordre de fréquence) :
+1. Obstacle prolongé (>5 semaines) et/ou reflux vésico-urétéral (50%) : HBP, lithiases, tumeurs, fibrose rétropéritonéale, vessie neurologique.
+2. Anomalies métaboliques (34%) : hypercalcémie, hyperuricémie, oxalose, hypokaliémie chronique.
+3. Médicaments/toxiques (16%) : AINS, aspirine, paracétamol, allopurinol, lithium, ciclosporine, tacrolimus, cisplatine, oméprazole, herbes chinoises.
+4. Maladies systémiques : Sjögren, Wegener, lupus, sarcoïdose, amylose.
+5. Autres : pyélonéphrite/tuberculose, polykystose, drépanocytose, myélome, âge, HTA, obésité.
+
+PRONOSTIC : Évolution très lente vers l’IRC, fonction du traitement étiologique.
+
+TRAITEMENT : Correction de la cause ; supplémentation en sel si perte excessive.

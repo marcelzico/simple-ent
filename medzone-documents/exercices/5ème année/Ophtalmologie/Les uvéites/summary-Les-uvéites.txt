@@ -1,0 +1,56 @@
+RÉSUMÉ – UVÉITES
+
+Définition : inflammation de l’uvée (membrane vasculaire intermédiaire de l’œil).
+- Uvéite antérieure : iritis +/ou cyclite (iridocyclite)
+- Uvéite postérieure : choroïdite
+- Pan-uvéite (uvéite totale) : atteinte antérieure, intermédiaire et postérieure
+- Diffusion possible : chorio-rétinite (rétine), hyalite (vitré)
+
+SYMPTOMATOLOGIE – TDD : UVÉITE ANTÉRIEURE AIGUË (UAA)
+
+Signes fonctionnels : BAV modérée variable, douleurs modérées (pesanteur), photophobie, larmoiement. Œil rouge douloureux.
+
+Signes physiques :
+- Œil nu : œil rouge + cercle péri-kératique, cornée claire, pupille en myosis, pas de sécrétion purulente.
+- Lampe à fente : précipités rétro-descemétiques (PRD), effet Tyndall de la chambre antérieure (pathognomonique : protéines et cellules en suspension), hypopion (pus aseptique) si Tyndall massif.
+- Signes de complications : synéchies irido-cristalliniennes (pupille en trèfle).
+- PIO : normale, hypotonie (<10 mmHg) ou hypertonie sévère (30-40 mmHg) dans les formes compliquées.
+- FO : normal (rechercher atteinte postérieure associée → panuvéite).
+
+Signes de gravité (hospitalisation) : AV <5/10, Tyndall 3+, hypopion/fibrine, synéchies, HTO.
+
+Évolution UAA : bonne si traitement précoce. Complications : cataracte secondaire, glaucome secondaire, récidive, cortico-dépendance.
+
+Uvéite postérieure : œil blanc indolore.
+- Signes fonctionnels : BAV sévère (hyalite ou localisation maculaire), myodésopsies, scotome.
+- FO : hyalite (trouble vitréen, condensations en œufs de fourmis/banquise), choriorétinite (foyer blanc jaunâtre), vascularites, papillite, cicatrices anciennes.
+- Évolution : cicatrice atrophique rétinienne (grave si maculaire). Complications : œdème maculaire, décollement séreux, cicatrice maculaire.
+
+DIAGNOSTIC POSITIF :
+- UAA : clinique (ORD + BAV + myosis + Tyndall + PRD + FO normal).
+- Uvéite postérieure : œil blanc indolore + BAV + myodésopsies + signes FO.
+
+DIAGNOSTIC DIFFÉRENTIEL (UAA) : GAFA (piège : UAA hypertensive – myosis vs semi-mydriase), kératite aiguë, sclérite, conjonctivite.
+
+DIAGNOSTIC ÉTIOLOGIQUE – BILAN SYSTÉMATIQUE :
+- Interrogatoire « policier » : ATCD personnels/familiaux, mode de vie, signes cutanés, rhumatologiques, ORL, génito-urinaires, aphtes, vaccinations, statut sérologique.
+- Examen clinique général : recherche maladie infectieuse, rhumatologique, dermatologique, systémique.
+- Examens complémentaires orientés : plus poussés si uvéite grave, bilatérale, récidivante.
+
+Étiologies :
+- Locorégionales (20 %) : ORL (sinusite, amygdalite), dentaires (granulome, kyste apical).
+- Générales (30 %) :
+  - Infectieuses : herpès (uvéite hypertensive), zona, CMV (PVVIH), tuberculose (IDR 10U, radio), syphilis, brucellose, toxoplasmose +++, toxocarose, candidose, Lyme.
+  - Rhumatologiques : spondylarthrite ankylosante (HLA B27+), polyarthrite rhumatoïde, syndrome de Fiessinger-Leroy-Reiter, maladie de Still.
+  - Maladies générales : sarcoïdose (ECA, radio), maladie de Behçet (aphtose bipolaire, hypopion, HLA B5+), lymphome (sujet âgé).
+- Idiopathiques (50 %) : aucune cause retrouvée malgré bilan.
+
+TRAITEMENT :
+- Buts : traiter inflammation oculaire, traiter la cause, limiter complications.
+- UAA – traitement symptomatique urgent et double :
+  - Corticothérapie locale : collyre (Frakidex, Chibrocadron) 1 goutte/heure ×2j puis dégression sur 10j. Formes graves : sous-conjonctivale (Celestène) ou générale (bolus).
+  - Collyres mydriatiques : Mydriaticum, Néosynéphrine ou Atropine 1% ×3/j pour éviter synéchies.
+- Uvéite postérieure : corticothérapie locale, générale (après exclusion d’infection), voire immunosuppresseurs au long cours (Behçet, Still).
+- Traitement étiologique systématique.
+
+Conclusion : l’uvéite est une inflammation de l’uvée. L’UAA est fréquente : œil rouge douloureux, myosis, Tyndall. L’uvéite postérieure : œil blanc indolore. Le bilan étiologique est fondamental (50 % idiopathiques). Traitement : corticoïdes + mydriatiques + traitement étiologique.

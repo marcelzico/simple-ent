@@ -1,0 +1,11 @@
+La varicelle est la primo-infection par le VZV (Herpès virus type 3). C'est une maladie fréquente, touchant 90% des enfants avant 10 ans. Les formes sévères surviennent chez les nourrissons de moins d'un an, les adultes, les femmes enceintes et les immunodéprimés. La transmission est directe par les lésions cutanéomuqueuses ou par voie respiratoire (24-48h avant l'éruption). L'incubation dure 14 jours. La contagiosité s'étend de 1 à 2 jours avant l'apparition des vésicules jusqu'à J7. L'immunité acquise est durable.
+
+Diagnostic : l'anamnèse recherche l'absence d'antécédent ou de vaccination, et un contage 2 semaines avant l'éruption. La phase d'invasion (2 jours) associe fièvre modérée et parfois rash scarlatiniforme fugace pré-éruptif. La phase éruptive débute 2 semaines après le contage, avec un exanthème fait de vésicules devenant croûteuses (J4-J10), prurigineuses, à siège diffus (y compris cuir chevelu), évoluant par 2-3 poussées successives (éléments d'âge différent). On note une fièvre modérée, un énanthème buccal érosif, une micropolyadénopathie, et un état général souvent conservé.
+
+Complications : surinfections bactériennes (Staphylococcus aureus, Streptococcus pyogenes) ; neurologiques (crises fébriles, cérébellite) ; syndrome de Reye (si administration d'aspirine) ; atteintes respiratoires, hématologiques, hépatiques.
+
+Examens paracliniques : diagnostic clinique +++ ; chez l'immunodéprimé, confirmation par PCR VZV ou IgM spécifiques sériques.
+
+Traitement : ambulatoire et symptomatique pour les formes habituelles : soins cutanés (antiseptique non alcool, non coloré, à base de chlorhexidine 2x/j, ongles coupés), antihistaminique, paracétamol (contre-indication formelle des AINS), antibiothérapie en cas de surinfection. Le patient peut se laver rapidement. Pas d'aliments interdits (cuits et propres suffisent).
+
+Prévention : fréquentation de la collectivité non recommandée, mais pas d'éviction scolaire obligatoire. Éviter le contact avec les sujets à risque. En cas d'hospitalisation, isolement strict. La vaccination n'est pas recommandée systématiquement.

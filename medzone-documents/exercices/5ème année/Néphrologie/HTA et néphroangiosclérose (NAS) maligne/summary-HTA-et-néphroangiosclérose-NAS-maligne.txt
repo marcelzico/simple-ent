@@ -1,0 +1,64 @@
+HTA MALIGNE ET NÉPHROANGIOSCLÉROSE (NAS) MALIGNE – RÉSUMÉ MÉDICAL
+
+DÉFINITIONS :
+- HTA maligne : élévation de la TA avec PAD > 120 mmHg + atteinte viscérale.
+- Urgence hypertensive vraie, pronostic spontané sombre (mortalité élevée).
+- À différencier d'une HTA sévère sans atteinte viscérale.
+
+SIGNES CLINIQUES :
+
+Généraux :
+- AEG avec amaigrissement marqué.
+- Polyurie-polydipsie secondaire à la natriurèse sévère + HTA → déshydratation globale.
+- Signes fonctionnels : troubles visuels, nausées, sensations vertigineuses.
+
+Atteinte oculaire :
+- Baisse brutale de l'acuité visuelle.
+- Fond d'œil : rétinopathie hypertensive sévère (stade 3 ou 4) : hémorragies en flammèche, nodules cotonneux, œdème papillaire.
+
+Atteinte cérébrale :
+- AVC ischémique ou hémorragique avec signes de focalisation.
+- Encéphalopathie hypertensive : céphalées, nausées, vomissements, troubles de la vigilance (jusqu'au coma), crises convulsives généralisées.
+- Imagerie : IRM ou scanner cérébral.
+
+Atteinte cardiovasculaire :
+- Œdème aigu du poumon (OAP) + signes d'insuffisance cardiaque globale.
+- Hypertrophie ventriculaire gauche (HVG) quasi-constante.
+- Syndrome coronarien aigu (SCA) : douleur thoracique constrictive, signes électriques, élévation des troponines.
+- Dissection aortique : douleur en coup de poignard, asymétrie du pouls et de la TA, souffle d'insuffisance aortique si atteinte de l'aorte ascendante.
+
+Atteinte rénale (NAS maligne) :
+- Insuffisance rénale rapidement progressive.
+- Protéinurie autour de 1g/24h (parfois néphrotique par élévation de la pression intra-glomérulaire).
+- Hypokaliémie par hyperaldostéronisme secondaire.
+- Anémie hémolytique mécanique (témoignant d'une microangiopathie thrombotique).
+
+Anatomie pathologique (PBR après stabilisation de la TA) :
+- Lésions des petits vaisseaux.
+- Endartérite proliférante : prolifération des fibres musculaires, aspect en « bulbe d'oignon ».
+- Thrombi dans les artérioles afférentes.
+- Nécrose fibrinoïde à l'immunofluorescence.
+
+ÉTIOLOGIES :
+1. HTA essentielle irrégulièrement traitée/non traitée/retard de traitement (1ère cause).
+2. Sténose de l'artère rénale.
+3. Néphropathies : glomérulaires (maladie de Berger...), maladies auto-immunes.
+4. Grossesse et pré-éclampsie.
+5. Toxiques : IMAO, contraceptifs oraux, cocaïne, amphétamines.
+6. Endocrinopathies : phéochromocytome, maladie de Cushing, syndrome de Conn.
+
+TRAITEMENT :
+- Hospitalisation en USI.
+- Contrôle de la volémie : SSI 0,9% si déshydratation (secondaire au syndrome polyuro-polydipsique).
+- Diurétiques et dérivés nitrés si OAP.
+- Anti-HTA IV : urapidil (α-bloquant), nicardipine (inhibiteur calcique), labétalol (α et β-bloquant).
+
+Objectifs tensionnels :
+- Baisse de la PAS de 25% en 1 heure.
+- PAM à 120 mmHg en 2-6 heures.
+- Normalisation en 24-48 heures.
+- Objectif plus strict (PAS < 140 mmHg en 1 heure) si dissection aortique, phéochromocytome, pré-éclampsie.
+
+ÉVOLUTION :
+- Détérioration de la fonction rénale au cours des 4 premières semaines.
+- Puis amélioration progressive si TA contrôlée.

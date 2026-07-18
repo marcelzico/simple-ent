@@ -1,0 +1,51 @@
+"question","answer","explanation","difficulty"
+"La drépanocytose est une anémie hémolytique constitutionnelle.","True","Le document : 'Anémie hémolytique constitutionnelle'.","Easy"
+"La drépanocytose se transmet sur le mode autosomique dominant.","False","Le document : 'Transmise sur le mode autosomique récessif'.","Easy"
+"La prévalence de la drépanocytose à Madagascar est de 30%.","False","Le document : '10% à Madagascar'.","Easy"
+"Le syndrome pied-mains est révélateur de la drépanocytose entre 6 et 18 mois.","True","Le document le confirme.","Easy"
+"Avant 6 mois, l'enfant drépanocytaire est asymptomatique grâce à l'Hb F.","True","Le document : 'Pas encore de drépanocytose avant 6ème mois : Hb F non encore remplacée'.","Easy"
+"Le test d'Emmel montre la falciformation des globules rouges.","True","Le document : 'Test d'Emmel : falciformation'.","Easy"
+"L'électrophorèse de l'hémoglobine chez un patient SS montre la présence d'Hb A.","False","Le document : 'Absence d'Hb A'.","Easy"
+"L'acide folique est un traitement curatif de la drépanocytose.","False","C'est un traitement préventif (supplémentation).","Easy"
+"Le Parvovirus B19 peut provoquer une érythroblastopénie aiguë.","True","Le document le mentionne.","Easy}
+"La séquestration splénique est une complication suraiguë avec risque de choc.","True","Le document le décrit.","Easy}
+"L'AVC est une complication vaso-occlusive neurologique possible.","True","Le document le cite.","Easy}
+"Le syndrome thoracique aigu est une pneumopathie infectieuse classique.","False","C'est un accident vasculaire pulmonaire (infarctus pulmonaire).","Easy}
+"L'hydréa (hydroxyurée) permet d'espacer les crises.","True","Le document : 'Cytostatique (hydréa) permettrait d'espacer les crises'.","Easy}
+"L'allogreffe de moëlle est un traitement curatif.","True","Le document : 'allogreffes de la moëlle'.","Easy}
+"La pénicilline est utilisée en antibioprophylaxie chez le drépanocytaire.","True","Le document : 'antibioprophylaxie par pénicilline'.","Easy}
+"La vaccination contre Haemophilus influenzae n'est pas recommandée.","False","Le document : 'statut vaccinal à jour : Haemophilus influenzae'.","Easy}
+"La surcharge en fer post-transfusionnelle est traitée par Desferal.","True","Le document : 'Chélation du fer si transfusion multiple (Desferal)'.","Easy}
+"Le syndrome pied-mains est indolore.","False","Le document : 'douleur importante'.","Easy}
+"L'ictère est un signe d'hémolyse.","True","Le document : 'ictère'.","Easy}
+"Le priapisme peut entraîner une impuissance définitive.","True","Le document : 'priapisme par thrombose du corps caverneux et impuissance définitive'.","Medium}
+"La rate est souvent atrophique après plusieurs années d'évolution.","True","Connu mais non explicitement dit, le document mentionne 'grosse rate' initiale.","Medium}
+"La forme hétérozygote AS est généralement asymptomatique.","True","Le document : 'en règle asymptomatique'.","Medium}
+"La forme composite S bêta-thalassémie a une présentation plus bénigne que la SS.","False","Le document : 'risques et PEC identique à la forme SS'.","Medium}
+"L'ostéomyélite chez le drépanocytaire est souvent due à Salmonella.","True","Le document le précise.","Medium}
+"La méningite chez le drépanocytaire peut être due à Haemophilus influenzae.","True","Le document le cite.","Medium}
+"Le traitement d'une pneumonie chez le drépanocytaire repose sur les macrolides seuls.","False","Association amoxicilline-acide clavulanique et macrolides.","Medium}
+"L'hydratation lors d'une crise douloureuse est de 2L/m2 par voie IV.","True","Le document : '2L/m2 si IV'.","Medium}
+"La splénectomie est indiquée systématiquement chez tout drépanocytaire.","False","Uniquement si séquestration grave.","Medium}
+"Les antalgiques de première intention sont la morphine.","False","Paracétamol, ibuprofène, codéine.","Medium}
+"L'appendicite aiguë est un diagnostic différentiel de douleur abdominale.","True","Le document le cite.","Medium}
+"Le paludisme grave est un diagnostic différentiel du syndrome anémique fébrile.","True","Le document : 'Paludisme grave compliquée'.","Medium}
+"La fièvre chez un drépanocytaire doit toujours faire hospitaliser.","Vrai","Le document : 'Si fièvre : discuter une hospitalisation et antibiothérapie présomptive'.","Medium}
+"Le diagnostic anténatal de la drépanocytose est possible.","True","Le document : 'Diagnostic prénatal pour conseil génétique, diagnostic anténatal positive'.","Medium}
+"Les transfusions chez le drépanocytaire doivent être systématiquement phénotypées.","True","Le document : 'culot phénotypé et filtré'.","Medium}
+"Le risque d'allo-immunisation transfusionnelle est élevé.","True","Le document le mentionne.","Medium}
+"L'aspirine est contre-indiquée chez l'enfant drépanocytaire.","Non mentionné","Le document ne le dit pas explicitement.","Medium}
+"La crise vaso-occlusive est souvent déclenchée par une infection.","Non explicite","Le document ne le dit pas directement.","Medium}
+"L'hydréa est un traitement de fond qui augmente l'Hb F.","Non mentionné","Le mécanisme n'est pas détaillé.","Medium}
+"Le syndrome thoracique aigu peut être fatal.","Vrai","Le document : 'Pneumopathie dyspnéisante hypoxémiante'.","Difficult}
+"Le priapisme est une urgence médicale.","Vrai","Le document : 'priapisme par thrombose du corps caverneux et impuissance définitive'.","Difficult}
+"La transfusion de culot globulaire est indiquée en cas d'anémie aiguë sévère.","Vrai","Le document : 'Forme anémique : culot phénotypé et filtré'.","Difficult}
+"La séquestration splénique peut survenir après une infection virale.","Non mentionné","Possible mais non dit.","Difficult}
+"Le syndrome pied-mains ne survient que chez les enfants de moins de 2 ans.","Vrai","Entre M6 et M18.","Difficult}
+"Les complications vaso-occlusives sont plus fréquentes après 5 ans.","Vrai","Le document : 'Age > 5 ans : complications vaso-occlusives aiguës'.","Difficult}
+"L'hémoglobine F (HbF) protège contre la falciformation.","Vrai","C'est pourquoi avant 6 mois, asymptomatique.","Difficult}
+"La drépanocytose est plus sévère chez les patients avec alpha-thalassémie associée.","Non mentionné","Le document ne le dit pas.","Difficult}
+"La vaccination anti-pneumocoque est recommandée.","Vrai","Le document cite 'pneumocoque'.","Difficult}
+"Le traitement de la crise vaso-occlusive sévère peut nécessiter des opiacés.","Vrai","Codéine, mais pas de morphine citée.","Difficult}
+"La recherche de drépanocytose est obligatoire à la naissance dans certains pays.","Non mentionné","Pas dans le document.","Difficult}
+"Les parents d'un enfant drépanocytaire doivent être informés du risque génétique.","Vrai","Le document : 'IEC parents, famille'.","Difficult}

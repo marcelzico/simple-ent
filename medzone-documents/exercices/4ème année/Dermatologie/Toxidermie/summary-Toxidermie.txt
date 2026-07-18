@@ -1,0 +1,19 @@
+Les toxidermies sont des effets secondaires cutanés des médicaments administrés par voie interne, de type réactions idiosyncrasiques aiguës imprévisibles, indépendantes de la dose. Elles concernent 10% des patients hospitalisés (1/3 graves) et 1-3% des utilisateurs de médicaments courants. Leur notification à la pharmacovigilance est obligatoire.
+
+**Formes bénignes** :
+- Exanthème maculo-papuleux : délai 4-15j, début tronc/racine des membres, lésions polymorphes (macules, papules, purpura pétéchial), durée <1 semaine, prurit, fièvre modérée.
+- Urticaire immédiate : délai minutes-heures, signe une sensibilisation préalable (contre-indication formelle à la réintroduction, risque anaphylaxie).
+- Photosensibilités : photo-allergie (eczéma) ou phototoxicité (super coup de soleil, bulles, onycholyse).
+- Érythème pigmenté fixe (EPF) : pathognomonique d’une toxidermie (cause exclusivement médicamenteuse). Délai <48h, plaques érythémateuses douloureuses régressant en laissant une pigmentation brune. Localisations : organes génitaux, lèvres, face, dos.
+
+**Formes graves** (arrêt immédiat du médicament, hospitalisation en urgence) :
+- Angiœdème/œdème de Quincke : tuméfaction ferme des paupières/lèvres ; œdème laryngé (dysphonie, dysphagie) signe d’asphyxie.
+- Pustulose exanthématique aiguë généralisée (PEAG) : délai 1-4j (antibiotiques). Éruption brutale fébrile, érythème en nappe des grands plis, pustules <2mm, détachement épidermique superficiel, hyperleucocytose neutrophile. Régression spontanée rapide.
+- Syndrome de Stevens-Johnson (SSJ) et syndrome de Lyell (nécrolyse épidermique toxique) : même maladie, différenciée par la surface nécrosée (SSJ <10%, Lyell >30%, intermédiaire 10-30%). Délai ≥21j. Fièvre, atteintes muqueuses sévères (oculaires, pharyngées, génitales), bulles, signe de Nikolsky positif. Lyell : vastes lambeaux décollés, derme suintant. Risque de nécrose bronchique. Mortalité 20-25%. Séquelles fréquentes (pigmentation, cicatrices oculaires). Éviter la voie veineuse si possible.
+- DRESS syndrome (Drug Rash with Eosinophilia and Systemic Symptoms) : hypersensibilité retardée (3 semaines à 3 mois). Mortalité 10%. Seule toxidermie traitée par corticoïdes. Clinique : prodrome pharyngé, AEG, fièvre, œdème visage/cou, polyadénopathie, hépatosplénomégalie, éruption maculo-papuleuse ou érythrodermie, prurit intense. Biologie : hyperéosinophilie (>500), lymphocytes activés (risque cardiaque), atteinte viscérale (foie +++, rein, cœur, poumon, thyroïde). Médicaments impliqués : anticonvulsivants, sulfamides, dapsone, allopurinol, minocycline, sels d’or.
+
+**Diagnostic** : enquête d’imputabilité chronologique (délais : urticaire minutes-heures ; EPF 1-4j ; PEAG <4j ; SSJ/Lyell 7-21j ; DRESS 2-6 semaines) et sémiologique. Diagnostics différentiels : infection virale (EMP), psoriasis pustuleux (PEAG), érythème polymorphe majeur (SSJ), brûlures, etc.
+
+**Critères de gravité** : infiltration, œdème du visage, diffusion érythème, fièvre, polyadénopathie, douleurs intenses, érosions muqueuses, signe de Nikolsky, purpura, nécrose.
+
+**Traitement** : arrêt immédiat du médicament suspect, notification. Formes bénignes : antihistaminiques, dermocorticoïdes. Formes graves : hospitalisation, soins locaux, antalgiques. DRESS : corticoïdes IV. SSJ/Lyell : soins locaux intensifs, éviter voie veineuse. Éducation du patient : carnet de médicament imputé.

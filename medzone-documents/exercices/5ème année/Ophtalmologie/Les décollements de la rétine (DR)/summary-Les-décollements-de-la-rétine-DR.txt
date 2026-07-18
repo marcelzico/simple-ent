@@ -1,0 +1,30 @@
+RÉSUMÉ – DÉCOLLEMENTS DE LA RÉTINE (DR)
+
+Définition : clivage entre la rétine neurosensorielle (photorécepteurs) et l’épithélium pigmentaire. Pathologie grave menaçant la vision à court terme. Urgence chirurgicale.
+
+Anatomie/embryologie : la rétine sensorielle est séparée de l’épithélium pigmentaire par un espace virtuel (espace sous-rétinien, vestige embryonnaire). Cet espace est maintenu virtuel par la pompe de l’épithélium pigmentaire qui maintient les photorécepteurs à son contact. En cas de dépassement de cette capacité, l’espace se reforme → DR.
+
+Physiopathologie – 3 types :
+
+1. DR rhégmatogène (+++) : lié à des déchirures rétiniennes. Cause principale : libération de tractions vitréorétiniennes lors du décollement postérieur du vitré (DPV). Rarement : traumatismes, tractions néovasculaires. Les déchirures créent une communication entre cavité vitréenne et espace sous-rétinien → liquide vitréen passe sous la rétine. Le DPV survient généralement à partir de 50 ans, précipité par myopie forte, traumatismes, chirurgie oculaire.
+
+2. DR tractionnel : tractions exercées par des néovaisseaux pré-rétiniens proliférant en réponse à une ischémie rétinienne (rétinopathie diabétique, occlusion veineuse centrale de la rétine). Évolution prolongée → déchirures → DR mixte.
+
+3. DR exsudatif (rare) : exsudation sous-rétinienne dépassant les capacités de pompe de l’EP, au décours d’une inflammation postérieure (uvéite postérieure, sclérite).
+
+Évolution : extension progressive du décollement → amputation du champ visuel. L’AV s’effondre lorsque la macula est soulevée. Sans traitement, les photorécepteurs sont détruits → BAV irréversible.
+
+Signes fonctionnels :
+- DPV : œil blanc indolore, souvent asymptomatique, myiodésopsies (corps flottants), photopsies (éclairs).
+- DR : œil blanc indolore, sensation de pluie de suie (pluie noire), amputation progressive du CV, altération AV si macula soulevée.
+
+Signes physiques : examen FO bilatéral comparatif, pupille dilatée au verre à 3 miroirs (V3M). DR : rétine soulevée grisâtre et fripée (papier-calque froissé). On recherche : DPV isolé, DPV compliqué de déchirures (clapet rétinien en périphérie), DR constitué.
+
+Signes paracliniques : hémorragie intravitréenne possible (traction sur vaisseau) → FO impossible → échographie mode B à la recherche de DR.
+
+Principes thérapeutiques :
+- DPV isolé : pas de traitement. Information du patient. Consultation urgente si signes de DR (amputation CV).
+- Déchirure isolée sans DR : cerclage laser autour de la déchirure. Objectif : prévenir le DR. Soude rétine à sclère en 1 mois.
+- DR constitué : laser inefficace. Chirurgie en urgence (24-48h) associant : indentation sclérale externe (rapproche sclère de rétine), cryoapplication des bords des déchirures (soudure en 1 semaine), vitrectomie + tamponnement interne (gaz ou huile de silicone).
+
+Conclusion : DR = clivage rétine neurosensorielle/EP. 3 types. Clinique : œil blanc indolore. Diagnostic au FO pupille dilatée au V3M. Traitement chirurgical en urgence.

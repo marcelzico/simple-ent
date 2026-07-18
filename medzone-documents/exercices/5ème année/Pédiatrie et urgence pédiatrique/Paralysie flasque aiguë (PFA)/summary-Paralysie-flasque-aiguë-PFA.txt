@@ -1,0 +1,16 @@
+La paralysie flasque aiguë (PFA) est une perte brutale de la motricité d'un membre ou d'une partie du corps, non traumatique, récente. Elle fait l'objet d'une surveillance mondiale dans le cadre de l'éradication de la poliomyélite. La prise en charge comporte trois étapes : reconnaître le déficit, établir le diagnostic topographique (central ou périphérique), et déclaration obligatoire.
+
+Le diagnostic positif repose sur : flaccidité, hypotonie (force 0/5), réflexes ostéotendineux faibles ou abolis, réflexe cutané plantaire en flexion, sensibilité conservée.
+
+La démarche étiologique associe interrogatoire (antécédents familiaux et personnels, statut vaccinal poliomyélite, voyages, immunodépression, modalités de survenue : post-infectieuse, brutale « coup de tonnerre », ou claudicante), examen clinique (fièvre, céphalées, convulsions, troubles vigilance, syndrome méningé, signes d'HTIC, signes associés respiratoires, digestifs, douleurs musculaires), et examens complémentaires (CPK, ponction lombaire, sérologies, PCR, EMG, TDM/IRM cérébrale et médullaire).
+
+Les étiologies sont classées en :
+- Atteinte de la corne antérieure : poliomyélite (hantise), amyotrophie spinale infantile.
+- Maladie du nerf périphérique : neuropathies héréditaires, Guillain Barré, botulisme, paralysie faciale a frigore.
+- Maladie de la transmission neuromusculaire : myasthénie.
+- Myopathies : dystrophies (Duchenne, Becker), myosite aiguë bénigne, polymyosite, dermatomyosite, dystrophie myotonique, myopathies métaboliques.
+- Autres : porphyries, Lyme, carences vitaminiques (B1, B6, B12, E), intoxications.
+- Atteinte centrale supra-médullaire : causes vasculaires (AVC hémorragique, ischémique, thrombose veineuse) et infectieuses/inflammatoires (méningite, empyème, abcès, encéphalite herpétique).
+- Atteinte médullaire aiguë : myélite transverse.
+
+La procédure obligatoire devant toute PFA chez l'enfant de moins de 15 ans comprend : déclaration obligatoire, prélèvements de selles (possible jusqu'à 6 semaines), et suivi à 60 jours. La poliomyélite aiguë se manifeste par syndrome grippal, déficit asymétrique (membre inférieur, muscles proximaux), abolition des ROT, amyotrophie rapide, signes ORL/digestifs. Le diagnostic virologique repose sur isolement du virus dans les selles/pharynx, PCR sang/LCS, ou sérologie rétrospective. L'analyse sémiologique minutieuse permet de différencier atteinte centrale (périphérique = polio).

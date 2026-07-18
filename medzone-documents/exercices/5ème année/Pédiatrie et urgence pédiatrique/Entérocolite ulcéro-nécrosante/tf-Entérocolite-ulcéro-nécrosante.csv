@@ -1,0 +1,21 @@
+"question","answer","explanation","difficulty"
+"L'ECUN est une maladie inflammatoire de la muqueuse intestinale pouvant entraîner une nécrose.","True","Le document : 'processus inflammatoire excessif ... provoquant une nécrose intestinale'.","Easy"
+"L'ECUN est la première urgence chirurgicale néonatale.","True","Le document : '1ère urgence chirurgicale néonatale'.","Easy"
+"L'ECUN touche principalement les nouveau-nés à terme.","False","Le document : '90% sont des prématurés'.","Easy"
+"La pneumatose intestinale est un signe radiologique de l'ECUN.","True","Le document : 'Pneumatose : bulles d’air dans la paroi intestinale'.","Easy"
+"L'hyperglycémie peut être observée dans l'ECUN.","True","Le document : 'Gaz, électrolytes et glycémie (acidose, hyperglycémie)'.","Easy"
+"L'ECUN peut être favorisée par l'alimentation entérale.","True","Le document : 'Une préoccupation classique est que l’alimentation entérale peut favoriser le développement des ECN'.","Easy"
+"La motilité intestinale rapide est un facteur de risque chez le prématuré.","False","Le document : 'Motilité intestinale et péristaltisme lente, immature'.","Easy"
+"L'ECUN peut se manifester par une altération de l'état général et un inconfort.","True","Le document : 'Altération de l’état général et inconfort' parmi signes systémiques.","Medium"
+"L'aéroportie correspond à des bulles d'air dans les espaces portes.","True","Le document : 'Aéroportie : bulles d’air dans les espaces portes'.","Medium"
+"La CRP est un examen de laboratoire non pertinent dans l'ECUN.","False","Le document : 'Protéines de l’inflammation (CRP)' dans les examens.","Medium}
+"La neutropénie n'est pas observée dans l'ECUN.","False","Le document : 'NFS (thrombopénie, neutropénie, anémie)'.","Medium}
+"Les vomissements dans l'ECUN sont d'abord clairs puis deviennent bilieux et sanglants.","True","Le document : 'Régurgitation de plus en plus volumineuse, rouge puis jaune puis verts, sanglants'.","Medium}
+"L'ECUN peut évoluer vers une défaillance multi-systémique et le décès.","True","Le document : 'Défaillance multi-systémique -> Décès'.","Medium}
+"Les prématurés ont une flore intestinale bien établie, ce qui les protège.","False","Le document : 'Flore intestinale non encore en place' comme facteur de risque.","Medium}
+"L'ECUN est toujours symptomatique dès le début.","False","Le document : 'Parfois asymptomatique'.","Difficult}
+"La péritonite est une complication rare de l'ECUN.","False","Le document cite la péritonite comme complication évolutive rapide.","Difficult}
+"La thrombopénie est un signe biologique de l'ECUN.","True","Le document le mentionne.","Difficult}
+"L'ascite dans l'ECUN est généralement de grande quantité et claire.","False","Le document : 'Ascite de petite quantité mais exsudative (inflammatoire)'.","Difficult}
+"La suppression de l'alimentation entérale par crainte d'ECUN peut entraîner une insuffisance nutritionnelle.","True","Le document : 'Insuffisance des apports nutritionnels'.","Difficult}
+"L'ECUN ne touche que le côlon.","False","Le document parle d'atteinte intestinale pouvant être étendue.","Difficult}

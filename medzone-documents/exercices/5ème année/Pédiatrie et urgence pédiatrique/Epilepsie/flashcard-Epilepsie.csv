@@ -1,0 +1,52 @@
+"front","back","cognitive_level"
+"Quelle est la définition d’une crise d’épilepsie selon le document ?","Manifestation clinique paroxystique liée à une activité excessive et anormale d’un groupe de neurones.","Recall"
+"Quelle est la différence entre une crise occasionnelle et une épilepsie ?","- Crise occasionnelle : survient suite à un phénomène intercurrent.
+- Épilepsie : affection chronique caractérisée par la répétition des crises épileptiques, survenant sans facteur particulier.","Understanding"
+"Quelle est la classification des épilepsies présentée dans le document ?","- Crise généralisée : touche les deux hémisphères (perte de connaissance initiale et/ou manifestations motrices bilatérales synchrones)
+- Crise focale : activation d’un groupe limité de neurones, parfois généralisation secondaire, pas toujours lésionnelle","Recall"
+"Quels sont les deux types d’épilepsies généralisées ?","- Primaires ou idiopathiques (facteur constitutionnel, bon pronostic) : Grand mal, Petit Mal Absences, Epilepsie Myoclonique juvénile bénigne
+- Secondaires (encéphalopathie sous-jacente ou dégradation) : Syndrome de West, Syndrome de Lennox-Gastaut","Recall"
+"Quelles sont les caractéristiques de l’épilepsie Petit Mal « Absences » ?","- Début : 3 à 10 ans (pic 5-7 ans), 10% des épilepsies de l’enfance
+- Clinique : absence (suspension de conscience quelques secondes), plusieurs dizaines par jour, décrochage scolaire
+- EEG : rythme de base normal, bouffées synchrones à 3 cycles/seconde, favorisées par l’hyperventilation
+- Parfois myoclonie palpébrale","Recall"
+"Quels sont les trois éléments de la triade du syndrome de West ?","1. Spasmes en flexion ou en extension
+2. Arrêt du développement psychomoteur (DPM), régression du DPM
+3. EEG : hypsarythmie","Recall"
+"À quel âge débute le syndrome de West et quelle est sa fréquence ?","Début entre 3 mois et 9 mois. 15% des épilepsies de la première année de vie.","Recall"
+"Quelle est l’étiologie du syndrome de West dans 2/3 des cas ?","Encéphalopathie sous-jacente (EAI – encéphalopathie anoxo-ischémique, syndromes neurocutanés, malformations cérébrales).","Recall"
+"Quelles sont les caractéristiques de l’épilepsie à paroxysme Rolandique ?","- Début : 3 à 13 ans (pic à 10 ans), 10-15% des épilepsies de l’enfance
+- Clinique : prédominance nocturne, pas d’altération de la conscience, prédominance facio-pharyngo-laryngée (bruit bizarre), paresthésies unilatérales de la langue et des lèvres
+- EEG : pointes-ondes rolandiques unifocales en bouffées","Recall"
+"Qu’est-ce que le syndrome de pointes-ondes continues du sommeil (POCS) ?","Encéphalopathie épileptogène rare. Diagnostic électro-clinique : crises d’épilepsie (variées, parfois inexistantes), état de mal électrique au sommeil lent (POCS), régression ou stagnation cognitive (point d’appel).","Recall"
+"Qu’est-ce que le syndrome de Landau-Kleffner ?","Encéphalopathie épileptique avec agnosie auditive acquise + aphasie épileptique acquise, l’enfant apparaît comme sourd ou « autiste ».","Recall"
+"Quelle est la conduite à tenir concrètement devant une crise d’épilepsie ?","- Coucher sur le côté droit et éviter qu’il ne se blesse
+- Évaluation de l’équilibre hydro-électrolytique (EHD), respiratoire, neurologique
+- 1er traitement : Valium
+- À la clinique (urgence) : O2, nouvelle injection de Valium en intra-rectal (IR) : 1 mg/kg au total (si persistance, environ 5 min), mise en place d’une voie + monitoring cardiaque
+- À éviter : ne pas mettre les doigts dans la bouche, ne pas contenir","Recall"
+"Quelle est la conduite à tenir devant un état de mal épileptique ?","Si crise >15 minutes (malgré 2 doses de Diazépam) :
+- Dose de charge de Phénobarbital : nouveau-né 20 mg/kg/j, nourrisson 15 mg/kg/j, enfant (dose non précisée). Injection IVDL 20 minutes.
+- Si persistance : CLONAZEPAM (dose de charge 0,1 mg/kg, dose d’entretien 0,01 mg/kg/h)
+- Mise en place d’une voie + monitoring cardiaque
+- Réanimation (REA)","Recall"
+"Quels sont les examens complémentaires à réaliser dans l’épilepsie ?","- EEG standard, de sieste, EEG de sommeil (24h) + vidéo (EEG vidéo)
+- Imagerie cérébrale : IRM surtout
+- Recherche d’une maladie neurocutanée (réf Dermato), systémique ou neurodégénérative
+- Génétique
+- Autres selon l’histoire, antécédents, clinique","Recall"
+"Quel est le principe fondamental du traitement de l’épilepsie concernant l’EEG ?","On traite une clinique et non un EEG : un EEG normal n’élimine pas une épilepsie.","Recall"
+"Quelles sont les modalités du traitement médicamenteux de l’épilepsie ?","- En fonction du type de crise et de l’âge
+- Introduction progressive du médicament (dépakine, phéno ; pas de dépakine chez une fille pubère)
+- Doses en fonction du poids
+- Tester le médicament jusqu’à la dose maximale
+- Dosage plasmatique","Recall"
+"Qu’est-ce que l’autostimulation du nourrisson ?","Surtout fille aux alentours de 12 mois, équivalent de masturbation, traité en excès.","Recall"
+"Comment évaluer l’efficacité d’un traitement antiépileptique ?","- Sur la clinique et pas l’EEG
+- Sur la clinique et pas le taux
+- Suivi tous les 6 mois, voire tous les ans","Recall"
+"Quand et comment arrêter un traitement antiépileptique ?","- Variable en fonction du diagnostic
+- Après 2 ans sans crise
+- Diminution très progressive","Recall"
+"Quels sont les conseils à donner à la maison pour un enfant épileptique ?","- Pas de bain seul
+- Sports : éviter les sports","Recall"

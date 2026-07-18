@@ -1,0 +1,13 @@
+Le néphroblastome (tumeur de Wilms) est une tumeur rénale maligne embryonnaire, de loin la plus fréquente chez l'enfant de 1 à 5 ans, avec un maximum vers 3 ans 1/2.
+
+Populations à risque : hémi-hypertrophie, syndrome de Wiedemann Beckwith, aniridie, association WAGR (Wilms, aniridie, malformation génito-urinaire, retard mental), syndrome de Drash (ambiguïté sexuelle, glomérulopathie).
+
+Anatomie pathologique : macroscopiquement, tumeur volumineuse, d'apparition explosive, bien limitée par une pseudo-capsule. Habituellement unique, parfois multiple (néphroblastomatose synchrone ou asynchrone). Microscopiquement : triple composante (blastémateuse, épithéliale, stroma). Pronostic : formes favorables (multi-kystiques, épithéliales, néphrome mésoblastique/tumeur de Bolande), intermédiaires (blastémateux, mésenchymateux), défavorables (anaplasique).
+
+Diagnostic : clinique – augmentation rapide du volume abdominal, tumeur ferme, lisse, indolore. Parfois hématie, anémie, rupture tumorale. Imagerie – échographie : masse solide, volumineuse, intra-rénale. TDM abdominale pour extension. Négativité des marqueurs VMA-HVA-dopamine permet un traitement sans confirmation histologique. Cas douteux : ponction biopsie.
+
+Bilan d'extension : loco-régional (ADP, organes de voisinage – rares, thrombose veine rénale et cave). Métastases pulmonaires (RX thorax), hépatiques (écho/scanner), osseuses, cérébrales. Formes particulières : HTA par sécrétion de rénine.
+
+Traitement : chimiothérapie (actinomycine, vincristine, épirubicine, ifosfamide, étoposide, carboplatine). Chirurgie : néphrectomie totale élargie (transpéritonéale, transversale) ou conservatrice (rein unique, bilatéral). Radiothérapie (tumeur radiocurable mais séquelles chez le petit enfant). Stratégie : formes métastatiques → chimiothérapie puis chirurgie ; formes non métastatiques → chirurgie puis chimiothérapie.
+
+Résultats : survie 93% (stade I) à 58% (stade IV).

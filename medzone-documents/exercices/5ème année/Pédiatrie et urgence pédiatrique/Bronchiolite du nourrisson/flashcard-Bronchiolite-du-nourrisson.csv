@@ -1,0 +1,81 @@
+"front","back","cognitive_level"
+"Quels sont les 5 critères de définition de la bronchiolite du nourrisson selon le document ?","1. Période épidémique
+2. 1 mois < âge < 12 mois
+3. Toux, dyspnée obstructive avec distension thoracique
+4. Râles sous-crépitants fins et bilatéraux
+5. Frein expiratoire et sibilants diffus","Recall"
+"Quelle est la période épidémique de la bronchiolite à Madagascar ?","Février-Mars-Avril (pic d'épidémie saisonnière).","Recall"
+"Citez 4 facteurs favorisants la bronchiolite.","- Anomalie respiratoire pré-existante (DBP : dysplasie broncho-pulmonaire)
+- Déséquilibre lymphocytaire
+- Tabagisme passif
+- Promiscuité, mode de garde (contagion : crèche...)","Recall"
+"Quels sont les signes de la phase d'invasion de la bronchiolite ?","Prodromes : rhinorrhée fébrile depuis 2 à 3 jours.","Recall"
+"Quels sont les signes du syndrome digestif dans la phase d'état de la bronchiolite ?","- Vomissements
+- Souvent toux émétisantes (qui font vomir)
+- Difficulté d'alimentation
+- Diarrhée","Recall"
+"Citez les signes du syndrome respiratoire dans la bronchiolite (phase d'état).","- Polypnée superficielle expiratoire +++ / bradypnée expiratoire
+- Signes de lutte : tirage intercostal, battement des ailes du nez, balancement thoraco-abdominal, entonnoir xyphoïdien, geignement expiratoire
+- Cyanose, pause respiratoire
+- Sous-crépitants et sibilants","Recall"
+"Quelle est la distinction entre phase sèche et phase humide dans la bronchiolite ?","- Phase sèche : freinage expiratoire et sibilants
+- Phase humide : expectorations + sous-crépitants","Understanding"
+"Citez les signes de détresse respiratoire menaçante ou sévère (bronchiolite grave).","- Signes de lutte très prononcés
+- Épuisement respiratoire (disparition de la polypnée → normalisation → bradypnée, sans signe de lutte, disparition des MV, accentuation cyanose, détérioration EG)
+- Hypoxie
+- Hypercapnie","Recall"
+"Quels sont les critères de gravité liés au terrain dans la bronchiolite ?","- Âge < 3 mois
+- Prématurité
+- Immunodépression
+- Dysplasie broncho-pulmonaire (DBP)
+- Mucoviscidose
+- Cardiopathie","Recall"
+"Quelles sont les trois catégories du score de Wang modifié (score clinique de gravité) ?","- <4 : Bronchiolite sans critère de gravité (reste à la maison)
+- 4 ≤ score < 8 : Bronchiolite de gravité modérée → hospitalisation de jour (service porte)
+- 8-12 : Bronchiolite sévère","Recall"
+"Quand doit-on réaliser des examens paracliniques dans la bronchiolite ?","Seulement si forme sévère et à la recherche de complications.","Recall"
+"Citez 4 diagnostics différentiels de la bronchiolite.","- Corps étranger intrabronchique (inhalé récemment)
+- Pneumopathie (++ virale, mycoplasme mais rare chez le nourrisson)
+- Coqueluche (toux sèche irritative)
+- Asthme débutant
+- Insuffisance cardiaque
+- Malformation pulmonaire
+- Acidose métabolique","Analysis"
+"Quel est le principal virus responsable de la bronchiolite épidémique saisonnière ?","Le VRS (Virus Respiratoire Syncitial).","Recall"
+"Citez 5 autres virus pouvant causer une bronchiolite.","Adénovirus, Rhinovirus, Virus influenzae et para-influenzae, Entérovirus, CMV, Virus de la rougeole, SARS-Cov2.","Recall"
+"Quelles sont les complications à court terme (5 jours) de la bronchiolite ?","- Myocardite
+- Surinfection bactérienne
+- Fausse route
+- Emphysème
+- Pneumothorax
+- Pneumomédiastin
+- Apnée, malaise","Recall"
+"Quelles sont les complications tardives de la bronchiolite ?","- Hyperréactivité bronchique
+- Asthme
+- DDB (dilatation des bronches) liée à l'adénovirus","Recall"
+"Quels sont les 5 buts du traitement de la bronchiolite ?","1. Dégager les voies aériennes
+2. Désencombrer
+3. Améliorer l'oxygénation
+4. Faire baisser la fièvre
+5. Traiter la surinfection (= traitement PAC)
+6. Eviter l'aggravation","Recall"
+"Quel est le moyen thérapeutique de base (non médicamenteux) dans la bronchiolite ?","La désobstruction rhino-pharyngée (DRP) systématique.","Recall"
+"Quelles sont les mesures hygiéno-diététiques recommandées ?","- Alimentation fractionnée : donner des petites quantités en fréquences plus élevées pour éviter les fausses routes
+- Allaitement maternel exclusif (AME) gardé comme tel
+- Biberon : adapter (ex: 60ml x6/j = 360ml/j → donner en 8 fois)
+- Gavage par sonde nasogastrique si nécessaire
+- Apport hydrique suffisant
+- Eviction du tabagisme passif, charbon, feux de paille","Application"
+"Quels médicaments sont cités dans le traitement de la bronchiolite et à quelles posologies ?","- Paracétamol : 15 mg/kg/6h (si fièvre)
+- Amoxicilline : 100 mg/kg/j ou amoxicilline-acide clavulanique (uniquement si surinfection)
+- Palivizumab : 15 mg/kg/mois (sur 5 mois maximum pendant la saison) : prévention chez terrains à risque","Recall"
+"Quelle est l'indication des corticoïdes dans la bronchiolite ?","Possible seulement si terrain atopique et 2ème épisode avant 12 mois (asthme du nourrisson éventuel). Pas d'indication prouvée de corticoïde systématique.","Understanding"
+"Quelle est l'indication des antibiotiques dans la bronchiolite ?","Seulement si surinfection (otite ou pneumopathie). Pas d'indication prouvée d'antibiotique systématique.","Recall"
+"Quels sont les terrains à risque pour la prévention par Palivizumab ?","- Anciens prématurés < 29 SA
+- Dysplasie broncho-pulmonaire
+- Cardiopathie
+(Administré quelques semaines avant la période épidémique saisonnière)","Recall"
+"Quelle est la conclusion du document concernant la bronchiolite du nourrisson ?","- Bronchiolite = nourrisson
+- 2 épisodes avec antécédent d'atopie = asthme du nourrisson
+- Traitement symptomatique basé sur la DRP (désobstruction rhino-pharyngée)
+- Pas d'indication prouvée de corticoïde ni d'antibiotique systématique","Recall"

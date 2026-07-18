@@ -1,0 +1,35 @@
+RÉSUMÉ – PRÉMATURITÉ
+
+La prématurité est définie par toute naissance vivante entre la 22ème et 37ème semaine d’aménorrhée (SA). Sa prévalence est de 5 % pour la prématurité, 1-1,5 % pour la grande prématurité. La classification selon le terme distingue : prématurité légère (34-36 SA), modérée (32-33 SA), grande prématurité (28-31 SA 6j), prématurité extrême (22-27 SA 6j, avec pour 22-24 SA des soins palliatifs sans réanimation). Selon la trophicité, on distingue prématurité eutrophique et hypotrophique (poids <10ème percentile sur courbe de Leroy et Lefort).
+
+L’âge gestationnel se détermine par la date des dernières règles, l’échographie des 12-14 SA, l’âge morphologique (score de FARR/Finnstrom), l’âge neurologique (score de BALLARD/Dubowitz) ou les examens électrophysiologiques (EEG, PEA). Les signes cliniques du prématuré sont : petite taille, mensurations harmonieuses, peau fine transparente gélatineuse, œdème des extrémités, lanugo abondant.
+
+Critères de gravité : âge <28 SA, mauvaise adaptation à la naissance, prématurité + hypotrophie, prématurité inexpliquée (= infection bactérienne précoce jusqu’à preuve du contraire), survenue de complications.
+
+Diagnostic différentiel : nouveau-né à terme hypotrophe (poids <10ème percentile sur courbe de Leroy et Lefort).
+
+Étiologies :
+- Facteurs favorisants : primiparité, multiparité, âge maternel <18 ou >35 ans, antécédent de prématurité, travail pénible, conditions socio-économiques défavorables, grossesse non désirée.
+- Causes maternelles : anomalies utérines (malformation, béance cervico-isthmique), rupture prématurée des membranes, infections (cervico-vaginales, urinaires, générales : grippe, listériose, streptocoque B).
+- Causes médicales : pathologie vasculaire placentaire (prééclampsie, RCIU sévère), accidents hémorragiques (décollement, hématome rétro-placentaire, placenta praevia), hypoxie intra-utérine sévère, décision médicale d’extraction.
+- Causes ovulaires : grossesses multiples, chorioamniotite, hydramnios.
+
+Complications :
+- Respiratoires : apnées du prématuré, maladie des membranes hyalines (défaut de surfactant), dysplasie broncho-pulmonaire (oxygénodépendance >28 jours).
+- Métaboliques et rénales : hypothermie, hypoglycémie (<0,3 g/l), hypocalcémie (<80 mg/l), déshydratation, tubulopathie du grand prématuré (perte de sodium), toxicité médicamenteuse, ictère (risque d’ictère nucléaire ++++), anémie.
+- Digestives : reflux gastro-œsophagien, iléus fonctionnel, entérocolites ulcéro-nécrosantes.
+- Cardiovasculaires : persistance du canal artériel (risque de décompensation cardiaque et HTAP), hyperréflectivité vagale, HTAP, hypotension.
+- Neurologiques : hémorragies intra-ventriculaires (HIV), leucomalacie périventriculaire (LPV) → retard psychomoteur et épilepsie.
+- Ophtalmologiques : rétinopathie du prématuré (immaturité rétinienne, surtout extrême prématuré et oxygénodépendance prolongée).
+- Infectieuses : très haute susceptibilité à la septicémie et aux infections localisées (poumons, urines, méninges), favorisée par les prothèses (sondes, cathéters).
+
+Pronostic : d’autant plus mauvais que l’âge gestationnel est bas, en cas d’hypotrophie associée, de détresse respiratoire sévère, d’infection sévère, ou de lésions cérébrales sévères.
+
+Prise en charge :
+- Buts : traiter et prévenir les complications, éviter les séquelles, prévenir la prématurité.
+- Moyens : réanimation néonatale, alimentation (lait maternel, lait lyophilisé, lait thérapeutique), antibiothérapie, vitaminothérapie (A, D, E, K), caféine (apnées).
+- En salle de travail : réanimation si besoin, lange stérile chauffé, sac plastique, table chauffante, incubateur portatif.
+- En néonatologie : incubateur, monitoring cardio-respiratoire/saturation/température, prise en charge des urgences. Méthode Kangourou (alternative à la couveuse, sans coût, naturelle, possible quel que soit le niveau de soin).
+- Prévention à 3 niveaux : 1) prévention de la survenue (planning familial, ≥8 consultations prénatales, décision médicale). 2) Prise en charge de la menace d’accouchement prématuré (tocolyse, corticothérapie, antibioprophylaxie). 3) Prévention du décès (réanimation, alimentation, méthode Kangourou, gestion des complications).
+
+Conclusion : la prématurité est un problème de santé publique, première cause de mortalité néonatale. Toute prématurité inexpliquée doit être considérée comme une infection néonatale jusqu’à preuve du contraire. Le pronostic dépend des complications, notamment l’hypotrophie et les lésions cérébrales. Les séquelles neurologiques sont fréquentes, nécessitant un suivi rigoureux de la naissance à l’âge adulte.

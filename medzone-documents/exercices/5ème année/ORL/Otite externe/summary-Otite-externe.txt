@@ -1,0 +1,76 @@
+RÉSUMÉ MÉDICAL SPÉCIALISÉ – OTITE EXTERNE
+
+DÉFINITION ET ÉPIDÉMIOLOGIE
+L'otite externe est une inflammation localisée ou diffuse de la peau du méat acoustique externe (MAE), d'origine bactérienne, mycosique ou virale, secondaire à une perturbation du rôle protecteur du cérumen. Il s'agit d'une pathologie fréquente, représentant 20 à 35 % des consultations d'urgence, survenant à tout âge. Le principal facteur de risque est la lésion cutanée du MAE (grattage, manipulations intempestives par coton-tige). Le diabète expose à une forme grave. Le diagnostic est clinique.
+
+DIAGNOSTIC POSITIF
+
+Otite externe diffuse (90 % des cas – type de description) :
+- Signes fonctionnels : otalgie (93 %) intense, paroxystique, insomniante, exacerbée par la mastication, la pression du tragus et la traction de l'auricule vers l'arrière, irradiant vers la tempe et la mandibule. Hypoacousie (surdité sur sténose), sensation de plénitude, prurit, otorrhée claire puis purulente, acouphène.
+- Examen : œdème péri-auriculaire, adénopathie cervicale.
+- Otoscopie : difficile voire impossible (douleur + sténose du MAE). Tympan normal ou myringite.
+
+FORMES CLINIQUES
+
+1. Furoncle du MAE (otite externe localisée) :
+Folliculite aiguë à Staphylococcus aureus. Otalgie identique à la forme diffuse, calmée par l'ouverture du furoncle. Otoscopie : tuméfaction érythémateuse limitée centrée par un point blanc (début), puis masse mollasse obstruant le MAE, après rupture pus crémeux puis cratère rouge. Adénopathies prétragiennes, mastoïdiennes, sous-digastriques.
+
+2. Otite externe maligne (nécrosante) :
+Infection grave du MAE à Pseudomonas aeruginosa. 90 % chez le sujet âgé diabétique mal équilibré, 10 % chez l'immunodéprimé. Évolution par dissémination érodant les cartilages : effraction cutanée → cellulite du MAE → chondrite → ostéite du tympanal → ostéite de la base du crâne.
+Signes : otalgie, céphalée temporo-occipitale, otorrhée fétide et verdâtre, hypoacousie (sténose +++), fièvre. Paralysie des paires crâniennes (notamment faciale périphérique) = mauvais pronostic.
+Otoscopie : sténose du MAE, zone nécrotique ou lésion polypoïde.
+Imagerie : scanner du rocher en coupe inframillimétrique, IRM, scintigraphie.
+
+3. Otite externe mycosique (otomycose) :
+Tableau similaire à l'OE diffuse mais moins intense. Prurit très évocateur +++.
+Otoscopie : MAE inflammatoire, aspect humide de « papier buvard », encombrement de filaments blanchâtres cotonneux, parfois plages noirâtres charbonneuses.
+
+4. Otite externe chronique :
+Prurit auriculaire, hypoacousie, otorrhée.
+Otoscopie : comblement du MAE par débris boueux noirâtres ou blanchâtres, substance granulaire ou filamenteuse.
+
+5. Eczéma du MAE :
+Prurit, douleur peu intense, otorrhée citrine. Otoscopie : érythème, vésicules, croûtes.
+
+6. Complications :
+Chondrite, périchondrite, abcès péri-auriculaire, cellulite faciale, ostéite, septicémie.
+
+DIAGNOSTIC ÉTIOLOGIQUE
+
+Facteurs favorisants :
+- Lésion cutanée préexistante du MAE
+- Corps étranger
+- Bain en piscine
+- Manipulations intempestives (coton-tiges, plumes d'oiseau)
+
+Germes en cause :
+- Bactéries : Staphylococcus aureus, Staphylococcus epidermidis, entérobactéries, Pseudomonas aeruginosa (bacille pyocyanique)
+- Champignons : Aspergillus, Candida
+
+DIAGNOSTIC DIFFÉRENTIEL
+Devant une otalgie avec sténose du MAE, éliminer : otite moyenne aiguë, otite moyenne chronique, tumeur de l'oreille externe ou moyenne, sténose du MAE, otohématome, otalgie réflexe (douleur projetée, ex : rage dentaire).
+
+TRAITEMENT
+
+Buts : soulager le patient, lutter contre l'infection, prévenir les récidives et complications.
+
+Moyens :
+- Préventif : éviter manipulations de l'oreille et baignades (protéger l'oreille)
+- Curatif :
+  - Antalgiques : paracétamol, codéine, tramadol, nefopam, morphine
+  - Soins locaux : détersion du MAE, pansement expansible (calibrage)
+  - Antibiotiques généraux : antistaphylococciques (Cloxacilline, Oxacilline), fluoroquinolones (Ciprofloxacine, Ofloxacine)
+  - Traitements locaux : corticoïdes (Polydexa, Antibiosynalar, Panotile), antifongiques locaux (Auricularum, Mycoster spray)
+  - Chirurgie : incision/drainage, évidement pétromastoïdien ou pétrectomie
+
+Indications selon forme :
+- OE diffuse : soins locaux, corticoïdes + antibiotiques locaux, antalgiques +/- antibiotiques généraux, pansement expansible
+- Otomycose : soins locaux, antalgiques, antifongique local 15-30 jours
+- OE maligne : hospitalisation, antibiotiques IV (8 semaines), antalgiques, calibrage, antibiotiques locaux, traiter le facteur de risque, chirurgie si besoin
+- Furoncle du MAE : antistaphylococcique général, incisio-drainage si collecté, préventif
+
+RÉSULTATS ET PRONOSTIC
+Bien traitée : guérison en 7 à 10 jours sans séquelles (sédation de la douleur, amélioration de l'audition, normalisation du calibre du MAE, rétablissement de la peau). Non ou mal traitée : complications.
+
+CONCLUSION
+L'otite externe est une maladie auto-infligée, donc évitable par la prévention. Le diagnostic est essentiellement clinique (otalgie). Il faut rechercher des maladies sous-jacentes (diabète, immunodépression) surtout si l'otite externe persiste plus de 10 jours malgré une prise en charge correcte, et dépister les formes malignes chez les immunodéprimés.

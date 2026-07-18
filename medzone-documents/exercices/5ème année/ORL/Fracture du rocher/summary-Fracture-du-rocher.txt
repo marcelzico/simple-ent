@@ -1,0 +1,55 @@
+RÉSUMÉ MÉDICAL SPÉCIALISÉ – FRACTURE DU ROCHER
+
+DÉFINITION ET ENJEUX
+La fracture du rocher est une solution de continuité de la pyramide pétreuse (partie de l’os temporal) survenant lors d’un choc violent. Elle expose à un triple risque : vital, neurologique et infectieux (contact direct avec le cerveau). La fréquence augmente avec le développement de l’activité humaine.
+
+DIAGNOSTIC POSITIF
+
+1. Fracture longitudinale isolée (70-80 %, TDD)
+Mécanisme : choc latéral, point d’impact temporo-pariétal. Trait parallèle à l’axe du rocher, extra-labyrinthique, entraînant toujours une hémorragie rétro-tympanique.
+Signes cliniques : acouphène, hypoacousie de transmission, otoliquorrhée/rhinoliquorrhée, otorragie, épistaxis, vertige positionnel avec nystagmus (fistule périlymphatique, commotion labyrinthique ou hydrops). Signes physiques : ecchymose/déchirure du méat acoustique externe, hémotympan ou perforation tympanique (50-90% sans perforation), lésions ossiculaires, signe de Battle (hématome rétro-auriculaire mastoïdien), trouble de l’articulé dentaire, paralysie oculo-motrice (VI), trouble sensibilité faciale (V), paralysie faciale (20%).
+Paraclinique : acumétrie, examen des paires crâniennes, scanner du rocher.
+
+2. Fracture transversale isolée (10-30 %)
+Mécanisme : choc frontal ou occipital. Trait perpendiculaire à l’axe du rocher, translabyrinthique, lésant cochlée, vestibule et nerf facial.
+Signes cliniques : vertige aigu, cophose (perte auditive totale), acouphène et paralysie faciale.
+
+3. Fracture mixte ou bilatérale
+Rare, secondaire à un violent choc temporal latéral. Peut être associée à une lésion de la carotide interne (canal carotidien dans le rocher).
+
+4. Fracture de la pointe du rocher
+Atteinte caractéristique du VI (paralysie oculo-motrice). Si lésion étendue : atteinte du V (trouble sensibilité faciale).
+
+5. Fracture ouverte du rocher
+Rare, par balle. Risque infectieux majeur : méningite, abcès cérébral, encéphalite.
+
+6. Fracture du rocher avec lésion cérébrale
+Urgence neurochirurgicale. Clinique : coma. Bilan : lésions nerveuses, méningées (hématome extra/sous-dural, brèche), encéphaliques. Signes : otorragie, otoliquorrhée, paralysie faciale.
+
+DIAGNOSTIC ÉTIOLOGIQUE
+Secondaire à un traumatisme : choc antéro-postérieur (→ fracture transversale), choc latéral (→ longitudinal), choc occipito-mastoïdien.
+
+DIAGNOSTIC DIFFÉRENTIEL
+Traumatisme crânien simple, vertige par commotion labyrinthique, otorragie par lésion tympanale (os tympanal – sans hématome rétro-tympanique).
+
+TRAITEMENT
+
+Buts : éliminer les urgences neurochirurgicales (coma, plaies cérébrales), traiter les complications.
+
+Moyens médicaux : corticothérapie, vasodilatateurs, antibiotiques, anti-vertigineux, diurétiques.
+Moyens chirurgicaux : exploration/décompression du nerf facial, myringoplastie, ossiculoplastie, implant cochléaire.
+
+Indications :
+- Paralysie faciale immédiate → exploration et décompression du nerf facial. Section totale → suture ou greffe.
+- Surdité de transmission : perforation tympanique → attendre 6 mois de cicatrisation spontanée, myringoplastie au-delà. Lésion des osselets → exploration et ossiculoplastie.
+- Surdité de perception (lésion translabyrinthique) → vasodilatateurs + corticoïdes.
+- Fistule périlymphatique → colmatage chirurgical.
+- Cophose bilatérale → implant cochléaire.
+- Otoliquorrhée → fermeture spontanée ou chirurgie immédiate selon le débit.
+- Vertige : VPPB → kinésithérapie ; commotion labyrinthique → bétahistine + corticoïdes + diurétiques.
+
+ÉVOLUTION
+Favorable avec amélioration clinique. Possibilité de séquelles fonctionnelles (nerf facial, cochlée).
+
+CONCLUSION
+La fracture du rocher associe un risque fonctionnel et un risque vital. L’urgence est d’éliminer les complications neurochirurgicales.

@@ -1,0 +1,41 @@
+RÉSUMÉ – OCCLUSION DE L’ARTÈRE CENTRALE DE LA RÉTINE (OACR)
+
+Définition : arrêt brutal de la circulation rétinienne interne. Urgence ophtalmologique et médicale (équivalent d’AVC). Traduit une pathologie grave sous-jacente, menace la vue et la vie (risque d’AVC).
+
+Rappels : vascularisation rétinienne – deux systèmes : choroïdien (rétine externe : EP, photorécepteurs) et rétinien propre (rétine interne : bipolaires, fibres optiques) via l’ACR (division dichotomique, vascularisation terminale). Conséquence : lésions ischémiques définitives en 90 minutes. BAV définitive malgré traitement.
+
+Diagnostic positif – TDD : OACR tronculaire
+- Signes fonctionnels : BAV brutale indolore, parfois précédée d’amaurose transitoire.
+- Signes physiques : BAV massive → PL, œil blanc indolore, pupille en mydriase aréactive.
+- FO : premiers instants normal ou rétrécissement artériel diffus. Heures suivantes : œdème blanc rétinien ischémique + tâche rouge cerise (macula normale). Emboles visibles dans 20 %.
+- Angiographie fluorescéinique : retard de perfusion artérielle, allongement temps artérioveineux (ne pas retarder traitement).
+- Évolution : toujours défavorable spontanément. Régression œdème 4-6 semaines → atrophie optique. Complication : glaucome néovasculaire (15-20 %).
+
+Formes cliniques :
+- OACR avec artère ciliorétinienne à destinée maculaire (AV centrale conservée, îlot rétine rosée).
+- Occlusion de branche d’ACR (BAV massive si macula touchée, amputation CV, œdème localisé).
+- Occlusion artère ophtalmique (BAV massive + douleur, rétine uniformément blanche, pas de tache rouge cerise).
+
+Diagnostics différentiels : OVCR, décollement total rétine, hémorragie vitré, névrite optique aiguë, ischémie tête nerf optique, maculopathie aiguë.
+
+Diagnostic étiologique :
+- Interrogatoire : ATCD HTA, diabète, tabac, hypercholestérolémie, amaurose fugace antérieure.
+- Examen : recherche emboles rétiniens (cholestérol → carotidien, calcaire → cardiaque), auscultation cardiaque/carotidienne.
+- Biologie en urgence (si >50 ans) : VS, CRP +++ (Horton). Puis NFS, glycémie, bilan lipidique, TP, TCA, facteurs coagulation, protéine C/S, antithrombine III.
+- Bilan cardiologique : ECG, écho-doppler cardiaque.
+
+Étiologies :
+- Embolies : sujet âgé : athérome carotidien +++ (risque AVC), ACFA. Sujet jeune : valvulopathies (rétrécissement aortique, RM). Rares : myxome oreillette gauche, embol graisseux, talc (toxicomanie IV), embols septiques (endocardite).
+- Thromboses : maladie de Horton +++ (>50 ans : céphalées, algie ceintures, pas de pouls temporal, VS élevée → biopsie artère temporale).
+- Maladies de système : lupus, Wegener, Takayasu, Kawasaki, Churg-Strauss.
+- Troubles coagulation (jeunes) : déficits en protéine C, S, antithrombine III, résistance protéine C activée, mutation facteur V, contraception orale, drépanocytose, homocystéinurie.
+
+Traitement (urgence hospitalière) :
+- Buts : éviter complications et bilatéralisation.
+- Traitement étiologique : correction FDRCV, corticothérapie forte dose (Horton), anticoagulants, régularisation ACFA, chirurgie valvulaire, endartériectomie carotidienne.
+- Traitement symptomatique : massage oculaire, ponction chambre antérieure, hypotonisant (acétazolamide), antiagrégant (aspirine systématique), vasodilatateur, anticoagulant, fibrinolyse in situ (cathétérisme).
+- Indications : antiagrégant dans tous les cas. Sujet jeune vu <24h → traitement maximal pour reperméabilisation. Horton → corticothérapie urgente. Sténose carotidienne → chirurgie.
+
+Surveillance : AV, régression œdème, recherche néovascularisation irienne/glaucome néovasculaire (15-20 %, délai 1-15 semaines), tolérance traitement.
+
+Conclusion : OACR = accident circulatoire grave (AVC). Diagnostic : BAV brutale, œil blanc indolore, AV effondrée, FO : œdème rétinien + macula rouge cerise. Étiologies : embolie, thrombose (Horton), trouble coagulation. Traitement étiologique + symptomatique en urgence.

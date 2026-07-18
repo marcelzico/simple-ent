@@ -1,0 +1,35 @@
+RÉSUMÉ : GROSSESSE GEMELLAIRE ET MULTIPLE – PHYSIOPATHOLOGIE, DIAGNOSTIC ET COMPLICATIONS
+
+INTRODUCTION
+La grossesse gémellaire est le développement simultané de deux embryons (le plus souvent) ou plus dans la cavité utérine. Elle peut être biovulaire (dizygote) ou uniovulaire (monozygote). Sa fréquence augmente en raison de l’âge maternel élevé et des techniques de procréation médicale assistée. Cette grossesse est considérée à risque élevé (morbidité et mortalité fœtales élevées) du fait de la surdistension utérine et de la compression aortique (risque d’HTA).
+
+GROSSESSE DIZYGOTE (BIOVULAIRE)
+Deux ovules d’un même cycle sont fécondés chacun par un spermatozoïde distinct (même coït ou coïts successifs). L’élévation de FSH (endogène ou exogène) permet la maturation simultanée de plusieurs follicules. Les jumeaux peuvent être de sexes différents. Le type placentaire est toujours bichoriale biamniotique : chaque œuf a son propre placenta et son sac membraneux complet. Pas d’anastomose vasculaire entre les deux circulations.
+
+GROSSESSE MONOZYGOTE (UNIOVULAIRE)
+Fécondation d’un ovocyte donnant un embryon qui se dédouble secondairement. Le type placentaire dépend du stade de dédoublement :
+- Avant le 3ème jour : bichoriale biamniotique (2 chorions, 2 amnios – cloison épaisse à 4 feuillets).
+- Entre J3 et J7 : monochoriale biamniotique (+++) – une seule cavité choriale, cloison fine à 2 amnios. Présence d’anastomoses vasculaires entre les 2 placentas → syndrome transfuseur-transfusé.
+- Entre J8 et la 2ème semaine : monochoriale monoamniotique – absence de cloison, risque d’accrochage des fœtus (membres, cordons).
+- Après la 2ème semaine : jumeaux siamois.
+
+FACTEURS DE RISQUE
+- Monozygote : âge maternel < 18 ans ou > 35 ans (cause inconnue).
+- Dizygote : ethnie africaine (Nigéria +++), âge maternel élevé, antécédents familiaux (génotype féminin), multiparité, traitement de la stérilité.
+- Grossesses multiples : ethnie noire, âge extrême, multiparité, grossesse induite (Clomifène).
+
+DIAGNOSTIC
+- Clinique : augmentation des signes sympathiques de grossesse (pollakiurie, hypersalivation, mastodynie, nausées), hauteur utérine augmentée par rapport à l’âge présumé.
+- Biologie : β-hCG plasmatique élevé.
+- Échographie (dès 7 SA) : diagnostic positif et détermination du type. Bichoriale : 2 sacs ovulaires, signe du LAMBDA (pathognomonique – raccordement des 4 feuillets). Monochoriale : une seule cavité choriale, absence du signe du LAMBDA – biamniotique (cloison fine) ou monoamniotique (absence de cloison).
+
+DIAGNOSTICS DIFFÉRENTIELS
+Hématome périovulaire, défaut d’accolement des caduques, grossesse molaire, hydramnios sur grossesse unique, fibrome sur grossesse unique, macrosomie.
+
+COMPLICATIONS
+- Prématurité (50 %) – distension utérine et ouverture cervicale.
+- RCIU – syndrome transfuseur-transfusé (spécifique des grossesses monozygotes monochoriales biamniotiques).
+- HTA gravidique, prééclampsie, éclampsie (compression aorte abdominale).
+- Mortalité périnatale.
+- Mort fœtale in utero du transfuseur – risque de mort du jumeau survivant et de lésions neurologiques sévères.
+- Malformations.

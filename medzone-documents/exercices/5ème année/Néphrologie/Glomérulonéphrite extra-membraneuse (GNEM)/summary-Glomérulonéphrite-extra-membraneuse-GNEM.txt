@@ -1,0 +1,50 @@
+GLOMÉRULONÉPHRITE EXTRA-MEMBRANEUSE (GNEM) – RÉSUMÉ MÉDICAL
+
+DÉFINITION : Glomérulonéphrite dont les lésions histologiques touchent le versant externe sous-épithélial de la membrane basale.
+
+ÉPIDÉMIOLOGIE : Représente 7% des glomérulonéphrites chez l'enfant et 40% chez l'adulte.
+
+DIAGNOSTIC CLINIQUE :
+- Syndrome néphrotique impur progressif associant : HTA, insuffisance rénale, hématurie, protéinurie variable.
+- Particularité : thrombose veineuse profonde (notamment rénale) → douleur abdominale + élévation importante de la créatininémie.
+- Ponction biopsie rénale (PBR) systématique si absence de contre-indication, notamment en cas d'échec du premier traitement.
+
+ANATOMIE PATHOLOGIQUE :
+- Microscopie optique : épaississement régulier et diffus des parois capillaires, SANS prolifération cellulaire.
+- Imprégnation argentique : expansions perpendiculaires à la membrane basale (« spikes ») donnant un aspect hérissé et dentelé. Entre les spikes : dépôts extramembraneux d'immunoglobulines.
+- Immunofluorescence : dépôt extramembraneux d'IgG et C3, fixation granuleuse caractéristique.
+
+CAUSES :
+1. PRIMITIVE (85%).
+2. MÉDICAMENTS : AINS (++), D-Pénicillamine, Probénécide, sels de mercure, sels d'or, Triméthadione.
+3. INFECTIONS : Filariose, Hydatidose, Lèpre, Bilharziose, Paludisme, Streptococcie, Syphilis, VHB, VHC, VIH.
+4. NÉOPLASIES : Leucémies, lymphomes, maladie de Hodgkin, cancers (poumon, colon, estomac, rein, sein, prostate, mélanomes). → Échographie abdomino-pelvienne systématique dès élévation de la créatininémie.
+5. MALADIES SYSTÉMIQUES : Lupus, connectivite mixte, polyarthrite rhumatoïde, Sjögren, dermatomyosite, sarcoïdose, spondylarthrite ankylosante.
+6. AUTRES : Drépanocytose, thyroïdite, pemphigoïde bulleuse, réaction greffon contre l'hôte, cirrhose biliaire primitive, dermatite herpétiforme, syndrome de Guillain-Barré.
+
+ÉVOLUTION (sans traitement) :
+- Rémission spontanée : 30%.
+- Persistance de la protéinurie sans IR : 50%.
+- Aggravation lente vers l'IRC : 20%.
+- Rémission sous traitement : 88% à 10 ans.
+- Le traitement étiologique fait régresser les dépôts.
+
+TRAITEMENT :
+Non spécifique :
+- Restriction sodée, diurétiques.
+- IEC +/- ARA2 (6 mois) : cible TA <130/80 mmHg, objectif protéinurie <0,5 g/24h.
+
+Spécifique (selon critères de sévérité) :
+- Protocole PONTICELLI (6 mois) : bolus méthylprednisolone 1g/j IV (3j/28j) puis prednisone orale alternée avec chlorambucil.
+- Cyclophosphamide oral + prednisone.
+- Mycophénolate mofétil (si échec Ponticelli et DFG <50 ml/min).
+- Immunoglobulines IV.
+- Rituximab (traitement d'actualité).
+
+INDICATIONS du traitement spécifique :
+- Protéinurie >4 g/j pendant 1 an.
+- Protéinurie >6 g/j pendant 9 mois.
+- Protéinurie >8 g/j pendant 6 mois.
+- Protéinurie >8 g/j + DFG normal.
+
+Traitement non spécifique seul (IEC) si : protéinurie <8g/j + DFG normal ou diminué.

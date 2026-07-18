@@ -1,0 +1,67 @@
+RÉSUMÉ : LEUCORRHÉE – DIAGNOSTIC, ÉTIOLOGIES ET PRISE EN CHARGE
+
+DÉFINITION ET IMPORTANCE
+La leucorrhée est un écoulement vulvaire non sanglant provenant de l'appareil génital féminin (endocol, col, vagin, vestibule vulvaire). Motif fréquent de consultation, presque toujours d'origine infectieuse (IST). Elle peut mettre en jeu le pronostic fonctionnel (stérilité) et le pronostic vital à long terme (néoplasie HPV).
+
+RAPPELS PHYSIOLOGIQUES
+Sécrétions hormono-dépendantes d'origine double :
+- Desquamation vaginale : cellules exfoliées + leucocytes + bactéries (bacilles de Döderlein). Glycogène intracellulaire → acide lactique → pH vaginal 3,8-4,6.
+- Glaire cervicale : translucide, analogue au blanc d'œuf, cristallisant en feuille de fougère, abondante du J8 à J15 (pic ovulatoire).
+
+Caractéristiques physiologiques : jamais associée à des troubles fonctionnels (prurit, douleur, dyspareunie), inodore, pas de polynucléaires. Ne nécessite pas de traitement.
+
+DÉMARCHE DIAGNOSTIQUE
+
+Interrogatoire :
+- Terrain : âge, activité génitale, profession (TDS), origine géographique.
+- Antécédents : diabète, immunodépression, infections urinaires récurrentes, néoplasie gynécologique. Antécédents gynécologiques : ménarche, jour du cycle, DIU, IST, manœuvres endo-utérines, GEU (Chlamydia).
+- Toxicologiques : antibiothérapie, corticothérapie, œstroprogestatifs, éthylisme, tabac.
+- Exposition : partenaires multiples, rapports non protégés.
+- Caractéristiques des leucorrhées : début, mode évolutif, couleur (blanchâtre, jaunâtre, verdâtre, grisâtre), consistance (spumeuse, caillebottée), odeur (poisson pourri, plâtre frais), circonstances (post-coïtale, post-ATB, grossesse, post-DIU), signes associés (fièvre, AEG, signes urinaires, douleurs pelviennes, dyspareunie, prurit, saignements, signes chez le partenaire).
+
+Examen clinique :
+- Paramètres vitaux : fièvre, AEG.
+- Inspection vulvo-périnéale : œdème (mycosique), rougeur (Trichomonas), lésions grattage (mycosique), ulcérations (syphilis/herpès).
+- Skénite (pus au niveau du méat), bartholinite (tuméfaction douloureuse grande lèvre).
+- Spéculum : aspect de l'écoulement, muqueuses (rouge framboisée, œdème, inflammation, lésions suspectes), prélèvements.
+- Toucher vaginal : douleur à la mobilisation utérine (infection haute), empâtement culs-de-sac, masses latéro-utérines.
+- Toucher rectal (petite fille vierge).
+- Examen somatique : douleurs péri-hépatiques (syndrome de Hugh-Fitz-Curtis), aires ganglionnaires.
+
+Examens paracliniques (non systématiques) :
+- Prélèvement vaginal si : symptomatologie atypique, urétrite chez partenaire, échec traitement, récidives.
+- Examens : test à la potasse, coloration de Gram, culture, antifongogramme/antibiogramme.
+- Bilan biologique : NFS, CRP, BU/ECBU, glycémie/HbA1c (diabète), recherche IST, biopsie.
+- Imagerie : échographie pelvienne, TDM/IRM (bilan d'extension néoplasique).
+
+DIAGNOSTICS DIFFÉRENTIELS
+Leucorrhées physiologiques, incontinence urinaire, rupture de poche amnio-choriale (grossesse), hydrorrhées de grossesse.
+
+ÉTIOLOGIES
+
+1. Chez la femme en âge de procréer :
+
+A. Vulvovaginites :
+- Trichomonas vaginalis (15-20 %) : leucorrhées abondantes, fluides, verdâtres, spumeuses, nauséabondes. Vulve framboisée, col framboisé.
+- Mycosique (Candida albicans – 10-15 %) : terrain diabète, grossesse, immunodépression, ATB. Prurit intense, brûlures, dyspareunie. Vulve sèche/œdématiée, lésions grattage. Leucorrhées blanchâtres caillebottées.
+- À pyogènes : leucorrhées jaunâtres inodores, exocervicite érythémateuse. Germes : streptocoques B, staphylocoques, entérocoques, etc.
+- Vaginose bactérienne (40-50 %) : leucorrhées abondantes, fluides, homogènes, blanc-grisâtres, odeur poisson pourri (test potasse +), pH > 4,5, clue cells. Pas d'inflammation. Gardnerella vaginalis.
+- Vaginite réactionnelle : post-crèmes spermicides, ovules, ATB → disparaît à l'arrêt.
+
+B. Endocervicites :
+- Gonocoque (Neisseria gonorrhoeae) : leucorrhées jaunes verdâtres purulentes, skénite, bartholinite, inflammation cervicale. Diagnostic : diplocoques Gram négatif, culture.
+- Chlamydia (Chlamydia trachomatis) : jeune femme classe aisée, parfois asymptomatique. Douleurs hypogastriques ou péri-hépatiques spontanées. Leucorrhée jaune verdâtre non purulente. Diagnostic : sérologie ou PCR.
+
+2. Chez la femme ménopausée :
+- Vulvovaginite atrophique sénile (carence hormonale) : leucorrhées variables, prurit, dyspareunie.
+- Vulvovaginites infectieuses : leucorrhées purulentes, vagin/col congestifs.
+- Pathologie néoplasique : leucorrhées/hydrorrhées, métrorragies, utérus volumineux, adénopathies → diagnostic par biopsie.
+
+3. Chez la petite fille :
+Corps étranger, défaut d'hygiène, vulvo-vaginites infectieuses (germes banaux, mycoses, Trichomonas, oxyures).
+
+4. Chez la femme enceinte :
+Infections à Streptococcus agalactiae, E. coli, S. aureus, Haemophilus influenzae, Candida albicans, etc.
+
+CONCLUSION
+La leucorrhée est un signe fréquent en gynécologie, potentiellement grave (stérilité, néoplasie). Le diagnostic positif est essentiellement clinique. Les bilans paracliniques ne sont pas systématiques. La hantise est de passer à côté d'une IST.

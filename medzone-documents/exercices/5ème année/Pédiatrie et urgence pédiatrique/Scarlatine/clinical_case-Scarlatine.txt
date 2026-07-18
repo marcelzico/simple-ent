@@ -1,0 +1,18 @@
+Le syndrome hémolytique et urémique (SHU) est une microangiopathie thrombotique caractérisée par une altération de l'endothélium vasculaire, entraînant une destruction mécanique des globules rouges et une activation de l'agrégation plaquettaire. La triade symptomatique associe anémie hémolytique mécanique, thrombopénie et insuffisance rénale aiguë. Le SHU est la première cause d'IRA organique chez l'enfant de moins de 3 ans. Il engage le pronostic vital et fonctionnel rénal : plus de 50% des enfants dialysés à la phase aiguë, mortalité 2-5%, séquelles chez près de 30% des patients.
+
+Formes cliniques :
+- SHU post-diarrhéique (90%) : secondaire à une infection digestive par Escherichia coli entérohémorragiques producteurs de Shigatoxines (STEC), sérotype O157:H7. Âge <3 ans. Contamination par viandes insuffisamment cuites, produits laitiers non pasteurisés, légumes crus.
+- SHU atypique (10%) : familial, sans diarrhée prodromique, début progressif, évolution par poussées, pronostic très réservé. Lié à des mutations des protéines régulatrices de la voie alterne du complément.
+- SHU secondaire : infections (pneumocoque, Shigelle), néphropathies, VIH, lupus, greffe de moelle, drogues (ciclosporine, ticlopidine, antipaludéens), irradiation.
+
+Diagnostic positif : interrogatoire (aliment suspect, diarrhée glairo-sanguinolente prodromique J3-J15, puis début brutal). Clinique : pâleur/subictère, oligurie/anurie, œdèmes, HTA, hématurie, protéinurie. Paraclinique : anémie hémolytique (Hb<10g/dl, schizocytes, haptoglobine effondrée), thrombopénie <150.000/mm3, IRA (créatinine et urée augmentées, troubles ioniques : hyponatrémie, hyperkaliémie). Le diagnostic étiologique repose sur coproculture, PCR ou sérologie IgM anti-STEC pour la forme typique.
+
+Diagnostics différentiels : anémie hémolytique (drépanocytose, paludisme, déficit enzymatique, hémopathie), thrombopénie (PTI, infection sévère), IRA (syndrome néphrotique, déshydratation, origine toxique).
+
+Traitement curatif (symptomatique) : conservateur de l'IRA (restriction hydrique 20 ml/kg/j + diurèse, restriction sodée 0,5 mmol/kg/j, restriction potassique 1 mmol/kg/j, apport calorique, antihypertenseurs, résines échangeuses de potassium, salbutamol). Transfusion de culot globulaire phénotypé si Hb <8 g/dl. Épuration extra-rénale (dialyse péritonéale) indiquée en cas d'anurie, créatininémie >300-400 µmol/L, surcharge hydrosodée, acidose, hyperkaliémie >6 mmol/L. Échange plasmatique avec PFC si thrombopénie sévère. Prise en charge multidisciplinaire des atteintes viscérales (nutrition parentérale si colite sévère, ventilation assistée si atteinte neurologique grave).
+
+Surveillance : clinique biquotidienne (signes vitaux, diurèse, bilan entrée-sortie, poids), paraclinique quotidienne (ECG, NFS, ionogramme, urée, créatinine, calcémie, phosphorémie, gaz du sang). Surveillance à long terme (3 à 5 ans) : pression artérielle, protéinurie, créatininémie/an.
+
+Prévention : règles d'abattage, cuisson des viandes, pasteurisation des laits, désinfection de l'eau, hygiène alimentaire et lavage des mains, éviter baignades en eaux contaminées par bétail, éviter les ralentisseurs de transit, pas d'antibiothérapie systématique.
+
+Évolution et pronostic : à court terme, mortalité <5%, hémolyse et thrombopénie corrigées en <15 jours, anurie dure 1-2 semaines. Évolution vers l'IRT dans 5-10% des cas. À long terme, après 15 ans, plus d'un tiers des enfants présentent HTA, IRC ou protéinurie chronique.

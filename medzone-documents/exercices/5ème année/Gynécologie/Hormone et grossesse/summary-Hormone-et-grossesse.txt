@@ -1,0 +1,40 @@
+RÉSUMÉ : HORMONES ET GROSSESSE – MODIFICATIONS ENDOCRINIENNES ET CONSÉQUENCES
+
+INTRODUCTION
+La grossesse entraîne un bouleversement majeur de l’organisme maternel, sous contrôle hormonal, visant au maintien et au développement de la grossesse, à l’adaptation maternelle et à la préparation à l’accouchement.
+
+HYPOPHYSE
+- Anatomique : taille double (poids 0,4-0,8 g en fin de grossesse), normalisation après lactation.
+- Fonctionnelle : TSH ↓ au pic de β-hCG puis ↑ ; Prolactine ↑ progressive (5-10× normale) – préparation à l’accouchement ; Ocytocine ↑ (165 µg/l en fin de grossesse) – régulation du travail ; Vasopressine inchangée.
+
+THYROÏDE
+- Anatomique : goître maternel possible (mécanisme compensateur) – augmentation de l’excrétion rénale d’iode + transfert iode au fœtus → besoins accrus.
+- Fonctionnelle : TBG ↑ ; T4 et T3 ↑ (liées et libres si supplémentation iodée suffisante).
+- Clinique : goître palpable chez 50 % des femmes ; supplémentation en iode nécessaire.
+
+PARATHYROÏDES
+- Besoin calcique fœtal : 300 mg/j au 3ème T (1/3 du besoin maternel) → minéralisation squelettique.
+- Adaptations : absorption intestinale de Ca ↑, excrétion rénale de Ca ↓, phosphorémie ↓ jusqu’à 30 SA puis ↑.
+- PTH ↑ vers 28 SA ; calcitonine ↑.
+
+GLANDES SURRÉNALES
+- Catécholamines (adrénaline, noradrénaline) : peu modifiées, légère ↓.
+- Cortisol : ↑ jusqu’à 2× normale dès début grossesse.
+- Aldostérone : ↑ par stimulation du SRA (↑ débit cardiaque).
+- Androgènes : testostérone/androstènedione ↑ ; DHEA ↓.
+
+PANCRÉAS – MÉTABOLISME GLUCIDIQUE
+La femme enceinte assure les apports fœtaux dans un état d’insulino-résistance.
+- 1er T jusqu’à 22 SA (anabolisme) : glycémie ↓, sécrétion d’insuline ↑, résistance à l’insuline ↑. Augmentation des îlots β de Langerhans (taille, nombre). Conséquences : baisse glycémie, mise en réserve des nutriments.
+- 2ème moitié de grossesse : insulino-résistance (progestérone + HPL) → hyperinsulinisme. Conséquences : glycémie ↑, mobilisation des réserves. Si fonction pancréatique normale = adaptation ; si anomalie = diabète gestationnel.
+- Surveillance : BU mensuelle (acétone, sucre, albumine).
+- Post-partum : chute du besoin en insuline → risque d’hypoglycémie → donner à manger rapidement.
+
+PLACENTA – HORMONES PLACENTAIRES
+- β-hCG : sécrétion dès J7 par syncitiotrophoblaste, pic à 10 SA puis ↓. Rôles : bloque LH, maintient progestérone ovarienne (6 premières semaines), rôle autocrine/paracrine dans différenciation du trophoblaste.
+- Progestérone : sécrétion dès J10, autonome dès le 4ème mois. Rôles : maintien grossesse, immunomodulation (tolérance), myorelaxation utérine, différenciation mammaire.
+- Œstrogènes : sous contrôle β-hCG/LH, rôle moindre que la progestérone dans le maintien de grossesse.
+- Hormone Lactogène Placentaire (HPL ou HCS) : anabolisme (synthèse protéique, lipogenèse, apport glucidique fœtal) ; activité mammotrope en synergie avec la prolactine.
+
+CONCLUSION
+La grossesse est un état de bouleversement hormonal où toutes les hormones (sauf l’insuline) sont hyperglycémiantes. L’équilibre précaire entre hormones hyperglycémiantes et hypoglycémiante permet une adaptation physiologique si la fonction pancréatique est normale. Une anomalie expose au diabète gestationnel (à partir de 21 SA).

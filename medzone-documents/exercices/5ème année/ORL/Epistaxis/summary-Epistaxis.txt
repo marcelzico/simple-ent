@@ -1,0 +1,49 @@
+RÉSUMÉ MÉDICAL SPÉCIALISÉ – EPISTAXIS
+
+DÉFINITION ET INTÉRÊT
+L’épistaxis est une hémorragie d’origine nasale, extériorisée par le nez ou la bouche, pouvant être antérieure, postérieure ou mixte. C’est l’urgence ORL la plus fréquente, habituellement bénigne, mais potentiellement grave par abondance, répétition ou fragilité du terrain, engageant le pronostic vital et relevant d’une urgence médico-chirurgicale. En dehors de l’urgence, une recherche étiologique systématique s’impose.
+
+VASCULARISATION
+L’artère principale de la cavité nasale est l’artère sphénopalatine, qui forme des anastomoses artério-artérielles (et non veineuses). Dans 75 % des cas, le saignement siège sur la tâche vasculaire du cloison nasal, présente bilatéralement.
+
+BILAN CLINIQUE
+L’interrogatoire recherche le terrain (âge, antécédents hémorragiques personnels/familiaux, prise d’aspirine ou anticoagulants, signes d’imprégnation éthylique), les circonstances d’apparition (mode de début, durée, quantité, déclenchement : traumatisme, infection, HTA) et les signes associés (obstruction nasale, douleur sinusale, otalgie, fièvre, purpura).
+
+L’examen physique comprend : rhinoscopie antérieure après mouchage (premier geste) et rétraction muqueuse par xylocaïne naphazolinée 5%, recherchant le côté saignant, le vaisseau, une tumeur ; prise de TA ; examen oropharynx (recherche d’écoulement postérieur) ; examen cervical (purpura, adénopathies) ; endoscopie optionnelle pour bilan précis. Il faut éliminer une hématémèse (efforts vomissements) et une hémoptysie (efforts de toux).
+
+BILAN DE GRAVITÉ
+La gravité s’apprécie par l’abondance (retentissement : anémie, pâleur, choc), la répétition (petits saignements répétés équivalant à un grand saignement) et le retentissement général (pouls, TA, faciès, conjonctives pâles, anxiété, sueurs).
+
+- Épistaxis bénigne : unilatérale, minime (goutte à goutte), saignement de la tâche vasculaire à la rhinoscopie antérieure, pas d’écoulement postérieur, pas de retentissement général.
+- Épistaxis maligne : répétition (moins abondante mais persistante, écoulement postérieur à bas bruit, évolution heures/jours, vomissements de caillots) ou abondance (bilatérale, antérieure+postérieure, altération de l’état général : pâleur, angoisse, sueurs, tachycardie, hypotension).
+
+GESTES D’URGENCE
+Devant une épistaxis maligne : tamponnement immédiat, hospitalisation USI, pose de deux voies veineuses de gros calibre, prélèvements (groupage, NFS-Hte, TP-TCA-INR), perfusion de solutés macromoléculaires, transfusion si Hb < 8g/dl chez l’adulte.
+
+BILAN ÉTIOLOGIQUE
+1) Origine locale (épistaxis symptôme) :
+- Traumatique : fractures de la face ou base du crâne, intubation nasotrachéale, chirurgie rhinosinusienne.
+- Infectieuse/inflammatoire : rhinosinusites aiguës, corps étrangers, ulcère de cloison (toxicomane sniff), granulome malin.
+- Tumorale : malignes (cavum, ethmoïde, cavités nasales, sinus) ; bénignes (fibrome nasopharyngé – adolescent 12-13 ans, masculin, très hémorragique –, angiofibrome de cloison, hémangiopéricytome).
+
+2) Origine générale (épistaxis épiphénomène) :
+- Maladies hémorragiques : perturbation temps vasculaire (purpura fulminans, Rendu-Osler), perturbation temps plaquettaire (purpura thrombopénique ou thrombopathique), perturbation temps coagulation (hémophilie, insuffisance hépatique – cirrhose –, anomalie fibrino-formation, anticoagulants – cause fréquente du sujet âgé).
+- Pathologies vasculo-tensionnelles : HTA, athéromatose, insuffisance rénale.
+- Maladies infectieuses : typhoïde, scarlatine, grippe.
+- Maladies métaboliques : diabète, scorbut.
+
+3) Épistaxis essentielle (épistaxis maladie) : diagnostic d’élimination. Facteurs favorisants : grattage, exposition solaire, phénomènes vasomoteurs, facteurs endocriniens (prémenstruelle, grossesse), artériosclérose.
+
+TRAITEMENT
+Principe d’escalade thérapeutique :
+1) Compression bidigitale (5-10 min)
+2) Tamponnement antérieur (méchage antérieur bilatéral ≥48h avec antibioprophylaxie)
+3) Double ballonnet gonflable
+4) Tamponnement postérieur
+5) Coagulation de la sphénopalatine
+6) Embolisation sélective, rarement ligature de carotide externe
+
+Prévention de la récidive : traiter l’étiologie (HTA, insuffisance hépatique, hémopathie), traitement local (traumatisme, tumeur, cautérisation), surveillance clinique et paraclinique.
+
+CONCLUSION
+L’épistaxis est une urgence ORL fréquente qu’il faut reconnaître et distinguer de l’hématémèse et de l’hémoptysie. La priorité est la recherche des signes de gravité, la prise en charge hémostatique par escalade thérapeutique, puis la recherche et le traitement étiologique.

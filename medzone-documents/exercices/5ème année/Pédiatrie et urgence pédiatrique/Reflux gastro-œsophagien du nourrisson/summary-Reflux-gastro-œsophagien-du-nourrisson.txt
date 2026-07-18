@@ -1,0 +1,19 @@
+Le reflux gastro-œsophagien (RGO) du nourrisson est le passage involontaire et sans effort du contenu gastrique vers l'œsophage. C'est la première cause de rejet lacté, atteignant 2/3 des nourrissons avant 5 mois. On distingue le RGO physiologique (bénin, très fréquent) du RGO pathologique (compliqué).
+
+Physiopathologie : inefficacité du sphincter inférieur de l'œsophage (SIO) par relaxations inappropriées transitoires ou hypotonie, inadéquation du contenu gastrique (lait >120 ml/kg/j), et anomalie anatomique (malposition cardiotubérositaire). Les conséquences sont la brûlure de l'œsophage et les lésions des voies aériennes.
+
+Diagnostic clinique :
+- Signes digestifs : régurgitations per ou postprandiales, favorisées par les changements de position. Signes d'œsophagite : hématémèse (tache de sang sur le bavoir), brûlure rétro-sternale, pyrosis, dysphagie/odynophagie. Retard staturo-pondéral exceptionnel (rechercher malabsorption).
+- Signes extra-digestifs : pulmonaires (toux nocturne, bronchite/pneumopathie récurrente du lobe moyen, asthme) ; ORL (dyspnée laryngée, dysphonie) ; malaise du nourrisson (perte de contact, pâleur, cyanose, hypotonie, bradycardie).
+Critères RGO physiologique : rejets non sanglants/non bilieux, appétit normal, croissance normale, RGO isolé.
+Critères RGO pathologique (≥1) : œsophagite, malaise, manifestations ORL ou pulmonaires.
+Terrains à risque : encéphalopathe, bronchopathe chronique.
+
+Explorations : biologiques jamais indiquées. Fibroscopie œsogastrique si suspicion d'œsophagite ou hématémèse ; pH-métrie 24h si formes extra-digestives (malaise, ORL) ; TOGD si formes compliquées ou bilan préopératoire.
+
+Traitement : guérison spontanée dans 80% des cas avant 1 an (diversification à 6 mois, maturation du SIO vers 1 an).
+- Mesures hygiéno-diététiques (toujours) : réduire les changements de position, faire roter l'enfant en position verticale, position proclive (jamais plat), rassurer les parents, épaississement du lait (lait AR sur ordonnance, caroube, Gumilk pour lait maternel), réduction du volume des biberons (fractionnement), rot en position proclive. Ces mesures suffisent pour le RGO physiologique.
+- Traitement médicamenteux (rare) : IPP (oméprazole 1 mg/kg/j) si œsophagite et/ou nourrisson >1 an.
+- Traitement chirurgical (exceptionnel) : fundoplicature de Nissen pour RGO compliqué, invalidant, rebelle, ou non contrôlé sur terrain particulier (encéphalopathie, atrésie de l'œsophage, hernie diaphragmatique, bronchopathie chronique).
+
+Conclusion : le RGO physiologique disparaît avant 12 mois. La présence de symptômes extra-digestifs (ORL, malaise) impose une exploration. Les mesures hygiéno-diététiques sont prioritaires et doivent être bien expliquées aux parents.

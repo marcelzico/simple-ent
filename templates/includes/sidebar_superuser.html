@@ -12,10 +12,10 @@
         <span>Leçons</span>
     </a>
     
-    <a href="{% url 'utilisateur:member' %}" class="nav-link">
+    {% comment %} <a href="{% url 'utilisateur:member' %}" class="nav-link">
         <i class="fas fa-users me-2"></i>
         <span>Membres</span>
-    </a>
+    </a> {% endcomment %}
     
     <a href="{% url 'lecon:ue_list' %}" class="nav-link">
         <i class="fas fa-layer-group me-2"></i>

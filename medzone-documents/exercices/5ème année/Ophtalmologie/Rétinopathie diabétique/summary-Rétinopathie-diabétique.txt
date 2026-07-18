@@ -1,0 +1,68 @@
+RÉSUMÉ – RÉTINOPATHIE DIABÉTIQUE (RD)
+
+Définition : microangiopathie rétinienne secondaire à des atteintes capillaires liées à l’hyperglycémie chronique.
+
+Épidémiologie : prévalence mondiale 28,7 %, France 40 %, Antananarivo 65 %. Après 15-20 ans d’évolution : diabète type 1 → 95 %, diabète type 2 → 60 %. 20 % des diabétiques type 2 ont une RD dès le diagnostic. Gravité : 3e cause de cécité mondiale, 1re cause avant 50 ans.
+
+Physiopathologie :
+- Lésions initiales : épaississement membrane basale, dégénérescence des péricytes, perte des cellules endothéliales → obstruction + dilatation capillaire → microanévrysmes.
+- Mécanismes : hyperglycémie → voie aldolase-réductase → accumulation de sorbitol → glycosylation des protéines → activation des protéines kinases. Modifications rhéologiques : hyperagrégation plaquettaire, hyperviscosité, troubles coagulation.
+- Conséquences : occlusion capillaire → hypoxie/ischémie → sécrétion de VEGF → néovascularisation (RD proliférante). Hyperperméabilité capillaire → œdème rétinien/maculaire.
+- Facteurs favorisants : HTA, hyperlipidémie, hyperuricémie, tabac, alcool.
+
+Symptomatologie – Examen clinique :
+- Interrogatoire : type/ancienneté diabète, équilibre (HbA1c), BAV, ATCD, FDR.
+- Acuité visuelle : normale longtemps, altérée aux stades avancés.
+- Fond d’œil après dilatation (ophtalmoscope, V3M, Volk) :
+  - Microanévrysmes : premiers signes, tâches ponctiformes rouges.
+  - Hémorragies intra-rétiniennes : punctiformes, en flammèche ou étendues.
+  - Exsudats secs : jaunes profonds, disposés en couronne (circinés).
+  - Nodules cotonneux : blancs superficiels (ischémie), localisation pré-papillaire.
+  - AMIR (anomalies microvasculaires intra-rétiniennes), anomalies veineuses.
+  - Œdème maculaire.
+  - Néovaisseaux pré-rétiniens/pré-papillaires (RD proliférante).
+  - Stade avancé : hémorragie vitréenne, prolifération vitréo-rétinienne, décollement rétine.
+
+Imageries complémentaires :
+- Angiographie à la fluorescéine : recherche lésions invisibles (ischémie, œdème, néovaisseaux), indications thérapeutiques, contrôle efficacité.
+- OCT : mesure quantitative épaisseur maculaire (œdème maculaire).
+- Échographie mode B : opacité des milieux (cataracte, hémorragie vitréenne) → recherche DDR.
+
+Diagnostic positif : clinique (FO) confirmée par angiographie, OCT, échographie.
+
+Diagnostics différentiels : OVCR, rétinopathie hypertensive, rétinopathie drépanocytaire, autres rétinopathies ischémiques.
+
+Classification (Société francophone du diabète – 6 stades) :
+1. Pas de RD.
+2. RD non proliférante (RDNP) minime : microanévrysmes.
+3. RDNP modérée : exsudats secs, nodules cotonneux, hémorragies punctiformes.
+4. RDNP sévère/pré-proliférante : modifications veineuses, hémorragies étendues.
+5. RD proliférante (RDP) : néovaisseaux pré-rétiniens/pré-papillaires.
+6. RDP compliquée : hémorragie intravitréenne, prolifération vitréo-rétinienne, DDR, rubéose irienne, glaucome néovasculaire.
+
+Maculopathie diabétique : œdème maculaire associé à chaque stade. Classifié en minime, modéré, sévère selon position par rapport au centre maculaire (sévère = œdème au centre).
+
+Traitement :
+- Buts : freiner l’évolution, éviter et traiter les complications.
+- Moyens médicaux : équilibre glycémique et tensionnel, traitement FDR, anti-VEGF intravitréens.
+- Moyens physiques : photocoagulation laser (destruction zones hypoxie/œdème : panrétinienne, focale, endolaser).
+- Moyens chirurgicaux : vitrectomie (hémorragies, proliférations, DDR).
+- Indications :
+  - RDNP minime/modérée : surveillance.
+  - RDNP sévère et RDP : laser + anti-VEGF.
+  - RDP compliquée : vitrectomie + laser.
+
+Dépistage :
+- Diabète type 1 : FO 5 ans après diagnostic.
+- Diabète type 2 : FO dès le diagnostic.
+- Puis FO annuel pour tous.
+
+Surveillance selon stade :
+- Pas de RD : annuel.
+- RD minime : annuel (+/- angiographie).
+- RDNP modérée : tous les 6 mois à 1 an.
+- RDNP sévère : tous les 4 à 6 mois.
+- RD proliférante : 2 à 4 mois après fin traitement.
+- Situations particulières : adolescence/puberté, femme enceinte, équilibration glycémique rapide (aggrave hypoxie rétinienne).
+
+Conclusion : microangiopathie diabétique longtemps asymptomatique. Diagnostic clinique au FO. Aggravation progressive. Prise en charge multidisciplinaire (ophtalmologiste, diabétologue, médecin généraliste, patient).

@@ -1,0 +1,26 @@
+"question","answer","explanation","difficulty"
+"La fièvre aiguë est définie par une élévation de la température rectale à 37°9 depuis moins de 5 jours.","True","Le document donne cette définition.","Easy"
+"L'hyperthermie est due à un déréglage du centre thermorégulateur.","False","L'hyperthermie est due à une élévation de la thermogenèse, de la température extérieure ou une diminution de la thermolyse. La fièvre est le déréglage du centre.","Easy"
+"Une fièvre élevée est définie par une température > 39°C.","False","Le document : 'Fièvre élevée : 38°5'.","Easy"
+"La somnolence est un signe de bonne tolérance de la fièvre.","False","La somnolence est un signe de mauvaise tolérance.","Easy"
+"Les convulsions sont une complication possible de la fièvre.","True","Le document cite les convulsions comme complication.","Easy"
+"Une hyperthermie majeure est définie par une température > 40°5.","True","Le document le mentionne.","Easy"
+"L'hémoculture est recommandée si la température est > 39°C.","True","Le document : 'Hémoculture (si T°39°C)'.","Easy"
+"La NFS, VS et CRP font partie du bilan de première intention.","True","Le document les cite.","Easy"
+"La cause la plus fréquente de fièvre aiguë chez l'enfant est bactérienne.","False","Le document : 'Virale +++'.","Easy}
+"Les nourrissons de moins de 3 mois fébriles ont un risque élevé d'infection bactérienne sévère.","True","Le document : 'Risque d'infection bactérienne SÉVÈRE +++'.","Easy}
+"La dose de paracétamol par voie orale est de 30 mg/kg/24h.","False","Le document donne 60 mg/kg/24h ou 15 mg/kg/6h.","Easy}
+"L'ibuprofène est utilisé à la dose de 30 mg/kg/24h.","True","Le document le donne.","Easy}
+"Le déshabillage est un moyen physique pour faire baisser la fièvre.","True","Le document : 'Déshabillage : perte de chaleur par convection'.","Medium}
+"Le bain tiède est recommandé sans risque.","False","Le document mentionne un risque de vasoconstriction et frissons.","Medium}
+"La fièvre altère la croissance et la virulence des bactéries.","True","Le document le dit.","Medium}
+"La BU et l'ECBU sont indiqués pour rechercher une infection urinaire.","True","Le document les cite.","Medium}
+"L'otite est une cause virale de fièvre.","False","L'otite est une cause bactérienne.","Medium}
+"Le vaccin anticoquelucheux peut être responsable de fièvre post-vaccinale.","True","Le document le mentionne.","Medium}
+"En cas d'hyperthermie sévère mal tolérée, les antipyrétiques peuvent être administrés par voie IV.","True","Le document donne les doses IV.","Medium}
+"La fièvre bien tolérée doit être immédiatement traitée par antipyrétiques.","False","Le document recommande de ne pas se précipiter à baisser, car la fièvre peut inhiber les microbes.","Medium}
+"Le faciès vultueux est un signe de mauvaise tolérance.","False","Le document : 'Bonne tolérance : Faciès : Vultueux' donc bonne tolérance.","Difficult}
+"Un enfant de moins de 3 mois avec une fièvre isolée sans signe peut être traité à domicile.","False","Le document : 'Présence d'un signe = Hospitalisation', mais même sans signe, la prudence est de règle.","Difficult}
+"La ponction lombaire est systématique devant toute fièvre.","False","Le document : 'PL en fonction de l'orientation clinique'.","Difficult}
+"Le paracétamol en suppositoire est utilisé à la dose de 20 mg/kg/24h en cas de vomissements.","True","Le document le donne.","Difficult}
+"L'hyperthermie majeure peut entraîner une défaillance multiviscérale.","True","Le document le cite.","Difficult}

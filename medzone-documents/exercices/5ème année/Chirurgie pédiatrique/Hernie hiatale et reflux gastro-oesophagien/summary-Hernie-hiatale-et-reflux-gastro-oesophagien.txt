@@ -1,0 +1,28 @@
+Hernie hiatale et reflux gastro-œsophagien (RGO)
+
+Introduction :
+La hernie hiatale est le passage d'une partie de l'estomac dans le thorax à travers le hiatus, favorisant le reflux gastro-œsophagien (RGO). Le RGO consiste en une remontée du contenu gastrique dans l'œsophage, physiologique ou pathologique. Chez le nourrisson, il est fréquent, souvent bénin, mais peut entraîner des complications digestives, respiratoires ou ORL.
+
+Physiopathologie :
+Le RGO pathologique résulte d'une incompétence du sphincter inférieur de l'œsophage (SIO), due à des relaxations transitoires inappropriées, hypotonie, immaturité sphinctérienne ou anomalies anatomiques telles que la hernie hiatale. L'agressivité du liquide gastrique (acide, pepsine) et les troubles de vidange gastrique aggravent le reflux.
+
+Exploration :
+Les examens incluent échographie post-prandiale, radio TOGD, endoscopie œsophagienne, pHmétrie et manométrie œsophagienne, chacun ayant ses indications, avantages et limites. L'exploration permet d'objectiver le reflux, ses caractéristiques et ses conséquences sur le nourrisson.
+
+Traitement :
+Le traitement repose sur mesures hygiéno-diététiques (position proclive, fractionnement des repas, épaississement du lait), traitement médical (prokinétiques, antisécrétoires gastriques) et traitement chirurgical par fundoplicature de Nissen en cas d'échec ou complications.
+
+Formes cliniques :
+Les manifestations incluent régurgitations, œsophagite, asthme, pneumonies récidivantes, apnées et stridor.
+
+Pronostic :
+Le RGO physiologique disparaît spontanément dans la majorité des cas avant 6-12 mois. Les formes pathologiques nécessitent un suivi et une prise en charge adaptée pour éviter complications et séquelles.
+La hernie hiatale est un phénomène anatomopathologique défini par le passage d'une partie de l'estomac dans le thorax à travers l'orifice hiatale. Le reflux gastro-œsophagien (RGO) est un phénomène physiopathologique correspondant au passage permanent ou intermittent du contenu gastrique dans l'œsophage. Chez le nourrisson, il est d'extrême fréquence : 3 à 5 épisodes/heure chez le prématuré, 9/10 à 1 mois, 50% avant 1 an. Le RGO pathologique concerne 1/300 avant 1 an et 8% entre 1 et 5 ans. Une forme héréditaire existe (gène GERD1, chromosome 13q14).
+
+Physiopathologie : incompétence de la jonction œso-gastrique (relaxations transitoires inappropriées du sphincter inférieur de l'œsophage - SIO - ou hypotonie permanente), secondaire à une immaturité ou à une anomalie anatomique (hernie hiatale, malposition cardio-tubérositaire). L'agressivité du liquide gastrique (acidité, pepsine) est variablement tolérée. Le spasme pylorique peut aggraver le RGO. L'intolérance aux protéines du lait de vache (IPLV) peut déclencher des poussées ou être associée.
+
+Explorations : échographie post-prandiale (RGO à estomac plein, limitée à 30 min, fiable après 4-5 mois) ; TOGD (visualise cardia, RGO, cinétique, vidange) ; endoscopie (diagnostic d'œsophagite, invasif) ; pHmétrie (reflux acides sur 20-24h, peu invasif, nécessite hospitalisation) ; manométrie (dynamique SIO-SSO, peu répandue).
+
+Traitements : mesures hygiéno-diététiques (posture proclive dorsale, éviter suralimentation, fractionnement, épaississement du lait, IPLV). Médicaments : prokinétiques (dompéridone 0,75 mg/kg/24h, efficacité 50% ; cisapride sous conditions avec contrôle ECG), antispasmodiques (rares), pansements œsophagiens (après repas), antisécrétoires (ranitidine 3-6 mg/kg/24h, IPP : oméprazole 1 mg/kg/24h, ésoméprazole). Chirurgie : fundoplicature de Nissen par cœlioscopie.
+
+Formes cliniques : digestives (régurgitations simples, œsophagite) ; neurologiques (malaise grave avec apnée/bradycardie) ; respiratoires (asthme, pneumonie récidivante, toux nocturne) ; ORL (stridor).

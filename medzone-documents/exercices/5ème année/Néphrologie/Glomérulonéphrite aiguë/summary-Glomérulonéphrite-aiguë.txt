@@ -1,0 +1,47 @@
+GLOMÉRULONÉPHRITE AIGUË – RÉSUMÉ MÉDICAL
+
+DÉFINITION : Glomérulonéphrite proliférative endocapillaire.
+
+ÉPIDÉMIOLOGIE : 60% des cas entre 2 et 12 ans, 10% après 40 ans.
+
+PHYSIOPATHOLOGIE : Réponse immunologique post-infectieuse. Formation de complexes immuns circulants (antigène-anticorps-complément) qui se déposent dans le rein et déclenchent une cascade inflammatoire, créant une brèche dans la membrane basale glomérulaire.
+
+DIAGNOSTIC POSITIF :
+Début brutal, précédé d'un épisode infectieux (angine, pharyngite, scarlatine, impétigo) avec intervalle libre de 15-21 jours.
+Signes généraux : fièvre, céphalées, douleurs abdominales/lombaires, asthénie, anorexie.
+Phase d'état = syndrome néphritique aigu :
+- Œdèmes déclives (visage matinal, membres inférieurs en journée), prise de poids.
+- HTA.
+- Urines « bouillon sale ».
+- Hématurie macroscopique (30%).
+- Oligo-anurie (<400ml/<200ml).
+- Insuffisance rénale : élévation urée-créatinine.
+- Urines concentrées, rapport créatinine urinaire/créatininémie >40, natriurèse basse.
+- Troubles hydro-électrolytiques : hyponatrémie, hyperkaliémie, acidose.
+- Protéinurie non sélective.
+- Hématurie + cylindrurie hématique.
+- Hypocomplémentémie : CH50, C3, C4 abaissés.
+- Élévation transitoire des anticorps antistreptococciques (ASLO, antistreptodornase) en 1-3 semaines, pic à 3-5 semaines, normalisation à 6 mois.
+
+ANATOMIE PATHOLOGIQUE (biopsie rénale) :
+- Optique : prolifération endocapillaire (cellules mésangiales, endothéliales) encombrant les lumières capillaires ; exsudat de polynucléaires ; dépôts extramembraneux « en chapeau de gendarme » (humps).
+- Immunofluorescence : fixation granuleuse abondante anti-C3 (rarement anti-IgG), topographie superposable aux humps.
+- Électronique : dépôts sous-épithéliaux.
+
+CAUSES (germes néphritogènes) :
+- Streptocoque bêta-hémolytique groupe A12 (angine).
+- Staphylocoque (impétigo).
+- Pneumocoque, méningocoque.
+- Virus : herpès, coxsackie, échovirus, adénovirus, hépatites.
+
+COMPLICATIONS : HTA avec œdème cérébral ou pulmonaire, anurie initiale, détérioration rapide de la fonction rénale. Mortalité à la phase aiguë <0,5%.
+
+ÉVOLUTION : Régression des signes après 48h. Protéinurie possible jusqu'au 6e mois, hématurie microscopique jusqu'à 12 mois. Normalisation du complément : remontée rapide du C4, plus lente du C3 et CH50, normale à 1 mois (cinétique différente de la GEM).
+
+TRAITEMENT :
+- Régime désodé strict, restriction hydrique.
+- Diurétiques si œdème.
+- Hémodialyse ou dialyse péritonéale si nécessaire.
+- Contrôle de l'HTA.
+- Bicarbonates si acidose métabolique.
+- Antibiothérapie du foyer infectieux (pénicilline ou amoxicilline 10 jours si streptocoque).
