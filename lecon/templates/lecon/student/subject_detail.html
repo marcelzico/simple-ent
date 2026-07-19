@@ -329,16 +329,16 @@
                                     </span>
                                     {% if request.user.is_student %}
                                     <span class="badge bg-secondary">
-                                        {% comment %} user_mastery_percentage not available without annotation {% endcomment %}
+                                        user_mastery_percentage not available without annotation 
                                         0%
                                     </span>
                                     {% endif %}
                                 </div>
-                                {% comment %} <div class="d-flex gap-2 mt-3">
+                                 <div class="d-flex gap-2 mt-3">
                                     <a href="{% url 'quizlet_copy:set-detail' flashcard_set.pk %}" class="btn btn-sm btn-outline-purple flex-fill">
                                         <i class="fas fa-eye me-1"></i>Voir
                                     </a>
-                                </div> {% endcomment %}
+                                </div> 
                             </div>
                         </div>
                     </div>
@@ -347,7 +347,7 @@
             </div>
         </div>
     </div>
-    {% endif %} {% endcomment %}
+    {% endcomment %}
 
     <!-- All Public Flashcards Section - ✅ Fixed variable name -->
     {% comment %} {% if can_view_flashcards and flashcard_sets_public.exists %}
