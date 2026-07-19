@@ -142,18 +142,18 @@ def subject_detail(request, pk):
     
 
     # Annotate chapters with flashcard counts and study time
-    chapters_flashcard = active_chapters.annotate(
-        flashcards_count=Count('flashcardset__cards', distinct=True),
-        study_seconds=Sum(
-            'studysession__duration_seconds',
-            filter=Q(studysession__user=request.user, studysession__completed=True)
-        )
-    ).order_by('order')
+    # chapters_flashcard = active_chapters.annotate(
+    #     flashcards_count=Count('flashcardset__cards', distinct=True),
+    #     study_seconds=Sum(
+    #         'studysession__duration_seconds',
+    #         filter=Q(studysession__user=request.user, studysession__completed=True)
+    #     )
+    # ).order_by('order')
 
     # Calculate derived values for template
-    for chapter in chapters_flashcard:
-        chapter.study_hours = (chapter.study_seconds or 0) // 3600
-        chapter.study_minutes = ((chapter.study_seconds or 0) % 3600) // 60
+    # for chapter in chapters_flashcard:
+    #     chapter.study_hours = (chapter.study_seconds or 0) // 3600
+    #     chapter.study_minutes = ((chapter.study_seconds or 0) % 3600) // 60
 
     # Calculate total flashcards
     # total_flashcards = FlashcardSet.objects.filter(
@@ -179,9 +179,9 @@ def subject_detail(request, pk):
         'mcq_quiz_score': round(mcq_quiz_avg, 1),
         'qa_quiz_score': round(qa_quiz_avg, 1),
         'active_subscription': active_sub,
-        'can_view_flashcards': active_sub.feature.can_view_public_flashcard,
-        'flashcard_sets_public': flashcard_sets_public,
-        'flashcard_sets_private': flashcard_sets_private,
+        # 'can_view_flashcards': active_sub.feature.can_view_public_flashcard,
+        # 'flashcard_sets_public': flashcard_sets_public,
+        # 'flashcard_sets_private': flashcard_sets_private,
 
     }
     return render(request, 'lecon/student/subject_detail.html', context)
