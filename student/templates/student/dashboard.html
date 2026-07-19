@@ -458,7 +458,7 @@
             </div>
         </div>
         
-        <div class="col-xl-3 col-md-6 mb-4 animate-fade-in-up animate-delay-3">
+        {% comment %} <div class="col-xl-3 col-md-6 mb-4 animate-fade-in-up animate-delay-3">
             <div class="stat-card schedules">
                 <div class="icon-container icon-schedule">
                     <i class="fas fa-calendar-check text-white"></i>
@@ -470,7 +470,7 @@
                     <div class="feature-progress-bar" style="width: {{ quick_stats.schedules_completed|divisibleby:10|yesno:'100,70,40' }}%"></div>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
     </div>
 
     <!-- Performance & Subscription Section -->
