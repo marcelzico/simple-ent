@@ -1,9 +1,0 @@
-L'adaptation à la vie extra-utérine survient après 40 SA (moyennement accepté à 37 SA). Elle repose sur plusieurs mécanismes physiologiques.
-
-- Adaptation respiratoire : évacuation du liquide pulmonaire par compression thoracique lors du passage dans la filière génitale et résorption veineuse/lymphatique. Le surfactant (pneumocytes de type II) assure la tensio-activité alvéolaire. L'asphyxie périnatale et l'infection bactérienne peuvent le détruire. L'évacuation est ralentie en cas de prématurité ou de césarienne.
-- Adaptation circulatoire : clampage du cordon → fermeture du canal d'Arantius. L'aération alvéolaire diminue les résistances pulmonaires et augmente la pression OG > OD → fermeture du foramen ovale. L'augmentation de la pression systémique et l'apport de sang oxygéné au canal artériel induisent une vasoconstriction → fermeture définitive du canal artériel.
-- Adaptation thermique : thermogenèse par lipolyse de la graisse. Pertes par conduction, convection, radiation et évaporation. Risque d'hypothermie.
-- Régulation glycémique : mobilisation des réserves glycogéniques après clampage. Glycémie maintenue > 0,4 g/l, chute à 1 h puis normalisation à 4-6 h par glycogénolyse, néoglucogenèse et alimentation précoce.
-- Adaptation digestive : motricité intestinale désordonnée avant 31 SA, harmonieuse à >34 SA. Succion-déglutition mature à 34-36 SA (tétée).
-
-Ces phénomènes déterminent le pronostic néonatal.
