@@ -12,6 +12,8 @@ from . import importers
 from django.conf import settings
 from lessoncopy.models import Importer
 from pathlib import Path
+from .utils import get_level_folders, get_folder_stats, get_exercise_folder_for_chapter
+
 
 # ---------- Dashboard ----------
 @login_required
@@ -50,23 +52,46 @@ def unite_list(request, level_name):
 
 
 # ---------- Chapter list for a unite ----------
+# @login_required
+# @non_student_required
+# def chapter_list(request, unite_id):
+#     unite = get_object_or_404(Unite, id=unite_id)
+#     chapters = unite.chapters.all().order_by('order')
+
+#     # Annotate chapters
+#     for chapter in chapters:
+#         chapter.has_copies = Importer.objects.filter(chapter=chapter).exists()
+#         # Check if exercise folder exists and has files
+#         exercise_path = Path(settings.BULK_IMPORT_ROOT) / settings.BULK_EXERCICES_DIR / unite.level / unite.title / chapter.title
+#         chapter.has_exercise_files = exercise_path.exists() and any(exercise_path.iterdir())
+
+#     return render(request, 'bulk_import/chapter_list.html', {
+#         'unite': unite,
+#         'chapters': chapters,
+#     })
+
+
+
+
 @login_required
 @non_student_required
 def chapter_list(request, unite_id):
     unite = get_object_or_404(Unite, id=unite_id)
     chapters = unite.chapters.all().order_by('order')
-
+    
     # Annotate chapters
     for chapter in chapters:
         chapter.has_copies = Importer.objects.filter(chapter=chapter).exists()
-        # Check if exercise folder exists and has files
-        exercise_path = Path(settings.BULK_IMPORT_ROOT) / settings.BULK_EXERCICES_DIR / unite.level / unite.title / chapter.title
-        chapter.has_exercise_files = exercise_path.exists() and any(exercise_path.iterdir())
-
+        
+        # 2. FIX: Use the robust folder finder instead of exact Path matching
+        exercise_folder = get_exercise_folder_for_chapter(unite.level, unite.title, chapter.title)
+        chapter.has_exercise_files = exercise_folder is not None and any(exercise_folder.iterdir())
+        
     return render(request, 'bulk_import/chapter_list.html', {
         'unite': unite,
         'chapters': chapters,
     })
+
 
 # ---------- Single item imports ----------
 @login_required

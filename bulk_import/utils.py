@@ -69,33 +69,6 @@ def get_chapter_files_for_unite(level, unite_title, subdir='splitted'):
     return [f for f in base.glob('*.docx') if f.is_file()]
 
 
-def get_exercise_files_for_chapter(level, unite_title, chapter_title):
-    base = Path(settings.BULK_IMPORT_ROOT) / settings.BULK_EXERCICES_DIR / level / unite_title / chapter_title
-    if not base.exists():
-        return {}
-    files = {}
-    for f in base.iterdir():
-        if not f.is_file():
-            continue
-        name_lower = f.name.lower()
-        if name_lower.endswith('.csv'):
-            if 'mcq' in name_lower or 'qcm' in name_lower:
-                files['mcq'] = f
-            elif 'qa' in name_lower:
-                files['qa'] = f
-            elif 'tf' in name_lower or 'truefalse' in name_lower:
-                files['tf'] = f
-            elif 'flash' in name_lower:
-                files['flashcard'] = f
-            elif 'term' in name_lower:
-                files['terminology'] = f
-        elif name_lower.endswith('.txt'):
-            if 'summary' in name_lower:
-                files['summary'] = f
-            elif 'clinical' in name_lower or 'cas' in name_lower:
-                files['clinical'] = f
-    return files
-
 
 def get_folder_stats():
     """Return statistics for the four main import folders."""
@@ -212,3 +185,58 @@ def get_folder_stats():
 
     return stats
 
+
+
+# utils.py
+
+def get_exercise_folder_for_chapter(level, unite_title, chapter_title):
+    """Finds the exercise folder for a chapter, robust to casing and accents."""
+    base = Path(settings.BULK_IMPORT_ROOT) / settings.BULK_EXERCICES_DIR / level / unite_title
+    if not base.exists():
+        return None
+    
+    norm_chapter = normalize_french(chapter_title)
+    
+    # 1. Try exact match first (fastest path)
+    exact_path = base / chapter_title
+    if exact_path.exists() and exact_path.is_dir():
+        return exact_path
+    
+    # 2. Fallback: search for a folder that matches the normalized title
+    # This fixes the Linux case-sensitivity issue!
+    for d in base.iterdir():
+        if d.is_dir() and normalize_french(d.name) == norm_chapter:
+            return d
+            
+    return None
+
+
+
+def get_exercise_files_for_chapter(level, unite_title, chapter_title):
+    """Get exercise files for a chapter using the robust folder finder."""
+    chapter_folder = get_exercise_folder_for_chapter(level, unite_title, chapter_title)
+    if not chapter_folder:
+        return {}
+        
+    files = {}
+    for f in chapter_folder.iterdir():
+        if not f.is_file():
+            continue
+        name_lower = f.name.lower()
+        if name_lower.endswith('.csv'):
+            if 'mcq' in name_lower or 'qcm' in name_lower:
+                files['mcq'] = f
+            elif 'qa' in name_lower:
+                files['qa'] = f
+            elif 'tf' in name_lower or 'truefalse' in name_lower:
+                files['tf'] = f
+            elif 'flash' in name_lower:
+                files['flashcard'] = f
+            elif 'term' in name_lower:
+                files['terminology'] = f
+        elif name_lower.endswith('.txt'):
+            if 'summary' in name_lower:
+                files['summary'] = f
+            elif 'clinical' in name_lower or 'cas' in name_lower:
+                files['clinical'] = f
+    return files

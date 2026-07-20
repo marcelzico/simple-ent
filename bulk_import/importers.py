@@ -354,8 +354,8 @@ def import_exercises_for_chapter(chapter, user):
     """Import all exercise files for a chapter."""
     stats = {
         'mcq': 0, 'qa': 0, 'tf': 0,
-        'flashcard': 0, 'terminology': 0,
-        'summary': 0, 'clinical': 0,
+        # 'flashcard': 0, 'terminology': 0,
+        'summary': 0, #'clinical': 0,
         'errors': []
     }
     try:
@@ -398,8 +398,8 @@ def import_exercises_for_chapter(chapter, user):
 def import_exercises_for_chapters_bulk(chapter_ids, user):
     aggregated = {
         'mcq': 0, 'qa': 0, 'tf': 0,
-        'flashcard': 0, 'terminology': 0,
-        'summary': 0, 'clinical': 0,
+        # 'flashcard': 0, 'terminology': 0,
+        'summary': 0, #'clinical': 0,
         'errors': []
     }
     for cid in chapter_ids:
@@ -409,10 +409,10 @@ def import_exercises_for_chapters_bulk(chapter_ids, user):
             aggregated['mcq'] += stats.get('mcq', 0)
             aggregated['qa'] += stats.get('qa', 0)
             aggregated['tf'] += stats.get('tf', 0)
-            aggregated['flashcard'] += stats.get('flashcard', 0)
-            aggregated['terminology'] += stats.get('terminology', 0)
+            # aggregated['flashcard'] += stats.get('flashcard', 0)
+            # aggregated['terminology'] += stats.get('terminology', 0)
             aggregated['summary'] += stats.get('summary', 0)
-            aggregated['clinical'] += stats.get('clinical', 0)
+            # aggregated['clinical'] += stats.get('clinical', 0)
             aggregated['errors'].extend(stats.get('errors', []))
         except LessonChapter.DoesNotExist:
             aggregated['errors'].append(f"Chapter {cid} not found.")
