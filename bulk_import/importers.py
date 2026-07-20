@@ -247,7 +247,7 @@ def process_mcq_file(file_path, chapter, user):
                         option2=row.get('option2', '').strip(),
                         option3=row.get('option3', '').strip() or None,
                         option4=row.get('option4', '').strip() or None,
-                        correct_option=int(row.get('correct') or row.get('answer') or 1),
+                        correct_option=int(row.get('correct') or row.get('answer')),
                         explanation=row.get('explanation') or row.get('explication') or '',
                         time_limit=60,
                     )
