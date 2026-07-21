@@ -110,7 +110,7 @@ class StudentProfileUpdateForm(forms.ModelForm):
     
     class Meta:
         model = StudentProfile
-        fields = ['date_of_birth', 'level', 'institution', 'student_id_number', 
+        fields = ['level', 'institution', 'student_id_number', 
                  'preferred_learning_style', 'facebook', 'instagram']
         widgets = {
             'level': forms.Select(attrs={
@@ -118,11 +118,11 @@ class StudentProfileUpdateForm(forms.ModelForm):
             }),
             'institution': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Université de Médecine',
+                'placeholder': 'Faculté de Médecine, d\'Antananarivo',
             }),
             'student_id_number': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'IM2024001',
+                'placeholder': '24001',
             }),
             'preferred_learning_style': forms.Select(attrs={
                 'class': 'form-select',

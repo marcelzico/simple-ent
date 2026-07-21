@@ -28,8 +28,8 @@ class User(AbstractUser):
     )
     # === Contact Info ===
     phone_regex = RegexValidator(
-        regex=r'^03[2-8]\d{7}$',
-        message="Numéro malgache requis (ex: 0341234567)"
+        regex=r'^03(?:2|3|4|7|8)\d{7}$'
+        message="Numéro Malagasy requis (ex: 0341234567)"
     )
     phone_number = models.CharField(
         validators=[phone_regex],
