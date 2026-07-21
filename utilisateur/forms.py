@@ -153,8 +153,8 @@ class UserRegistrationForm(UserCreationForm):
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': '0341234567',
-            'pattern': '03[2-4][0-9]{7}',
-            'title': 'Format: 032, 033 ou 034 suivi de 7 chiffres'
+            'pattern': '03[2-8][0-9]{7}',
+            'title': 'Format: 032, 033, 034, 037 ou 038 suivi de 7 chiffres'
         }),
         help_text="Format malgache: 032, 033 ou 034 suivi de 7 chiffres"
     )
@@ -218,14 +218,14 @@ class UserRegistrationForm(UserCreationForm):
             # Clean the number
             phone = ''.join(filter(str.isdigit, phone))
             
-            if len(phone) == 9 and phone.startswith(('32', '33', '34')):
+            if len(phone) == 9 and phone.startswith(('32', '33', '34', '37', '38')):
                 phone = '0' + phone
             
             if len(phone) != 10:
                 raise ValidationError("Le numéro doit contenir 10 chiffres.")
             
-            if not phone.startswith(('032', '033', '034')):
-                raise ValidationError("Le numéro doit commencer par 032, 033 ou 034.")
+            if not phone.startswith(('032', '033', '034', '037', '038')):
+                raise ValidationError("Le numéro doit commencer par 032, 033, 034, 037 ou 038.")
             
             # Check if phone number already exists
             if User.objects.filter(phone_number=phone).exists():
