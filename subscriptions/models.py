@@ -69,6 +69,7 @@ class Feature(models.Model):
     can_add_own_flashcard = models.BooleanField(default=False)
 
     price = models.PositiveIntegerField()
+    # is_available = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -16,9 +16,6 @@ def get_remaining_attempts(subscription):
     }
 
 
-
-
-
 def get_student_active_subscription(user):
     """
     Get active subscription for a user's student profile
@@ -44,10 +41,12 @@ def get_student_active_subscription(user):
     except Subscription.DoesNotExist:
         return None
 
+
 def has_active_subscription(user):
     """Check if user has an active subscription"""
     subscription = get_student_active_subscription(user)
     return subscription is not None
+
 
 def get_trial_days_remaining(user):
     """Get remaining days in trial period"""
@@ -64,6 +63,7 @@ def get_trial_days_remaining(user):
     
     return 0
 
+
 def is_trial_subscription(user):
     """Check if user's active subscription is a trial"""
     subscription = get_student_active_subscription(user)
@@ -72,6 +72,7 @@ def is_trial_subscription(user):
         return subscription.feature.price == 0 or subscription.feature.code == 'TRIAL_30DAYS'
     
     return False
+
 
 def can_access_feature(user, feature_code):
     """
@@ -98,6 +99,7 @@ def can_access_feature(user, feature_code):
     else:
         # Check boolean features
         return subscription.is_feature_available(feature_code)
+
 
 def record_quiz_attempt(user, quiz_type):
     """
@@ -132,6 +134,7 @@ def record_quiz_attempt(user, quiz_type):
     )
     
     return True
+
 
 def get_remaining_attempts(user, quiz_type):
     """Get remaining attempts for a specific quiz type"""

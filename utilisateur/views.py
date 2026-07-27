@@ -129,7 +129,7 @@ class LogoutView(View):
         request.session.flush()
         return redirect('utilisateur:login')
 
-
+# Version avec amélioration sur la création du profil étudiant et redirection après l'inscription
 class RegisterView(View):
     """User registration view - creates student and redirects to login"""
     template_name = 'utilisateur/register.html'
@@ -163,12 +163,57 @@ class RegisterView(View):
             )
             
             # Log out the user (so they have to log in)
-            auth_logout(request)
+            # auth_logout(request)
             
             # Redirect to login page
-            return redirect('utilisateur:login')
+            # return redirect('utilisateur:login')
+
+            # Redirect to after signup page to complete profile
+            return redirect('utilisateur:after_signup_redirect')
         
         return render(request, self.template_name, {'form': form})
+ 
+
+# Version originale
+# class RegisterView(View):
+#     """User registration view - creates student and redirects to login"""
+#     template_name = 'utilisateur/register.html'
+    
+#     def get(self, request):
+#         if request.user.is_authenticated:
+#             return redirect('utilisateur:dashboard')
+        
+#         form = UserRegistrationForm()
+#         return render(request, self.template_name, {'form': form})
+    
+#     def post(self, request):
+#         form = UserRegistrationForm(request.POST)
+        
+#         if form.is_valid():
+#             # Save the user
+#             user = form.save(commit=False)
+#             # Automatically make all new users students
+#             user.is_student = True
+#             user.save()
+            
+#             # StudentProfile will be created by the signal
+#             # Check if it was created or create it manually
+#             if not hasattr(user, 'student_profile'):
+#                 StudentProfile.objects.create(user=user)
+            
+#             # Show success message
+#             messages.success(
+#                 request, 
+#                 "Compte étudiant créé avec succès! Veuillez vous connecter."
+#             )
+            
+#             # Log out the user (so they have to log in)
+#             auth_logout(request)
+            
+#             # Redirect to login page
+#             return redirect('utilisateur:login')
+        
+#         return render(request, self.template_name, {'form': form})
     
 # ======================
 # PROFILE VIEWS
@@ -1040,3 +1085,21 @@ def voir_profil(request, user_id):
     return render (request, "utilisateur/voir_profil.html", {"person": person})
 
 
+# After signup redirect view to handle student profile completion
+@login_required
+def after_signup_redirect (request):
+    # 1. Get the profile for the current user, or create a blank one if it doesn't exist yet
+    profile, created = StudentProfile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        # 2. Bind the form to the submitted data AND the existing profile instance
+        form = StudentProfileUpdateForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your student profile has been updated successfully!")
+            return redirect('utilisateur:dashboard')  # 👈 Replace with your actual success URL name
+    else:
+        # 3. Pre-fill the form with the current profile data for a GET request
+        form = StudentProfileUpdateForm(instance=profile)
+        
+    return render(request, 'utilisateur/after_signup.html', {'form': form})
