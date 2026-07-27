@@ -355,6 +355,7 @@
 {% block content %}
 <div class="container-fluid py-4">
     
+    <a href="{% url "utilisateur:after_signup_redirect" %}" class="btn btn-outline-primary">Modifier mon profil étudiant</a>
     <!-- Medical Header with Welcome -->
     <div class="medical-header animate-fade-in-up">
         <div class="row align-items-center">
@@ -777,11 +778,11 @@
         <div class="col-lg-6 mb-4">
             <div class="dashboard-card">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div>
+                    {% comment %} <div>
                         <h5 class="mb-1">📅 Planning</h5>
                         <small class="text-muted">Vos prochaines révisions</small>
                     </div>
-                    {% comment %} <a href="{% url 'journal:entry_create' %}" class="btn btn-sm btn-primary rounded-pill">
+                     <a href="{% url 'journal:entry_create' %}" class="btn btn-sm btn-primary rounded-pill">
                         <i class="fas fa-plus me-1"></i>Ajouter
                     </a> {% endcomment %}
                 </div>
