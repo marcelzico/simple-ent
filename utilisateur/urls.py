@@ -51,4 +51,6 @@ urlpatterns += [
     # list de mambre pour interaction
     path('member/', views.list_membres, name="member"),
     path('member/user/<int:user_id>/', views.voir_profil, name="voir_profil"),
+    path('quick-profile-update/', views.after_signup_redirect, name='after_signup_redirect'),
+
 ]
