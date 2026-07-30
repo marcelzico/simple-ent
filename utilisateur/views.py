@@ -130,51 +130,6 @@ class LogoutView(View):
         return redirect('utilisateur:login')
 
 # Version avec amélioration sur la création du profil étudiant et redirection après l'inscription
-class RegisterView(View):
-    """User registration view - creates student and redirects to login"""
-    template_name = 'utilisateur/register.html'
-    
-    def get(self, request):
-        if request.user.is_authenticated:
-            return redirect('utilisateur:dashboard')
-        
-        form = UserRegistrationForm()
-        return render(request, self.template_name, {'form': form})
-    
-    def post(self, request):
-        form = UserRegistrationForm(request.POST)
-        
-        if form.is_valid():
-            # Save the user
-            user = form.save(commit=False)
-            # Automatically make all new users students
-            user.is_student = True
-            user.save()
-            
-            # StudentProfile will be created by the signal
-            # Check if it was created or create it manually
-            if not hasattr(user, 'student_profile'):
-                StudentProfile.objects.create(user=user)
-            
-            # Show success message
-            messages.success(
-                request, 
-                "Compte étudiant créé avec succès! Veuillez vous connecter."
-            )
-            
-            # Log out the user (so they have to log in)
-            # auth_logout(request)
-            
-            # Redirect to login page
-            # return redirect('utilisateur:login')
-
-            # Redirect to after signup page to complete profile
-            return redirect('utilisateur:after_signup_redirect')
-        
-        return render(request, self.template_name, {'form': form})
- 
-
-# Version originale
 # class RegisterView(View):
 #     """User registration view - creates student and redirects to login"""
 #     template_name = 'utilisateur/register.html'
@@ -208,12 +163,57 @@ class RegisterView(View):
 #             )
             
 #             # Log out the user (so they have to log in)
-#             auth_logout(request)
+#             # auth_logout(request)
             
 #             # Redirect to login page
-#             return redirect('utilisateur:login')
+#             # return redirect('utilisateur:login')
+
+#             # Redirect to after signup page to complete profile
+#             return redirect('utilisateur:after_signup_redirect')
         
 #         return render(request, self.template_name, {'form': form})
+ 
+
+# Version originale
+class RegisterView(View):
+    """User registration view - creates student and redirects to login"""
+    template_name = 'utilisateur/register.html'
+    
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('utilisateur:dashboard')
+        
+        form = UserRegistrationForm()
+        return render(request, self.template_name, {'form': form})
+    
+    def post(self, request):
+        form = UserRegistrationForm(request.POST)
+        
+        if form.is_valid():
+            # Save the user
+            user = form.save(commit=False)
+            # Automatically make all new users students
+            user.is_student = True
+            user.save()
+            
+            # StudentProfile will be created by the signal
+            # Check if it was created or create it manually
+            if not hasattr(user, 'student_profile'):
+                StudentProfile.objects.create(user=user)
+            
+            # Show success message
+            messages.success(
+                request, 
+                "Compte étudiant créé avec succès! Veuillez vous connecter."
+            )
+            
+            # Log out the user (so they have to log in)
+            auth_logout(request)
+            
+            # Redirect to login page
+            return redirect('utilisateur:login')
+        
+        return render(request, self.template_name, {'form': form})
     
 # ======================
 # PROFILE VIEWS
