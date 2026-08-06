@@ -592,7 +592,7 @@ class UsageAuditView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = SubscriptionUsageAudit
     template_name = 'subscriptions/usage_audit.html'
     context_object_name = 'audit_logs'
-    paginate_by = 50
+    paginate_by = 500
     
     def test_func(self):
         return is_admin(self.request.user)
